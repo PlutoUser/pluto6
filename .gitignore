@@ -30,6 +30,7 @@
 
 #ROOT
 G__*
+*.root
 
 #cmake
 CMakeCache.txt
