@@ -127,7 +127,7 @@
 
 //#pragma link C++ function select;
 
-////#include "PluginLinkdef.h"
+#include "PluginLinkDef.h"
 
 #endif
 

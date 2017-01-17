@@ -1559,8 +1559,8 @@ void PSaid::defaults(void) {
 }
 
 PSaid::~PSaid() {
-    y.~TArrayD();
-    aa.~TArrayD();
+    //y.~TArrayD();
+    //aa.~TArrayD();
     
     told = -1.;      // to make sure that tables are recalculated for new object
 }
@@ -1572,8 +1572,8 @@ Bool_t PSaid::IsValid(void) {
     return kTRUE;
 };
 
-Bool_t PSaid:: Init(void) {
-    if (!PAngularDistribution:: Init()) return kFALSE;
+Bool_t PSaid::Init(void) {
+    if (!PAngularDistribution::Init()) return kFALSE;
 
     if (!beam || !target) {
 	Warning("Init", "beam or target not found");
