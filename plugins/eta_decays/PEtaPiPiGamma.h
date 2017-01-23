@@ -16,7 +16,7 @@ class PEtaPiPiGamma : public PChannelModel  {
  public:
     PEtaPiPiGamma();
     PEtaPiPiGamma(const Char_t *id, const Char_t *de, Int_t key);
-    PDistribution* Clone(const char*delme=NULL) const;
+    PDistribution *Clone(const char *delme=NULL) const;
 
     Bool_t Init(void);
 
@@ -35,7 +35,7 @@ class PEtaPiPiGamma : public PChannelModel  {
 
     Double_t weight_max;               //Maximum
   
-    ClassDef(PEtaPiPiGamma,0)  // Decay eta -> pi+ pi- gamma
+    ClassDef(PEtaPiPiGamma, 0)  // Decay eta -> pi+ pi- gamma
 };
 
 #endif

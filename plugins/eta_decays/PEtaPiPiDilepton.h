@@ -16,7 +16,7 @@ class PEtaPiPiDilepton : public PChannelModel  {
  public:
     PEtaPiPiDilepton();
     PEtaPiPiDilepton(const Char_t *id, const Char_t *de, Int_t key);
-    PDistribution* Clone(const char*delme=NULL) const;
+    PDistribution *Clone(const char *delme=NULL) const;
 
     Bool_t Init(void);
 
@@ -28,7 +28,7 @@ class PEtaPiPiDilepton : public PChannelModel  {
 
     using PDistribution::SampleMass;
     using PChannelModel::SampleMass;
-    Bool_t   SampleMass(void);
+    Bool_t SampleMass(void);
 
 
     Bool_t IsValid(void);
@@ -39,7 +39,7 @@ class PEtaPiPiDilepton : public PChannelModel  {
     Double_t  m_pi, mass_ee, mass_e, mass_eta;
     Double_t weight_max;               //Maximum
   
-    ClassDef(PEtaPiPiDilepton,0)  // pipi correlation in eta -> pi+ pi- dilepton
+    ClassDef(PEtaPiPiDilepton, 0)  // pipi correlation in eta -> pi+ pi- dilepton
 };
 
 #endif

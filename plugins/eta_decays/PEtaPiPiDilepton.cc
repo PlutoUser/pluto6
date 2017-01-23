@@ -25,24 +25,23 @@ using namespace std;
 
 ClassImp(PEtaPiPiDilepton)
 
-PEtaPiPiDilepton::PEtaPiPiDilepton()  {
-} ;
+PEtaPiPiDilepton::PEtaPiPiDilepton() {
+};
 
 PEtaPiPiDilepton::PEtaPiPiDilepton(const Char_t *id, const Char_t *de, Int_t key) :
-    PChannelModel(id, de,key) {
+    PChannelModel(id, de, key) {
 
-    if (is_channel<0)
-	Warning("PEtaPiPiDilepton","This model should be bound to CHANNELS only");
+    if (is_channel < 0)
+	Warning("PEtaPiPiDilepton", "This model should be bound to CHANNELS only");
 
-    m_pi    = makeStaticData()->GetParticleMass("pi+");
-    mass_e  = makeStaticData()->GetParticleMass("e-"); 
-    mass_eta= makeStaticData()->GetParticleMass("eta"); 
-    mass_ee = 2.*mass_e;
+    m_pi     = makeStaticData()->GetParticleMass("pi+");
+    mass_e   = makeStaticData()->GetParticleMass("e-"); 
+    mass_eta = makeStaticData()->GetParticleMass("eta"); 
+    mass_ee  = 2.*mass_e;
     weight_max = 0.00000001;
+};
 
-} ;
-
-PDistribution* PEtaPiPiDilepton::Clone(const char*delme) const {
+PDistribution *PEtaPiPiDilepton::Clone(const char *delme) const {
     return new PEtaPiPiDilepton((const PEtaPiPiDilepton &)* this);
 };
 
@@ -52,34 +51,34 @@ Bool_t PEtaPiPiDilepton::Init(void) {
     //looking for parent. This is mandatory
     parent = GetParticle("parent");
     if (!parent) {
-	Warning("Init","Parent not found");
+	Warning("Init", "Parent not found");
 	return kFALSE;
     }
     pip = GetParticle("pi+");
     if (!pip) {
-	Warning("Init","Pi+ not found");
+	Warning("Init", "Pi+ not found");
 	return kFALSE;
     }
     pim = GetParticle("pi-");
     if (!pim) {
-	Warning("Init","Pi- not found");
+	Warning("Init", "Pi- not found");
 	return kFALSE;
     }
     em = GetParticle("e-");
     if (!em) {
-	Warning("Init","e- not found");
+	Warning("Init", "e- not found");
 	return kFALSE;
     }
     ep = GetParticle("e+");
     if (!ep) {
-	Warning("Init","e+ not found");
+	Warning("Init", "e+ not found");
 	return kFALSE;
     }
     return kTRUE;
 }
 
 
-Double_t PEtaPiPiDilepton::GetWeight(Double_t *mass, Int_t * ) {
+Double_t PEtaPiPiDilepton::GetWeight(Double_t *mass, Int_t *) {
     //Inputs: s_pipi, q, theta_pip, theta_e, phi
     //This is the second part of eqn. 64 of Wirzba's report
 
@@ -90,14 +89,14 @@ Double_t PEtaPiPiDilepton::GetWeight(Double_t *mass, Int_t * ) {
     Double_t theta_ep  = mass[4];
     Double_t phi       = mass[5];
 
-    Double_t sin_theta_pip   = sin(theta_pip);
-    Double_t beta_pi2  = (1-((4*m_pi*m_pi)/s_pipi));
-    Double_t weight = (s_pipi*beta_pi2 *sin_theta_pip*sin_theta_pip);
+    Double_t sin_theta_pip = sin(theta_pip);
+    Double_t beta_pi2      = (1-((4*m_pi*m_pi)/s_pipi));
+    Double_t weight        = (s_pipi*beta_pi2 *sin_theta_pip*sin_theta_pip);
 
     //for the curly bracket only the first part is supported at the moment
-    Double_t beta_e2  = (1-((4*mass_e*mass_e)/q2));
+    Double_t beta_e2      = (1-((4*mass_e*mass_e)/q2));
     Double_t weight_part2 = PKinematics::lambda(mass_eta*mass_eta,s_pipi,q2) *
-	(1+beta_e2*sin(theta_ep)*sin(theta_ep) * sin(phi)*sin(phi)  );
+	(1+beta_e2*sin(theta_ep)*sin(theta_ep) * sin(phi)*sin(phi));
 
     return weight * weight_part2;
 }
@@ -117,7 +116,7 @@ Double_t PEtaPiPiDilepton::GetWeight(void) {
 
     PParticle p_star(pip);
     //rotate such that twopi points to z-axis:
-    Double_t Phi = twopi.Phi();
+    Double_t Phi   = twopi.Phi();
     Double_t Theta = twopi.Theta();
     twopi.RotateZ(-Phi);
     twopi.RotateY(-Theta);
@@ -141,7 +140,6 @@ Double_t PEtaPiPiDilepton::GetWeight(void) {
     Double_t phi=p_star.Phi() - ep_tmp.Phi();
 
     return GetWeight(s_pipi, dil.M(), theta_pi, ep_tmp.Theta(), phi);
-
 }
 
 Bool_t PEtaPiPiDilepton::IsValid(void) {
@@ -153,17 +151,13 @@ Bool_t PEtaPiPiDilepton::IsValid(void) {
     Double_t weight = GetWeight();
     
     if (weight>weight_max) {
-	Warning("IsValid","Weight (%lf) > max (%lf)",weight,weight_max);
+	Warning("IsValid","Weight (%lf) > max (%lf)", weight, weight_max);
 	weight_max = weight*1.1;
     }
 
-    if ((weight/weight_max)>PUtils::sampleFlat()) return kTRUE; // sample now distribution
+    if ((weight/weight_max)>PUtils::sampleFlat()) 
+	return kTRUE; // sample now distribution
     
     return kFALSE;
-    
-
-    //return kFALSE;
-
-
 }
 

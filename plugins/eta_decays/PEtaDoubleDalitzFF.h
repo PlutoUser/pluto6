@@ -17,7 +17,7 @@ public:
   
   using PChannelModel::GetWeight;
   PEtaDoubleDalitzFF(Char_t *id, Char_t *de, Int_t key);
-  PDistribution* Clone(const char*delme=NULL) const;
+  PDistribution *Clone(const char *delme=NULL) const;
   Double_t GetWeight();
   
   void SetLambda(Double_t  val) {Lambda=val;};
@@ -26,10 +26,10 @@ public:
   
  private:
 
-  PParticle *dil1,*dil2,*parent;   //decay particles
+  PParticle *dil1, *dil2, *parent;   //decay particles
   Double_t  Lambda;                //pole factor
 
-  ClassDef(PEtaDoubleDalitzFF,0)  //Eta DD FF
+  ClassDef(PEtaDoubleDalitzFF, 0)  //Eta DD FF
 };
 
 #endif

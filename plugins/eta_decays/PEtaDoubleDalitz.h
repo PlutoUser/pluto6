@@ -11,8 +11,6 @@
 #include "TRandom2.h"
 
 
-
-
 class PEtaDoubleDalitz : public PChannelModel  {
   
 public:
@@ -22,19 +20,19 @@ public:
   
   Bool_t Init(void);
   
-  using PChannelModel::SampleMass;
+  using  PChannelModel::SampleMass;
   Bool_t SampleMass(void);
   
 private:
   
   Double_t   Gen2lepton1(Double_t m);
   TRandom2  *gRand;
-  PParticle *dil1,*dil2,*parent;
+  PParticle *dil1, *dil2, *parent;
 
   Double_t       ff_w_max;             //Max weight of FF model
   PChannelModel *formfactor_model;     //form factor object
   
-  ClassDef(PEtaDoubleDalitz,0)  // Simple Eta Dalitz decay based on two dileptons
+  ClassDef(PEtaDoubleDalitz, 0)  // Simple Eta Dalitz decay based on two dileptons
 
 };
 

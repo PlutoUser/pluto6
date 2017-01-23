@@ -11,22 +11,22 @@
 #include "PEtaDoubleDalitzEnv.h"
 
 
-PDistribution* PEtaDoubleDalitzEnv::Clone(const char*) const {
+PDistribution *PEtaDoubleDalitzEnv::Clone(const char*) const {
     //clone the object
     return new PEtaDoubleDalitzEnv((const PEtaDoubleDalitzEnv &)* this);
 };
 
-PEtaDoubleDalitzEnv::PEtaDoubleDalitzEnv(const Char_t *id, const Char_t *de, Int_t key) : PChannelModel(id, de,key) {
+PEtaDoubleDalitzEnv::PEtaDoubleDalitzEnv(const Char_t *id, const Char_t *de, Int_t key) : PChannelModel(id, de, key) {
     //Constructor
-    dil1=dil2=parent=NULL;
-} ;
+    dil1 = dil2 = parent = NULL;
+};
 
 
 Bool_t PEtaDoubleDalitzEnv::Init(void) {
   
     parent = GetParticle("parent");
     if (!parent) {
-	Warning("Init","Parent not found");
+	Warning("Init", "Parent not found");
 	return kFALSE;
     }
 
@@ -34,7 +34,7 @@ Bool_t PEtaDoubleDalitzEnv::Init(void) {
     dil2 = GetParticle("dilepton");
   
     if (!dil1 || !dil2) {
-	Warning("Init","Dileptons not found");
+	Warning("Init", "Dileptons not found");
 	return kFALSE;
     }
 
@@ -73,31 +73,31 @@ Bool_t PEtaDoubleDalitzEnv::EndOfChain(void) {
     dil2_tmp.AddTmp(em2_tmp);
 
     //rotate such that dileptons point to z-axis
-    Double_t Phi = dil1_tmp.Phi();
+    Double_t Phi   = dil1_tmp.Phi();
     Double_t Theta = dil1_tmp.Theta();
     ep1_tmp.RotateZ(-Phi);
     ep1_tmp.RotateY(-Theta);
     dil1_tmp.RotateZ(-Phi);
     dil1_tmp.RotateY(-Theta);
-    ep1_tmp.Boost(0,0,-dil1_tmp.Beta());
+    ep1_tmp.Boost(0, 0, -dil1_tmp.Beta());
     //   em1_tmp.RotateZ(-dil1_tmp.Phi());
     //   em1_tmp.RotateY(-dil1_tmp.Theta());
     //   em1_tmp.Boost(0,0,-dil1_tmp.Beta()); --> Unused
 
-    Phi = dil2_tmp.Phi();
+    Phi   = dil2_tmp.Phi();
     Theta = dil2_tmp.Theta();
     ep2_tmp.RotateZ(-dil2_tmp.Phi());
     ep2_tmp.RotateY(-dil2_tmp.Theta());
     dil2_tmp.RotateZ(-Phi);
     dil2_tmp.RotateY(-Theta);
-    ep2_tmp.Boost(0,0,-dil2_tmp.Beta());
+    ep2_tmp.Boost(0, 0, -dil2_tmp.Beta());
     //   em2_tmp.RotateZ(-dil2_tmp.Phi());
     //   em2_tmp.RotateY(-dil2_tmp.Theta());
     //   em2_tmp.Boost(0,0,-dil2_tmp.Beta()); --> Unused
 
-    Double_t theta1=ep1_tmp.Theta();
-    Double_t theta2=ep2_tmp.Theta();
-    Double_t phi=ep1_tmp.Phi() - ep2_tmp.Phi();
+    Double_t theta1 = ep1_tmp.Theta();
+    Double_t theta2 = ep2_tmp.Theta();
+    Double_t phi    = ep1_tmp.Phi() - ep2_tmp.Phi();
 
     Double_t sin1_2 = sin(theta1)*sin(theta1);
     Double_t sin2_2 = sin(theta2)*sin(theta2);
@@ -115,7 +115,6 @@ Bool_t PEtaDoubleDalitzEnv::EndOfChain(void) {
     if (PUtils::sampleFlat() > amplitude) return kFALSE;
 
     return kTRUE;
-
 }
 
 ClassImp(PEtaDoubleDalitzEnv)

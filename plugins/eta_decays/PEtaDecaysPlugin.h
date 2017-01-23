@@ -39,7 +39,7 @@ class PEtaDecaysPlugin : public PDistributionCollection {
     //destructor
     ~PEtaDecaysPlugin();
 
-    Bool_t ExecCommand(const char * command, Double_t value); 
+    Bool_t ExecCommand(const char *command, Double_t value); 
 
     Bool_t Activate(void);
 
@@ -51,9 +51,7 @@ class PEtaDecaysPlugin : public PDistributionCollection {
 
     PEtaPiPiGamma       *eta_pipi_gamma;
 
-
-
-    ClassDef(PEtaDecaysPlugin,0) // A plugin for (rare) eta decays
+    ClassDef(PEtaDecaysPlugin, 0) // A plugin for (rare) eta decays
 };
 
 #endif // _PETADECAYSPLUGIN_H_

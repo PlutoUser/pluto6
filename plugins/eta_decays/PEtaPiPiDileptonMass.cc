@@ -21,14 +21,14 @@ using namespace std;
 
 ClassImp(PEtaPiPiDileptonMass)
 
-PEtaPiPiDileptonMass::PEtaPiPiDileptonMass()  {
-} ;
+PEtaPiPiDileptonMass::PEtaPiPiDileptonMass() {
+};
 
 PEtaPiPiDileptonMass::PEtaPiPiDileptonMass(const Char_t *id, const Char_t *de, Int_t key) :
-    PChannelModel(id, de,key) {
+    PChannelModel(id, de, key) {
 
-    if (is_channel<0)
-	Warning("PEtaPiPiDileptonMass","This model should be bound to CHANNELS only");
+    if (is_channel < 0)
+	Warning("PEtaPiPiDileptonMass", "This model should be bound to CHANNELS only");
 
     m_pi    = makeStaticData()->GetParticleMass("pi+");
     mass_e  = makeStaticData()->GetParticleMass("e-"); 
@@ -50,38 +50,38 @@ Bool_t PEtaPiPiDileptonMass::Init(void) {
     //looking for parent. This is mandatory
     parent = GetParticle("parent");
     if (!parent) {
-	Warning("Init","Parent not found");
+	Warning("Init", "Parent not found");
 	return kFALSE;
     }
     pip = GetParticle("pi+");
     if (!pip) {
-	Warning("Init","Pi+ not found");
+	Warning("Init", "Pi+ not found");
 	return kFALSE;
     }
     pim = GetParticle("pi-");
     if (!pim) {
-	Warning("Init","Pi- not found");
+	Warning("Init", "Pi- not found");
 	return kFALSE;
     }
     ep = GetParticle("e+");
     if (!ep) {
-	Warning("Init","e+ not found");
+	Warning("Init", "e+ not found");
 	return kFALSE;
     }
     em = GetParticle("e-");
     if (!em) {
-	Warning("Init","e- not found");
+	Warning("Init", "e- not found");
 	return kFALSE;
     }
 
-    vmd_formfactor_model=
+    vmd_formfactor_model =
 	GetSecondaryModel("formfactor");
 
     return kTRUE;
 }
 
 
-Double_t PEtaPiPiDileptonMass::GetWeight(Double_t *mass, Int_t * ) {
+Double_t PEtaPiPiDileptonMass::GetWeight(Double_t *mass, Int_t *) {
 
     //This is the mass-dependent part of eqn. 64 of Wirzba's report
 
@@ -110,12 +110,10 @@ Bool_t PEtaPiPiDileptonMass::SampleMass(Double_t *mass, Int_t *didx) {
     return kTRUE;
 }
 
-Double_t PEtaPiPiDileptonMass::Eval(Double_t x, Double_t y , Double_t z , Double_t t ) const {
-
+Double_t PEtaPiPiDileptonMass::Eval(Double_t x, Double_t y, Double_t z, Double_t t) const {
     //return mass of the dilepton for GetRandom sampling
 
     return GetMassWeight(x);
-
 }
 
 // Double_t PEtaPiPiDileptonMass::GetWeight(void) {

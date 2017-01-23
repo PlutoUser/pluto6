@@ -18,7 +18,7 @@ class POmega3Pi : public PDistribution  {
 
     POmega3Pi();
     POmega3Pi(const Char_t *id, const Char_t *de);
-    PDistribution* Clone(const char*delme=NULL) const;
+    PDistribution* Clone(const char *delme=NULL) const;
 
     Bool_t Init(void); 
     Bool_t Prepare(void);
@@ -33,17 +33,16 @@ class POmega3Pi : public PDistribution  {
     
  private: 		
 
-    PParticle * side_particle[2]; //2 additional particles
-    PParticle * primary;
-    PParticle * parent;
+    PParticle *side_particle[2]; //2 additional particles
+    PParticle *primary;
+    PParticle *parent;
 
     Double_t max;
 	
     double diffgam(double M00, double M01);
-    PChannelModel* RhoPropagator;
+    PChannelModel *RhoPropagator;
 
-    ClassDef(POmega3Pi,0)  //omega -> pi+pi-pi0
-
+    ClassDef(POmega3Pi, 0)  //omega -> pi+pi-pi0
 };
 
 

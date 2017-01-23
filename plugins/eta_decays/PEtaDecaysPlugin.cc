@@ -91,32 +91,28 @@
 
 
 PEtaDecaysPlugin::PEtaDecaysPlugin() {
-}
+};
 
 
 PEtaDecaysPlugin::PEtaDecaysPlugin(const Char_t *id, const Char_t *de):
     PDistributionCollection(id, de) {
 
-    eta_dd_simple = NULL;
-    eta_dd_ff     = NULL;
-    
+    eta_dd_simple  = NULL;
+    eta_dd_ff      = NULL;
     eta_pipi_gamma = NULL;
-
-}
+};
 
 PEtaDecaysPlugin::~PEtaDecaysPlugin() {
-}
+};
 
 Bool_t PEtaDecaysPlugin::Activate(void) {
-
     return kTRUE;
-
 };
 
 
-Bool_t PEtaDecaysPlugin::ExecCommand(const char * command, Double_t value) {
+Bool_t PEtaDecaysPlugin::ExecCommand(const char *command, Double_t value) {
 
-    PDistributionManagerUtil * pdmutil = makeDistributionManagerUtil();
+    PDistributionManagerUtil *pdmutil = makeDistributionManagerUtil();
 
     //called the 1st time?
     if (!eta_pipi_gamma) {
@@ -131,13 +127,13 @@ Bool_t PEtaDecaysPlugin::ExecCommand(const char * command, Double_t value) {
 	//Standalone models, up to now nothing special
 	eta_pipi_gamma = 
 	    new PEtaPiPiGamma("eta_pipi_gamma_matrix_weighting@eta_to_pi+_pi-_g/matrix",
-			      "Matrix element eta -> pipi gamma (Weighting)",-1);
+			      "Matrix element eta -> pipi gamma (Weighting)", -1);
 	
 	eta_pipi_gamma->EnableWeighting();
 	makeDistributionManagerUtil()->Add(eta_pipi_gamma);
 	eta_pipi_gamma = 
 	    new PEtaPiPiGamma("eta_pipi_gamma_matrix@eta_to_pi+_pi-_g/matrix",
-			      "Matrix element eta -> pipi gamma",-1);
+			      "Matrix element eta -> pipi gamma", -1);
 	makeDistributionManagerUtil()->Add(eta_pipi_gamma);
 	
 	//
@@ -147,17 +143,17 @@ Bool_t PEtaDecaysPlugin::ExecCommand(const char * command, Double_t value) {
 	Int_t ipid[5];
 
 	//Add dilepton decay, if not yet present:
-	ipid[0]=makeStaticData()->GetParticleID("eta");
-	ipid[1]=makeStaticData()->GetParticleID("dilepton");
-	ipid[2]=makeStaticData()->GetParticleID("dilepton");
+	ipid[0] = makeStaticData()->GetParticleID("eta");
+	ipid[1] = makeStaticData()->GetParticleID("dilepton");
+	ipid[2] = makeStaticData()->GetParticleID("dilepton");
 	
 	if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
 	    makeStaticData()->AddDecay(-1,"eta -> dilepton + dilepton", 
-				       "eta", "dilepton,dilepton",ETA_DOUBLE_DALITZ_BR);
+				       "eta", "dilepton,dilepton", ETA_DOUBLE_DALITZ_BR);
 	
 	//Create and add simple model:
 	eta_dd_simple = new PEtaDoubleDalitz("eta_double_dalitz_simple@eta_to_dilepton_dilepton",
-					     "Dilepton generator for eta -> dilepton + dilepton",-1);
+					     "Dilepton generator for eta -> dilepton + dilepton", -1);
 	
 	makeDistributionManagerUtil()->SetGroup("rare_eta_decays");
 	makeDistributionManagerUtil()->Add(eta_dd_simple);
@@ -167,7 +163,7 @@ Bool_t PEtaDecaysPlugin::ExecCommand(const char * command, Double_t value) {
 	//chain has been sampled
 
 	eta_dd_complex = new PEtaDoubleDalitzEnv("eta_double_dalitz_complex@eta_to_dilepton_dilepton/full",
-						 "Full dilepton generator for eta -> e+ e- e+ e-",-1);
+						 "Full dilepton generator for eta -> e+ e- e+ e-", -1);
 	eta_dd_complex->Add("eta,parent");
 	eta_dd_complex->Add("dilepton,daughter");
 	eta_dd_complex->Add("dilepton,daughter");
@@ -179,7 +175,7 @@ Bool_t PEtaDecaysPlugin::ExecCommand(const char * command, Double_t value) {
 	makeDistributionManagerUtil()->Add(eta_dd_complex);
 
 	PSimpleVMDFF *ff = new PSimpleVMDFF("eta_double_dalitz_vmd_ff@eta_to_dilepton_dilepton/formfactor",
-					    "Simple VMD form factor for eta Double Dalitz",-1);
+					    "Simple VMD form factor for eta Double Dalitz", -1);
 	ff->SetVectorMesonMass(0.77);
 	ff->SetWeightMax(5.);
 	
@@ -192,19 +188,19 @@ Bool_t PEtaDecaysPlugin::ExecCommand(const char * command, Double_t value) {
 	
 	
 	//Add  decay, if not yet present:
-	ipid[0]=makeStaticData()->GetParticleID("eta");
-	ipid[1]=makeStaticData()->GetParticleID("e+");
-	ipid[2]=makeStaticData()->GetParticleID("e-");
-	ipid[3]=makeStaticData()->GetParticleID("pi+");
-	ipid[4]=makeStaticData()->GetParticleID("pi-");
+	ipid[0] = makeStaticData()->GetParticleID("eta");
+	ipid[1] = makeStaticData()->GetParticleID("e+");
+	ipid[2] = makeStaticData()->GetParticleID("e-");
+	ipid[3] = makeStaticData()->GetParticleID("pi+");
+	ipid[4] = makeStaticData()->GetParticleID("pi-");
 	
 	if (makeStaticData()->GetDecayKey(ipid, 4) < 0)
 	    makeStaticData()->AddDecay(-1,"eta -> e+ + e- + pi+ + pi-", 
-				       "eta", "e+,e-,pi+,pi-",ETA_EE_PIPI_BR);
+				       "eta", "e+,e-,pi+,pi-", ETA_EE_PIPI_BR);
 
 	//first, the standard ff
 	ff = new PSimpleVMDFF("eta_ee_pipi_vmd_ff@eta_to_e+_e-_pi+_pi-/formfactor",
-			      "eta -> pi pi dilepton VMD form factor",-1);
+			      "eta -> pi pi dilepton VMD form factor", -1);
 	ff->SetVectorMesonMass(0.77);
 	makeDistributionManagerUtil()->Add(ff);
 
@@ -213,12 +209,12 @@ Bool_t PEtaDecaysPlugin::ExecCommand(const char * command, Double_t value) {
 	//function to be folded into the genbod model
 	PEtaPiPiDileptonMass *main = 
 	    new PEtaPiPiDileptonMass("eta_ee_pipi_mass@eta_to_e+_e-_pi+_pi-/correlation",
-				     "eta -> pi pi dilepton a la Wirzba (dilepton mass)",-1);
+				     "eta -> pi pi dilepton a la Wirzba (dilepton mass)", -1);
 	makeDistributionManagerUtil()->Add(main);
 
 	//...and now the adapted genbod:
 	PGenBod *genbod = new PGenBod("eta_ee_pipi_genbod@eta_to_e+_e-_pi+_pi-/genbod",
-				      "eta -> pi pi dilepton genbod",-1);
+				      "eta -> pi pi dilepton genbod", -1);
 	genbod->Add("eta,parent");
 	genbod->Add("pi+,daughter");
 	genbod->Add("pi-,daughter");
@@ -228,9 +224,8 @@ Bool_t PEtaDecaysPlugin::ExecCommand(const char * command, Double_t value) {
 
 	//main distribution (afterburner to take 4-body correlation into account)
 	PEtaPiPiDilepton *final = new PEtaPiPiDilepton("eta_ee_pipi@eta_to_e+_e-_pi+_pi-",
-						       "eta -> pi pi dilepton a la Wirzba (decay angles)",-1);
+						       "eta -> pi pi dilepton a la Wirzba (decay angles)", -1);
 	makeDistributionManagerUtil()->Add(final);
-
     }
 
     return kTRUE;
