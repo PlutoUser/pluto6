@@ -10,7 +10,7 @@ SET(PLUGIN_CLASSES_NAMES "")
 SET(PLUGIN_COLLECTION "")
 
 FUNCTION(addprefix var prefix)
-   MESSAGE( STATUS "prefix: " ${prefix} )
+   ##MESSAGE( STATUS "prefix: " ${prefix} )
    SET(listVar "")
    FOREACH(f ${ARGN})
       LIST(APPEND listVar "${prefix}/${f}")
@@ -27,13 +27,13 @@ FUNCTION(addsuffix var suffix)
 ENDFUNCTION(addsuffix)
 
 add_subdirectory(plugins)
-MESSAGE( STATUS "PLUGIN_CLASSES: " ${PLUGIN_CLASSES} )
+##MESSAGE( STATUS "PLUGIN_CLASSES: " ${PLUGIN_CLASSES} )
 
 addsuffix(PHDRS ".h"  ${PLUGIN_CLASSES})
 addsuffix(PSRC  ".cc" ${PLUGIN_CLASSES})
-MESSAGE( STATUS "PHDRS: " ${PHDRS} )
-MESSAGE( STATUS "PLUGIN_CLASSES_NAMES: " ${PLUGIN_CLASSES_NAMES} )
-MESSAGE( STATUS "PLUGIN_COLLECTION: " ${PLUGIN_COLLECTION} )
+##MESSAGE( STATUS "PHDRS: " ${PHDRS} )
+##MESSAGE( STATUS "PLUGIN_CLASSES_NAMES: " ${PLUGIN_CLASSES_NAMES} )
+##MESSAGE( STATUS "PLUGIN_COLLECTION: " ${PLUGIN_COLLECTION} )
 
 ###########################################################
 
