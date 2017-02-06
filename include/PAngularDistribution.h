@@ -27,7 +27,7 @@ class PAngularDistribution : public PDistribution  {
     Bool_t Init(void);
     Bool_t Prepare(void);
     Bool_t Finalize(void);
-    Bool_t IsValid(void);
+    Bool_t IsNotRejected(void);
     Bool_t CheckAbort(void);
     Bool_t SampleAngle(void);
 

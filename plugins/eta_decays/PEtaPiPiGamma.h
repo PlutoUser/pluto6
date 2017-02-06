@@ -25,7 +25,7 @@ class PEtaPiPiGamma : public PChannelModel  {
 
     Double_t GetWeight(void);
 
-    Bool_t IsValid(void);
+    Bool_t IsNotRejected(void);
 
  protected:
   

@@ -95,7 +95,7 @@ Bool_t POmega3Pi::CheckAbort(void) {
     return kFALSE;
 };
 
-Bool_t POmega3Pi::IsValid(void) {
+Bool_t POmega3Pi::IsNotRejected(void) {
 
     TLorentzVector M00 = (*(TLorentzVector *) primary) + (*(TLorentzVector *) side_particle[0]);
     TLorentzVector M01 = (*(TLorentzVector *) primary) + (*(TLorentzVector *) side_particle[1]); // Definiere meinen TLorentzvector für pi0/pi- auf x-Achse
@@ -107,9 +107,9 @@ Bool_t POmega3Pi::IsValid(void) {
     
 
     if (factor > max) {
-	Warning("IsValid", "Dalitz factor %f > max %f", factor, max);
+	Warning("IsNotRejected", "Dalitz factor %f > max %f", factor, max);
 	if (max < 0) {
-	    Warning("IsValid", "Dalitz factor max not set");
+	    Warning("IsNotRejected", "Dalitz factor max not set");
 	}
 	max = factor*1.02;
     } 

@@ -179,7 +179,7 @@ Double_t PFermiMomentum::Eval(Double_t x, Double_t y , Double_t z , Double_t t )
     return draw_scaling*r*r*(U*U + W*W);  // total probability to have momentum p
 };
 
-Bool_t PFermiMomentum::IsValid(void) {
+Bool_t PFermiMomentum::IsNotRejected(void) {
     return kTRUE;
 };
 

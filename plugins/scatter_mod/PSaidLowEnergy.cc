@@ -43,17 +43,17 @@ PDistribution* PSaidLowEnergy::Clone(const char*delme) const {
 };
 
 
-Bool_t PSaidLowEnergy::IsValid(void) {
+Bool_t PSaidLowEnergy::IsNotRejected(void) {
     
     if (!direct_sampling_done) {
-	Fatal("IsValid","Sampling not finished");
+	Fatal("IsNotRejected", "Sampling not finished");
     }
     return kTRUE;
 };
 
 
 Bool_t PSaidLowEnergy:: Init(void) {
-    if (!PAngularDistribution:: Init()) return kFALSE;
+    if (!PAngularDistribution::Init()) return kFALSE;
 
     if (!beam || !target) {
 	Warning("Init", "beam or target not found");

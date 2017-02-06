@@ -73,7 +73,7 @@ Bool_t PScatterDistribution::Init(void) {
 };
 
 
-Bool_t PScatterDistribution::IsValid(void) {
+Bool_t PScatterDistribution::IsNotRejected(void) {
        
     PParticle tmp_primary(primary);  //particle under investigation. Make better a copy
     PParticle tmp_parent(parent);    //particle under investigation. Make better a copy

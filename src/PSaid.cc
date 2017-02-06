@@ -1565,9 +1565,9 @@ PSaid::~PSaid() {
     told = -1.;      // to make sure that tables are recalculated for new object
 }
 
-Bool_t PSaid::IsValid(void) {
+Bool_t PSaid::IsNotRejected(void) {
     if (!direct_sampling_done) {
-	Warning("IsValid", "Sampling not finished");
+	Warning("IsNotRejected", "Sampling not finished");
     }
     return kTRUE;
 };

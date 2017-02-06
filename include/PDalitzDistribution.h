@@ -21,7 +21,7 @@ class PDalitzDistribution : public PDistribution  {
     Bool_t Init(void);
     Bool_t Prepare(void);
     Bool_t Finalize(void);
-    Bool_t IsValid(void);
+    Bool_t IsNotRejected(void);
     Bool_t CheckAbort(void);
 
     void SetSlopes(Double_t myslope1, Double_t myslope2) {slope1=myslope1;slope2=myslope2;};

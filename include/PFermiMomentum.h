@@ -24,7 +24,7 @@ class PFermiMomentum : public PChannelModel  {
 
     Bool_t Init(void);
     Bool_t Prepare(void);
-    Bool_t IsValid(void);
+    Bool_t IsNotRejected(void);
     int GetDepth(int i);
 
     void   Print(const Option_t *delme=NULL) const;  //Debug info
@@ -44,8 +44,8 @@ class PFermiMomentum : public PChannelModel  {
        if (spline) g_spline = new TSpline3("",f);
     };
 
-    virtual Double_t	Eval(Double_t x, Double_t y = 0, Double_t z = 0, Double_t t = 0) const;
-    virtual Double_t    EvalPar(const Double_t *x, const Double_t *params);
+    virtual Double_t Eval(Double_t x, Double_t y = 0, Double_t z = 0, Double_t t = 0) const;
+    virtual Double_t EvalPar(const Double_t *x, const Double_t *params);
     //TF1 wrapper
 
  protected:

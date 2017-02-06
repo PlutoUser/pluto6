@@ -39,7 +39,7 @@ class PHadronDecayM1 : public PHadronDecay  {
 	return abort;
     };
 
-    Bool_t IsValid(void) {
+    Bool_t IsNotRejected(void) {
 	return !abort;
     };
 

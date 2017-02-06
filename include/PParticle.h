@@ -175,7 +175,7 @@ class PParticle: public TLorentzVector {
 	if (!makeDataBase()->GetParamDouble(pkey, param, &result)) return -1;
 	return *result;
     };
-    const char GetDBString(char *name) {
+    char GetDBString(char *name) const {
 	Int_t param = makeDataBase()->GetParamString(name);
 	if (param < 0) return -1;
 	Int_t pkey = makeStaticData()->GetParticleKey(pid);

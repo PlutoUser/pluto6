@@ -114,7 +114,7 @@ Double_t PEtaPiPiGamma::GetWeight(void) {
 
 }
 
-Bool_t PEtaPiPiGamma::IsValid(void) {
+Bool_t PEtaPiPiGamma::IsNotRejected(void) {
     //Use rejection mode...
 
     if (GetVersionFlag() & VERSION_WEIGHTING) return kTRUE; 
@@ -124,7 +124,7 @@ Bool_t PEtaPiPiGamma::IsValid(void) {
     
     if (weight > weight_max) {
 	weight_max = weight*1.1;
-	Warning("IsValid", "Weight > max, new max is %lf", weight_max);
+	Warning("IsNotRejected", "Weight > max, new max is %lf", weight_max);
     }
 
     if ((weight/weight_max) > PUtils::sampleFlat()) 

@@ -120,7 +120,7 @@ Bool_t PDistribution::Init(void) {
     return kTRUE;    
 };
 
-Bool_t PDistribution::IsValid(void) {
+Bool_t PDistribution::IsNotRejected(void) {
     //check after genbod if the generated daughters are matching to the distributions
     //Each inherited class must decide on its own, what should be done here
     //Can be used to cut-out distributions from phase space

@@ -169,7 +169,7 @@ Bool_t PAnyDistribution::CheckAbort(void) {
     return kFALSE;
 };
 
-Bool_t PAnyDistribution::IsValid(void) {
+Bool_t PAnyDistribution::IsNotRejected(void) {
 
     double factor = 1.;
 
@@ -188,7 +188,7 @@ Bool_t PAnyDistribution::IsValid(void) {
 			  ANY_DISTRIBUTION_MAX_DAUGHTERS);
 	factor = *vf;
     } else {
-	Fatal("IsValid", "No equation set");
+	Fatal("IsNotRejected", "No equation set");
     }
     
     Double_t myres = 0.;
@@ -220,7 +220,7 @@ Bool_t PAnyDistribution::IsValid(void) {
 
     if (factor>max) {
 	max = factor * 1.1;
-	Warning("IsValid", "Factor > max, increased (%f)",max);
+	Warning("IsNotRejected", "Factor > max, increased (%f)",max);
     }
  
     if ((factor/max) > PUtils::sampleFlat()) return kTRUE; // sample now 

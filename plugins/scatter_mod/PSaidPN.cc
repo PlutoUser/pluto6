@@ -29,17 +29,17 @@ PDistribution *PSaidPN::Clone(const char *delme) const {
     return new PSaidPN((const PSaidPN &)* this);
 };
 
-Bool_t PSaidPN::IsValid(void) {
+Bool_t PSaidPN::IsNotRejected(void) {
     
     if (!direct_sampling_done) {
-	Fatal("IsValid", "Sampling not finished");
+	Fatal("IsNotRejected", "Sampling not finished");
     }
     return kTRUE;
 };
 
-Bool_t PSaidPN:: Init(void) {
+Bool_t PSaidPN::Init(void) {
     
-    if (!PAngularDistribution:: Init()) return kFALSE;
+    if (!PAngularDistribution::Init()) return kFALSE;
 
     if (!beam || !target) {
 	Warning("Init", "beam or target not found");

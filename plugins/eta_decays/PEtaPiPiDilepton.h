@@ -31,7 +31,7 @@ class PEtaPiPiDilepton : public PChannelModel  {
     Bool_t SampleMass(void);
 
 
-    Bool_t IsValid(void);
+    Bool_t IsNotRejected(void);
 
  protected:
   

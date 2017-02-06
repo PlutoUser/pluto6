@@ -33,10 +33,10 @@ PDistribution *PPiOmegaAngularDistribution::Clone(const char *delme) const {
     return new PPiOmegaAngularDistribution((const PPiOmegaAngularDistribution &)* this);
 };
 
-Bool_t PPiOmegaAngularDistribution::IsValid(void) {
+Bool_t PPiOmegaAngularDistribution::IsNotRejected(void) {
     
     if (!direct_sampling_done) {
-	Fatal("IsValid", "Sampling not finished");
+	Fatal("IsNotRejected", "Sampling not finished");
     }
     
     return kTRUE;

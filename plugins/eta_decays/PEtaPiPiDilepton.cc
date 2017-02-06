@@ -142,7 +142,7 @@ Double_t PEtaPiPiDilepton::GetWeight(void) {
     return GetWeight(s_pipi, dil.M(), theta_pi, ep_tmp.Theta(), phi);
 }
 
-Bool_t PEtaPiPiDilepton::IsValid(void) {
+Bool_t PEtaPiPiDilepton::IsNotRejected(void) {
     //Use rejection mode...
 
     if (GetVersionFlag(VERSION_WEIGHTING)) return kTRUE; 
@@ -151,7 +151,7 @@ Bool_t PEtaPiPiDilepton::IsValid(void) {
     Double_t weight = GetWeight();
     
     if (weight>weight_max) {
-	Warning("IsValid","Weight (%lf) > max (%lf)", weight, weight_max);
+	Warning("IsNotRejected", "Weight (%lf) > max (%lf)", weight, weight_max);
 	weight_max = weight*1.1;
     }
 

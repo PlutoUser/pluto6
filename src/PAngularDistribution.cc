@@ -422,7 +422,7 @@ Bool_t PAngularDistribution::RotateBack(Int_t rotate_daughters) {
     return kTRUE;
 }
 
-Bool_t PAngularDistribution::IsValid(void) {
+Bool_t PAngularDistribution::IsNotRejected(void) {
 
     if (direct_sampling_done) return kTRUE;
 
@@ -450,7 +450,7 @@ Bool_t PAngularDistribution::IsValid(void) {
 
     if (f > weight_max) {
 	weight_max = f*1.1;
-	Warning("IsValid", "[%s] Weight > max, new max is %lf", GetName(), weight_max);
+	Warning("IsNotRejected", "[%s] Weight > max, new max is %lf", GetName(), weight_max);
     }
 
     if ((f/weight_max) > PUtils::sampleFlat()) 

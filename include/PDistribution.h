@@ -125,7 +125,7 @@ class PDistribution : public TF1 {
   
     virtual Bool_t SampleAngle(void);
 
-    virtual Bool_t IsValid(void);
+    virtual Bool_t IsNotRejected(void);
 
     virtual Bool_t CheckAbort(void);
 

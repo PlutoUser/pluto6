@@ -32,10 +32,10 @@ PDistribution *PDeltaAngularDistribution::Clone(const char *delme) const {
     return new PDeltaAngularDistribution((const PDeltaAngularDistribution &)* this);
 };
 
-Bool_t PDeltaAngularDistribution::IsValid(void) {
+Bool_t PDeltaAngularDistribution::IsNotRejected(void) {
     
     if (!direct_sampling_done) {
-	Fatal("IsValid", "Sampling not finished");
+	Fatal("IsNotRejected", "Sampling not finished");
     }
 
     return kTRUE;

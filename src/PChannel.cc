@@ -964,7 +964,7 @@ int PChannel::Decay() {
 
 	for (int j=0; j<distribution_position; j++) { //loop over all valid distributions
 	    if ((dist[j]->GetStatus() == 0) && dist[j]->GetEnable()) { //all particles set
-		if (dist[j]->IsValid() == kFALSE) { 
+		if (dist[j]->IsNotRejected() == kFALSE) { 
 		    distr_status++;
 		    if (dist[j]->CheckAbort()) {
 			do_flag = 1000000;//set to big number, next step will abort

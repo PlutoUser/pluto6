@@ -23,7 +23,7 @@ class PAnyDistribution : public PDistribution  {
     Bool_t Init(void);
     Bool_t Prepare(void);
     Bool_t Finalize(void);
-    Bool_t IsValid(void);
+    Bool_t IsNotRejected(void);
     Bool_t CheckAbort(void);
 
     Bool_t AddEquation(TH1  *histo, char *command);  //adds an equation + cache for non-uniform distributions

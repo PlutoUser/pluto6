@@ -24,7 +24,7 @@ class PPiOmegaAngularDistribution : public PAngularDistribution {
 
     Bool_t Init(void);
     Bool_t Prepare(void);
-    Bool_t IsValid(void);
+    Bool_t IsNotRejected(void);
     
     void   Print(const Option_t *delme=NULL) const;  //Debug info
     

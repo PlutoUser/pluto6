@@ -100,7 +100,7 @@ Bool_t PDalitzDistribution::CheckAbort(void) {
     return kFALSE;
 };
 
-Bool_t PDalitzDistribution::IsValid(void) {
+Bool_t PDalitzDistribution::IsNotRejected(void) {
     
     // eta -> pi+ pi- pi0
     // see e.g. Ref. 8 
@@ -128,7 +128,7 @@ Bool_t PDalitzDistribution::IsValid(void) {
 	factor = 1 + slope1*dalitz_y + slope2*dalitz_y*dalitz_y;
     }
     
-    if (factor > max) Warning("IsValid", "Dalitz factor > max");
+    if (factor > max) Warning("IsNotRejected", "Dalitz factor > max");
  
     if ((factor/max) > PUtils::sampleFlat()) return kTRUE; // sample now angular distribution
     

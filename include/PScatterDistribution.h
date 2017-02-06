@@ -22,14 +22,13 @@ class PScatterDistribution : public PDistribution  {
 
     Bool_t Init(void);
 
-    Bool_t IsValid(void);
+    Bool_t IsNotRejected(void);
 
-
-    void   SetAngleFunction(TF1 *f) {
-	angles1=f;
+    void SetAngleFunction(TF1 *f) {
+	angles1 = f;
     };
-    void   SetAngleFunction(TF2 *f) {
-	angles2=f;
+    void SetAngleFunction(TF2 *f) {
+	angles2 = f;
     };
 
 
