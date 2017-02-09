@@ -41,24 +41,24 @@ class PReaction : public TObject  {
 
     PReaction();
 
-    PReaction(char *filename);
+    PReaction(const char *filename);
 
-    PReaction(PChannel **, char *, int n=2, int f0=1, int f1=0, int f2=0, int f3=0, TTree *ttree=NULL);
+    PReaction(PChannel **, const char *, int n=2, int f0=1, int f1=0, int f2=0, int f3=0, TTree *ttree=NULL);
 
-    PReaction(PChannel **, int n=2, unsigned int ff=0, TTree *ttree=NULL, char *filename=NULL);
+    PReaction(PChannel **, int n=2, unsigned int ff=0, TTree *ttree=NULL, const char *filename=NULL);
 
-    PReaction(double momentum, char *beam, char *target, char *reaction, char *file_name=NULL,
-	      int f0=1, int f1=0, int f2=0, int f3=0, TTree *ttree=NULL); 
+    PReaction(Double_t momentum, const char *beam, const char *target, const char *reaction, const char *file_name=NULL,
+	      Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL); 
     // build reaction from a descriptor string
-    PReaction(char *command,  char *beam, char *target, 
-	      char *reaction, char *file_name=NULL,
-	      int f0=1, int f1=0, int f2=0, int f3=0, TTree *ttree=NULL); 
+    PReaction(const char *command,  const char *beam, const char *target, 
+	      const char *reaction, const char *file_name=NULL,
+	      Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL); 
     // build reaction from a descriptor string but uses energy parser
-    PReaction(PParticle *, char *reaction, char *file_name=NULL,
-	      int f0=1, int f1=0, int f2=0, int f3=0, TTree *ttree=NULL); 
+    PReaction(PParticle *, const char *reaction, const char *file_name=NULL,
+	      Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL); 
     // build reaction from a descriptor string but uses a seed particle
 
-    void AddReaction(char *reaction);
+    void AddReaction(const char *reaction);
     //add a reaction to the list
 
     ~PReaction();
@@ -242,28 +242,28 @@ class PReaction : public TObject  {
     Bool_t AddBulk(PBulkInterface *mybulk);
     Bool_t AddPrologueBulk(PBulkInterface *mybulk); //Bulk IO before any decay
 
-    Bool_t Do(char *command) {
+    Bool_t Do(const char *command) {
 	return GetCurrentProjector()->AddCommand(command);
     }
-    Bool_t Do(TH1 *f, char *command, Int_t flag=1) {
+    Bool_t Do(TH1 *f, const char *command, Int_t flag=1) {
 	return GetCurrentProjector()->AddHistogram(f,command,flag);
     }
-    Bool_t Do(TH2 *f, char *command, Int_t flag=1) {
+    Bool_t Do(TH2 *f, const char *command, Int_t flag=1) {
 	return GetCurrentProjector()->AddHistogram(f,command,flag);
     }
-    Bool_t Do(TH3 *f, char *command, Int_t flag=1) {
+    Bool_t Do(TH3 *f, const char *command, Int_t flag=1) {
 	return GetCurrentProjector()->AddHistogram(f,command,flag);
     }
-    Bool_t Output(TNtuple *f, char *command = (char *)"") {
+    Bool_t Output(TNtuple *f, const char *command = (char *)"") {
 	return GetCurrentProjector()->AddOutputTNtuple(f,command);
     }
     Bool_t Input(TNtuple *f) {
 	return GetCurrentProjector()->AddInputTNtuple(f);
     }
-    Bool_t Output(char *f, char *command=(char *)"") {
+    Bool_t Output(const char *f, const char *command="") {
 	return GetCurrentProjector()->AddOutputASCII(f,command);
     }
-    Bool_t Input(char *f, char *command=(char *)"") {
+    Bool_t Input(const char *f, const char *command="") {
 	return GetCurrentProjector()->AddInputASCII(f, command);
     }
     Bool_t CloseFile(void) {
@@ -385,8 +385,8 @@ class PReaction : public TObject  {
     void SetUp(PChannel **);
     // get the channels and particles, identify the physics, set up the defaults.
 
-    Bool_t parse_script(char *e, char *beam, char *target, char *reaction, char *file_name=NULL,
-			int f0=1, int f1=0, int f2=0, int f3=0, TTree *ttree=NULL); 
+    Bool_t parse_script(const char *e, const char *beam, const char *target, const char *reaction, const char *file_name=NULL,
+			Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL); 
 
     void InitLoop();
     // resets the dynamical objects of the reaction and opens files
@@ -410,25 +410,25 @@ class PReaction : public TObject  {
     // beam axis skewing and smearing
     /* Double_t thetaBeam, phiBeam, sigmaBeam; */
     /* Double_t beam_energy,beam_momentum; //for consecutive reactions */
-    char    *r_beam,*r_target;
+    const char *r_beam, *r_target;
 
     //From batch system
-    Double_t *vertex_x,*vertex_y,*vertex_z;
+    Double_t *vertex_x, *vertex_y, *vertex_z;
     Double_t *event_impact_param , *event_plane;
     Double_t *weight_version;
 
     // ascii file
 
-    static void passEvent(float,float,float,int,int*,int*,int*,int*,
-			  float*,float*,float*,float*,
-			  float*,float*,float*,float*) {;}
+    static void passEvent(float,  float,  float,  int, int*, int*, int*, int*,
+			  float*, float*, float*, float*,
+			  float*, float*, float*, float*) {;}
     // dummy HGeant interface.  Comment to make HGeant routine visible!
 
 
     Int_t pre_heating;
     PReaction *sub_reaction;
 
-    ClassDef(PReaction,0) //Pluto Reaction Class
+    ClassDef(PReaction, 0) //Pluto Reaction Class
 
 };
 

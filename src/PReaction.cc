@@ -85,7 +85,7 @@ const unsigned int PReaction::ff2=1<<2;
 const unsigned int PReaction::ff3=1<<3;
 const unsigned int PReaction::ff4=1<<4;
 
-PReaction::PReaction(PChannel **pchannel, char *file_name, int n,
+PReaction::PReaction(PChannel **pchannel, const char *file_name, int n,
 		     int f0, int f1, int f2, int f3, TTree *ttree) {
     // Reaction constructor by pointer to array of pointers to Channels,
     // output file name (see below), options (see below), pointer to external event tree
@@ -157,7 +157,7 @@ PReaction::PReaction() {
 }
 
 
-PReaction:: PReaction(char *filename) {
+PReaction:: PReaction(const char *filename) {
     makeStdData()->fillDataBase();//init physics, if not yet done
     makeDistributionManager()->DisableAddWarning();
     makeDistributionManager()->ExecAll("init"); //init physics, if not yet done, and allow for didx-plugins
@@ -177,7 +177,7 @@ PReaction:: PReaction(char *filename) {
 }
 
 PReaction::PReaction(PChannel **pchannel, int n, unsigned int ff, 
-		     TTree *ttree, char *file_name) {
+		     TTree *ttree, const char *file_name) {
     // same as above, but passing one unsigned int as flag
     // position of arguments shuffled to break ambiguity with previous constructor
 
@@ -199,8 +199,8 @@ PReaction::PReaction(PChannel **pchannel, int n, unsigned int ff,
 
 
 PReaction::PReaction(Double_t momentum,
-		     char *beam, char *target,
-		     char *reaction, char *file_name,
+		     const char *beam, const char *target,
+		     const char *reaction, const char *file_name,
 		     Int_t f0, Int_t f1, Int_t f2, Int_t f3, TTree *ttree) {
     // build reaction completely from descriptor string
     
@@ -212,9 +212,9 @@ PReaction::PReaction(Double_t momentum,
 		 f0, f1,f2, f3, ttree);
 } 
 
-PReaction::PReaction(char *e,
-		     char *beam, char *target,
-		     char *reaction, char *file_name,
+PReaction::PReaction(const char *e,
+		     const char *beam, const char *target,
+		     const char *reaction, const char *file_name,
 		     Int_t f0, Int_t f1, Int_t f2, Int_t f3, TTree *ttree) {
     // build reaction completely from descriptor string
 
@@ -224,9 +224,9 @@ PReaction::PReaction(char *e,
 		 f0, f1,f2, f3, ttree);
 } 
 
-Bool_t PReaction::parse_script(char *command,
-                      char *beam, char *target,
-                      char *reaction, char *file_name,
+Bool_t PReaction::parse_script(const char *command,
+                      const char *beam, const char *target,
+                      const char *reaction, const char *file_name,
                       Int_t f0, Int_t f1, Int_t f2, Int_t f3, TTree *ttree) {
     // Build "reaction" completely from descriptor string  (author: V. Hejny)
     // For "command, the batch script syntax is supported
@@ -256,16 +256,17 @@ Bool_t PReaction::parse_script(char *command,
     makeDistributionManager()->ExecAll("init"); //init physics, if not yet done, and allow for didx-plugins
     sub_reaction = NULL;
 
-    PUtils::remove_spaces(&command);
-    if (strlen(command)>0 && isdigit(command[0])) {
-	char *newe = new char[strlen(command)+5];
-	sprintf(newe, "_T1=%s", (char *)command);
-	command = newe;
+    char *newcommand = PUtils::NewString(command);
+    PUtils::remove_spaces(&newcommand);
+    if (strlen(newcommand)>0 && isdigit(newcommand[0])) {
+	char *newe = new char[strlen(newcommand)+5];
+	sprintf(newe, "_T1=%s", (char *)newcommand);
+	newcommand = newe;
     }
 
     makeGlobalBatch()->SetVarList((char *)
 				  "_T1;_T2;_P1;_P2;_theta1;_theta2;_phi;");
-    makeGlobalBatch()->Execute(command);
+    makeGlobalBatch()->Execute(newcommand);
     makeGlobalBatch()->SetVarList(NULL);
     
     Double_t beam_energy1 = 0.;
@@ -376,7 +377,7 @@ Bool_t PReaction::parse_script(char *command,
 } 
 
 PReaction::PReaction(PParticle *q,
-		     char *reaction, char *file_name,
+		     const char *reaction, const char *file_name,
 		     Int_t f0, Int_t f1, Int_t f2, Int_t f3, TTree *ttree) {
     // build reaction completely from descriptor string  (author: V. Hejny)
 
@@ -393,13 +394,12 @@ PReaction::PReaction(PParticle *q,
     TList plutoList;
    
     for (int i=0; i<array_s; i++) {
-       
-      Int_t n = 0;
-
-      plutoList.AddLast(q);
-      ParseChannel(q, array[i], plutoList, n);
-
-      total_channels += n;
+	Int_t n = 0;
+	
+	plutoList.AddLast(q);
+	ParseChannel(q, array[i], plutoList, n);
+	
+	total_channels += n;
     }
 
     PChannel **pchannel = new PChannel*[total_channels];
@@ -435,7 +435,7 @@ PReaction::PReaction(PParticle *q,
     SetName(file_name); 
 } 
 
-void PReaction::AddReaction(char *reaction) {
+void PReaction::AddReaction(const char *reaction) {
     if (sub_reaction) {
 	sub_reaction->AddReaction(reaction);
     } else {

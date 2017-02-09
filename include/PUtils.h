@@ -168,6 +168,11 @@ class PUtils : public TObject {
   static Int_t remove_brackets(char **partc, char a, char b);
   static Bool_t ValidVariableName(const char *name, unsigned int len = 0);
   static Bool_t IsInt(const char *name);
+  static char *NewString(const char *var) {
+      char *newvar = new char[strlen(var)+1];
+      sprintf(newvar, "%s", var);
+      return newvar;
+  };
   
   static void correct_histo(TH1 *histo);
   static void correct(TH1 *histo);

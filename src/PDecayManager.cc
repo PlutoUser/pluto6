@@ -206,7 +206,7 @@ void PDecayManager::AddChannel(PParticle *p, PDecayChannel *n) {
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayManager::AddChannel(char *p, PDecayChannel *n) {
+void PDecayManager::AddChannel(const char *p, PDecayChannel *n) {
     // Adds a specific PDecayChannel 'n' to the particle represented just
     // by its name. 
     AddChannel(makeStaticData()->GetParticleID(p), n);  
@@ -300,7 +300,7 @@ void PDecayManager::SetDefault(PParticle *p,Int_t recursive) {
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayManager::SetDefault(char *p,Int_t recursive) {
+void PDecayManager::SetDefault(const char *p,Int_t recursive) {
     // Sets the default decay branches for the particle represented by its
     // name.
     SetDefault(makeStaticData()->GetParticleID(p), recursive);  
@@ -410,7 +410,7 @@ void PDecayManager::InitReaction(PParticle *start, PDecayChannel *CurrentChannel
 		MoreToDo = 1;
 		tempRL->Finished->Push(tempPC);
  
-		Int_t           i,loop;
+		Int_t           i, loop;
 		Int_t           NOP = tempPC->GetNumPar();	// number of products
 		PParticle     **LOP = tempPC->GetParticles();   // list of products
 		PDecayChannel **pdc = new PDecayChannel*[NOP];  // array of decay channels
@@ -531,7 +531,7 @@ void PDecayManager::ConstructPChannel(PParticle *p, PDecayChannel *c1,
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-PReaction *PDecayManager::GetNextReaction(int wf, char *name, int f0,
+PReaction *PDecayManager::GetNextReaction(int wf, const char *name, int f0,
 					  int f1, int f2, int f3,
 					  TTree *tt) {
     // GetNextReaction() looks for the next decay tree in 'ReactionList'
@@ -606,7 +606,7 @@ PReaction *PDecayManager::GetNextReaction(int wf, char *name, int f0,
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-PReaction *PDecayManager::GetNextReaction(char *name, int f0,
+PReaction *PDecayManager::GetNextReaction(const char *name, int f0,
 					  int f1, int f2, int f3,
 					  TTree *tt) {
     // This call sets the weight flag to zero and is obsolete.
@@ -615,7 +615,7 @@ PReaction *PDecayManager::GetNextReaction(char *name, int f0,
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-Int_t PDecayManager::Loop(int num, int wf, char *name, int f0,
+Int_t PDecayManager::Loop(int num, int wf, const char *name, int f0,
 			  int f1, int f2, int f3, int rf) {
     // This is the standard call to process all possible reaction channels
     // of the reaction set up before.

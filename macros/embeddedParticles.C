@@ -1,19 +1,19 @@
 //TITLE <PEmbeddedParticles> Adds embedded particles in the eta Dalitz decay
 
 {
-
-    PReaction my_reaction(3.13,"p","p","p p eta [dilepton [e+ e-] g]","eta_dalitz_embedded",1,0,0,0);
+    
+    PReaction my_reaction(3.13, "p", "p", "p p eta [dilepton [e+ e-] g]", "eta_dalitz_embedded", 1, 0, 0, 0);
 
     //Construct the bulk container:
-    PEmbeddedParticles * embedded = new PEmbeddedParticles();
+    PEmbeddedParticles *embedded = new PEmbeddedParticles();
 
     //Add an e+ which we emit at a single point:
-    PParticle * e_plus = new PParticle("e+",1.,2.,3.);  
+    PParticle *e_plus = new PParticle("e+", 1., 2., 3.);  
     //Just add the particle to the container:
     embedded->AddParticle(e_plus);
 
     //We can also add a "white" dilepton, which we emit in a small cone:
-    PParticle * dilepton = new PParticle("dilepton");
+    PParticle *dilepton = new PParticle("dilepton");
     embedded->AddParticle(dilepton);
     embedded->SetSampling(0, 1.,   //pmin and pmax in lab frame 
 			  TMath::Pi()/1000., //opening angle

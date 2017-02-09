@@ -17,7 +17,7 @@ class PBeamSmearing : public PDistribution  {
  public:
     PBeamSmearing();
     ~PBeamSmearing();
-    PBeamSmearing(Char_t *id, Char_t *de);
+    PBeamSmearing(const Char_t *id, const Char_t *de);
     
     PDistribution *Clone(const char *delme=NULL) const;
 
@@ -49,7 +49,7 @@ class PBeamSmearing : public PDistribution  {
 	ang_smearing=f;
     };
     
-    void SetReaction(char *reaction);
+    void SetReaction(const char *reaction);
 
  private:
 

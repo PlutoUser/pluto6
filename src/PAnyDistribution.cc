@@ -103,24 +103,24 @@ void PAnyDistribution::MakeVars() {
     z = makeStaticData()->GetBatchValue("_z"); 
 };
 
-Bool_t PAnyDistribution::AddEquation(char *command) {
+Bool_t PAnyDistribution::AddEquation(const char *command) {
     MakeVars();
     return projector->AddCommand(command);
 };
 
-Bool_t PAnyDistribution::AddEquation(TH1 *histo, char *command) {
+Bool_t PAnyDistribution::AddEquation(TH1 *histo, const char *command) {
     MakeVars();
     cache1 = histo;
     return projector->AddHistogram(histo, command, 2);
 };
 
-Bool_t PAnyDistribution::AddEquation(TH2 *histo, char *command) {
+Bool_t PAnyDistribution::AddEquation(TH2 *histo, const char *command) {
     MakeVars();
     cache2 = histo;
     return projector->AddHistogram(histo, command, 2);
 };
 
-Bool_t PAnyDistribution::AddEquation(TH3 *histo, char *command) {
+Bool_t PAnyDistribution::AddEquation(TH3 *histo, const char *command) {
     MakeVars();
     cache3 = histo;
     return projector->AddHistogram(histo, command, 2);

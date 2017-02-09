@@ -29,7 +29,7 @@ PBeamSmearing::~PBeamSmearing() {
     if (mytarget) delete (mytarget);
 };
 
-PBeamSmearing::PBeamSmearing(Char_t *id, Char_t *de) :
+PBeamSmearing::PBeamSmearing(const Char_t *id, const Char_t *de) :
     PDistribution(id, de) {
     beam     = NULL;
     mybeam   = NULL;
@@ -153,7 +153,7 @@ Bool_t PBeamSmearing::Prepare(void) {
     return kTRUE;
 }
 
-void PBeamSmearing::SetReaction(char *reaction) {
+void PBeamSmearing::SetReaction(const char *reaction) {
     char *array[2];
     Int_t array_s = 2; //max products
     PUtils::Tokenize(reaction, "+", array, &array_s);

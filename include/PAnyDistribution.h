@@ -26,10 +26,10 @@ class PAnyDistribution : public PDistribution  {
     Bool_t IsNotRejected(void);
     Bool_t CheckAbort(void);
 
-    Bool_t AddEquation(TH1  *histo, char *command);  //adds an equation + cache for non-uniform distributions
-    Bool_t AddEquation(TH2  *histo, char *command);  //adds an equation + cache for non-uniform distributions
-    Bool_t AddEquation(TH3  *histo, char *command);  //adds an equation + cache for non-uniform distributions
-    Bool_t AddEquation(char *command);
+    Bool_t AddEquation(TH1 *histo, const char *command);  //adds an equation + cache for non-uniform distributions
+    Bool_t AddEquation(TH2 *histo, const char *command);  //adds an equation + cache for non-uniform distributions
+    Bool_t AddEquation(TH3 *histo, const char *command);  //adds an equation + cache for non-uniform distributions
+    Bool_t AddEquation(const char *command);
     
     void SetMaxEnhancementFactor(Double_t _max_enhance_factor) {
 	max_enhance_factor = _max_enhance_factor;

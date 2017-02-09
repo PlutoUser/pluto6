@@ -58,10 +58,10 @@ class PDecayChannel : public TObject {
     void AddChannel(Double_t w, Int_t nd, PParticle **ld);
   
     // The same as above using particle names instead of ids.
-    void AddChannel(Double_t w, char *d1);
-    void AddChannel(Double_t w, char *d1, char *d2);
-    void AddChannel(Double_t w, char *d1, char *d2, char *d3);
-    void AddChannel(Double_t w, char *d1, char *d2, char *d3, char *d4);
+    void AddChannel(Double_t w, const char *d1);
+    void AddChannel(Double_t w, const char *d1, const char *d2);
+    void AddChannel(Double_t w, const char *d1, const char *d2, const char *d3);
+    void AddChannel(Double_t w, const char *d1, const char *d2, const char *d3, const char *d4);
     void AddChannel(Double_t w, Int_t nd, char **ld);
   
     // Get the information out of the class ...

@@ -34,34 +34,33 @@
     //if you want to have a flat distribution
     //one has to take this into account by multiplying with x
     //This produces a flat beam spot around around +/- 1deg
-    smear->SetAngularSmearing(new TF1("delme","1    *x",0,1.));
+    smear->SetAngularSmearing(new TF1("delme","1 *x", 0, 1.));
 
     //momentum smearing +/- 10%
-    //smear->SetMomentumSmearing(new TF1("delme","1",0.9,1.1));
+    //smear->SetMomentumSmearing(new TF1("delme", "1", 0.9, 1.1));
 
     makeDistributionManager()->Add(smear);
 
-    PReaction my_reaction("2.2","p","p","p p eta [dilepton [e+ e-] g]", "eta_dalitz",1,0,0,0);
+    PReaction my_reaction("2.2", "p", "p", "p p eta [dilepton [e+ e-] g]", "eta_dalitz", 1, 0, 0, 0);
 
     //This histogram shows the beam profile:
-    TH2F * histo1 = new TH2F ("histo1","Px vs. Py of beam",100,-.1,.1,100,-.1,.1);
-    my_reaction.Do(histo1,"_x = [p + p]->Px(); _y  = [p + p]->Py();");
+    TH2F *histo1 = new TH2F ("histo1", "Px vs. Py of beam", 100, -.1, .1, 100, -.1, .1);
+    my_reaction.Do(histo1, "_x = [p + p]->Px(); _y  = [p + p]->Py();");
     
     //This histogram shows how a wrong assumption about the beam
     //momentum can influence the reconstruction in an exclusive
     //reaction
-    TH1F * histo2 = new TH1F ("histo2","Reconstructed eta mass",100,0.3,.0.7);
+    TH1F *histo2 = new TH1F ("histo2", "Reconstructed eta mass", 100, 0.3, 0.7);
     my_reaction.Do("wrong_cm = P3E(0.000000,0.000000,2.994728,4.076545);");
-    my_reaction.Do(histo2,"_x = wrong_cm - ([p,1] + [p,2])->M();");
+    my_reaction.Do(histo2, "_x = (wrong_cm - ([p,1] + [p,2]))->M();");
 
     my_reaction.Print();   //The "Print()" statement is optional
     my_reaction.Loop(10000);
-
+    
     histo1->Draw();
     
     new TCanvas();
 
     histo2->Draw();
-    
 
 }

@@ -235,17 +235,17 @@ class PDecayManager : public TObject {
   
     // add/assign/get a specific decay channel to one particle either by
     // particle id, by an instance of PParticle or just by name 
-    void AddChannel(Int_t id,     PDecayChannel *n);
-    void AddChannel(PParticle *p, PDecayChannel *n);       
-    void AddChannel(char *p,      PDecayChannel *n);       
+    void AddChannel(Int_t id,      PDecayChannel *n);
+    void AddChannel(PParticle *p,  PDecayChannel *n);       
+    void AddChannel(const char *p, PDecayChannel *n);       
     PDecayChannel *GetChannel(Int_t id) const;
-    PDecayChannel *GetChannel(PParticle *p)const;    
-    PDecayChannel *GetChannel(char *n)const;    
+    PDecayChannel *GetChannel(PParticle *p) const;    
+    PDecayChannel *GetChannel(char *n) const;    
   
     // set the default decay channel for this particle (according to PDG)
-    void SetDefault(Int_t id,     Int_t recursive=0);
-    void SetDefault(PParticle *p, Int_t recursive=0);       
-    void SetDefault(char *p,      Int_t recursive=0);       
+    void SetDefault(Int_t id,      Int_t recursive=0);
+    void SetDefault(PParticle *p,  Int_t recursive=0);       
+    void SetDefault(const char *p, Int_t recursive=0);       
 
     // clear the channel
     void Clear(Int_t id);
@@ -270,17 +270,17 @@ class PDecayManager : public TObject {
     // list is transfered to the initial particle; each reaction is simulated
     // with the same nb. of events, product particles have a proper weight set.
     // The second form is obsolete (and implies wf=0)
-    PReaction *GetNextReaction(int wf, char *name, int f0=0, int f1=0, 
+    PReaction *GetNextReaction(int wf, const char *name, int f0=0, int f1=0, 
 			       int f2=0, int f3=0, TTree *tt=NULL);
-    PReaction *GetNextReaction(char *name, int f0=0, int f1=0, int f2=0, 
+    PReaction *GetNextReaction(const char *name, int f0=0, int f1=0, int f2=0, 
 			       int f3=0, TTree *tt=NULL);
   
     // loop does a loop over all possible reaction channels and write
     // the output in a file name.root. The arguments are the same as
     // in GetNextReaction.
-    Int_t Loop(int num, int wf, char* name, int f0=0, 
+    Int_t Loop(int num, int wf, const char* name, int f0=0, 
 	       int f1=0, int f2=0, int f3=0, int rf=0);
-    Int_t loop(int num, int wf, char* name, int f0=0, 
+    Int_t loop(int num, int wf, const char* name, int f0=0, 
 	       int f1=0, int f2=0, int f3=0, int rf=0) {
 	return Loop(num, wf, name, f0, f1, f2, f3, rf);
     }

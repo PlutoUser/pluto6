@@ -15,7 +15,7 @@
     makeStaticData()->SetBatchValue("pileup_time_theshold", 0.5 * 10e-5 * TMath::C() / 10e-3);
 
     //4.) Just a flag for pileup
-    makeStaticData()->SetBatchValue("pileup_flag" ,0);
+    makeStaticData()->SetBatchValue("pileup_flag", 0);
 
     //this just constructs the temporary particles:
     makeDynamicData()->GetBatchParticle("p1");
@@ -23,7 +23,7 @@
     makeDynamicData()->GetBatchParticle("eta1");
 
     //**************************************************************
-    PReaction my_reaction("_T1=2.2","p","p","p p eta","pileup_eta");
+    PReaction my_reaction("_T1=2.2", "p", "p", "p p eta", "pileup_eta");
     my_reaction.trackedParticles();  //this removes the "empty events"
     //**************************************************************
     
@@ -59,7 +59,6 @@
     //my_reaction.Do("time = [p,1]->T(); echo $time");
     //my_reaction.Do("foreach(*); [*]->Print();");
     
-
     my_reaction.Print();   //The "Print()" statement is optional
     my_reaction.Loop(100);
 }

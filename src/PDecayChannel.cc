@@ -258,7 +258,7 @@ void PDecayChannel::AddChannel(Double_t w, Int_t nd, PParticle **ld) {
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayChannel::AddChannel(Double_t w, char *d1) {
+void PDecayChannel::AddChannel(Double_t w, const char *d1) {
     // The channel describes a decay into 1 daughter particle represented by
     // its name d1 and branching ratio w.
     // (This strange case is implemented only for completeness.)
@@ -275,7 +275,7 @@ void PDecayChannel::AddChannel(Double_t w, char *d1) {
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayChannel::AddChannel(Double_t w, char *d1, char *d2) {
+void PDecayChannel::AddChannel(Double_t w, const char *d1, const char *d2) {
     // The channel describes a decay into 2 daughter particles represented by
     // their names d1, d2 and branching ratio w.
     if (!Daughters.GetArray()) {
@@ -292,7 +292,7 @@ void PDecayChannel::AddChannel(Double_t w, char *d1, char *d2) {
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayChannel::AddChannel(Double_t w, char *d1, char *d2, char *d3) {
+void PDecayChannel::AddChannel(Double_t w, const char *d1, const char *d2, const char *d3) {
     // The channel describes a decay into 3 daughter particles represented by
     // their names d1, d2, d3 and branching ratio w.
     if (!Daughters.GetArray()) {
@@ -310,7 +310,7 @@ void PDecayChannel::AddChannel(Double_t w, char *d1, char *d2, char *d3) {
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayChannel::AddChannel(Double_t w, char *d1, char *d2, char *d3, char *d4) {
+void PDecayChannel::AddChannel(Double_t w, const char *d1, const char *d2, const char *d3, const char *d4) {
     // The channel describes a decay into 4 daughter particles represented by
     // their names d1, d2, d3, d4 and branching ratio w.
     if (!Daughters.GetArray()) {

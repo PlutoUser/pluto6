@@ -4,13 +4,12 @@
 //can be used
 
 
-#include "../src/PValues.h"
+//#include "../include/PValues.h"
 
-fermi_dd() {
-
+{
     //This is the real reaction:
-    PParticle * beam  =new PParticle("d",2.2);
-    PParticle * target=new PParticle("d");
+    PParticle *beam   = new PParticle("d", 2.2);
+    PParticle *target = new PParticle("d");
 
     //Set the values BEFORE using the "+" operator
     //beam->SetValue(P_SCATTER);
@@ -57,11 +56,9 @@ fermi_dd() {
     makeDistributionManager()->Add(pmodel);
     makeDistributionManager()->Print("user");//The "Print()" statement is optional
 
-
     PReaction *r=new PReaction(cc,"fermi_dd",2,1,0,0,0);
 
     r->Print();
-
 
     r->loop(100000);
 
