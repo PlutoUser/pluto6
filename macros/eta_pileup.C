@@ -56,8 +56,8 @@
     
 
     //this is just for debugging:
-    //my_reaction.Do("time = [p,1]->T(); echo $time");
-    //my_reaction.Do("foreach(*); [*]->Print();");
+    my_reaction.Do("time = [p,1]->T(); echo $time");
+    my_reaction.Do("foreach(*); [*]->Print();");
     
     my_reaction.Print();   //The "Print()" statement is optional
     my_reaction.Loop(100);

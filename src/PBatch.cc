@@ -215,6 +215,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
     //cout << "command:" << command_pos << ":" << command_pointer << ":" << retval << endl;
 
     current_position = -1;
+    locnum_old_command = -1;
 
     for (int i=command_pos; i<command_pointer; i++) {
 	TObject  *res  = NULL;
@@ -451,7 +452,8 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    makeDataBase()->GetParamTObj(lst_key[1][i], batch_particle_param, &res);
 	    if (res) {
 		current_particle = (PParticle *)res;
-		locnum_old_command = i + 1;
+		//current_particle->Print();
+		if (locnum_old_command < 0) locnum_old_command = i + 1;
 		if (lst_key[2][i] == -1) {
 		    //old version (function or empty method)
 		    return retval | kPUSH;
@@ -1171,7 +1173,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
  		} else {
  		    retval = kFOREACH;
  		}
-		locnum_old_command = i; //Jump to the "foreach" command
+		if (locnum_old_command < 0) locnum_old_command = i; //Jump to the "foreach" command
 	    }
 
 	} else if (lst_command[i] == COMMAND_READLINE) {
@@ -1315,6 +1317,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 
 Bool_t PBatch::AddCommand(char *command) {
 
+    //cout << "AddCommand1:" << command << endl;
     PUtils::remove_spaces(&command);
     if (strlen(command) == 0) return kTRUE;
     Bool_t has_something  = kFALSE;
@@ -1631,7 +1634,7 @@ Bool_t PBatch::AddCommand(char *command) {
 	}
 	if (!strncmp(command,"push",4) || !strncmp(command,"Push",4)) {
 	    key_a = makeStaticData()->
-		MakeDirectoryEntry("batch_objects",NBATCH_NAME,LBATCH_NAME,command3);
+		MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, command3);
 	    char *dummy = new char[strlen(command)-3];
 	    strncpy(dummy, command+4, strlen(command)-4);
 	    dummy[strlen(command)-4] = '\0';

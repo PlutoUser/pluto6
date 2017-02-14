@@ -33,7 +33,7 @@
 
 ClassImp(PFireball)
 
-PFireball::PFireball(char *particle, float AGeV, float t1, float t2, float f,
+PFireball::PFireball(const char *particle, float AGeV, float t1, float t2, float f,
 		     float b, float a2, float a4, float w1, float w2, int sp) :
 PParticle(particle) {
     //

@@ -1,7 +1,6 @@
 //TITLE <PFermiNucleus, PBeamSmearing> Quasi-free pi+A scattering, including beam smearing
 
-{
-    
+{    
     //Uses PFermiNucleus.C & PCopyBeam
     //This class is here only for didactical reasons. It has no real physics content
 

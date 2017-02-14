@@ -106,7 +106,7 @@ Bool_t PProjector::AddCommand(const char *command) {
     }
 
     batch[batch_pos]->SetPosition(batch_pos, bulk_id);  //Set absolute adress
-    if (!batch[batch_pos]->AddCommand((char*) command))  {
+    if (!batch[batch_pos]->AddCommand(PUtils::NewString(command)))  {
 	delete batch[batch_pos];
 	return kFALSE;
     }
@@ -540,11 +540,14 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
     SetParticles(mstack, decay_done, num, stacksize, 1);
     //cout << "num:  " << *num << endl;
     //excuting batch
-    Int_t startcommand=0;
+    Int_t startcommand = 0;
     Int_t retval = kFALSE;
     for (int i=0; i<batch_pos; i++) {
 
+	//cout << i << endl;
+	if (i<0) return -1;
 	retval = batch[i]->Execute(startcommand, retval);
+	//cout << "retval:" << retval << endl;
 	startcommand = 0;
 
 	if (retval & kTRUE) {
@@ -607,19 +610,24 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 	    }
 	} 
 	
+	int redo = 0;
+	int setparticle = 0;
 	if (retval & kGOTO) {
 	    if (batch[i]->GetNewBulk() == bulk_id) {
 		//stay in the same PProjector
-		SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles for "formore"
+		setparticle = 1;
+		//SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles for "formore"
 		Int_t new_batch = batch[i]->GetNewBatch();
 		startcommand = batch[i]->GetNewCommand();
-		i =  new_batch -1;
+		i =  new_batch - 1;
 	    } else {
 		Error("Modify", "Jumping with a GOTO over different Projector not yet implemented");
 	    }
 	    retval &= ~kGOTO;
-	} else if (retval & kPUSH) {
+	} 
+	if (retval & kPUSH) {
 	    startcommand = batch[i]->GetOldCommand();
+	    //cout << startcommand << endl;
 	    if ((*num) >= stacksize) {
 		Warning("Modify (kPUSH)", "Stack size too small, increase '_system_particle_stacksize'");
 		return kTRUE;
@@ -628,16 +636,19 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 		*(mstack[*num]) = *(batch[i]->GetCurrentParticle());
 		(*num)++;
 		decay_done[*num]=0;
-		SetParticles(mstack, decay_done, num, stacksize, 1);  //reset particles
+		setparticle = 2;
+		//SetParticles(mstack, decay_done, num, stacksize, 1);  //reset particles
 	    } else {
 		Warning("Modify (kPUSH)", "Pushed particle not found");
 	    }
-	    i -=1; //stay in same batch
+	    //i -= 1; //stay in same batch
+	    redo = 1;
 	    retval &= ~kPUSH;
-	} else if (retval & kPUSHBRANCH) {
+	} 
+	if (retval & kPUSHBRANCH) {
 	    startcommand = batch[i]->GetOldCommand();
 	    if (batch[i]->GetBranch() > (*size_branches))  {
-		Warning("Modify (kPUSHBRANCH)", "Branch number %i not known",*size_branches);
+		Warning("Modify (kPUSHBRANCH)", "Branch number %i not known", *size_branches);
 		return kTRUE;
 	    }
 	    if ( (*(current_size_branches[batch[i]->GetBranch()-1])) >= stacksize) {
@@ -653,33 +664,50 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 	    } else {
 		Warning("Modify", "Pushed particle not found");
 	    }
-	    i -=1; //stay in same batch
+	    redo = 1;
+	    //i -= 1; //stay in same batch
 	    retval &= ~kPUSHBRANCH;
-	} else if (retval & kFOREACHEND) {
-	    SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles like for "formore"
+	} 
+	if (retval & kFOREACHEND) {
+	    setparticle = 1;
+	    //SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles like for "formore"
 	    startcommand = 0;
 	    retval &= ~kFOREACHEND;
-	} else if (retval & kUPDATE) {
-	    SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles like for "formore"
+	    retval &= ~kFOREACH;
+	} 
+	if (retval & kUPDATE) {
+	    setparticle = 1;
+	    //SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles like for "formore"
 	    startcommand = batch[i]->GetOldCommand();
-	    i -=1; //stay in same batch
+	    redo = 1;
+	    //i -=1; //stay in same batch
 	    retval &= ~kUPDATE;
-	} else if (retval & kEOF) {
+	} 
+	if (retval & kEOF) {
 	    Info("Modify", "EOF reached");
 	    return kFALSE;
-	} else if (retval & kFOREACH) {
+	} 
+	if (retval & kFOREACH) {
 	    startcommand = batch[i]->GetOldCommand();
-	    i -= 1; //redo current loop
-	    SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles like for "formore"
+	    //cout << "sc foreach " << startcommand << endl;
+	    redo = 1;
+	    //i -= 1; //redo current loop
+	    setparticle = 1;
+	    //SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles like for "formore"
 	    retval &= ~kFOREACHEND;
-	} else if (!(retval & kTRUE) && !(retval & kELSE)) {
+	} 
+	if (!(retval & kTRUE) && !(retval & kELSE) && !redo) {
 	    //if something failed, try to get the else
 	    if (batch[i]->GetElsePosition()>-1 &&  //only if else is provided
 		batch[i]->GetCurrentPosition() < batch[i]->GetElsePosition() ) { //avoid deadlocks
 		startcommand = batch[i]->GetElsePosition();
-		i -= 1; //stay in same batch		
+		redo = 1;
+		//i -= 1; //stay in same batch		
 	    }
 	}
+	if (setparticle == 1) SetParticles(mstack, decay_done, num, stacksize, 0);
+	if (setparticle == 2) SetParticles(mstack, decay_done, num, stacksize, 1);
+	if (redo) i -= 1; //stay in same batch	
 
 	retval &= ~kTRUE; //clean true flag for next loop
     }

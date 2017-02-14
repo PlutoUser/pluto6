@@ -43,31 +43,31 @@
     //This is controlled via "filter_smear_factor"
 
     //Create the efficiency matrices:
-    TH3F * gen = 
-	new TH3F ("gen","Generated events",30,0,1500,20,-1,1,20,0,360);
-    TH3F * eff_elec = 
-	new TH3F ("eff_elec","Efficiency matrix electrons",30,0,1500,20,-1,1,20,0,360);    
-    TH3F * eff_protons = 
-	new TH3F ("eff_protons","Efficiency matrix protons",30,0,1500,20,-1,1,20,0,360);
+    TH3F *gen = 
+	new TH3F ("gen", "Generated events", 30, 0, 1500, 20, -1, 1, 20, 0, 360);
+    TH3F *eff_elec = 
+	new TH3F ("eff_elec", "Efficiency matrix electrons", 30, 0, 1500, 20, -1, 1, 20, 0, 360);    
+    TH3F *eff_protons = 
+	new TH3F ("eff_protons", "Efficiency matrix protons", 30, 0, 1500, 20, -1, 1, 20, 0, 360);
 
     //Start the Monte-Carlo
     int nev = 1000000;
-    for (int i=0; i<nev ; i++) {
+    for (int i=0; i<nev; i++) {
 	Double_t mom = PUtils::sampleFlat()*3000;
-	Double_t costheta = PUtils::sampleFlat()*2-1;
+	Double_t costheta = PUtils::sampleFlat()*2 - 1;
 	Double_t phi = PUtils::sampleFlat()*360;
 	
-	gen->Fill(mom,costheta,phi);
+	gen->Fill(mom, costheta, phi);
 
 	Double_t theta = acos(costheta)*180/TMath::Pi();
 
 	//electrons
-	if ((theta > 18) && (theta<95)) {
-	    Double_t rnd=PUtils::sampleFlat();
-	    if ((mom>100) && (rnd<0.8))
-		eff_elec->Fill(mom,costheta,phi);
-	    else if ((mom>50) && (rnd<0.5))
-		eff_elec->Fill(mom,costheta,phi);	    
+	if ((theta > 18) && (theta < 95)) {
+	    Double_t rnd = PUtils::sampleFlat();
+	    if ((mom > 100) && (rnd < 0.8))
+		eff_elec->Fill(mom, costheta, phi);
+	    else if ((mom > 50) && (rnd < 0.5))
+		eff_elec->Fill(mom, costheta, phi);	    
 	}
 
 	//protons
@@ -75,12 +75,10 @@
 	Double_t y = tan(acos(costheta)) * 2 * sin(phi*TMath::Pi()/180);
 	
 	if ((fabs(x) < 1.5) && (fabs(y) < 1.5)) {
-	    Double_t rnd=PUtils::sampleFlat();
-	    if (rnd<0.90)
+	    Double_t rnd = PUtils::sampleFlat();
+	    if (rnd < 0.90)
 		eff_protons->Fill(mom,costheta,phi);
 	}
-
-
     }
 
     eff_elec->Divide(gen);
@@ -88,7 +86,7 @@
 
 
     //Now we create the filter file
-    TFile *f = new TFile("pluto_demo_filter.root","RECREATE");
+    TFile *f = new TFile("pluto_demo_filter.root", "RECREATE");
 
     //Commands with the keyword "_main" are called when the filter is attached
     PCommandList *p = new PCommandList("_main", "echo **** This is our demo filter, v1");
@@ -172,13 +170,9 @@
 
     l->AddCommand("_end:");
     
-    
-
     l->Write();
     eff_elec->Write();
     eff_protons->Write();
 
     f->Write();
- 
-
 }

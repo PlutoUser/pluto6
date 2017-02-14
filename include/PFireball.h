@@ -75,7 +75,7 @@ class PFireball: public PParticle {
     Float_t y0;          // mid-rapidity of source 
 
  public:
-    PFireball(char *name, float AGeV, float t1, float t2=0.0, float f=1.0,
+    PFireball(const char *particle, float AGeV, float t1, float t2=0.0, float f=1.0,
 	      float b=0.0, float a2=0.0, float a4=0.0, float w1=0.0, float w2=0.0, int sp=0);
 
     void setTemperature(float t1, float t2, float f, int id=0) {

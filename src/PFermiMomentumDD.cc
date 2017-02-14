@@ -8,7 +8,7 @@
 
 #include "PFermiMomentumDD.h"
 
-PFermiMomentumDD::PFermiMomentumDD(Char_t *id, Char_t *de, Int_t key) : 
+PFermiMomentumDD::PFermiMomentumDD(const Char_t *id, const Char_t *de, Int_t key) : 
     PFermiMomentum(id, de, key) {
 };
 

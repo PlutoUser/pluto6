@@ -13,9 +13,9 @@ private:
     
     PHadesAcc();
 
-    Bool_t Modify(PParticle ** stack, int *decay_done, int * num, int stacksize);  //bulk interface
+    Bool_t Modify(PParticle ** stack, int *decay_done, int *num, int stacksize);  //bulk interface
 
-    ClassDef(PHadesAcc,0) 
+    ClassDef(PHadesAcc, 0) 
 };
 
 PHadesAcc::PHadesAcc() {
@@ -23,16 +23,13 @@ PHadesAcc::PHadesAcc() {
     opang  = makeStaticData()->GetBatchValue("_opang");
 }
 
-bool PHadesAcc::Modify(PParticle ** stack, int *decay_done, int * num, int stacksize) {
+bool PHadesAcc::Modify(PParticle **stack, int *decay_done, int *num, int stacksize) {
 
-    *hadacc=1.;
+    *hadacc = 1.;
 
     for (int i=0; i< *num; i++) {
-	PParticle * cur = stack[i];
+	PParticle *cur = stack[i];
 //	cur->Print();
-
-
-
 
 	if (cur->Is("pi+") || cur->Is("pi-")|| cur->Is("p") 
 	    || cur->LeptonN()) {
@@ -57,7 +54,6 @@ bool PHadesAcc::Modify(PParticle ** stack, int *decay_done, int * num, int stack
 
  	    cur->ResetE();
 #endif
-
 	    
 
 	    if (cur->Theta() < ((18./180)*TMath::Pi())){
@@ -72,30 +68,26 @@ bool PHadesAcc::Modify(PParticle ** stack, int *decay_done, int * num, int stack
 		*hadacc=0.;
 		
 	    }
-
 	}
-
     }
 
-    *opang=1.;
+    *opang = 1.;
 
     //the opang:
-    for (int i=0; i< *num; i++) {
-	PParticle * ep = stack[i];
+    for (int i=0; i<*num; i++) {
+	PParticle *ep = stack[i];
 	if (ep->Is("e+")) {
-	    for (int i=0; i< *num; i++) {
-		PParticle * em = stack[i];
+	    for (int i=0; i<*num; i++) {
+		PParticle *em = stack[i];
 		if (em->Is("e-")) {
-		    Double_t oa= ep->Vect().Angle(em->Vect());
+		    Double_t oa = ep->Vect().Angle(em->Vect());
 		    if (oa < ((4./180)*TMath::Pi())){
-			*opang=0.;
+			*opang = 0.;
 		    }
 		}
 	    }
-	    
 	}
     }
-
 
     return kTRUE;
 };

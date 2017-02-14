@@ -3,40 +3,40 @@
 //This class is here only for didactical reasons. It has no real physics content
 //See nucleus_fermi plugin for a real implementation
 
-#include "../src/PChannelModel.h"
+#include "../include/PChannelModel.h"
 
 //Class definition
 
 class PFermiNucleus : public PChannelModel  {
-  
- public:
-
+    
+public:
+    
     using PDistribution::GetWeight;
-    PFermiNucleus(Char_t *id, Char_t *de, Int_t key);
-    PDistribution* Clone(const char*delme=NULL) const;
+    PFermiNucleus(const Char_t *id, const Char_t *de, Int_t key);
+    PDistribution *Clone(const char *delme=NULL) const;
     Bool_t Init(void);
     Bool_t SampleMass(void);
     Bool_t SampleMomentum(void);
 
  private:
 
-    double SampleFermi(double & px, double & py, double & pz);
-    PParticle * beam;
-    PParticle * target;
-    PParticle * spectator;
-    PParticle * parent;
-    PParticle * p2,*participant;
-    PParticle * composite;
+    double SampleFermi(double &px, double &py, double &pz);
+    PParticle *beam;
+    PParticle *target;
+    PParticle *spectator;
+    PParticle *parent;
+    PParticle *p2, *participant;
+    PParticle *composite;
     
-    ClassDef(PFermiNucleus,0)  //
+    ClassDef(PFermiNucleus, 0)  //
 };
 
-PDistribution* PFermiNucleus::Clone(const char*) const {
+PDistribution *PFermiNucleus::Clone(const char*) const {
     //clone the object
     return new PFermiNucleus((const PFermiNucleus &)* this);
 };
 
-PFermiNucleus::PFermiNucleus(Char_t *id, Char_t *de, Int_t key) : PChannelModel(id, de,key) {
+PFermiNucleus::PFermiNucleus(const Char_t *id, const Char_t *de, Int_t key) : PChannelModel(id, de,key) {
     //Constructor
     beam = NULL;
     target = NULL;
@@ -48,7 +48,7 @@ PFermiNucleus::PFermiNucleus(Char_t *id, Char_t *de, Int_t key) : PChannelModel(
 } ;
 
 
-double PFermiNucleus:: SampleFermi(double & px, double & py, double & pz) {
+double PFermiNucleus::SampleFermi(double &px, double &py, double &pz) {
     // dummy function
   
     double p = 0.5; //150 MeV
@@ -62,27 +62,27 @@ double PFermiNucleus:: SampleFermi(double & px, double & py, double & pz) {
     return p;
 }
 
-Bool_t PFermiNucleus:: Init(void) {
+Bool_t PFermiNucleus::Init(void) {
     
-    beam = GetParticle("beam");
+    beam   = GetParticle("beam");
     target = GetParticle("target");
-    parent=GetParticle("parent");
+    parent = GetParticle("parent");
 
     if (!beam || !target) {
-	Warning("Init","beam or target not found");
+	Warning("Init", "beam or target not found");
 	return kFALSE;
     }
 
-    spectator= GetParticle("spectator");
-    participant=GetParticle("participant");
-    p2=GetParticle("p2");
+    spectator = GetParticle("spectator");
+    participant = GetParticle("participant");
+    p2 = GetParticle("p2");
 
-    composite= GetParticle("composite");
+    composite = GetParticle("composite");
 
     return kTRUE;
 }
 
-Bool_t PFermiNucleus:: SampleMass(void) {
+Bool_t PFermiNucleus::SampleMass(void) {
 
     Double_t massS, eS, eP, ptot, px, py, pz, t=-1., mtarget;
     while (t<0.) {
@@ -104,7 +104,7 @@ Bool_t PFermiNucleus:: SampleMass(void) {
     participant->Boost(target->BoostVector()); 
     spectator->Boost(target->BoostVector());  
 
-    *p2=*beam;
+    *p2 = *beam;
 
     //go into parent frame
     participant->Boost(-parent->BoostVector());
@@ -120,10 +120,9 @@ Bool_t PFermiNucleus:: SampleMass(void) {
     spectator->SetW(parent->W());                  // copy parent weight to spectator
     
     return kTRUE;
-
 }
 
-Bool_t PFermiNucleus:: SampleMomentum(void) {
+Bool_t PFermiNucleus::SampleMomentum(void) {
     return kTRUE;
 }
 

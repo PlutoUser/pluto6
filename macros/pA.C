@@ -16,11 +16,14 @@
     makeStaticData()->AddDecay(-1, "p + A -> (p + p) + A' (quasi-free)", 
 			       "p + A","p + p,A'", 1.0 );
 
-    gSystem->CompileMacro( "./PFermiNucleus.C");
-    
-    PFermiNucleus *pmodel = new PFermiNucleus(
-			"n_fermi@p + A_to_p + p_A'",
-			"Quasi-free particle production",-1);
+    //cout << gSystem->CompileMacro( "./PFermiNucleus.C") << endl;
+    cout << gSystem->CompileMacro( "eqweqwC") << endl;
+    gSystem->Print();
+
+
+    PFermiNucleus *pmodel = 
+	new PFermiNucleus("n_fermi@p + A_to_p + p_A'",
+			  "Quasi-free particle production", -1);
     
     pmodel->Add("q","parent");
     pmodel->Add("p","grandparent","beam");

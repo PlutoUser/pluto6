@@ -10,7 +10,7 @@ class PFermiMomentumDD : public PFermiMomentum  {
   
  public:
 
-    PFermiMomentumDD(Char_t *id, Char_t *de, Int_t key);
+    PFermiMomentumDD(const Char_t *id, const Char_t *de, Int_t key);
     
     PDistribution *Clone(const char *delme=NULL) const;
 
