@@ -25,7 +25,7 @@ ClassImp(PFunction)
 PFunction::PFunction() {
 };
 
-PFunction::PFunction(Char_t *id, Char_t *de, Int_t key) : PChannelModel (id, de,key) {
+PFunction::PFunction(const Char_t *id, const Char_t *de, Int_t key) : PChannelModel (id, de,key) {
 
     tf1 = NULL;
     tf2 = NULL;
@@ -34,7 +34,7 @@ PFunction::PFunction(Char_t *id, Char_t *de, Int_t key) : PChannelModel (id, de,
     batch    = NULL;
 };
 
-PDistribution *PFunction::Clone(const char*delme) const {
+PDistribution *PFunction::Clone(const char *delme) const {
     return new PFunction((const PFunction &)* this);
 };
 
@@ -42,7 +42,8 @@ Bool_t PFunction::Init(void) {
     return kTRUE;    
 };
 
-Bool_t PFunction::AddEquation(char *command) {
+Bool_t PFunction::AddEquation(const char *command) {
+
     if (!batch) batch = new PBatch();
     
     vx = makeStaticData()->GetBatchValue("_x"); 
@@ -53,12 +54,10 @@ Bool_t PFunction::AddEquation(char *command) {
 
 Double_t PFunction::GetWeight(Double_t *mass, Int_t *didx) {
 
-    if (batch) {
-	
+    if (batch) {	
 	*vx = mass[0];
 	batch->Execute();
 	return *vf;
-
     }
 
     if (tf1) return tf1->Eval(mass[0]);
@@ -72,8 +71,10 @@ Double_t PFunction::GetWeight(Double_t *mass, Int_t *didx) {
 Bool_t PFunction::SampleMass(Double_t *mass, Int_t *didx) {
 
     if (tf1) {
-	mass[0]=tf1->GetRandom();
+	mass[0] = tf1->GetRandom();
 	return kTRUE;
+    } else if (batch) {
+	mass[0] = GetRandom();
     }
 
     return kFALSE;

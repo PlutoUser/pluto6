@@ -34,7 +34,7 @@ class PDensityMatrix: public PEmbeddedParticles {
     
     Bool_t Modify(PParticle **stack, int *decay_done, int *num, int stacksize);  //bulk interface
     
-    Bool_t ReadDensityMatrix(char *filename, Int_t dim, Bool_t use_bin_width,
+    Bool_t ReadDensityMatrix(const char *filename, Int_t dim, Bool_t use_bin_width,
 			     Double_t min_selection, Double_t max_selection);
 
     Bool_t   GetBin(Double_t *x,    Int_t *bins);

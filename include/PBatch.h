@@ -108,22 +108,23 @@ class PBatch : public TObject {
 
  private:
 
-    Bool_t CheckAndSplit(char * arg,char delim,int * key1, int * key2);
+    Bool_t CheckAndSplit(char * arg, char delim, int *key1, int *key2);
     
     Bool_t GetArguments(const char *a, const char *b, 
-			char * name,char ** function,char ** arg1,char ** arg2);
+			char *name, char **function, char **arg1, char **arg2);
     Int_t  CheckObjectType(Int_t key);
-    Int_t  GetKey(char * name, int fl, int makeflag);
-    Int_t  GetDelimPosition(char *arg,char delim,Int_t *yes=NULL);
+    Int_t  GetKey(char *name, int fl, int makeflag);
+    Int_t  GetDelimPosition(char *arg, char delim, Int_t *yes=NULL);
 
-    Int_t  GetMethodHandle(char * name, Int_t flag=0);
-    Int_t  CrackMethodArgs(char * name);
-    Int_t  arg1,arg2,arg3,arg4;
+    Int_t  GetMethodHandle(char *name, Int_t flag=0);
+    Int_t  CrackMethodArgs(char *name);
+    Int_t  arg1, arg2, arg3, arg4;
 
     Int_t command_pointer, method_pointer, last_command_pointer;
-    TMethodCall * methods[MAX_COMMAND_TMETHODS];
-    char * method_name[MAX_COMMAND_TMETHODS];
-    Int_t methods_flags[MAX_COMMAND_TMETHODS],methods_arg_flags[4][MAX_COMMAND_TMETHODS];
+    TMethodCall *methods[MAX_COMMAND_TMETHODS];
+    char *method_name[MAX_COMMAND_TMETHODS];
+    Int_t methods_flags[MAX_COMMAND_TMETHODS],
+	methods_arg_flags[4][MAX_COMMAND_TMETHODS];
 
     char lst_command[MAX_COMMAND_POINTER];
     Int_t lst_command_int[MAX_COMMAND_POINTER];
@@ -144,8 +145,8 @@ class PBatch : public TObject {
     int readline_num_args[MAX_COMMAND_POINTER];
     char *varlist;   //Allowed command for new variables
 
-    Int_t batch_particle_param,batch_value_param,pid_param,num_command_param,num_batch_param,num_bulk_param,
-	stream_default_pos_param,stream_max_pos_param,batch_update_param,batch_models_param;
+    Int_t batch_particle_param, batch_value_param, pid_param, num_command_param, num_batch_param, num_bulk_param,
+	stream_default_pos_param, stream_max_pos_param, batch_update_param, batch_models_param;
     Int_t batch_histogram_param;
     Int_t num_batch,num_bulk, locnum_batch, locnum_bulk, locnum_command, locnum_old_command;  //Position in the projector & reaction loop
     Int_t locnum_branch; //current branch number
@@ -155,9 +156,9 @@ class PBatch : public TObject {
     static Int_t stack_num_batch[MAX_STACK_GOSUB], stack_num_bulk[MAX_STACK_GOSUB], 
 	stack_num_command[MAX_STACK_GOSUB], stack_num_pos;
 
-    void  AddSpacePlaceholder(char * command);
-    void  RemoveSpacePlaceholder(char * command);
-    Int_t EvalPFormula(char * command);
+    void  AddSpacePlaceholder(char *command);
+    void  RemoveSpacePlaceholder(char *command);
+    Int_t EvalPFormula(char *command);
     
 
     PValues pdummy;
@@ -173,14 +174,14 @@ class PBatch : public TObject {
     FILE      *file, *tmp_file;
     PParticle *current_particle; //For push command
 
-    Double_t *x,*y,*z;  //Axis values for _eval
+    Double_t *x, *y, *z;  //Axis values for _eval
     Int_t eval_err_dumped;
 
     Int_t status;
 
-    TTree   *tree;         //Pointer to storage tree
-    Int_t   *size_branches;
-    Int_t   *key_branches;
+    TTree *tree;         //Pointer to storage tree
+    Int_t *size_branches;
+    Int_t *key_branches;
     
 
  public:
@@ -188,13 +189,14 @@ class PBatch : public TObject {
     //constructor
     PBatch();
 
-    void Print(const Option_t* delme=NULL) const ;
+    void Print(const Option_t *delme=NULL) const ;
 
-    Bool_t AddCommand(char * command); //adds a command line to batch
-    Bool_t AddCommand(char command,int key_a,int key1,int key2,int key3=-1,int key4=-1,int key5=-1);
+    Bool_t AddCommand(const char *command); //adds a command line to batch
+    Bool_t AddCommand(char command, int key_a, int key1, int key2, int key3=-1, int key4=-1, int key5=-1);
 
     void SetPosition(Int_t my_num_batch, Int_t my_num_bulk) {
-	num_batch=my_num_batch; num_bulk=my_num_bulk;
+	num_batch = my_num_batch; 
+	num_bulk  = my_num_bulk;
     };
     Int_t GetNewBatch()   {return locnum_batch;};
     Int_t GetNewBulk()    {return locnum_bulk;};
@@ -205,40 +207,40 @@ class PBatch : public TObject {
     Int_t GetCurrentPosition() {return current_position;};
 
     using TObject::Execute;
-    Int_t Execute(Int_t command_pos=0, Int_t retval = kFALSE);
+    Int_t Execute(Int_t command_pos=0, Int_t retval=kFALSE);
     Int_t ExecuteLastLine(void) {
 	Bool_t retval = Execute(last_command_pointer);
 	last_command_pointer = command_pointer;
 	return retval;
     }
-    Bool_t Execute(char * command) {
+    Bool_t Execute(const char *command) {
 	if (AddCommand(command)) {
 	    return (Bool_t)ExecuteLastLine();
 	}
 	last_command_pointer = command_pointer;
-	Error("Execute","Command not executed");
+	Error("Execute", "Command not executed");
 	return kFALSE;
     }
 
-    void SetToolObject(TH1 * Histo1) {
+    void SetToolObject(TH1 *Histo1) {
 	fHisto1 = Histo1;
     }
-    void SetToolObject(TH2 * Histo2) {
+    void SetToolObject(TH2 *Histo2) {
 	fHisto2 = Histo2;
     }
-    void SetToolObject(TH3 * Histo3) {
+    void SetToolObject(TH3 *Histo3) {
 	fHisto3 = Histo3;
     }
-    void SetToolObject(TGraph * Graph) {
+    void SetToolObject(TGraph *Graph) {
 	fGraph = Graph;
     }
-    void SetToolObject(TGraph2D * Graph2D) {
+    void SetToolObject(TGraph2D *Graph2D) {
 	fGraph2D = Graph2D;
     }
-    void SetToolObject(FILE * f) {
+    void SetToolObject(FILE *f) {
 	file = f;
     }
-    void SetToolObjectTmp(FILE * f) {
+    void SetToolObjectTmp(FILE *f) {
 	tmp_file = f;
     }
     Int_t IsReadonly() {
@@ -256,14 +258,14 @@ class PBatch : public TObject {
 	return status;
     }
 
-    void SetVarList(char * my_x) {
+    void SetVarList(char *my_x) {
 	//Allowed commands for new variables
 	//Format must be "a;b;c;" with trailing ;'s 
 	//If NULL don't care!
-	varlist=my_x;
+	varlist = my_x;
     };
 
-    void  ReplaceAll(TString *op, const char * oldstring, const char * newstring);
+    void ReplaceAll(TString *op, const char *oldstring, const char *newstring);
 
     void SetTree(TTree *my_tree) {tree = my_tree;};
     TTree *GetTree(void)         {return tree;};
@@ -271,8 +273,7 @@ class PBatch : public TObject {
     void SetSizeBranches(Int_t *my_size_branches) {size_branches = my_size_branches;};
     void SetKeysBranches(Int_t *my_key_branches)  {key_branches = my_key_branches;};
 
-
-    ClassDef(PBatch,0)  //Batch commands
+    ClassDef(PBatch, 0)  //Batch commands
 };
 
 #endif

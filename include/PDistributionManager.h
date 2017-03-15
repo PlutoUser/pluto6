@@ -107,7 +107,7 @@ class PDistributionManager : public TObject {
     Bool_t Activate(const char *name);
 
     Bool_t Startup(void); //called before event loop
-    Bool_t Startup(char *command); //add commands for startup
+    Bool_t Startup(const char *command); //add commands for startup
 
     Bool_t Unpack(const char *filename);  //unpack and execute command list
 

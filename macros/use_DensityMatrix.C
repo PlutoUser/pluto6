@@ -43,19 +43,19 @@
     matrix->Do("foreach(*); [*]->Boost(boost)");
 
     //Start the reaction:
-    PParticle *ep = new PParticle("e+");
-    PParticle *em = new PParticle("e-");
-    PParticle *p[]={seed,em,ep};
-    PChannel dilepton_decay(p,2);
+    PParticle *ep  = new PParticle("e+");
+    PParticle *em  = new PParticle("e-");
+    PParticle *p[] = {seed, em, ep};
+    PChannel dilepton_decay(p, 2);
     dilepton_decay.AddPrologueBulk(matrix);
 
     PChannel *c[]={&dilepton_decay};
     PReaction my_reaction(c, "output", 1);
     
     //Just for debugging...
-    TH1F * histo1 = new TH1F ("histo1","ee mass",100,0.01,1.5);
+    TH1F *histo1 = new TH1F("histo1", "ee mass", 100, 0.01, 1.5);
     my_reaction.Do(histo1, "_x = ([e+]+[e-])->M()");
-    TH2F * histo2 = new TH2F ("histo2","Y vs. Pt", 100, -4.0, 6.0, 300, 0.,1.);
+    TH2F *histo2 = new TH2F("histo2","Y vs. Pt", 100, -4.0, 6.0, 300, 0.,1.);
     my_reaction.Do(histo2, "_x = ([e+]+[e-])->Rapidity(); _y = ([e+]+[e-])->Pt()");
 
     my_reaction.Loop(1000000);

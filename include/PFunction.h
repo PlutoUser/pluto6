@@ -18,8 +18,8 @@ class PFunction : public PChannelModel  {
   
  public:
     PFunction();
-    PFunction(Char_t *id, Char_t *de, Int_t key);
-    PDistribution *Clone(const char*delme=NULL) const;
+    PFunction(const Char_t *id, const Char_t *de, Int_t key);
+    PDistribution *Clone(const char *delme=NULL) const;
 
     Bool_t Init(void);
 
@@ -31,7 +31,7 @@ class PFunction : public PChannelModel  {
     void SetFunction(TF2 *my_tf2) {tf2 = my_tf2;};
     void SetFunction(TF3 *my_tf3) {tf2 = my_tf3;};
     void SetFunction(Double_t c)  {constant = c;};
-    Bool_t AddEquation(char *command);
+    Bool_t AddEquation(const char *command);
 
     using PDistribution::SampleMass;   
     Bool_t SampleMass(Double_t *mass, Int_t *didx=NULL);

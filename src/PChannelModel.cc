@@ -168,8 +168,8 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
     else
 	maxmesh = 302;
 
-    draw_option=0;
-    didx_option=-1;
+    draw_option = 0;
+    didx_option = -1;
     
     //some TF1 defaults...
 
@@ -217,10 +217,10 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 	fNames[2] = "Amplitude(abs) for 1st propagator term for didx";
 	fNames[3] = "Amplitude(phase) for 1st propagator term for didx";
     }
-    fParams[0]=0;
-    fParams[1]=-1;
-    fParams[2]=0;
-    fParams[3]=0;
+    fParams[0] = 0;
+    fParams[1] = -1;
+    fParams[2] = 0;
+    fParams[3] = 0;
 #endif
 
     mc_max = 1000; //for the integration methods in Width-mesh calculation
@@ -280,8 +280,7 @@ Double_t PChannelModel::EvalPar(const Double_t *x, const Double_t *params) {
     return Eval(x[0]);
 }
  
-Double_t PChannelModel::Eval(Double_t x, Double_t y, Double_t z, Double_t t) const
-{
+Double_t PChannelModel::Eval(Double_t x, Double_t y, Double_t z, Double_t t) const {
     Double_t res;
     Double_t my_x[11];
     Int_t    my_didx_option[11];
@@ -339,7 +338,7 @@ TComplex PChannelModel::GetAmplitude(Double_t *mass, Int_t *didx) {
 	return TComplex (1., 0, kTRUE);
     }
     loop_flag++;
-    TComplex r = TComplex (GetWeight(mass,didx), 0, kTRUE);
+    TComplex r = TComplex(GetWeight(mass,didx), 0, kTRUE);
     if (loop_flag > 0)
 	loop_flag--;
     return r;

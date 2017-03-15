@@ -25,7 +25,7 @@ class PDalitzDistribution : public PDistribution  {
     Bool_t CheckAbort(void);
 
     void SetSlopes(Double_t myslope1, Double_t myslope2) {slope1=myslope1;slope2=myslope2;};
-    Bool_t AddEquation(char *command);
+    Bool_t AddEquation(const char *command);
     Bool_t AddHistogram(TH2 *histo, const char *command = "");
     Bool_t Do(char *command) {
 	return AddEquation(command);

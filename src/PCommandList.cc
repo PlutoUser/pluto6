@@ -8,8 +8,10 @@
 
 
 #include "PCommandList.h"
+#include "PUtils.h"
 #include <iostream>
 #include "TROOT.h"
+
 
 using namespace std;
 
@@ -23,12 +25,12 @@ PCommandList::PCommandList(TString name) : TObjString(name) {
     fLevel = 0;
 };
 
-PCommandList::PCommandList(TObject * obj, TString name, TString cmd) : TObjString(name) {
+PCommandList::PCommandList(TObject *obj, TString name, TString cmd) : TObjString(name) {
     fCmd.SetString(cmd);
     fNextP = NULL;
     fLevel = 0;
     if (obj) {
-	cout << "add object" << endl;
+	Info("PCommandList", "Added object %s", obj->GetName());
 	fTool.SetString(obj->GetName());
     }
 };
@@ -47,7 +49,8 @@ Bool_t PCommandList::AddCommand(const char *cmd, const char *basename, int level
 };
 
 Bool_t PCommandList::AddCommand(TObject *obj, const char *cmd, const char *basename, int level) {
-
+    //if (basename && !fNextP) cout << "PCommandList::AddCommand " << basename << ":" << level << endl;
+    //else if (!fNextP) cout << "PCommandList::AddCommand " << GetName() << ":" << level << endl;
     if (fNextP) {
 	if (basename && level) return fNextP->AddCommand(obj,cmd,basename,level+1);
 	else return fNextP->AddCommand(obj,cmd,GetName(),1);
@@ -57,13 +60,13 @@ Bool_t PCommandList::AddCommand(TObject *obj, const char *cmd, const char *basen
 	    tmp += "_";
 	    tmp += (level+1);
 	    fNextP = new PCommandList(obj, tmp, cmd);    
-	    fNext.SetString(tmp);
+	    fNext.SetString(PUtils::NewString(tmp));
 	    return kTRUE;
 	} else {
 	    TString tmp(GetName());
 	    tmp += "_1";
 	    fNextP = new PCommandList(obj, tmp, cmd);  
-	    fNext.SetString(tmp);
+	    fNext.SetString(PUtils::NewString(tmp));
 	    return kTRUE;
 	}
     }
@@ -72,7 +75,7 @@ Bool_t PCommandList::AddCommand(TObject *obj, const char *cmd, const char *basen
 
 Bool_t PCommandList::GetCommand(char **cmd, int level, TObject **obj) {
     if (level == 0) {
-	(*cmd) = (char*)fCmd.GetString().Data();
+	(*cmd) = PUtils::NewString(fCmd.GetString().Data());
 	if (obj) {
 	    if (fTool.GetString().Data() && strlen(fTool.GetString().Data())) {
 		//Try to recover tool object
@@ -107,9 +110,9 @@ void PCommandList::Print(const Option_t *delme) const {
     }
     //print following:
     if (fNext.GetString().Data() && strlen(fNext.GetString().Data())) {
-	PCommandList* fNextP = (PCommandList*)gROOT->FindObject(fNext.GetString().Data());
+	PCommandList *fNextP = (PCommandList*)gROOT->FindObject(fNext.GetString().Data());
 	if (!fNextP) {
-	    Error("Print","Object %s not found", fNext.GetString().Data());
+	    Error("Print", "Object %s not found", fNext.GetString().Data());
 	    return;
 	}
 	fNextP->Print();
@@ -117,9 +120,11 @@ void PCommandList::Print(const Option_t *delme) const {
 };
 
 
-Int_t PCommandList::Write(const char *name, Int_t option, Int_t bufsize) {
-    if (fNextP) fNextP->Write(name,option,bufsize);
-    return TObject::Write(name,option,bufsize);
+Int_t PCommandList::Write(const char *name, Int_t option, Int_t bufsize) const {
+    
+    if (fNextP) 
+	fNextP->Write(name, option, bufsize);
+    return TObject::Write(name, option, bufsize);
 }
 
 

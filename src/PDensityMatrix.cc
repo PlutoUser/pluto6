@@ -95,7 +95,7 @@ Bool_t PDensityMatrix::Do(const char *command) {
     return kTRUE;
 }
 
-Bool_t PDensityMatrix::ReadDensityMatrix(char *filename, Int_t dim, Bool_t use_bin_width,
+Bool_t PDensityMatrix::ReadDensityMatrix(const char *filename, Int_t dim, Bool_t use_bin_width,
 					 Double_t min_selection, Double_t max_selection) {
     //Reads a density matrix which must be organized in one of the the two following way
     //

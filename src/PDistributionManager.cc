@@ -200,7 +200,7 @@ void PDistributionManager::PluginInfo(const char *info) {
 };
 
 
-Bool_t PDistributionManager::Startup(char *command) {
+Bool_t PDistributionManager::Startup(const char *command) {
     if (!batch) 
 	batch = new PBatch;
     batch->AddCommand(command);

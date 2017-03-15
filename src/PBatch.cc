@@ -1315,9 +1315,10 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
     return kTRUE | retval ;
 }
 
-Bool_t PBatch::AddCommand(char *command) {
+Bool_t PBatch::AddCommand(const char *_command) {
 
     //cout << "AddCommand1:" << command << endl;
+    char *command = PUtils::NewString(_command);
     PUtils::remove_spaces(&command);
     if (strlen(command) == 0) return kTRUE;
     Bool_t has_something  = kFALSE;
@@ -2755,7 +2756,7 @@ Int_t PBatch::CheckObjectType(Int_t key) {
     return -1;
 }
 
-Bool_t PBatch::AddCommand(char command,int key_a,int key1,int key2, int key3, int key4, int key5) {
+Bool_t PBatch::AddCommand(char command, int key_a, int key1, int key2, int key3, int key4, int key5) {
 
     if (command == '=' && key_a==key1)
 	return kTRUE; //filter nonsense

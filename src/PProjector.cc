@@ -544,7 +544,7 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
     Int_t retval = kFALSE;
     for (int i=0; i<batch_pos; i++) {
 
-	//cout << i << endl;
+	//cout << "do now : " << i << endl;
 	if (i<0) return -1;
 	retval = batch[i]->Execute(startcommand, retval);
 	//cout << "retval:" << retval << endl;
@@ -665,7 +665,6 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 		Warning("Modify", "Pushed particle not found");
 	    }
 	    redo = 1;
-	    //i -= 1; //stay in same batch
 	    retval &= ~kPUSHBRANCH;
 	} 
 	if (retval & kFOREACHEND) {
@@ -680,7 +679,6 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 	    //SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles like for "formore"
 	    startcommand = batch[i]->GetOldCommand();
 	    redo = 1;
-	    //i -=1; //stay in same batch
 	    retval &= ~kUPDATE;
 	} 
 	if (retval & kEOF) {
@@ -691,13 +689,11 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 	    startcommand = batch[i]->GetOldCommand();
 	    //cout << "sc foreach " << startcommand << endl;
 	    redo = 1;
-	    //i -= 1; //redo current loop
 	    setparticle = 1;
 	    //SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles like for "formore"
 	    retval &= ~kFOREACHEND;
 	} 
-	if (!(retval & kTRUE) && !(retval & kELSE) && !redo) {
-	    //if something failed, try to get the else
+	if (retval & kELSE) {
 	    if (batch[i]->GetElsePosition()>-1 &&  //only if else is provided
 		batch[i]->GetCurrentPosition() < batch[i]->GetElsePosition() ) { //avoid deadlocks
 		startcommand = batch[i]->GetElsePosition();

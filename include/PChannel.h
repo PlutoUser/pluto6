@@ -172,16 +172,16 @@ class PChannel : public TObject {
     Bool_t AddBulk(PBulkInterface *mybulk);
     Bool_t AddPrologueBulk(PBulkInterface *mybulk); //Bulk IO before any decay
 
-    Bool_t Do(char *command) {
+    Bool_t Do(const char *command) {
 	return GetCurrentProjector()->AddCommand(command);
     }
-    Bool_t Do(TH1F *f, char *command, Int_t flag=1) {
+    Bool_t Do(TH1F *f, const char *command, Int_t flag=1) {
 	return GetCurrentProjector()->AddHistogram(f,command,flag);
     }
-    Bool_t Do(TH2F *f, char *command, Int_t flag=1) {
+    Bool_t Do(TH2F *f, const char *command, Int_t flag=1) {
 	return GetCurrentProjector()->AddHistogram(f,command,flag);
     }
-    Bool_t Do(TH3F *f, char *command, Int_t flag=1) {
+    Bool_t Do(TH3F *f, const char *command, Int_t flag=1) {
 	return GetCurrentProjector()->AddHistogram(f,command,flag);
     }
 

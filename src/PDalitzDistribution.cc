@@ -44,7 +44,7 @@ void PDalitzDistribution::MakeVars() {
     vf         = makeStaticData()->GetBatchValue("_f"); 
 };
 
-Bool_t PDalitzDistribution::AddEquation(char *command) {
+Bool_t PDalitzDistribution::AddEquation(const char *command) {
     MakeVars();
     return projector->AddCommand(command);
 };
