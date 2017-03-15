@@ -47,11 +47,11 @@ PSimpleVMDFF::PSimpleVMDFF(const Char_t *id, const Char_t *de, Int_t key) :
     batch = NULL;
 };
 
-PDistribution* PSimpleVMDFF::Clone(const char*delme) const {
+PDistribution* PSimpleVMDFF::Clone(const char *delme) const {
     return new PSimpleVMDFF((const PSimpleVMDFF &)* this);
 };
 
-Bool_t PSimpleVMDFF::AddEquation(char * command) {
+Bool_t PSimpleVMDFF::AddEquation(const char *command) {
     if (!batch) batch = new PBatch();
 
     vq   = makeStaticData()->GetBatchValue("_q"); 
@@ -130,5 +130,4 @@ Double_t PSimpleVMDFF::GetWeight(Double_t *mass, Int_t *) {
 
     Double_t ff = vector_meson_mass2/(vector_meson_mass2 - q2);
     return ff*ff;
-
-}
+};

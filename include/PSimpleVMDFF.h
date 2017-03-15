@@ -15,7 +15,7 @@ class PSimpleVMDFF : public PChannelModel  {
  public:
     PSimpleVMDFF();
     PSimpleVMDFF(const Char_t *id, const Char_t *de, Int_t key);
-    PDistribution* Clone(const char*delme=NULL) const;
+    PDistribution* Clone(const char *delme=NULL) const;
 
     Bool_t Init(void);
     
@@ -29,7 +29,7 @@ class PSimpleVMDFF : public PChannelModel  {
 	vector_meson_mass2 = x*x;
     };
 
-    Bool_t AddEquation(char *command);
+    Bool_t AddEquation(const char *command);
 
  private:
 

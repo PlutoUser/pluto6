@@ -16,7 +16,7 @@ class PMassSampling : public PHadronModel  {
   
  public:
     PMassSampling();
-    PMassSampling(Char_t *id, Char_t *de, Int_t key);
+    PMassSampling(const Char_t *id, const Char_t *de, Int_t key);
     PDistribution* Clone(const char *delme=NULL) const;
 
     using PDistribution::GetWeight;   

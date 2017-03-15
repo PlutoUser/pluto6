@@ -22,7 +22,7 @@ ClassImp(PMassSampling)
 PMassSampling::PMassSampling()  {
 }
 
-PMassSampling::PMassSampling(Char_t *id, Char_t *de, Int_t key) :
+PMassSampling::PMassSampling(const Char_t *id, const Char_t *de, Int_t key) :
     PHadronModel(id, de, key) {
     
     shape1 = NULL;
