@@ -28,6 +28,13 @@
     PChannel *cc[] = {c1,c2,c3};
 
     PReaction *r = new PReaction(cc, "pp_delta_dalitz", 3, 1);
+
+    //filtered dilepton pairs:
+    r->Do("theta_ep = ([e+]->Theta() * 180.)/TMath::Pi()");
+    r->Do("theta_em = ([e-]->Theta() * 180.)/TMath::Pi()");
+    r->Do("opang = ([e+]->Angle([e-]) * 180.)/TMath::Pi()");
+    r->Do("filter=1; if ((theta_ep<18 || theta_ep>85 || theta_em<18 || theta_em>85) || opang < 9) filter=0");
+    r->Do("if (filter); [dilepton]->Push(Branch(Accepted)); [e+]->Push(Branch(Accepted)); [e-]->Push(Branch(Accepted))");
     
     makeDistributionManager()->GetDistribution("D+_dalitz")->Print();
     
