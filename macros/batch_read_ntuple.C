@@ -6,9 +6,8 @@
     // * hello_world.C
     // * batch_write_ntuple.C
 
-
     TFile *f = new TFile("ntuple.root");
-    TH1F * histo = new TH1F ("histo","cos theta of eta",100,-1.,1.);
+    TH1F * histo = new TH1F ("histo", "cos theta of eta", 100, -1., 1.);
 
     //Define an "empty" reaction
     PReaction my_reaction;
@@ -28,5 +27,4 @@
     cout << my_reaction.Loop() << " events recovered" << endl;
     
     histo->Draw();
-
 }

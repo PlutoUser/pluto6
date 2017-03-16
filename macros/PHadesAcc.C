@@ -1,9 +1,6 @@
 //TITLE <UserClass> Very small acceptance filter (setting variables for batch) including opening angle.
 
 
-#include "../src/PBulkInterface.h"
-#include "../src/PUtils.h"
-
 class PHadesAcc : public PBulkInterface {
 
 private:
@@ -21,13 +18,13 @@ private:
 PHadesAcc::PHadesAcc() {
     hadacc = makeStaticData()->GetBatchValue("_hadacc");
     opang  = makeStaticData()->GetBatchValue("_opang");
-}
+};
 
 bool PHadesAcc::Modify(PParticle **stack, int *decay_done, int *num, int stacksize) {
 
     *hadacc = 1.;
 
-    for (int i=0; i< *num; i++) {
+    for (int i=0; i<*num; i++) {
 	PParticle *cur = stack[i];
 //	cur->Print();
 

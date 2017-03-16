@@ -3,7 +3,7 @@
 //This class is here only for didactical reasons. It has no real physics content
 //See nucleus_fermi plugin for a real implementation
 
-#include "../include/PChannelModel.h"
+//#include "../include/PChannelModel.h"
 
 //Class definition
 

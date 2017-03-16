@@ -1,6 +1,7 @@
-{
+#include "PHadesAcc.C"
 
-    gSystem->CompileMacro( "PHadesAcc.C");
+
+void batch_use_PHadesAcc(void) {
     
     TH1F * histo1 = new TH1F ("histo1","opang",50,0,3.14);
     histo1->Sumw2();

@@ -17,6 +17,4 @@
     my_reaction.Print();
 
     cout << my_reaction.Loop() << " events recovered" << endl;
-    
-
 }

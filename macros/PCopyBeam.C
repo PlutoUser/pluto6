@@ -1,4 +1,4 @@
-#include "../src/PBulkInterface.h"
+//#include "../src/PBulkInterface.h"
 
 class PCopyBeam : public PBulkInterface {
 
@@ -8,7 +8,6 @@ public:
     
     ClassDef(PCopyBeam, 0) 
 };
-
 
 
 bool PCopyBeam::Modify(PParticle **stack, int *decay_done, int *num, int stacksize) {

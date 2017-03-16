@@ -1,6 +1,6 @@
 //TITLE A dummy channel model including a new partial decay width
 
-#include "../src/PChannelModel.h"
+//#include "../src/PChannelModel.h"
 
 //Class definition
 
@@ -49,7 +49,6 @@ Bool_t PDummyModel::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
 	*width = static_width;
 
     return kTRUE;
-
 }
 
 
