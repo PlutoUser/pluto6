@@ -354,7 +354,7 @@ class PDecayManager : public TObject {
     Bool_t AddBulk(PBulkInterface *mybulk);
     Bool_t AddPrologueBulk(PBulkInterface *mybulk); //Bulk IO before any decay
 
-    Bool_t Do(char *command) {
+    Bool_t Do(const char *command) {
 	return GetCurrentProjector()->AddCommand(command);
     }
     Bool_t Do(TH1F *f, char *command) {

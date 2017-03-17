@@ -31,7 +31,7 @@ class PF2: public TF2 {
     //TF wrapper
 
   
-    Bool_t Add(char *command);
+    Bool_t Add(const char *command);
     Bool_t Add(TH1 *histo, const char *command = "");
     Bool_t Add(TH2 *histo, const char *command = "");
     Bool_t Add(TH3 *histo, const char *command = "");

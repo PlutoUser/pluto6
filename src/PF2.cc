@@ -77,7 +77,7 @@ PF2::PF2(const char *name, Double_t xmin, Double_t xmax, Double_t ymin, Double_t
     vy = makeStaticData()->GetBatchValue("_y"); 
 }
 
-Bool_t PF2::Add(char *command) {
+Bool_t PF2::Add(const char *command) {
     if (!projector) {
 	Warning("Add", "No PProjector, wrong ctor called?");
 	return kFALSE;
