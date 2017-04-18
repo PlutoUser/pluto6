@@ -43,7 +43,7 @@ void PInclusiveModel::Setup(void) {
     }
 }
 
-PDistribution* PInclusiveModel::Clone(const char *delme) const {
+PDistribution* PInclusiveModel::Clone(const char *) const {
     return new PInclusiveModel((const PInclusiveModel &)* this);
 }
 
@@ -83,7 +83,7 @@ Bool_t PInclusiveModel::Init(void) {
     return kTRUE;    
 };
 
-int PInclusiveModel::GetDepth(int i) {
+int PInclusiveModel::GetDepth(int) {
     //check if we have models
     //This also initializes the sub-models
     //returns 0 in case of stable daughters BUGBUG->check all others

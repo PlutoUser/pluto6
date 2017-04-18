@@ -30,7 +30,7 @@ PBulkInterface::PBulkInterface() {
     key_branches  = NULL;
 }
 
-bool PBulkInterface::Modify(PParticle **array, int *decay_done, int *num, int maxnum) {
+bool PBulkInterface::Modify(PParticle**, int*, int*, int) {
     //modify the particle array "array"
     //input: particle array with "*num" members
     //new particles may be added (they are already instantiated) and *num increased

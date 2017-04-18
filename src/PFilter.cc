@@ -14,9 +14,7 @@
 
 ClassImp(PFilter)
 
-PFilter:: PFilter(PReaction *r, char *expression) {
-
-    Error("PFilter","The PFilter class has been removed. Use PProjector instead");
-
+PFilter::PFilter(PReaction *, char *) {
+    Error("PFilter", "The PFilter class has been removed. Use PProjector instead");
 }
 

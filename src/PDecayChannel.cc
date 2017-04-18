@@ -380,7 +380,7 @@ PDecayChannel *PDecayChannel::GetLast() {
 
 
 // --------------------------------------------------------------------------
-void PDecayChannel::Print(const Option_t *delme)const {
+void PDecayChannel::Print(const Option_t *) const {
     //
     // Prints the channel information.
     // 

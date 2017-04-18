@@ -18,7 +18,7 @@ PFileOutput::PFileOutput() {
     filename  = "<user file>";
 }
 
-bool PFileOutput::OpenFile(const char *filename) {
+bool PFileOutput::OpenFile(const char *) {
     return kFALSE; //pure virtual not allowed
 }
 
@@ -39,7 +39,7 @@ bool PFileOutput::WriteBranchHeader(void) {
     return kFALSE; //pure virtual not allowed
 }
 
-bool PFileOutput::WriteParticle(PParticle *par) {
+bool PFileOutput::WriteParticle(PParticle *) {
     //write one particle
     return kFALSE; //pure virtual not allowed
 }

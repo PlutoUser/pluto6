@@ -110,7 +110,7 @@ class PBatch : public TObject {
 
     Bool_t CheckAndSplit(char * arg, char delim, int *key1, int *key2);
     
-    Bool_t GetArguments(const char *a, const char *b, 
+    Bool_t GetArguments(const char *a, /* const char *b, */ 
 			char *name, char **function, char **arg1, char **arg2);
     Int_t  CheckObjectType(Int_t key);
     Int_t  GetKey(char *name, int fl, int makeflag);

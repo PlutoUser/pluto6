@@ -116,7 +116,7 @@ PAngularDistribution::PAngularDistribution(const Char_t *id,const  Char_t *de) :
     weight_max = 1.;
 };
 
-PDistribution *PAngularDistribution::Clone(const char *delme) const {
+PDistribution *PAngularDistribution::Clone(const char *) const {
     return new PAngularDistribution((const PAngularDistribution &)* this);
 };
 
@@ -459,7 +459,7 @@ Bool_t PAngularDistribution::IsNotRejected(void) {
     return kFALSE;
 };
 
-double PAngularDistribution::SamplePolarAngle(double r) {
+double PAngularDistribution::SamplePolarAngle(double) {
     if (angles1) {
 	return angles1->GetRandom();
     } else if (anglesh){
@@ -487,7 +487,7 @@ Double_t PAngularDistribution::EvalPar(const Double_t *x, const Double_t *params
     return Eval(x[0]);
 }
  
-Double_t PAngularDistribution::Eval(Double_t x, Double_t y, Double_t z, Double_t t ) const
+Double_t PAngularDistribution::Eval(Double_t x, Double_t, Double_t, Double_t) const
 {
     if ((reflection_symmetry) && (x<0.)) x = -x;
 
@@ -497,7 +497,7 @@ Double_t PAngularDistribution::Eval(Double_t x, Double_t y, Double_t z, Double_t
     return 0;
 }
 
-void PAngularDistribution::Print(const Option_t *delme) const {
+void PAngularDistribution::Print(const Option_t *) const {
     BasePrint();
 
     cout << "    Formula used: ";

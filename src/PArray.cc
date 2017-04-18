@@ -28,7 +28,7 @@ PArray::PArray(Int_t dimension) {
 PArray::~PArray() {
 };
 
-Bool_t PArray::OpenFile(const char *filename, Int_t syntax, Int_t num_columns, Double_t y) {
+Bool_t PArray::OpenFile(const char *filename, Int_t, Int_t num_columns, Double_t y) {
 
     if ((dim == 1) && vals_1d[0]) {
 	Warning("OpenFile", "Cannot read more then one file for 1dim arrays");

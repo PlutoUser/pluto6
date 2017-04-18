@@ -101,7 +101,7 @@ Bool_t PCommandList::GetCommand(char **cmd, int level, TObject **obj) {
     return kFALSE;
 }
 
-void PCommandList::Print(const Option_t *delme) const {
+void PCommandList::Print(const Option_t *) const {
     
     if (fTool.GetString().Data() && strlen(fTool.GetString().Data())) {
 	cout<< "<" <<  fTool.GetString().Data() << "> " << fCmd.GetString() << endl;

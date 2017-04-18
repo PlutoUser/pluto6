@@ -45,7 +45,7 @@ PFixedProduction::PFixedProduction(const Char_t *id, const Char_t *de, Int_t key
     version_flag |= VERSION_MASS_SAMPLING;  //Only one mass sampling in the PChannel
 };
 
-PDistribution *PFixedProduction::Clone(const char*delme) const {
+PDistribution *PFixedProduction::Clone(const char*) const {
     return new PFixedProduction((const PFixedProduction &)* this);
 };
 
@@ -66,7 +66,7 @@ Bool_t PFixedProduction::Init(void) {
     return kTRUE;
 }
 
-int PFixedProduction::GetDepth(int i) {
+int PFixedProduction::GetDepth(int) {
     return 0; 
 }
 
@@ -83,7 +83,7 @@ Bool_t PFixedProduction::SampleMass(void) {
     return kTRUE;
 };
 
-Bool_t PFixedProduction::SampleMass(Double_t *mass, Int_t *didx) {
+Bool_t PFixedProduction::SampleMass(Double_t *mass, Int_t *) {
     //Not much to do here...
     //mass=parent mass
     

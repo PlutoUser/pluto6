@@ -38,6 +38,7 @@ public:
     vector<Int_t> listInCollIndex;     // list of collisions involing this particle
     vector<Int_t> listOutCollIndex;
 
+    using TObject::Read;
     Bool_t Read(ifstream& in) {
 	if(in.eof())   return kFALSE;
 	if(!in.good()) return kFALSE;
@@ -111,8 +112,8 @@ public:
         return kFALSE;
     }
 
-
-    void Print() {
+    using TObject::Print;
+    void Print(Option_t *) {
 	cout << setw(5)  << dec << ind << " "
 	     << setw(15) << scientific
 	     << setw(15) << fr.X() << " "
@@ -133,7 +134,8 @@ public:
 	     << dec << endl;
     }
 
-    void  Clear() {
+    using TObject::Clear;
+    void  Clear(Option_t *) {
 	ind            = -1;
 	t              = -1;
 	SetPxPyPzE(-1.,-1.,-1.,-1.);
@@ -155,7 +157,7 @@ public:
         listOutCollIndex.clear();
     }
 
-    PHUrParticle(){ Clear(); }
+    PHUrParticle(){ Clear(NULL); }
     ~PHUrParticle(){}
 
     ClassDef(PHUrParticle, 0)

@@ -22,7 +22,7 @@ PHadronDecayM2::PHadronDecayM2(const Char_t *id, const  Char_t *de, Int_t key) :
 	Warning("PHadronDecayM2", "The model (%s) should be bound to CHANNELS only", de);   
 };
 
-PDistribution *PHadronDecayM2::Clone(const char *delme) const {
+PDistribution *PHadronDecayM2::Clone(const char *) const {
     return new PHadronDecayM2((const PHadronDecayM2 &)* this);
 };
 
@@ -40,7 +40,7 @@ Bool_t PHadronDecayM2::Prepare(void) {
     return PHadronDecayM1::Prepare();
 };
 
-void PHadronDecayM2::SubPrint(Int_t opt) const {
+void PHadronDecayM2::SubPrint(Int_t) const {
     //Print sub-models    
     if (model1) {
 	cout << " ";
@@ -65,7 +65,7 @@ Bool_t PHadronDecayM2::SampleMass(void) {
     return kTRUE;
 };
 
-Bool_t PHadronDecayM2::SampleMass(Double_t *mass, Int_t *didx) {
+Bool_t PHadronDecayM2::SampleMass(Double_t *mass, Int_t *) {
     //samples the mass of the unstable decay products
     //Input: mass[0] (parent)
     //Output: mass[1] and mass[2] 
@@ -90,7 +90,7 @@ Bool_t PHadronDecayM2::SampleMass(Double_t *mass, Int_t *didx) {
     return kTRUE;
 };
 
-Bool_t PHadronDecayM2::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
+Bool_t PHadronDecayM2::GetWidth(Double_t mass, Double_t *width, Int_t) {
 
     if (makeStaticData()->GetPWidx(is_channel) == -1) 
 	return 0.; // Disabled --> BUGBUG why not static?
@@ -205,7 +205,7 @@ Double_t PHadronDecayM2::GetWeight(Double_t *mass, Int_t *didx) {
 }
 
 
-bool PHadronDecayM2:: sampleM2(const double &ecm) {
+bool PHadronDecayM2::sampleM2(const double &ecm) {
     
     // Mass sampling algorithm in case of hadronic decay to two unstable hadrons
 

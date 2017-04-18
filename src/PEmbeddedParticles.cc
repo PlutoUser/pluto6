@@ -159,7 +159,7 @@ Bool_t PEmbeddedParticles::AddParticle(PParticle * particle, int downsc) {
     return kTRUE;
 }
 
-Bool_t PEmbeddedParticles::Modify(PParticle **mstack, int *decay_done, int *num, int stacksize) {
+Bool_t PEmbeddedParticles::Modify(PParticle **mstack, int *, int *num, int stacksize) {
     // Read the particles from the defined stack and copy this to the official
     // particle stream
 

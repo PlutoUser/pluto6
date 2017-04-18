@@ -23,7 +23,8 @@ public:
     Double_t sig_partial;     //   8  Double_t  partial cross section of exit channel mbarn
     Double_t baryon_density;  //   9  Double_t baryon density at collision point
 
-    Bool_t Read(ifstream& in){
+    using TObject::Read;
+    Bool_t Read(ifstream& in) {
 	if(in.eof())   return kFALSE;
 	if(!in.good()) return kFALSE;
 	in >> n_in >> n_out >> process_id >> n_collision >> t_collision >> 
@@ -32,7 +33,8 @@ public:
         return kTRUE;
     }
 
-    void Print(){
+    using TObject::Print;
+    void Print(Option_t *) {
 	cout<< setw(5)  << dec << n_in << " "
 	    << setw(6)  << n_out       << " "
 	    << setw(4)  << process_id  << " "
@@ -45,7 +47,8 @@ public:
 	    << dec << endl;
     }
 
-    void Clear(){
+    using TObject::Clear;
+    void Clear(Option_t *) {
 	n_in           = -2;
 	n_out          = -1;
 	process_id     = -1;
@@ -56,7 +59,7 @@ public:
 	sig_partial    = -1;
 	baryon_density = -1;
     }
-    PHUrCollisionHeader(){ Clear();}
+    PHUrCollisionHeader(){ Clear(NULL);}
     ~PHUrCollisionHeader(){}
     Bool_t IsScattering()            { return (n_in==2 && n_out==2 ) ; }
     Bool_t IsDecay()                 { return (n_in==1 && n_out==2 ) ; }

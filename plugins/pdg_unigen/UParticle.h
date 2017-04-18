@@ -46,7 +46,7 @@ class UParticle : public TObject {
     virtual ~UParticle();
     const UParticle& operator =  (const UParticle& right);
     const UParticle& operator =  (const TParticle& right);
-    const Bool_t     operator == (const UParticle& right) const;
+    Bool_t operator == (UParticle& right) const;
     using TObject::Print;
     void Print(Option_t *option = "");
     inline Int_t    GetIndex()       const {return fIndex;}

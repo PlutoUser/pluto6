@@ -80,7 +80,7 @@ PHadronDecay::PHadronDecay(const Char_t *id, const Char_t *de, Int_t key) :
     w0=makeStaticData()->GetDecayBR(is_channel); //Weight used for mormalization
 };
 
-PDistribution *PHadronDecay::Clone(const char*delme) const {
+PDistribution *PHadronDecay::Clone(const char*) const {
     return new PHadronDecay((const PHadronDecay &)* this);
 };
 
@@ -89,11 +89,11 @@ Bool_t PHadronDecay::Init(void) {
     return kTRUE;
 };
 
-Double_t PHadronDecay::EvalPar(const Double_t *x, const Double_t *params) {
+Double_t PHadronDecay::EvalPar(const Double_t *x, const Double_t *) {
     return Eval(x[0]);
 };
  
-Double_t PHadronDecay::Eval(Double_t x, Double_t y, Double_t z, Double_t t) const {
+Double_t PHadronDecay::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     Double_t res;
     Double_t mass[3];
     mass[0] = x; 
@@ -113,7 +113,7 @@ Double_t PHadronDecay::Eval(Double_t x, Double_t y, Double_t z, Double_t t) cons
     return 0;
 };
 
-int PHadronDecay::GetDepth(int i) {
+int PHadronDecay::GetDepth(int) {
     
     makeStaticData()->SetDecayEmin(is_channel, mass1+mass2);
     return 0; //2 stable products -> depth is 0
@@ -124,7 +124,7 @@ Bool_t PHadronDecay::SampleMass(void) {
     return kTRUE;
 };
 
-Bool_t PHadronDecay::SampleMass(Double_t *mass, Int_t *didx) {
+Bool_t PHadronDecay::SampleMass(Double_t *mass, Int_t *) {
     //Not much to do here...
     //Since we have 2 stable products, for completeness
     //we reset the masses to the nominal value
@@ -150,7 +150,7 @@ Bool_t PHadronDecay::SampleMass(Double_t *mass, Int_t *didx) {
 // }
 
 
-Bool_t PHadronDecay::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
+Bool_t PHadronDecay::GetWidth(Double_t mass, Double_t *width, Int_t) {
 
     if (makeStaticData()->GetPWidx(is_channel) == -1) {
 	*width = parent_g0;

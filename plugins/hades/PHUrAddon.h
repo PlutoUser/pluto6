@@ -32,7 +32,8 @@ public:
     Int_t    first;     // default -1 , 0 first n last appearance of the particle
     Int_t    last;      // default -1 , 0 first n last appearance of the particle
 
-    void  Clear() {
+    using TObject::Clear;
+    void  Clear(Option_t *) {
 	n_in           = -2;
 	n_out          = -1;
 	process_id     = -1;
@@ -50,7 +51,7 @@ public:
         instance=-1;
     }
 
-    PHUrAddon(){ Clear(); }
+    PHUrAddon(){ Clear(NULL); }
     ~PHUrAddon(){}
 
     Bool_t IsScattering()            { return (n_in==2 && n_out==2 ) ; }

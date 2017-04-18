@@ -114,7 +114,7 @@ Int_t PFileInput::readParticle(Double_t &px, Double_t &py, Double_t &pz, Double_
     return ret;
 }
 
-void PFileInput:: Print(const Option_t *delme) const {
+void PFileInput:: Print(const Option_t *) const {
     printf(" Input type: %s\n", name);
     printf(" File name: %s\n",  file);
     printf(" rapidity=%f  weight=%f\n", Rapidity(), W());

@@ -32,7 +32,7 @@ PDataBase::PDataBase() {
     param_string_pointer = 0;
     param_int_pointer    = 0;
     param_tobj_pointer   = 0;
-    lastkey=0;
+    lastkey = 0;
 
     //Init arrays to NULL
     for (int i=0; i<PDATABASE_MAX_LINES; i++) {
@@ -47,8 +47,8 @@ PDataBase::PDataBase() {
     }
 
     for (int j=0; j<PDATABASE_MAX_INT_PARAM; j++) {
-	param_int_key[PDATABASE_MAX_INT_PARAM] = NULL;
-	param_int_key_max[PDATABASE_MAX_INT_PARAM] = 0;
+	param_int_key[j] = NULL;
+	param_int_key_max[j] = 0;
     }
 
     MakeParamString("name", "Database name"); 
@@ -57,7 +57,7 @@ PDataBase::PDataBase() {
 }
 
 
-void PDataBase::Print(const Option_t *delme) const {
+void PDataBase::Print(const Option_t *) const {
     cout << param_int_pointer << " INT's booked (out of " << PDATABASE_MAX_INT_PARAM <<")" << endl;
     for (int i=0; i<param_int_pointer; i++)
 	cout << "INT:" << param_int_name[i] << ":" << param_int_descr[i] << endl;
@@ -564,19 +564,19 @@ Int_t PDataBase::AddListEntry(const char *name, const char *count,
 	(*i_count)++;
 
 	//Find the last entry in the chain
-	Int_t listkey=-1, lastkey;
+	Int_t listkey=-1, mylastkey=-1;
 	while (makeDataBase()->MakeListIterator(key, count, link, &listkey)) {
-	    lastkey = listkey;
+	    mylastkey = listkey;
 	}
 
 	//copy old pointer to new entry
 	//GetParamInt (key, link,&i_link);
-	GetParamInt(lastkey, link, &i_link);
+	GetParamInt(mylastkey, link, &i_link);
 	i_newlink = new Int_t(*i_link);
 	SetParamInt(targetkey, link, i_newlink);
 	//set new entry
 	i_link = new Int_t(targetkey);
-	SetParamInt(lastkey, link, i_link);
+	SetParamInt(mylastkey, link, i_link);
     }
     return targetkey;
 }

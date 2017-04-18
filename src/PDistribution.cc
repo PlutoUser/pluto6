@@ -100,7 +100,7 @@ PDistribution::~PDistribution() {
     delete[] description;
 }
 
-PDistribution *PDistribution::Clone(const char*delme) const {
+PDistribution *PDistribution::Clone(const char *) const {
     Fatal("Clone", "Clone calling virt. function for %s", description);
     return NULL;
 };
@@ -473,12 +473,12 @@ void PDistribution::BasePrint(void) const {
     }
 }
 
-void PDistribution::Print(const Option_t *delme) const {  
+void PDistribution::Print(const Option_t *) const {  
     //Debug info
     BasePrint();
 }
 
-void PDistribution::SubPrint(Int_t opt) const {
+void PDistribution::SubPrint(Int_t) const {
     //Print sub-models
     return;
 }
@@ -489,13 +489,12 @@ const Char_t *PDistribution::Path() const {
     return makeDataBase()->GetName(model_def_key);
 }
 
-int PDistribution::GetDepth(int i) {
-
+int PDistribution::GetDepth(int) {
     return -1; //nothing
 }
 
 
-Bool_t PDistribution::ExecCommand(const char *command, Double_t value) {
+Bool_t PDistribution::ExecCommand(const char *, Double_t) {
     //Pure virtual
     return kFALSE;
 }

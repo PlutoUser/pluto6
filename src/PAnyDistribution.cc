@@ -88,7 +88,7 @@ PAnyDistribution::PAnyDistribution(const Char_t *id, const Char_t *de) :
     }
 };
 
-PDistribution *PAnyDistribution::Clone(const char *delme) const {
+PDistribution *PAnyDistribution::Clone(const char *) const {
     return new PAnyDistribution((const PAnyDistribution &)* this);
 };
 

@@ -1,1 +1,1 @@
-char *version_string = (char*)"Trunk";
+char *version_string = (char*) "6.00";

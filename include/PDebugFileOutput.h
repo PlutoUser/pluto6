@@ -18,7 +18,8 @@ class PDebugFileOutput: public PFileOutput {
  public:
     PDebugFileOutput();
     ~PDebugFileOutput();
-    
+
+    using PFileOutput::OpenFile;
     bool OpenFile(char *filename);       //filename
     bool CloseFile(void);                //
     bool WriteEvent(void);               //next event

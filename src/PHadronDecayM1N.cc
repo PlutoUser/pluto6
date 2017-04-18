@@ -64,7 +64,7 @@ PHadronDecayM1N::PHadronDecayM1N(const Char_t *id, const Char_t *de, Int_t key) 
     mesh = new PMesh(maxmesh-2,"mesh");
 };
 
-PDistribution *PHadronDecayM1N::Clone(const char *delme) const {
+PDistribution *PHadronDecayM1N::Clone(const char *) const {
     return new PHadronDecayM1N((const PHadronDecayM1N &)* this);
 };
 
@@ -139,7 +139,7 @@ int PHadronDecayM1N::GetDepth(int i) {
     //check if we have models
     //This also initializes the sub-models
 
-    Int_t a1;
+    Int_t a1=0;
     unstable_model = makeDynamicData()->GetParticleModel(unstable_id);
     if (unstable_model) a1 = unstable_model->GetDepth(i);
 
@@ -147,7 +147,7 @@ int PHadronDecayM1N::GetDepth(int i) {
     return a1; 
 }
 
-void PHadronDecayM1N::SubPrint(Int_t opt) const {
+void PHadronDecayM1N::SubPrint(Int_t) const {
     //Print sub-models
     
     if (unstable_model) {
@@ -157,11 +157,11 @@ void PHadronDecayM1N::SubPrint(Int_t opt) const {
 }
 
 
-Double_t PHadronDecayM1N::EvalPar(const Double_t *x, const Double_t *params) {
+Double_t PHadronDecayM1N::EvalPar(const Double_t *x, const Double_t *) {
     return Eval(x[0]);
 }
 
-Double_t PHadronDecayM1N::Eval(Double_t x, Double_t y, Double_t z, Double_t t) const {
+Double_t PHadronDecayM1N::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     if (mesh)  {
 	return mesh->GetLinearIP(x);
     }

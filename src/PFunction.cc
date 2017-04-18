@@ -34,7 +34,7 @@ PFunction::PFunction(const Char_t *id, const Char_t *de, Int_t key) : PChannelMo
     batch    = NULL;
 };
 
-PDistribution *PFunction::Clone(const char *delme) const {
+PDistribution *PFunction::Clone(const char *) const {
     return new PFunction((const PFunction &)* this);
 };
 
@@ -52,7 +52,7 @@ Bool_t PFunction::AddEquation(const char *command) {
     return batch->AddCommand(command);
 };
 
-Double_t PFunction::GetWeight(Double_t *mass, Int_t *didx) {
+Double_t PFunction::GetWeight(Double_t *mass, Int_t *) {
 
     if (batch) {	
 	*vx = mass[0];
@@ -68,7 +68,7 @@ Double_t PFunction::GetWeight(Double_t *mass, Int_t *didx) {
 };
 
 
-Bool_t PFunction::SampleMass(Double_t *mass, Int_t *didx) {
+Bool_t PFunction::SampleMass(Double_t *mass, Int_t *) {
 
     if (tf1) {
 	mass[0] = tf1->GetRandom();

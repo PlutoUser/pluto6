@@ -48,7 +48,7 @@ PHadronDecayM3::PHadronDecayM3(const Char_t *id, const Char_t *de, Int_t key) :
     didx3 = -1;
 };
 
-PDistribution *PHadronDecayM3::Clone(const char *delme) const {
+PDistribution *PHadronDecayM3::Clone(const char *) const {
     return new PHadronDecayM3((const PHadronDecayM3 &)* this);
 };
 
@@ -80,9 +80,9 @@ Bool_t PHadronDecayM3::Prepare(void) {
     return kTRUE;
 }
  
-Double_t PHadronDecayM3::Eval(Double_t x, Double_t y, Double_t z, Double_t t ) const {
+Double_t PHadronDecayM3::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     Double_t res;
-    Double_t mass[3];
+    Double_t mass[4];
     mass[0] = x; 
     mass[1] = mass1;
     mass[2] = mass2;
@@ -105,7 +105,7 @@ int PHadronDecayM3::GetDepth(int i) {
     //check if we have models
     //This also initializes the sub-models
 
-    Int_t a1, a2, a3;
+    Int_t a1=0, a2=0, a3=0;
     model1 = makeDynamicData()->GetParticleModel(id1);
     model2 = makeDynamicData()->GetParticleModel(id2);
     model3 = makeDynamicData()->GetParticleModel(id3);
@@ -118,7 +118,7 @@ int PHadronDecayM3::GetDepth(int i) {
     return TMath::Max(a1+1, TMath::Max(a2+1,a3+1)); 
 }
 
-void PHadronDecayM3::SubPrint(Int_t opt) const {
+void PHadronDecayM3::SubPrint(Int_t) const {
     //Print sub-models
     
     if (model1) {
@@ -232,7 +232,7 @@ Bool_t PHadronDecayM3::SampleMass(Double_t *mass, Int_t *didx) {
     return kTRUE;
 };
 
-Bool_t PHadronDecayM3::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
+Bool_t PHadronDecayM3::GetWidth(Double_t mass, Double_t *width, Int_t) {
     
     double q_value      = mass-(mass1+mass2+mass3);
     double q_value_pole = parent_mass-(mass1+mass2+mass3);

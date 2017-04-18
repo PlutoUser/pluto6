@@ -314,7 +314,7 @@ void PFireball::setToMidrapidity(float agev) {  // boost thermal source to
     }
 }
 
-void PFireball:: Print(const Option_t *delme) const {
+void PFireball::Print(const Option_t *delme) const {
     if (fHisto != NULL) {
 	printf("%s d2N/dpdTheta sampled from histogram: %s\n", delme, fHisto->GetTitle());
     } else if(power1 == 0) {
@@ -365,7 +365,7 @@ void PFireball::printAverages() const {
     printf(" average b=%5.2f  average Apart=%5.1f  average M=%8.2e\n\n", avb, avApart, avM);
 }
 
-Double_t PFireball::AvApart(Double_t ap, Double_t am, Double_t bm, Double_t bx) {
+Double_t PFireball::AvApart(Double_t, Double_t, Double_t, Double_t) {
     Int_t nSample = 10000;
     Float_t b;
     Float_t Apart;

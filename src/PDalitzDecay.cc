@@ -135,7 +135,7 @@ PDalitzDecay::PDalitzDecay(const Char_t *id, const Char_t *de, Int_t key) :
     formfactor_model = NULL;
 };
 
-PDistribution* PDalitzDecay::Clone(const char *delme) const {
+PDistribution* PDalitzDecay::Clone(const char *) const {
     return new PDalitzDecay((const PDalitzDecay &)* this);
 };
 
@@ -190,7 +190,7 @@ Bool_t PDalitzDecay::SampleMass(void) {
     return kTRUE;
 };
 
-Bool_t PDalitzDecay::SampleMass(Double_t *mass, Int_t *didx) {
+Bool_t PDalitzDecay::SampleMass(Double_t *mass, Int_t *) {
     sampleMD(mass[0], parent_id, 
 	     mass[dilepton_position], mass[others_position]);
     return kTRUE;
@@ -244,14 +244,14 @@ Double_t PDalitzDecay::GetWeight(void) {
      //	makeStaticData()->GetParticleTotalWidth(parent_id);
 };
 
-Double_t PDalitzDecay::GetWeight(Double_t *mass, Int_t *didx) {
-    Double_t dgdm = dGdM(parent_id,mass[dilepton_position],mass[0]);
+Double_t PDalitzDecay::GetWeight(Double_t *mass, Int_t *) {
+    Double_t dgdm = dGdM(parent_id, mass[dilepton_position], mass[0]);
     //    Double_t dgdm = FDalitz(parent_id,mass[dilepton_position],mass[0]);
 
     return dgdm;
 };
 
-Bool_t PDalitzDecay::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
+Bool_t PDalitzDecay::GetWidth(Double_t mass, Double_t *width, Int_t) {
     if (makeStaticData()->GetPWidx(is_channel) == -1) 
 	return 0.; // Disabled --> BUGBUG why not static?
 
@@ -310,11 +310,11 @@ Bool_t PDalitzDecay::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
     return kFALSE;
 };
 
-Double_t PDalitzDecay::EvalPar(const Double_t *x, const Double_t *params) {
+Double_t PDalitzDecay::EvalPar(const Double_t *x, const Double_t *) {
     return Eval(x[0]);
 };
  
-Double_t PDalitzDecay::Eval(Double_t x, Double_t y , Double_t z , Double_t t ) const {
+Double_t PDalitzDecay::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     //Draw the Dalitz FF as a function of the dilepton mass
     Double_t res;
     Double_t mass[3];
@@ -593,7 +593,7 @@ double PDalitzDecay:: PhotonBR(const int &id) {
     return 0.;                       // no such mode
 };
 
-void PDalitzDecay::Print(const Option_t *delme) const {  
+void PDalitzDecay::Print(const Option_t *) const {  
     //Debug info
     BasePrint();
     if (useQED) 

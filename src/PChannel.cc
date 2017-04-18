@@ -60,7 +60,7 @@ const char *Message[14] = {
 
 double PChannel::globalWeight = 1.;              // global channel weight
 
-PChannel::PChannel(PParticle **particles, int nt, int mf, int af, int bf) {
+PChannel::PChannel(PParticle **particles, int nt, int, int, int) {
     // Channel constructor by pointer to array of pointers to particles
     // (parent, decay products), number of decay particles (default 2).
     // ____________________________________________________________________________
@@ -105,7 +105,7 @@ PChannel::PChannel(PParticle **particles, int nt, int mf, int af, int bf) {
     DMIndex=makeStaticData()->GetDecayIdx(ipid.GetArray(),n); // match decay mode with PData
 }
 
-PChannel::PChannel(int idx, PParticle **particles, int mf, int af, int bf) {
+PChannel::PChannel(int idx, PParticle **particles, int, int, int) {
     // Channel constructor by decay-mode index
     
     makeStdData()->fillDataBase();//init physics, if not yet done
@@ -157,7 +157,7 @@ PChannel::PChannel(int idx, PParticle **particles, int mf, int af, int bf) {
 	for (i=0; i<=n; ++i)             // ompare id arrays
 	    hit += (test[i]==ia[i]);
 	if (hit != n) {                  // input array inconsistent with decay-mode index
-	    printf("%s\n", Message[14]);
+	    printf("%s\n", Message[13]);
 	    ipid.~TArrayI();
 	    return;
 	}
@@ -171,7 +171,7 @@ PChannel::PChannel(int idx, PParticle **particles, int mf, int af, int bf) {
     ecm = ptcls[0]->M();             // system invariant mass on instantiation
 }     
 
-PChannel::PChannel(int idx, PParticle &parent, int mf, int af, int bf) {
+PChannel::PChannel(int idx, PParticle &parent, int, int, int) {
     // Channel constructor by decay-mode index and parent reference
     
     makeStdData()->fillDataBase();//init physics, if not yet done
@@ -198,7 +198,7 @@ PChannel::PChannel(int idx, PParticle &parent, int mf, int af, int bf) {
     ipid[0] = parent.ID();           // parent id
 
     if (ipid[0] != makeStaticData()->GetDecayParent(idx)) {
-	printf("%s\n", Message[14]);
+	printf("%s\n", Message[13]);
 	ipid.~TArrayI();
 	delete [] ptcls;
 	return;

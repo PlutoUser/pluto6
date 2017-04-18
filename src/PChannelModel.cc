@@ -240,7 +240,7 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
     
 };
 
-PDistribution *PChannelModel::Clone(const char *delme) const {
+PDistribution *PChannelModel::Clone(const char *) const {
     return new PChannelModel((const PChannelModel &)* this);
 };
 
@@ -264,7 +264,7 @@ PChannelModel *PChannelModel::GetSecondaryModel(const char *name) {
     return NULL;
 }
 
-Bool_t PChannelModel::SampleMass(Double_t *mass,  Int_t *didx) {
+Bool_t PChannelModel::SampleMass(Double_t*,  Int_t*) {
     //Samples the masses of the known decay products (or single particle)
     //Order of particles is the same as in data base
     
@@ -280,7 +280,7 @@ Double_t PChannelModel::EvalPar(const Double_t *x, const Double_t *params) {
     return Eval(x[0]);
 }
  
-Double_t PChannelModel::Eval(Double_t x, Double_t y, Double_t z, Double_t t) const {
+Double_t PChannelModel::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     Double_t res;
     Double_t my_x[11];
     Int_t    my_didx_option[11];
@@ -344,7 +344,7 @@ TComplex PChannelModel::GetAmplitude(Double_t *mass, Int_t *didx) {
     return r;
 };
 
-Bool_t PChannelModel::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
+Bool_t PChannelModel::GetWidth(Double_t, Double_t *width, Int_t didx) {
     //Calculates the mass-dependent width (either partial for the decay or
     //total for the particles)
     //If didx is set, use the partial width for a particular target channel
@@ -404,7 +404,7 @@ Bool_t PChannelModel::GetBR(Double_t mass, Double_t *br, Double_t totalwidth) {
     return kTRUE; 
 }
 
-int PChannelModel::GetDepth(int i) {
+int PChannelModel::GetDepth(int) {
     //By default don't care
     return -1;
 }

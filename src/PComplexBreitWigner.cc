@@ -40,7 +40,7 @@ PComplexBreitWigner::PComplexBreitWigner(const Char_t *id, const Char_t *de, Int
     mr = makeStaticData()->GetParticleMassByKey(key);
 };
 
-PDistribution* PComplexBreitWigner::Clone(const char *delme) const {
+PDistribution* PComplexBreitWigner::Clone(const char *) const {
     return new PComplexBreitWigner((const PComplexBreitWigner &)* this);
 };
 
@@ -156,7 +156,7 @@ Double_t PComplexBreitWigner::EvalPar(const Double_t *x, const Double_t *params)
     return Eval(x[0]);
 };
  
-Double_t PComplexBreitWigner::Eval(Double_t x, Double_t y , Double_t z , Double_t t ) const {
+Double_t PComplexBreitWigner::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     Double_t res;
     Double_t my_x[11];
     Int_t my_didx_option[11];
@@ -274,7 +274,7 @@ TComplex PComplexBreitWigner::GetAmplitude(Double_t *mass, Int_t *didx) {
 };
 
 
-void PComplexBreitWigner::Print(const Option_t *delme) const {
+void PComplexBreitWigner::Print(const Option_t *) const {
     //loop over decay modes
     for (int i=0; i<num_decaychannels; i++) {
 	//Now loop over possible interference terms

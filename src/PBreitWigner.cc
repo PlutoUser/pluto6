@@ -31,7 +31,7 @@ PBreitWigner::PBreitWigner(const Char_t *id, const Char_t *de, Int_t key) :
     mr = makeStaticData()->GetParticleMassByKey(primary_key);
 };
 
-PDistribution *PBreitWigner::Clone(const char *delme) const {
+PDistribution *PBreitWigner::Clone(const char *) const {
     return new PBreitWigner((const PBreitWigner &)* this);
 };
 

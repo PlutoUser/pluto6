@@ -59,7 +59,7 @@ PEEDirectDecay::PEEDirectDecay(const Char_t *id, const Char_t *de, Int_t key) : 
     use_hadronic_ps = 0;
 };
 
-PDistribution *PEEDirectDecay::Clone(const char *delme) const {
+PDistribution *PEEDirectDecay::Clone(const char *) const {
     return new PEEDirectDecay((const PEEDirectDecay &)* this);
 };
 
@@ -92,7 +92,7 @@ Bool_t PEEDirectDecay::SampleMass(void) {
     return kTRUE;
 };
 
-Bool_t PEEDirectDecay::SampleMass(Double_t *mass, Int_t *didx) {
+Bool_t PEEDirectDecay::SampleMass(Double_t *mass, Int_t *) {
     //Set to fixed decay products here
     mass[1] = mlep;
     mass[2] = mlep;
@@ -100,7 +100,7 @@ Bool_t PEEDirectDecay::SampleMass(Double_t *mass, Int_t *didx) {
 };
 
 #if 1
-Bool_t PEEDirectDecay::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
+Bool_t PEEDirectDecay::GetWidth(Double_t mass, Double_t *width, Int_t) {
 
     if (makeStaticData()->GetPWidx(is_channel)==-1) {
 	*width = makeStaticData()->GetDecayPartialWidth(is_channel);
@@ -175,12 +175,12 @@ Bool_t PEEDirectDecay::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
 }
 #endif
 
-Double_t PEEDirectDecay::GetWeight(Double_t *mass, Int_t *didx) {
+Double_t PEEDirectDecay::GetWeight(Double_t *, Int_t *) {
     Warning("GetWeight", "not implemented");
     return 0;
 }
 
-Double_t PEEDirectDecay::Eval(Double_t x, Double_t y, Double_t z, Double_t t) const {
+Double_t PEEDirectDecay::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     Double_t res;
     Double_t mass = x;
 

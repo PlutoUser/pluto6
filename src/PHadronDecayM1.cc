@@ -65,7 +65,7 @@ PHadronDecayM1::PHadronDecayM1(const Char_t *id, const Char_t *de, Int_t key) :
     didx_unstable = -1;
 };
 
-PDistribution *PHadronDecayM1::Clone(const char*delme) const {
+PDistribution *PHadronDecayM1::Clone(const char*) const {
     return new PHadronDecayM1((const PHadronDecayM1 &)* this);
 };
 
@@ -95,7 +95,7 @@ Double_t PHadronDecayM1::EvalPar(const Double_t *x, const Double_t *params) {
     return Eval(x[0]);
 }
  
-Double_t PHadronDecayM1::Eval(Double_t x, Double_t y, Double_t z, Double_t t ) const {
+Double_t PHadronDecayM1::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     Double_t res;
     Double_t mass[3];
     Int_t didx[3];
@@ -132,7 +132,7 @@ Double_t PHadronDecayM1::Eval(Double_t x, Double_t y, Double_t z, Double_t t ) c
 int PHadronDecayM1::GetDepth(int i) {
     //Initialize daughter decay modes
 
-    Int_t a1, a2;
+    Int_t a1=0, a2=0;
     model1 = makeDynamicData()->GetParticleModel(id1);
     model2 = makeDynamicData()->GetParticleModel(id2);
 
@@ -144,7 +144,7 @@ int PHadronDecayM1::GetDepth(int i) {
 				   TMath::Min(makeStaticData()->GetParticleEmin(id1),
 					      makeStaticData()->GetParticleEmin(id2)));
     
-    return TMath::Max(a1+1,a2+1); 
+    return TMath::Max(a1+1, a2+1); 
 }
 
 Bool_t PHadronDecayM1::Prepare(void) {
@@ -162,7 +162,7 @@ Bool_t PHadronDecayM1::Prepare(void) {
     return kTRUE;
 }
 
-void PHadronDecayM1::SubPrint(Int_t opt) const {
+void PHadronDecayM1::SubPrint(Int_t) const {
     //Print sub-models    
     if (model1) {cout << " "; cout << model1->GetDescription();}
     if (model2) {cout << " "; cout << model2->GetDescription();}
@@ -233,7 +233,7 @@ Bool_t PHadronDecayM1::SampleMass(Double_t *mass, Int_t *didx) {
     return kTRUE;
 };
 
-Bool_t PHadronDecayM1::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
+Bool_t PHadronDecayM1::GetWidth(Double_t mass, Double_t *width, Int_t) {
 
     if (makeStaticData()->GetPWidx(is_channel) == -1) 
 	return 0.; // Disabled --> BUGBUG why not static?

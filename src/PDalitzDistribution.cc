@@ -30,7 +30,7 @@ PDalitzDistribution::PDalitzDistribution(const Char_t *id, const Char_t *de) :
     max = 0.0;
 };
 
-PDistribution *PDalitzDistribution::Clone(const char *delme) const {
+PDistribution *PDalitzDistribution::Clone(const char *) const {
     return new PDalitzDistribution((const PDalitzDistribution &)* this);
 };
 

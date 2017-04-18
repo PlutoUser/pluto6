@@ -25,6 +25,7 @@ public:
     Double_t E_beam;           // 8 : Double_t the beam energy ,
     Double_t mom_per_particle; // 9 : Double_t momentum (per particle) in the laboratory frame
 
+    using TObject::Read;
     Bool_t Read(ifstream& in){
 	if(in.eof()) return kFALSE;
 	if(!in.good()) return kFALSE;
@@ -34,7 +35,9 @@ public:
 	    return kFALSE;
         return kTRUE;
     }
-    void Print() {
+
+    using TObject::Print;
+    void Print(Option_t *) {
 	cout << setw(5)  << dec << id  << " "
 	     << setw(6)  << evtnum     << " "
 	     << setw(4)  << mass_proj  << " "
@@ -47,6 +50,7 @@ public:
 	     << dec << endl;
     }
 
+    using TObject::Copy;
     void Copy(PHUrCollisionHeader& colheader){
 	id               = colheader.n_in;
 	evtnum           = colheader.n_out;
@@ -59,7 +63,8 @@ public:
 	mom_per_particle = colheader.baryon_density;
     }
 
-    void Clear() {
+    using TObject::Clear;
+    void Clear(Option_t *) {
 	id               = -2;
 	evtnum           = -1;
 	mass_proj        = -99;
@@ -71,7 +76,7 @@ public:
 	mom_per_particle = -1.;
     }
 
-    PHUrEventHeader(){ Clear(); };
+    PHUrEventHeader(){ Clear(NULL); };
     ~PHUrEventHeader(){};
 
     ClassDef(PHUrEventHeader, 0)

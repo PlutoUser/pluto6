@@ -315,7 +315,7 @@ void PDecayManager::Clear(Int_t id) {
     // this function automatically.
     
     Int_t key = makeDataBase()->GetEntryInt("pid", id); //TODO: make this faster
-    if (key < 0);
+    /* if (key < 0); */
     TObject *ch;
     if (!makeDataBase()->GetParamTObj(key, "decaychannel", &ch)) return;
     if (ch == NULL) return;

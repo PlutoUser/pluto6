@@ -46,7 +46,7 @@ PFixedDecay::PFixedDecay(const Char_t *id, const Char_t *de, Int_t key) :
     version_flag |= VERSION_MASS_SAMPLING;  //Only one mass sampling in the PChannel
 };
 
-PDistribution *PFixedDecay::Clone(const char*delme) const {
+PDistribution *PFixedDecay::Clone(const char*) const {
     return new PFixedDecay((const PFixedDecay &)* this);
 };
 
@@ -70,7 +70,7 @@ Bool_t PFixedDecay::Init(void) {
     return kTRUE;
 }
 
-int PFixedDecay::GetDepth(int i) {
+int PFixedDecay::GetDepth(int) {
     
     double mymin = 0.;
     for (int i=1; i<=n_daughters; i++) {
@@ -91,7 +91,7 @@ Bool_t PFixedDecay::SampleMass(void) {
     return kTRUE;
 };
 
-Bool_t PFixedDecay::SampleMass(Double_t *mass, Int_t *didx) {
+Bool_t PFixedDecay::SampleMass(Double_t *mass, Int_t *) {
     //Not much to do here...
     //Since we have 2 stable products, for completeness
     //we reset the masses to the nominal value
@@ -103,7 +103,7 @@ Bool_t PFixedDecay::SampleMass(Double_t *mass, Int_t *didx) {
 };
 
 
-Bool_t PFixedDecay::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
+Bool_t PFixedDecay::GetWidth(Double_t mass, Double_t *width, Int_t) {
     //Returns the fixed width for stable parents
     //and the p.s. for the decay unstable -> stable stable
     //decays > 2 body are not supported yet

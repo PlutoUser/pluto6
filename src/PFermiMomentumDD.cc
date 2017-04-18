@@ -12,7 +12,7 @@ PFermiMomentumDD::PFermiMomentumDD(const Char_t *id, const Char_t *de, Int_t key
     PFermiMomentum(id, de, key) {
 };
 
-PDistribution *PFermiMomentumDD::Clone(const char *delme) const {
+PDistribution *PFermiMomentumDD::Clone(const char *) const {
     return new PFermiMomentumDD((const PFermiMomentumDD &)* this);
 };
 

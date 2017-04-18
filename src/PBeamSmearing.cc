@@ -44,7 +44,7 @@ PBeamSmearing::PBeamSmearing(const Char_t *id, const Char_t *de) :
     sigmaBeam = 0.;
 };
 
-PDistribution *PBeamSmearing::Clone(const char *delme) const {
+PDistribution *PBeamSmearing::Clone(const char *) const {
     return new PBeamSmearing((const PBeamSmearing &)* this);
 };
 
@@ -163,7 +163,7 @@ void PBeamSmearing::SetReaction(const char *reaction) {
     NoDaughters();
 }
 
-void PBeamSmearing::Print(const Option_t *delme) const{
+void PBeamSmearing::Print(const Option_t *) const{
     PDistribution::Print();
 }
 

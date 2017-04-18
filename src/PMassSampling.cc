@@ -28,11 +28,11 @@ PMassSampling::PMassSampling(const Char_t *id, const Char_t *de, Int_t key) :
     shape1 = NULL;
 }
 
-PDistribution *PMassSampling::Clone(const char *delme) const {
+PDistribution *PMassSampling::Clone(const char *) const {
     return new PMassSampling((const PMassSampling &)* this);
 }
 
-Bool_t PMassSampling::SampleMass(Double_t *mass, Int_t *didx) {
+Bool_t PMassSampling::SampleMass(Double_t *mass, Int_t *) {
     if (!shape1) {
 	Warning("SampleMass", "(%s): no TF1 found", GetDescription());
 	mass[0] = 0;
@@ -42,7 +42,7 @@ Bool_t PMassSampling::SampleMass(Double_t *mass, Int_t *didx) {
     return kTRUE;
 }
 
-Double_t PMassSampling::GetWeight(Double_t *mass, Int_t *didx) {
+Double_t PMassSampling::GetWeight(Double_t *mass, Int_t *) {
     if (!shape1) {
 	Warning("GetWeight", "(%s): no TF1 found", GetDescription());
 	return 0;

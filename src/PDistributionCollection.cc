@@ -25,7 +25,7 @@ PDistributionCollection::PDistributionCollection(const Char_t *id, const  Char_t
     plugin_pointer = 0;
 };
 
-PDistribution *PDistributionCollection::Clone(const char *delme) const {
+PDistribution *PDistributionCollection::Clone(const char *) const {
     return new PDistributionCollection((const PDistributionCollection &)* this);
 };
 

@@ -28,7 +28,7 @@ PDeltaAngularDistribution::PDeltaAngularDistribution(const Char_t *id, const Cha
     use_term = 1+2+4; //By default all terms
 };
 
-PDistribution *PDeltaAngularDistribution::Clone(const char *delme) const {
+PDistribution *PDeltaAngularDistribution::Clone(const char *) const {
     return new PDeltaAngularDistribution((const PDeltaAngularDistribution &)* this);
 };
 
@@ -181,8 +181,7 @@ double PDeltaAngularDistribution::SamplePolarAngle(double r) {
     return c0;                            // accept
 };
 
-void PDeltaAngularDistribution::Print(const Option_t* delme) const {
-
+void PDeltaAngularDistribution::Print(const Option_t *) const {
     PAngularDistribution::Print();
 };
 

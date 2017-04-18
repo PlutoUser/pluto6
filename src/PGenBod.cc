@@ -41,7 +41,7 @@ PGenBod::PGenBod(const Char_t *id, const Char_t *de, Int_t key) :
     }
 };
 
-PDistribution *PGenBod::Clone(const char*delme) const {
+PDistribution *PGenBod::Clone(const char*) const {
     return new PGenBod((const PGenBod &)* this);
 };
 
@@ -242,7 +242,7 @@ Bool_t PGenBod::SampleMomentum(void) {
     return kTRUE;
 };
 
-void PGenBod::Print(const Option_t* delme) const {
+void PGenBod::Print(const Option_t*) const {
     BasePrint();
 };
 

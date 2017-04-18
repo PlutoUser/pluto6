@@ -29,7 +29,7 @@ PHadronModel::PHadronModel(const Char_t *id, const Char_t *de, Int_t key) :
     global_weight_scaling = 1.;
 };
 
-PDistribution *PHadronModel::Clone(const char *delme) const {
+PDistribution *PHadronModel::Clone(const char *) const {
     return new PHadronModel((const PHadronModel &)* this);
 };
 

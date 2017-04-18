@@ -1487,7 +1487,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
     Bool_t found = kFALSE;
     char *prod[2];
     Int_t prod_s = 2; //max 2 products
-    int key_a, key1=-1, key2=-1;
+    int key_a=-1, key1=-1, key2=-1;
 
     int numbrack = 0;
     for (UInt_t i=0; i<strlen(command); i++) {
@@ -2562,7 +2562,7 @@ Int_t PBatch::GetMethodHandle(char *name, Int_t flag) {
 
     //BUGBUG: have to include overloading
 
-    const TList *list;
+    const TList *list = NULL;
     if (flag == 0)
 	list = gROOT->GetClass("PParticle")->GetListOfAllPublicMethods();
     else if (flag == 1)
@@ -2779,8 +2779,7 @@ Bool_t PBatch::AddCommand(char command, int key_a, int key1, int key2, int key3,
     return kTRUE;
 }
 
-Bool_t PBatch::GetArguments(const char *a, const char *b, 
-			    char *name, char **function, char **arg1, char **arg2) {
+Bool_t PBatch::GetArguments(const char *a, char *name, char **function, char **arg1, char **arg2) {
     //looks for syntax like f(a,b);
     
     char *prod[2];
@@ -2937,7 +2936,7 @@ Int_t PBatch::GetKey(char *name, int fl, int makeflag) {
 		MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, name);
 	    
 	    char *function, *arg1, *arg2;
-	    GetArguments("[", "]", name, &function, &arg1, &arg2);
+	    GetArguments("[", /* "]", */ name, &function, &arg1, &arg2);
 	   	    
 	    if (!arg1) { 
 		Error("AddCommand", "[%s] Argument not found", name);
@@ -3042,7 +3041,7 @@ Int_t PBatch::GetKey(char *name, int fl, int makeflag) {
     return key;
 }
 
-void PBatch::Print(const Option_t *delme) const {
+void PBatch::Print(const Option_t *) const {
 
     cout << "Command list: res <=== arg{key,name}" << endl;
 

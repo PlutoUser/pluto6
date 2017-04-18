@@ -70,8 +70,8 @@ class PDecayChannel : public TObject {
     PDecayChannel *GetNext();
     PDecayChannel *GetLast();
 
-    void setAngleFunction(TF1 *f) {Warning("setAngleFunction", "setAngleFunction is obsolete");};
-    void setAngleFunction(TF2 *f) {Warning("setAngleFunction", "setAngleFunction is obsolete");};
+    void setAngleFunction(TF1 *) {Warning("setAngleFunction", "setAngleFunction is obsolete");};
+    void setAngleFunction(TF2 *) {Warning("setAngleFunction", "setAngleFunction is obsolete");};
   
     // Unlink means to return the next decay channel and to set Next to NULL
     PDecayChannel *Unlink();

@@ -34,7 +34,7 @@ PDiLepton::PDiLepton(Float_t M1, Float_t M2, Float_t Pt1, Float_t Pt2,
     if (y1 > y2) { y2 = Y1; y1 = Y2; }
 }
 
-void PDiLepton::Print(const Option_t *delme) const{
+void PDiLepton::Print(const Option_t *) const{
     printf(" Dilepton with:\n %5.2f < M < %5.2f,  %5.2f < Pt < %5.2f and %5.2f < y < %5.2f\n",
 	   m1, m2, pt1, pt2, y1, y2);
 }
