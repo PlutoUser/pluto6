@@ -36,13 +36,12 @@ bool PPlutoBulkDecay::Modify(PParticle ** stack, int *decay_done, int * num, int
 
 
     Int_t child_ids[maxnp+1];
-    PParticle *cur_p, *work[maxnp+1];
+    PParticle *cur_p, *work[maxnp+2];
 
     //I follow the LIFO principle, starting with the last particle and going to 0
     //This is needed because I first HAVE to end a decay chain, before re-using the PChannel
     //BUGBUG: This might not work with a self-decay like Delta->Delta+gamma
     st_i1 = size_ini-1;
-
     
     //st_i2 = st_i3 = size_ini;
     st_i3 = size_ini;

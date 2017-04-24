@@ -39,7 +39,7 @@ PTCrossWeight::PTCrossWeight(const Char_t *id, const Char_t *de, Int_t key) :
     SetExpectedWeightMean(-1); //switch off re-normalization
 };
 
-PDistribution *PTCrossWeight::Clone(const char *delme) const {
+PDistribution *PTCrossWeight::Clone(const char *) const {
     return new PTCrossWeight((const PTCrossWeight &)* this);
 };
 

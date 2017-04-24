@@ -42,18 +42,18 @@ void PStdModels::Add(PDistributionManagerUtil *pdmutil) {
     }
 }
 
-double f_eta_decay(double *x, double *par) {
+double f_eta_decay(double *x, double *) {
     // QED helicity angle (Bratkovskaya, Toneev et al.)
     return (1+x[0]*x[0])/2;
 }
 
-Double_t f_delta_decay(Double_t *x, Double_t *par) {
+Double_t f_delta_decay(Double_t *x, Double_t *) {
     //    return (1+3*x[0]*x[0])/4; 
     //    return (1+1.35*x[0]*x[0])/4.; 
     return (1+1.35*x[0]*x[0])/2.35; //faster 
 }
 
-Double_t f_delta_decay2(Double_t *x, Double_t *par) {
+Double_t f_delta_decay2(Double_t *x, Double_t *) {
     return (5.-3.*(1.35/3.)*x[0]*x[0])/5; //(1.35/3.) is the damping factor
 }
 

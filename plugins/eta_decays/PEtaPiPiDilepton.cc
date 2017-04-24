@@ -41,7 +41,7 @@ PEtaPiPiDilepton::PEtaPiPiDilepton(const Char_t *id, const Char_t *de, Int_t key
     weight_max = 0.00000001;
 };
 
-PDistribution *PEtaPiPiDilepton::Clone(const char *delme) const {
+PDistribution *PEtaPiPiDilepton::Clone(const char *) const {
     return new PEtaPiPiDilepton((const PEtaPiPiDilepton &)* this);
 };
 

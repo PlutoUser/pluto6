@@ -33,7 +33,7 @@ PScatterCrossSection::PScatterCrossSection(const Char_t *id, const Char_t *de) :
  
 };
 
-PDistribution *PScatterCrossSection::Clone(const char *delme) const {
+PDistribution *PScatterCrossSection::Clone(const char *) const {
     return new PScatterCrossSection((const PScatterCrossSection &)* this);
 };
 
@@ -131,6 +131,6 @@ Bool_t PScatterCrossSection::Prepare(void) {
 
 
 
-double PScatterCrossSection::SamplePolarAngle(double r) {
+double PScatterCrossSection::SamplePolarAngle(double) {
     return costheta;
 }

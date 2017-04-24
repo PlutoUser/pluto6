@@ -26,7 +26,7 @@ PStrangenessPlugin::~PStrangenessPlugin() {
 }
 
 
-Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t value) {
+Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
 
     if (strcmp (command,"init") == 0) {
 	if (!is_initialized) {

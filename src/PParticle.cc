@@ -512,7 +512,7 @@ PParticle & PParticle::Transform(const TLorentzRotation & m) {
     return *this;
 }
 
-PParticle* PParticle::Clone(const char*delme) const {
+PParticle* PParticle::Clone(const char*) const {
     return new PParticle((const PParticle &)* this);
 }
 

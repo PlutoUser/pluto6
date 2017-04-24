@@ -396,7 +396,7 @@ Bool_t PProjector::AddInputTNtuple(TNtuple *n,const  char *command) {
     return kTRUE;    
 }
 
-Int_t  PProjector::SetParticles(PParticle **mstack, int *decay_done, int *num, int stacksize, Int_t first_time) {
+Int_t  PProjector::SetParticles(PParticle **mstack, int *, int *num, int, Int_t first_time) {
     //loop over batch object and see what I can do
 
     Int_t listkey=-1, *i_result, new_particles=0, counter_all=0, particle_key;

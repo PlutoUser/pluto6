@@ -65,7 +65,7 @@ Bool_t PUniGenInput::Input(char *filename) {
 
 };
 
-Bool_t PUniGenInput::Modify(PParticle **mstack, int *decay_done, int *num, int stacksize) {
+Bool_t PUniGenInput::Modify(PParticle **mstack, int *, int *num, int stacksize) {
 
     if (centry == 0) { 
 	//init before 1st event

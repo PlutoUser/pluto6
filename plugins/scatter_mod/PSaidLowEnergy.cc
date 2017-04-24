@@ -38,7 +38,7 @@ PSaidLowEnergy::PSaidLowEnergy(const Char_t *id, const Char_t *de) :
     told = -1.;
 };
 
-PDistribution* PSaidLowEnergy::Clone(const char*delme) const {
+PDistribution* PSaidLowEnergy::Clone(const char*) const {
     return new PSaidLowEnergy((const PSaidLowEnergy &)* this);
 };
 
@@ -183,7 +183,7 @@ double PSaidLowEnergy::dsdw(double th, double tlab) {
     long double d63 = -0.702778910136937;
     long double d73 = 0.014105237506306;
     
-    long double as, bs, cs,ds;
+    long double as=0, bs=0, cs=0, ds=0;
     
     if(th > 40) {
 	as = a0+a1*th+a2*pow(th,2)+a3*pow(th,3)+a4*pow(th,4)+a5*pow(th,5)+a6*pow(th,6);

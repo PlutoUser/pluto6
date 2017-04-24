@@ -180,7 +180,7 @@ PNucleusFermiPlugin::~PNucleusFermiPlugin() {
 }
 
 
-Bool_t PNucleusFermiPlugin::ExecCommand(const char *command, Double_t value) {
+Bool_t PNucleusFermiPlugin::ExecCommand(const char *command, Double_t) {
 
     PDistributionManagerUtil *pdmutil = makeDistributionManagerUtil();
     

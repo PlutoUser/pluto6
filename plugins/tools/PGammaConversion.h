@@ -28,7 +28,7 @@ class PGammaConversion: public PBulkInterface {
     PParticle ep, em;
     Float_t Z;
     Double_t x1, y1, z1;
-    Float_t convpar[3];
+    Float_t convpar[6];
     Float_t ConvProb;
 
     static Double_t dSde(Double_t *x, Double_t *par); // has to be static to be used by TF1 object

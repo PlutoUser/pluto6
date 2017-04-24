@@ -29,7 +29,7 @@ PPiOmegaAngularDistribution::PPiOmegaAngularDistribution(const Char_t *id, const
     version = 1;
 };
 
-PDistribution *PPiOmegaAngularDistribution::Clone(const char *delme) const {
+PDistribution *PPiOmegaAngularDistribution::Clone(const char *) const {
     return new PPiOmegaAngularDistribution((const PPiOmegaAngularDistribution &)* this);
 };
 
@@ -133,7 +133,7 @@ double PPiOmegaAngularDistribution::SamplePolarAngle(double r) {
     return c0;                            // accept
 }
 
-void PPiOmegaAngularDistribution::Print(const Option_t *delme) const{
+void PPiOmegaAngularDistribution::Print(const Option_t *) const{
     PAngularDistribution::Print();
 }
 

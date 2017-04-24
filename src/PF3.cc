@@ -22,25 +22,25 @@ PF3::PF3() :
     projector = NULL;    
 };
 
-PF3::PF3(const char *name, const char *formula, Double_t xmin, Double_t xmax, Double_t ymin, Double_t ymax, Double_t zmin, Double_t zmax) :
+PF3::PF3(const char *name, const char *formula, Double_t xmin, Double_t xmax, Double_t, Double_t, Double_t, Double_t) :
     TF3(name, formula, xmin, xmax) {
     projector = NULL;
 };
 
 #if 0
-PF3::PF3(const char *name, void *fcn, Double_t xmin, Double_t xmax, Double_t ymin, Double_t ymax, Double_t zmin, Double_t zmax, Int_t npar) :
+PF3::PF3(const char *name, void *fcn, Double_t xmin, Double_t xmax, Double_t, Double_t, Double_t, Double_t, Int_t npar) :
     TF3(name, fcn, xmin, xmax, npar) {
     projector = NULL;
 };
 #endif
 
 PF3::PF3(const char *name, Double_t (*fcn)(Double_t *, Double_t *), 
-	 Double_t xmin, Double_t xmax, Double_t ymin, Double_t ymax, Double_t zmin, Double_t zmax, Int_t npar) :
+	 Double_t xmin, Double_t xmax, Double_t, Double_t, Double_t, Double_t, Int_t npar) :
     TF3(name, fcn, xmin, xmax, npar) {
     projector = NULL;
 };
 
-PF3::PF3(const char *name, ROOT::Math::ParamFunctor f, Double_t xmin, Double_t xmax, Double_t ymin, Double_t ymax, Double_t zmin, Double_t zmax, Int_t npar) :
+PF3::PF3(const char *name, ROOT::Math::ParamFunctor f, Double_t xmin, Double_t xmax, Double_t, Double_t, Double_t, Double_t, Int_t npar) :
     TF3(name, f, xmin, xmax, npar) {
     projector = NULL;
 };  
@@ -51,7 +51,7 @@ PF3::PF3(const PF3 &f3) :
 };
 
 //Pluto ctor
-PF3::PF3(const char *name, Double_t xmin, Double_t xmax, Double_t ymin, Double_t ymax, Double_t zmin, Double_t zmax) :
+PF3::PF3(const char *name, Double_t xmin, Double_t xmax, Double_t, Double_t, Double_t, Double_t) :
     TF3(name,"x+y+z", xmin, xmax) {
     SetTitle(name);
     projector = new PProjector();

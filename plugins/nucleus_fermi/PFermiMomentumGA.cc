@@ -34,7 +34,7 @@ PFermiMomentumGA::PFermiMomentumGA(const Char_t *id, const Char_t *de, Int_t key
     relative_warning=0;
 }
 
-PDistribution *PFermiMomentumGA::Clone(const char *delme) const {
+PDistribution *PFermiMomentumGA::Clone(const char *) const {
     return new PFermiMomentumGA((const PFermiMomentumGA &)* this);
 };
 

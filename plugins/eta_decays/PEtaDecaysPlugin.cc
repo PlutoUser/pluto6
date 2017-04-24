@@ -110,7 +110,7 @@ Bool_t PEtaDecaysPlugin::Activate(void) {
 };
 
 
-Bool_t PEtaDecaysPlugin::ExecCommand(const char *command, Double_t value) {
+Bool_t PEtaDecaysPlugin::ExecCommand(const char *, Double_t) {
 
     PDistributionManagerUtil *pdmutil = makeDistributionManagerUtil();
 

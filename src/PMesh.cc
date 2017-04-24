@@ -46,11 +46,11 @@ PMesh::~PMesh() {
     if (td) delete[] td;
 }
 
-Double_t PMesh::EvalPar(const Double_t *x, const Double_t *params) {
+Double_t PMesh::EvalPar(const Double_t *x, const Double_t *) {
     return Eval(x[0]);
 }
  
-Double_t PMesh::Eval(Double_t x, Double_t y, Double_t z, Double_t t) const {
+Double_t PMesh::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     return GetLinearIP(x);
 }
 
@@ -66,7 +66,7 @@ Double_t PMesh::GetNode(Int_t node) {
     return td[node];
 }
 
-void PMesh::Print(const Option_t* delme) const {
+void PMesh::Print(const Option_t*) const {
     cout << "Min:  " << min  << endl;
     cout << "Max:  " << max  << endl;
     cout << "Size: " << size << endl;
@@ -74,7 +74,7 @@ void PMesh::Print(const Option_t* delme) const {
 }
 
 Double_t PMesh::GetLinearIP(Double_t m) const {
-    if ((m > min)  && (m < max)) {
+    if ((m > min) && (m < max)) {
 
 	Double_t dm = (max-min)/(size-1.); 
 	int bin     = int((m-min)/dm);

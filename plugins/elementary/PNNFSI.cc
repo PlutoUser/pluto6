@@ -41,7 +41,7 @@ void PNNFSI::Setup(void) {
     is_np = 0;
 }
 
-PDistribution *PNNFSI::Clone(const char *delme) const {
+PDistribution *PNNFSI::Clone(const char *) const {
     return new PNNFSI((const PNNFSI &)* this);
 };
 

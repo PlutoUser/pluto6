@@ -32,7 +32,7 @@ PEtaPiPiGamma::PEtaPiPiGamma(const Char_t *id, const Char_t *de, Int_t key) :
     weight_max = 0.0004;
 };
 
-PDistribution* PEtaPiPiGamma::Clone(const char *delme) const {
+PDistribution* PEtaPiPiGamma::Clone(const char *) const {
     return new PEtaPiPiGamma((const PEtaPiPiGamma &)* this);
 };
 

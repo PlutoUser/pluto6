@@ -17,7 +17,7 @@ PHadesParticleSmearer:: PHadesParticleSmearer() {
     fPriority = FILTER_PRIORITY+1; //for HADES it is standard to filter first and then smear
 }
 
-bool PHadesParticleSmearer::Modify(PParticle **stack, int *decay_done, int *num, int stacksize) {
+bool PHadesParticleSmearer::Modify(PParticle **stack, int *, int *num, int) {
 
     for (int i=0; i<*num; i++) {
 	PParticle *cur = stack[i];

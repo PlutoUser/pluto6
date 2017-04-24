@@ -2319,7 +2319,7 @@ PPionBeamPlugin::~PPionBeamPlugin() {
 }
 
 
-Bool_t PPionBeamPlugin::ExecCommand(const char *command, Double_t value) {
+Bool_t PPionBeamPlugin::ExecCommand(const char *, Double_t) {
     return kTRUE;
 }
 

@@ -99,7 +99,7 @@ Double_t PPionBeamAmplitude::GetWeight(void) {
 }
 
 
-Double_t PPionBeamAmplitude::GetWeight(Double_t *mass, Int_t *didx) {
+Double_t PPionBeamAmplitude::GetWeight(Double_t *mass, Int_t *) {
 
     Double_t q_bar_m  = mass[0];
     Double_t q_bar_m2 = q_bar_m * q_bar_m;

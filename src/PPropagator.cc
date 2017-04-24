@@ -23,7 +23,7 @@ PDistribution* PPropagator::Clone(const char*) const {
     return new PPropagator((const PPropagator &) *this);
 };
 
-TComplex  PPropagator::GetAmplitude(Double_t *mass, Int_t *didx) {
+TComplex  PPropagator::GetAmplitude(Double_t *mass, Int_t *) {
     
     Double_t x = mass[0];
     

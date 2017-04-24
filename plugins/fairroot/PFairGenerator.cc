@@ -18,7 +18,7 @@ PFairGenerator::PFairGenerator() {
     fPriority = 99999; //a really high number!
 }
 
-bool PFairGenerator::Modify(PParticle **stack, int *decay_done, int *num, int stacksize) {
+bool PFairGenerator::Modify(PParticle **stack, int *decay_done, int *num, int) {
 	    
     fNumberParticles = 0;
 

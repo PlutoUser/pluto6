@@ -1786,7 +1786,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
     return good_event;
 }
 
-void PReaction::SetFilter(int ch_id, PFilter * filter) {
+void PReaction::SetFilter(int, PFilter *) {
     //outdated
     Error("SetFilter", "The PFilter class has been removed. Use PProjector instead");
 }
@@ -1893,7 +1893,7 @@ void PReaction::Print(const Option_t *delme) const {
     }
 }
 
-void PReaction::SetUserSelection(void *f) {  // set user selection function
+void PReaction::SetUserSelection(void *) {  // set user selection function
 
     Error("SetUserSelection", "Does not work in ROOT6");
 #if 0
@@ -1921,7 +1921,7 @@ void PReaction::SetUserSelection(void *f) {  // set user selection function
 #endif
 }
 
-Int_t CalledSelection(PParticle* p) { // interface for interactive user
+Int_t CalledSelection(PParticle*) { // interface for interactive user
                                       // selection function
     Error("CalledSelection", "Does not work in ROOT6");
 #if 0
@@ -1933,9 +1933,10 @@ Int_t CalledSelection(PParticle* p) { // interface for interactive user
     gMethodCall1->Execute(result);     // ... and execute
     return (Int_t)result;
 #endif
+    return -1;
 } 
 
-void PReaction::SetUserAnalysis(void *f) { // set user analysis function
+void PReaction::SetUserAnalysis(void *) { // set user analysis function
 
     Error("SetUserAnalysis", "Does not work in ROOT6");
 #if 0
@@ -1963,7 +1964,7 @@ void PReaction::SetUserAnalysis(void *f) { // set user analysis function
 #endif
 }
 
-Int_t CalledAnalysis(PParticle **p, Int_t n) { // interface for user
+Int_t CalledAnalysis(PParticle **, Int_t) { // interface for user
                                                // analysis function
     Error("CalledAnalysis", "Does not work in ROOT6");
 #if 0
@@ -1976,6 +1977,7 @@ Int_t CalledAnalysis(PParticle **p, Int_t n) { // interface for user
     gMethodCall2->Execute(result);     // ... and execute
     return (Int_t)result;
 #endif
+    return -1;
 } 
 
 

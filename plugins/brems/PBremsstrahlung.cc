@@ -151,15 +151,15 @@ Bool_t PBremsstrahlung::Init(void) {
     return kTRUE;
 }
 
-Double_t PBremsstrahlung::EvalPar(const double *x, const double *par) {
+Double_t PBremsstrahlung::EvalPar(const double *x, const double *) {
     return Eval(x[0]);
 }
 
 
-Double_t PBremsstrahlung::EvalSM(Double_t x, Double_t y, Double_t z, Double_t t) const {
+Double_t PBremsstrahlung::EvalSM(Double_t x, Double_t, Double_t, Double_t) const {
     Double_t kinLim;
     Double_t M = x;
-    Double_t b0, b1, b2, b3;
+    Double_t b0=0, b1=0, b2=0, b3=0;
     
     if(neutron_position > -1) {
 	// p + n case
@@ -252,7 +252,7 @@ Double_t PBremsstrahlung::Eval(Double_t x, Double_t y , Double_t z , Double_t t)
 
     Double_t kinLim;
     Double_t M = x;
-    Double_t b0, b1, b2, b3;
+    Double_t b0=0, b1=0, b2=0, b3=0;
     Double_t parA[4];
     Double_t parB[4];
 

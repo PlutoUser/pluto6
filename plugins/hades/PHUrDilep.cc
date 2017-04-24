@@ -441,7 +441,7 @@ void  PHUrDilep::diromega(Double_t tau, Double_t mres, Int_t multi, Double_t &we
     weight = br/multi;
 }
 
-void PHUrDilep::dirphi(Double_t tau, Double_t mres, Int_t multi, Double_t &weight) {
+void PHUrDilep::dirphi(Double_t, Double_t mres, Int_t multi, Double_t &weight) {
             
     const Double_t gamma_tot = 0.00426;
     const Double_t cv        = 0.0000012411;
@@ -462,11 +462,11 @@ void PHUrDilep::dirrho(Double_t tau, Double_t mres, Int_t multi, Double_t &weigh
     weight = br/multi;  
 }
 
-void PHUrDilep::lobo_dal(Double_t p0_gstar, Double_t p0_particle,
+void PHUrDilep::lobo_dal(Double_t p0_gstar, Double_t,
 	      Double_t m_gstar, Double_t beta, Double_t gamma,
-	      Double_t x_gstar, Double_t y_gstar, Double_t z_gstar, Double_t t_gstar,
-	      Double_t x_particle, Double_t y_particle, Double_t z_particle,
-	      Double_t m_res) {
+	      Double_t x_gstar, Double_t y_gstar, Double_t z_gstar, Double_t,
+	      Double_t, Double_t, Double_t,
+	      Double_t) {
     Double_t p0_res = particleOut->E();
     Double_t px_res = particleOut->Px();
     Double_t py_res = particleOut->Py();
@@ -1119,7 +1119,7 @@ void  PHUrDilep::gamma_star(Double_t smin, Double_t smax, Double_t tmax,
 
 }
 
-void PHUrDilep::t_delta(Double_t tau, Double_t mres, Int_t multi, Double_t &tmax_del) {
+void PHUrDilep::t_delta(Double_t tau, Double_t mres, Int_t, Double_t &tmax_del) {
     const Double_t smin_del = 0.0013;
 
     //     cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -1158,7 +1158,7 @@ void PHUrDilep::t_delta(Double_t tau, Double_t mres, Int_t multi, Double_t &tmax
     }
 }
 
-void PHUrDilep::t_omega(Double_t tau,Int_t multi,
+void PHUrDilep::t_omega(Double_t tau,Int_t,
 			Double_t& smin_omega,Double_t& smax_omega,Double_t& tmax_omega) {
 
     //     cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -1185,7 +1185,7 @@ void PHUrDilep::t_omega(Double_t tau,Int_t multi,
 
 }
 
-void PHUrDilep::Output(Int_t ityp, Double_t weight, Double_t mres, Int_t multi, Double_t tau) {
+void PHUrDilep::Output(Int_t ityp, Double_t weight, Double_t mres, Int_t, Double_t tau) {
 
     /*          .   ,
       write(*,'(I5,1X,13(E16.8E3,1X),I4,1X,2(E16.8E3,1X),I9,1X,F12.8,1X,2(E16.8,1x))')
@@ -1216,7 +1216,7 @@ void PHUrDilep::Output(Int_t ityp, Double_t weight, Double_t mres, Int_t multi, 
     OutputROOT(ityp, weight);
 }
 
-void PHUrDilep::OutputROOT(Int_t ityp, Double_t weight) {
+void PHUrDilep::OutputROOT(Int_t, Double_t weight) {
 
     Int_t nRequest             = 1;
     if(outputLeptons) nRequest = 3;

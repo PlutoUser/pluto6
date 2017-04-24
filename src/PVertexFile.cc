@@ -55,7 +55,7 @@ Bool_t PVertexFile::OpenFile(TString inputfile) {
     return kTRUE;
 }
 
-Bool_t PVertexFile::Modify(PParticle **mstack, int *decay_done, int *num, int stacksize) {
+Bool_t PVertexFile::Modify(PParticle **, int *, int *, int) {
     // Read the particles from the defined stack and copy this to the official
     // particle stream
 

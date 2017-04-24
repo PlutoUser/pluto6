@@ -25,7 +25,7 @@ PSaidPN::PSaidPN(const Char_t *id, const Char_t *de) :
     beam = target = NULL;
 };
 
-PDistribution *PSaidPN::Clone(const char *delme) const {
+PDistribution *PSaidPN::Clone(const char *) const {
     return new PSaidPN((const PSaidPN &)* this);
 };
 
@@ -1339,11 +1339,11 @@ double PSaidPN::dsdw(double th, double tlab) {
     c644=c644*1e-6;
     c654=c654*1e-6;
     
-    Double_t A0,A1,A2,A3,A4;
+    Double_t A0=0,A1=0,A2=0,A3=0,A4=0;
     //Double_t avper;
     //Int_t i;
   
-    Double_t dsg_calc;
+    Double_t dsg_calc=0;
   
     if( Tlab >= 1 && Tlab <= 10) {    
 	if(th <= 48) {	

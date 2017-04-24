@@ -40,7 +40,7 @@ PEtaPiPiDileptonMass::PEtaPiPiDileptonMass(const Char_t *id, const Char_t *de, I
     SetDynamicRange(mass_ee,makeStaticData()->GetParticleMass("eta")-2*m_pi);
 } ;
 
-PDistribution* PEtaPiPiDileptonMass::Clone(const char*delme) const {
+PDistribution* PEtaPiPiDileptonMass::Clone(const char*) const {
     return new PEtaPiPiDileptonMass((const PEtaPiPiDileptonMass &)* this);
 };
 
@@ -104,13 +104,13 @@ Double_t PEtaPiPiDileptonMass::GetMassWeight(Double_t mass) const {
 
 }
 
-Bool_t PEtaPiPiDileptonMass::SampleMass(Double_t *mass, Int_t *didx) {
+Bool_t PEtaPiPiDileptonMass::SampleMass(Double_t *mass, Int_t *) {
 
-    mass[0]=this->GetRandom();
+    mass[0] = this->GetRandom();
     return kTRUE;
 }
 
-Double_t PEtaPiPiDileptonMass::Eval(Double_t x, Double_t y, Double_t z, Double_t t) const {
+Double_t PEtaPiPiDileptonMass::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     //return mass of the dilepton for GetRandom sampling
 
     return GetMassWeight(x);

@@ -38,7 +38,7 @@ POmega3Pi::POmega3Pi(const Char_t *id, const Char_t *de) :
     max = -1;
 };
 
-PDistribution *POmega3Pi::Clone(const char *delme) const {
+PDistribution *POmega3Pi::Clone(const char *) const {
     return new POmega3Pi((const POmega3Pi &)* this);
 };
 

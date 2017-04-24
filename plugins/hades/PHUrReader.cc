@@ -476,7 +476,7 @@ Bool_t PHUrReader::ReadEvent() {
 	// only in first event. In next
 	// events the eventheader will be read
         // by the previous call.
-	evtheader.Clear();
+	evtheader.Clear(NULL);
 	if(!evtheader.Read(fInputAscii)){
 	    Error("ReadEvent()", "Could not read event header!");
 	    return kFALSE;
@@ -494,7 +494,7 @@ Bool_t PHUrReader::ReadEvent() {
 	collisions.clear();
 
 	while ( !fInputAscii.eof() ) {
-            colheader.Clear();
+            colheader.Clear(NULL);
 	    if(!colheader.Read(fInputAscii)) return kFALSE;   // read next collision header
 
             if(colheader.n_in == -1 || colheader.n_in == 0){  // detected  eventheader
@@ -562,7 +562,7 @@ Bool_t PHUrReader::ReadEvent() {
 
 }
 
-Bool_t PHUrReader::Modify(PParticle **mstack, int *decay_done, int *num, int stacksize) {
+Bool_t PHUrReader::Modify(PParticle **mstack, int *, int *num, int stacksize) {
 
     if(!ReadEvent()) return kFALSE;
     
@@ -962,7 +962,7 @@ PHUrAddon *PHUrReader::CreateAddon(Int_t &index) {
     return (PHUrAddon*)((*fAdd)[fNumPartAddon - 1]);
 }
 
-void PHUrReader::CreateParticleArray(TTree *T, Int_t stacksize) {
+void PHUrReader::CreateParticleArray(TTree *, Int_t stacksize) {
    // create UrQMD PParticle local TClonesArray
     fEvent  = new TClonesArray( "PParticle", stacksize);
     //T->Branch("Event", &fEvent,8000,99);

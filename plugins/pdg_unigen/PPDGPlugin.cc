@@ -22,7 +22,7 @@ PPDGPlugin::~PPDGPlugin() {
 }
 
 
-Bool_t PPDGPlugin::ExecCommand(const char *command, Double_t value) {
+Bool_t PPDGPlugin::ExecCommand(const char *command, Double_t) {
 
     if (strcmp (command,"extend_resonances") == 0) {
 	if (!is_extend_resonances) {

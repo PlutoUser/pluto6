@@ -1544,7 +1544,7 @@ PSaid::PSaid(const Char_t *id, const Char_t *de) :
     defaults();
 };
 
-PDistribution *PSaid::Clone(const char *delme) const {
+PDistribution *PSaid::Clone(const char *) const {
     return new PSaid((const PSaid &)* this);
 };
 

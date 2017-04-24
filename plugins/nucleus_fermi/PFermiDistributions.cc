@@ -82,7 +82,7 @@ PFermiDistributions::PFermiDistributions(const Char_t *id, const Char_t *de, Int
 };
 
 
-PDistribution *PFermiDistributions::Clone(const char *delme) const {
+PDistribution *PFermiDistributions::Clone(const char *) const {
     return new PFermiDistributions((const PFermiDistributions &)* this);
 };
 
@@ -93,11 +93,11 @@ PFermiDistributions::~PFermiDistributions(){
     delete [] DeutM2;
 };
 
-Double_t  PFermiDistributions::EvalPar(const double *x, const double *par) {
+Double_t  PFermiDistributions::EvalPar(const double *x, const double *) {
     return Eval(x[0]);
 }
 
-Double_t PFermiDistributions::Eval(Double_t x, Double_t y , Double_t z , Double_t t) const {
+Double_t PFermiDistributions::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     // Returns connected fermi distribution
     
     Double_t p = x/MeV2GeV;
@@ -118,7 +118,7 @@ Double_t PFermiDistributions::Eval(Double_t x, Double_t y , Double_t z , Double_
 
 
 //---------------------- Fermi Distribution of Deuteron  -----------------------
-double PFermiDistributions::FermiDisD(double *x, double *par) const {
+double PFermiDistributions::FermiDisD(double *x, double *) const {
 
     const double pi   = 3.1415927;
     const double hbar = 0.197463569747999998;  // unit: GeV*fm/c 
@@ -136,7 +136,7 @@ double PFermiDistributions::FermiDisD(double *x, double *par) const {
 }
 
 //---------------------- Fermi Distribution of Helium-3 ---------------------
-double PFermiDistributions::FermiDis3He(double *x, double *par) const {
+double PFermiDistributions::FermiDis3He(double *x, double *) const {
 
     const double pi = 3.1415927;
     const double a  = 7.09078;
@@ -152,7 +152,7 @@ double PFermiDistributions::FermiDis3He(double *x, double *par) const {
 }
 
 //---------------------- Fermi Distribution of Helium-4 ---------------------
-double PFermiDistributions::FermiDis4He(double *x, double *par)  const {
+double PFermiDistributions::FermiDis4He(double *x, double *)  const {
 
     const double hbar  = 0.197463569747999998;
     const double a = 0.7352;
@@ -165,7 +165,7 @@ double PFermiDistributions::FermiDis4He(double *x, double *par)  const {
 }
 
 //---------------------- Fermi Distribution of Lithium-7 ---------------------
-double PFermiDistributions::FermiDis7Li(double *x, double *par) const {
+double PFermiDistributions::FermiDis7Li(double *x, double *) const {
     
     const double a = 1.2e-4;
     const double b = 6.87e-3;
@@ -180,7 +180,7 @@ double PFermiDistributions::FermiDis7Li(double *x, double *par) const {
 }
 
 //---------------------- Fermi Distribution of Carbon-12 ---------------------
-double PFermiDistributions::FermiDis12C(double *x, double *par) const {
+double PFermiDistributions::FermiDis12C(double *x, double *) const {
 
     const double pi = 3.1415927;
     const double a  = 1/0.416;
@@ -195,7 +195,7 @@ double PFermiDistributions::FermiDis12C(double *x, double *par) const {
 }
 
 //---- Fermi Distribution of Calcium-40 (can be used for heavier nuclei) -----------------
-double PFermiDistributions::FermiDis40Ca( double *x, double *par ) const {
+double PFermiDistributions::FermiDis40Ca( double *x, double *) const {
 
     const double pi = 3.1415927;
     const double a  = 1/0.42;

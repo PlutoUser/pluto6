@@ -488,7 +488,7 @@ Bool_t PElementaryPlugin::Activate(void) {
 };
 
 
-Bool_t PElementaryPlugin::ExecCommand(const char *command, Double_t value) {
+Bool_t PElementaryPlugin::ExecCommand(const char *, Double_t) {
     return kFALSE;
 }
 

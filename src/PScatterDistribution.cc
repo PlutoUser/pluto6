@@ -35,7 +35,7 @@ PScatterDistribution::PScatterDistribution(const Char_t *id, const Char_t *de) :
     parent  = NULL;
 };
 
-PDistribution *PScatterDistribution::Clone(const char *delme) const {
+PDistribution *PScatterDistribution::Clone(const char *) const {
     return new PScatterDistribution((const PScatterDistribution &)* this);
 };
 

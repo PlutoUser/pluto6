@@ -47,7 +47,7 @@ PSimpleVMDFF::PSimpleVMDFF(const Char_t *id, const Char_t *de, Int_t key) :
     batch = NULL;
 };
 
-PDistribution* PSimpleVMDFF::Clone(const char *delme) const {
+PDistribution* PSimpleVMDFF::Clone(const char *) const {
     return new PSimpleVMDFF((const PSimpleVMDFF &)* this);
 };
 

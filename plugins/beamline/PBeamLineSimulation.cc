@@ -49,7 +49,7 @@ PBeamLineSimulation::PBeamLineSimulation(Char_t *id, Char_t *de) :
     ind23 = 0;
 };
 
-PDistribution* PBeamLineSimulation::Clone(const char *delme) const {
+PDistribution* PBeamLineSimulation::Clone(const char *) const {
     return new PBeamLineSimulation((const PBeamLineSimulation &)* this);
 };
 

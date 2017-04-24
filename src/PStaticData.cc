@@ -813,7 +813,7 @@ void PStaticData::SetTWidthMesh(const int &id, PMesh *mesh) {
 
     Int_t key = makeDataBase()->GetEntryInt("pid", id);
     if (!makeDataBase()->SetParamTObj(key, "mesh", mesh)) {
-	Warning("SetTWidthMesh", "Particle %i: failed");
+      Warning("SetTWidthMesh", "Particle %i: failed", id);
     }
 }
 
@@ -828,7 +828,7 @@ PMesh *PStaticData::GetTWidthMesh(const int &id) {
 void PStaticData::SetPWidthMesh(const int &id, PMesh *mesh) {
     Int_t key = makeDataBase()->GetEntryInt("didx", id);
     if (!makeDataBase()->SetParamTObj(key, "mesh", mesh)) {
-	Error("SetPWidthMesh", "Decay %i: failed");
+      Error("SetPWidthMesh", "Decay %i: failed", id);
     }
 }
 
@@ -844,7 +844,7 @@ PMesh *PStaticData::GetPWidthMesh(const int &id) {
 void PStaticData::SetTF1(const int &id, TF1 *mesh) {
     Int_t key = makeDataBase()->GetEntryInt("pid", id);
     if (! makeDataBase()->SetParamTObj(key, "tf1", mesh)) {
-	Error("SetTF1", "Particle %i: failed");
+      Error("SetTF1", "Particle %i: failed", id);
     }
 }
 
@@ -1067,7 +1067,7 @@ bool PStaticData::SetDecayBR(const char *parent, const char *daughters,
     //get parent key
     Int_t parent_key = makeDataBase()->GetEntry(parent);
     if (parent_key < 0) {
-	Warning("SetDecayBR", "Parent %i not found in data base", parent);
+	Warning("SetDecayBR", "Parent %s not found in data base", parent);
 	return kFALSE;
     }
 
@@ -1148,7 +1148,7 @@ bool PStaticData::NormParticleBRbyKey(Int_t key) {
     return kTRUE;
 }
 
-void PStaticData::FreezeDecayBR(Int_t id, Int_t brn) { // set BR static
+void PStaticData::FreezeDecayBR(Int_t, Int_t) { // set BR static
     Fatal("FreezeDecayBR", "not implemented");
 
     //TODO
@@ -1242,7 +1242,7 @@ int PStaticData::AddDecay(int didx, const char *name, const char *parent,
     //get parent key
     Int_t parent_key = GetParticleKey(parent);
     if (parent_key < 0) {
-	Warning("AddDecay", "Parent %i not found in data base", parent);
+	Warning("AddDecay", "Parent %s not found in data base", parent);
 	return -1;
     }
 
@@ -1298,7 +1298,7 @@ int PStaticData::AddDecay(int didx, const char *name, const char *parent,
 	//This takes into account aliases:
 	Int_t *pkey = new int(makeStaticData()->GetParticleKey(partc));
 	if (*pkey < 0) {
-	    Error("AddDecay", "processing decay: do not find pid %i", partc);
+	    Error("AddDecay", "processing decay: do not find pid %s", partc);
 	} 
 	const char *ds;
 	if (pat == 0) ds = "d1";

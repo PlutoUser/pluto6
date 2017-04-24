@@ -27,7 +27,7 @@ PResonanceDalitz::PResonanceDalitz(const Char_t *id, const Char_t *de, Int_t key
     charge = makeStaticData()->GetParticleCharge(parent_id);
 };
 
-double PResonanceDalitz::GetMatrixT(int &spin, int &parity, int &charge, const double& ecm, const double& M) {
+double PResonanceDalitz::GetMatrixT(int &spin, int &parity, int&, const double& ecm, const double& M) {
     float matr;
     if (spin == 1) {
 	if (parity == 1) {
@@ -65,7 +65,7 @@ double PResonanceDalitz::GetMatrixT(int &spin, int &parity, int &charge, const d
     }
 }
 
-double PResonanceDalitz::GetMatrixL(int &spin, int &parity, int &charge, const double& ecm, const double& M) {
+double PResonanceDalitz::GetMatrixL(int &spin, int &parity, int&, const double&, const double& M) {
     float matr;
     if (spin == 1) {
 	if (parity == 1) {
@@ -103,7 +103,7 @@ double PResonanceDalitz::getLambda(double a, double b, double c) {
 }
 
 
-double PResonanceDalitz::dGdM(const int& id, const double& m, const double& ecm) {
+double PResonanceDalitz::dGdM(const int&, const double& m, const double& ecm) {
   
     mn      = 0.938273;
     mn2     = mn*mn;
