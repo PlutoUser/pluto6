@@ -404,11 +404,12 @@ PUtilsREngine::PUtilsREngine () {
 
 void PUtilsREngine::SetSeed(UInt_t s) { 
     rnd->SetSeed(s); 
+    gRandom->SetSeed(s); //DONEv6
 
     if (s)
-	Warning("PUtilsREngine","Seed set FIXED to %i",s);
+	Warning("PUtilsREngine", "Seed set FIXED to %i", s);
     else
-	Info("PUtilsREngine","Random seed set to %i",rnd->GetSeed());
+	Info("PUtilsREngine", "Random seed set to %i", rnd->GetSeed());
 }
 
 ClassImp(PUtils)

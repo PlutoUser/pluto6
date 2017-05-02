@@ -733,7 +733,8 @@ Int_t PDecayManager::Loop(int num, int wf, const char *name, int f0,
 	    else rEntries = r->loop((Int_t)(num*rWeight + 0.5), 0);
 	    SumOfEvents += rEntries;
 	    rStop = SumOfEvents;
-
+	    CurrentReaction = NULL; //DONEv6
+            //...cannot delete CurrentReaction -> CRASH
 	    r = GetNextReaction(wf, name, f0, f1, f2, f3, td);
 	    if (ti) ti->Fill();
 	}
