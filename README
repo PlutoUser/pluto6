@@ -2,26 +2,8 @@ Installation:
 _____________________________________________________
 
 Standard installation:
-The Pluto package comes with a Makefile. ROOT must be installed
-before, of course, and the $ROOTSYS must be set properly.
-
-The object code is stored in a sub-directory "lib", this allows
-to set a symbolic link somewhere.
-
-Just type "make" - there is no "make install". The libPluto.so stays
-in the main path.
-
-In the macro path there are a lot of examples - and a rootlogon.C loading
-the libPluto.so
-
-Customized installation:
-Pluto can be combined with local add-ons. To make use of this, the
-environment variable PLUTO_USER_PLUGINS has to be defined. To 
-overwrite the plugin settings of Pluto completely, use the
-variable PLUTO_PLUGINS
-
-Example:
-PLUTO_PLUGINS="" PLUTO_USER_PLUGINS="plugins/nucleus_fermi" make
+./cmake
+make
 
 
 Release Notes:
