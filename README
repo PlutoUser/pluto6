@@ -1544,3 +1544,4 @@ of changes. Code cleanup.
 
 379) Fixed bug in PHUrEventHeader.h (missing TObject inheritance)
 
+380) Added histogram smearing option in PBeamSmearing
