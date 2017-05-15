@@ -39,6 +39,8 @@ PBeamSmearing::PBeamSmearing(const Char_t *id, const Char_t *de) :
     mom_smearing = NULL;
     ang_smearing = NULL;
     mom_function = NULL;
+    mom_smearing_histo = NULL;
+    mom_function_histo = NULL;
     thetaBeam = 0.;
     phiBeam   = 0.;
     sigmaBeam = 0.;
@@ -93,6 +95,8 @@ Bool_t PBeamSmearing::Prepare(void) {
     Double_t mom = 1.;
     if (mom_smearing) 
 	mom = mom_smearing->GetRandom();
+    if (mom_smearing_histo) 
+	mom *= mom_smearing->GetRandom();
 
     //restore saved particles
     *beam   = *mybeam;
@@ -104,6 +108,8 @@ Bool_t PBeamSmearing::Prepare(void) {
 	Double_t mymom = beam->Rho();
 	if (mom_function) 
 	    mymom = mom_function->GetRandom();
+	if (mom_function_histo) 
+	    mymom = mom_function_histo->GetRandom();
 	beam->SetMom(mymom*mom);
 	beam->RotateX(angle);
 	beam->RotateZ(PUtils::sampleFlat()*2*TMath::Pi());
@@ -111,6 +117,8 @@ Bool_t PBeamSmearing::Prepare(void) {
 	Double_t mymom = target->Rho();
 	if (mom_function) 
 	    mymom = mom_function->GetRandom();
+	if (mom_function_histo) 
+	    mymom = mom_function_histo->GetRandom();
 	target->SetMom(mymom*mom);
 	target->RotateX(angle);
 	target->RotateZ(PUtils::sampleFlat()*2*TMath::Pi());

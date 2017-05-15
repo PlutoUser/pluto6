@@ -1,1 +1,1 @@
-char *date_string = (char*)" 2 Mai 2017";
+char *date_string = (char*)"15 Mai 2017";
