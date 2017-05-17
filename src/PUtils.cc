@@ -404,7 +404,8 @@ PUtilsREngine::PUtilsREngine () {
 
 void PUtilsREngine::SetSeed(UInt_t s) { 
     rnd->SetSeed(s); 
-    gRandom->SetSeed(s); //DONEv6
+    UInt_t seed = (UInt_t)rnd->Rndm()*kMaxUInt; // get a different seed for gRandom
+    gRandom->SetSeed(seed);//TODOv6 
 
     if (s)
 	Warning("PUtilsREngine", "Seed set FIXED to %i", s);
