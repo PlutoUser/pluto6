@@ -1200,6 +1200,13 @@ int PChannel::Genbod(int nProd) {
 	return status = 6;
     }
 
+    if (PDistribution_sampleMomentum == 0) {
+        Warning("Genbod","Sampling model failed in %s",
+                makeStaticData()->GetDecayNameByKey(decay_key));
+        return status = 6;
+    }
+
+
     //ANGLE SAMPLING
     for (int j=0; j<distribution_position; j++) { //loop over all valid distributions
 	if ((dist[j]->GetStatus() == 0) && dist[j]->GetEnable()){ //all particles set
@@ -1213,10 +1220,10 @@ int PChannel::Genbod(int nProd) {
 	conserve_e -= ptcls[i+1]->E();
 
     if (fabs(conserve_e) > 1.e-8) {
- 	 // cout << "*************conserve_e" << conserve_e  << endl;
- 	 // ptcls[0]->Print();
- 	 // for (i=0;i<nProd;++i) ptcls[i+1]->Print();
- 	 // cout << "*************" << endl;
+	//cout << "*************conserve_e" << conserve_e  << endl;
+	//ptcls[0]->Print();
+	//for (i=0;i<nProd;++i) ptcls[i+1]->Print();
+	//cout << "*************" << endl;
 	return status = 7; // conservation of energy violated
     }
 

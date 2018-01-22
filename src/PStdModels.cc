@@ -22,6 +22,7 @@
 #include "PFermiMomentum.h"
 #include "PPropagator.h"
 #include "PSaid.h"
+#include "PTGenPhaseSpace.h"
 
 PStdModels::PStdModels() {
     generic_physics_done = kFALSE;
@@ -782,29 +783,56 @@ TObjArray *PStdModels::GetModels(void) {
 	    if (!makeDynamicData()->GetDecayModelByKey(decaykey, genbod_key)) { 
 
 		if (!decay_has_composite && tid[0]>1) {
+
 		    //Adding PGENBOD by default
-		    id = new TString(makeStaticData()->GetParticleName(pid));
-		    id->Append("_genbod_");
-		    for (int p=1; p<=tid[0]; p++) {
-			id->Append(makeStaticData()->GetParticleName(tid[p]));
-			if (p != tid[0]) id->Append("_");
+		    if (tid[0] < *(makeStaticData()->GetBatchValue("_system_num_particles_tgenphasespace"))) {
+
+			id = new TString(makeStaticData()->GetParticleName(pid));
+			id->Append("_genbod_");
+			for (int p=1; p<=tid[0]; p++) {
+			    id->Append(makeStaticData()->GetParticleName(tid[p]));
+			    if (p != tid[0]) id->Append("_");
+			}
+			id->Append("@");
+			id->Append(makeStaticData()->GetParticleName(pid));
+			id->Append("#genbod#");
+			for (int p=1; p<=tid[0]; p++) {
+			    id->Append(makeStaticData()->GetParticleName(tid[p]));
+			    if (p != tid[0]) id->Append("#");
+			}
+			id->Append("&genbod");
+			PGenBod *pmodel = new PGenBod((char*)id->Data(), "Pluto build-in genbod", -2);
+			//if (pid<1000) 
+			pmodel->Add(makeStaticData()->GetParticleName(pid), "parent");
+			//else pmodel->Add("q","parent");  //"White" decay of composite
+			for (int num=0; num<tid[0]; num++)
+			    pmodel->Add(makeStaticData()->GetParticleName(tid[1+num]), "daughter");
+			pmodel->SetGroupID("genbod_models");
+			arr->Add((TObject *)pmodel);
+		    } else {
+			id = new TString(makeStaticData()->GetParticleName(pid));
+                        id->Append("_tgenps_");
+                        for (int p=1; p<=tid[0]; p++) {
+                            id->Append(makeStaticData()->GetParticleName(tid[p]));
+                            if (p != tid[0]) id->Append("_");
+                        }
+                        id->Append("@");
+                        id->Append(makeStaticData()->GetParticleName(pid));
+                        id->Append("#tgenps#");
+                        for (int p=1; p<=tid[0]; p++) {
+                            id->Append(makeStaticData()->GetParticleName(tid[p]));
+                            if (p != tid[0]) id->Append("#");
+                        }
+                        id->Append("&genbod");
+                        PTGenPhaseSpace *pmodel = new PTGenPhaseSpace((char*)id->Data(), "ROOT TGenPhaseSpace", -2);
+                        //if (pid<1000)
+                        pmodel->Add(makeStaticData()->GetParticleName(pid), "parent");
+                        //else pmodel->Add("q","parent");  //"White" decay of composite
+                        for (int num=0; num<tid[0]; num++)
+                            pmodel->Add(makeStaticData()->GetParticleName(tid[1+num]), "daughter");
+                        pmodel->SetGroupID("genbod_models");
+                        arr->Add((TObject *)pmodel);
 		    }
-		    id->Append("@");
-		    id->Append(makeStaticData()->GetParticleName(pid));
-		    id->Append("#genbod#");
-		    for (int p=1; p<=tid[0]; p++) {
-			id->Append(makeStaticData()->GetParticleName(tid[p]));
-			if (p != tid[0]) id->Append("#");
-		    }
-		    id->Append("&genbod");
-		    PGenBod *pmodel = new PGenBod((char*)id->Data(), "Pluto build-in genbod", -2);
-		    //if (pid<1000) 
-		    pmodel->Add(makeStaticData()->GetParticleName(pid), "parent");
-		    //else pmodel->Add("q","parent");  //"White" decay of composite
-		    for (int num=0; num<tid[0]; num++)
-			pmodel->Add(makeStaticData()->GetParticleName(tid[1+num]), "daughter");
-		    pmodel->SetGroupID("genbod_models");
-		    arr->Add((TObject *)pmodel);
 
 // 		    //Now check for a possible "reflected" particle
 // 		    if (pid > PLUTO_COMPOSITE) {

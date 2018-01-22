@@ -87,7 +87,11 @@ PDistribution::PDistribution(const Char_t *id, const Char_t *de):
     fXmax      = 0.;
     
     fNpx       = 1;
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,12,0)
     fType      = 0;
+#else
+    fType      = EFType::kFormula;
+#endif
     //    fFunction  = 0;
     fNdim = 1;
     //... to be overwritten by PChannelModel

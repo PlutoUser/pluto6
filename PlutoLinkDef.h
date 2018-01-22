@@ -102,6 +102,7 @@
 #pragma link C++ class PFixedDecay;
 #pragma link C++ class PFixedProduction;
 #pragma link C++ class PGenBod;
+#pragma link C++ class PTGenPhaseSpace;
 #pragma link C++ class PNNFSI;
 
 #pragma link C++ class PTCrossWeight;

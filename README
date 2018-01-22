@@ -1527,3 +1527,9 @@ of changes. Code cleanup.
 379) Fixed bug in PHUrEventHeader.h (missing TObject inheritance)
 
 380) Added histogram smearing option in PBeamSmearing
+
+V6.01:
+======
+
+381) Added TGenPhaseSpace as the default model for decay
+     with number of daughters >= 5 particles

@@ -160,6 +160,8 @@ PStaticData::PStaticData() {
     *GetBatchValue("_event_vertex_z")        = 0.;
     *GetBatchValue("_event_seqnr")           = -1.;
 
+    *GetBatchValue("_system_num_particles_tgenphasespace") = 5.;
+
     Double_t *version= GetBatchValue("_system_version");
 
     if (!strncmp("Trunk", version_string, 3)) {
