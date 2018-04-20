@@ -15,7 +15,7 @@ using namespace std;
 
 #include "PDistributionManager.h"
 
-#include "../Plugins.h"
+#include "Plugins.h"
 #include "TFile.h"
 
 PDistributionManager *gDM=0;          // global pointer 
@@ -50,7 +50,7 @@ PDistributionManager::PDistributionManager() {
     batch = NULL;
     loop_start = NULL;
 
-#include "../Plugins.cc"
+#include "Plugins.cc"
 
     pdmutil->no_warning = kFALSE; //workaround in Add()
 

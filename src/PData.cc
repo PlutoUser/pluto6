@@ -74,7 +74,7 @@ int PData::IsMDalitz(const int &idx) {
 
 #include "TApplication.h"
 #include "../Version.h"
-#include "../Compiled.h"
+#include "Compiled.h"
 
 PSplash *gSplash = 0;             // global pointer to PSplash instance
 static PSplash PSplashInstance;   // create instance on library load
