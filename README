@@ -1533,3 +1533,9 @@ V6.01:
 
 381) Added TGenPhaseSpace as the default model for decay
      with number of daughters >= 5 particles
+
+382) Fixed some bugs for ROOT 6.12
+
+                                        I. Froehlich
+                                        IKF, 11/06/2018
+
