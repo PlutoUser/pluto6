@@ -92,7 +92,7 @@ target_link_libraries(Pluto ${ROOT_LIBRARIES})
 #target_link_libraries(Main Event)
 
 add_custom_target(Compiled.h)
-add_custom_command(OUTPUT Compiled.h COMMAND @echo char *date_string = \"\(char*\)\"\\\"\$\$\(date +\"%e %B %Y\"\)\\\"\\\; > ${CMAKE_CURRENT_BINARY_DIR}/Compiled.h DEPENDS G__Pluto.cxx ${SOURCES})
+add_custom_command(OUTPUT Compiled.h COMMAND echo char *date_string = \\\(char*\\\) \\\"\$\$\(date +\"%e %B %Y\"\)\\\"  > ${CMAKE_CURRENT_BINARY_DIR}/Compiled.h DEPENDS G__Pluto.cxx ${SOURCES})
 
 
 
