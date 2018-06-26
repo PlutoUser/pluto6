@@ -2,7 +2,9 @@ Installation:
 _____________________________________________________
 
 Standard installation:
-./cmake
+mkdir builddir
+cd builddir
+cmake ..
 make
 
 
