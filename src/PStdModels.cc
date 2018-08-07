@@ -540,62 +540,14 @@ TObjArray *PStdModels::GetModels(void) {
 			PDalitzDecay *pmodel = new PDalitzDecay((char*)id->Data(), "Dalitz decay", decaykey);
 			model = (PChannelModel*) pmodel;
 			//	makeDataBase()->SetParamInt (decaykey, "maxmesh",new Int_t(2000)); //take into account strong var.
-		    }
-
-		    int n1=1, n2=1;
-		    if (makeStaticData()->
-			GetParticleTotalWidth(tid[1]) < unstable_width) 
-			n1 = 0; // too narrow 
-		    
-		    if (makeStaticData()->
-			GetParticleTotalWidth(tid[2]) < unstable_width ) 
-			n2 = 0; // too narrow
-		    
-		    int h = makeStaticData()->IsParticleHadron(tid[1])+
-			makeStaticData()->IsParticleHadron(tid[2]);
-
-		    /* Decay of a hadron in 1 stable and 1 unstable product */
-		    if ((h && n1 && !n2) || (h && !n1 && n2)) {
-			id = new TString(makeStaticData()->GetParticleName(pid));
-			id->Append("_m1_");
-			id->Append(makeStaticData()->GetParticleName(tid[1]));
-			id->Append("_");
-			id->Append(makeStaticData()->GetParticleName(tid[2]));
-			PHadronDecayM1 *pmodel = new PHadronDecayM1((char*)id->Data(),
-								    "1 unstable hadron (2-body ps)", decaykey);
-			model = (PChannelModel*) pmodel;
-		    }
-		    /* Decay of a hadron in unstable products */
-		    if ((h && n1 && n2) || (h && n1 && n2)) {
-			id = new TString(makeStaticData()->GetParticleName(pid));
-			id->Append("_m2_");
-			id->Append(makeStaticData()->GetParticleName(tid[1]));
-			id->Append("_");
-			id->Append(makeStaticData()->GetParticleName(tid[2]));
-			PHadronDecayM2 *pmodel = new PHadronDecayM2((char*)id->Data(),
-								    "2 unstable hadrons (2-body ps)", decaykey);
-			model = (PChannelModel*) pmodel;
-		    }
-
-		    /* Decay in stable products */
-		    if (h && !n1 && !n2) {
-			id = new TString(makeStaticData()->GetParticleName(pid));
-			id->Append("_fix_");
-			id->Append(makeStaticData()->GetParticleName(tid[1]));
-			id->Append("_");
-			id->Append(makeStaticData()->GetParticleName(tid[2]));
-			PHadronDecay *pmodel = new PHadronDecay((char*)id->Data(),
-								"2-body fixed mass, partial width", decaykey);
-			model = (PChannelModel*) pmodel;
-		    }
-		    /* Decay in ee */
-		    if ((PData::IsDirectEE(pid,tid[1],tid[2]) ||
-			 PData::IsDirectMuMu(pid,tid[1],tid[2]))
-			&& (!makeStaticData()->IsParticle(pid, "eta")
-			    && !makeStaticData()->IsParticle(pid, "J/Psi") 
-			    && !makeStaticData()->IsParticle(pid, "Psi'") 
-			    && !makeStaticData()->IsParticle(pid, "sigma") //Not included  
-			)) {
+		    } else if  /* Decay in ee */
+			((PData::IsDirectEE(pid,tid[1],tid[2]) ||
+			  PData::IsDirectMuMu(pid,tid[1],tid[2]))
+			 && (!makeStaticData()->IsParticle(pid, "eta")
+			     && !makeStaticData()->IsParticle(pid, "J/Psi") 
+			     && !makeStaticData()->IsParticle(pid, "Psi'") 
+			     && !makeStaticData()->IsParticle(pid, "sigma") //Not included  
+			     )) {
 			id = new TString(makeStaticData()->GetParticleName(pid));
 			id->Append("_ee_");
 			id->Append(makeStaticData()->GetParticleName(tid[1]));
@@ -607,6 +559,53 @@ TObjArray *PStdModels::GetModels(void) {
 			model = (PChannelModel*) pmodel;
 			makeDataBase()->SetParamInt (particlekey, "maxmesh", new Int_t(2000)); //-> take into accoutn strong variations
 			makeDataBase()->SetParamInt (decaykey, "maxmesh", new Int_t(2000)); 
+		    } else {
+			int n1=1, n2=1;
+			if (makeStaticData()->
+			    GetParticleTotalWidth(tid[1]) < unstable_width) 
+			    n1 = 0; // too narrow 
+			
+			if (makeStaticData()->
+			    GetParticleTotalWidth(tid[2]) < unstable_width ) 
+			    n2 = 0; // too narrow
+		    
+			int h = makeStaticData()->IsParticleHadron(tid[1])+
+			    makeStaticData()->IsParticleHadron(tid[2]);
+
+			/* Decay of a hadron in 1 stable and 1 unstable product */
+			if ((h && n1 && !n2) || (h && !n1 && n2)) {
+			    id = new TString(makeStaticData()->GetParticleName(pid));
+			    id->Append("_m1_");
+			    id->Append(makeStaticData()->GetParticleName(tid[1]));
+			    id->Append("_");
+			    id->Append(makeStaticData()->GetParticleName(tid[2]));
+			    PHadronDecayM1 *pmodel = new PHadronDecayM1((char*)id->Data(),
+									"1 unstable hadron (2-body ps)", decaykey);
+			    model = (PChannelModel*) pmodel;
+			}
+			/* Decay of a hadron in unstable products */
+			if ((h && n1 && n2) || (h && n1 && n2)) {
+			    id = new TString(makeStaticData()->GetParticleName(pid));
+			    id->Append("_m2_");
+			    id->Append(makeStaticData()->GetParticleName(tid[1]));
+			    id->Append("_");
+			    id->Append(makeStaticData()->GetParticleName(tid[2]));
+			    PHadronDecayM2 *pmodel = new PHadronDecayM2((char*)id->Data(),
+									"2 unstable hadrons (2-body ps)", decaykey);
+			    model = (PChannelModel*) pmodel;
+			}
+			/* Decay in stable products */
+			if (h && !n1 && !n2) {
+			    id = new TString(makeStaticData()->GetParticleName(pid));
+			    id->Append("_fix_");
+			    id->Append(makeStaticData()->GetParticleName(tid[1]));
+			    id->Append("_");
+			    id->Append(makeStaticData()->GetParticleName(tid[2]));
+			    PHadronDecay *pmodel = new PHadronDecay((char*)id->Data(),
+								    "2-body fixed mass, partial width", decaykey);
+			    model = (PChannelModel*) pmodel;
+			}
+			
 		    }
 		} /* END 2 products */
 

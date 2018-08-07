@@ -38,7 +38,7 @@
     gSystem->SetDynamicPath(TString(".:")+TString(gSystem->GetDynamicPath()));
 
     
-    if (gSystem->Load("../libPluto.so")==0) {
+    if (gSystem->Load("../builddir/libPluto.so")==0) {
 	printf("Shared library Pluto.so loaded\n");
     } else {
 	printf("Unable to load Pluto.so\n");
