@@ -1530,6 +1530,9 @@ of changes. Code cleanup.
 
 380) Added histogram smearing option in PBeamSmearing
 
+                                        I. Froehlich
+                                        IKF, 17/05/2017
+
 V6.01:
 ======
 
@@ -1541,3 +1544,7 @@ V6.01:
                                         I. Froehlich
                                         IKF, 11/06/2018
 
+dev
+===
+
+383) Bugfixes, made by S. Wagner (Uni Mainz)
