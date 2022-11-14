@@ -180,7 +180,14 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
     fParErrors.resize(fNpar);
     fParMin.resize(fNpar);
     fParMax.resize(fNpar);
+
+#if ROOT_VERSION_CODE  >= ROOT_VERSION(6,24,0)
+    fParams = std::unique_ptr<TF1Parameters>(new TF1Parameters(fNpar));
+#else
     fParams = new TF1Parameters(fNpar);
+#endif
+
+
     for (int i = 0; i < fNpar; i++) {
 	fParErrors[i]  = 0;
 	fParMin[i]     = 0;

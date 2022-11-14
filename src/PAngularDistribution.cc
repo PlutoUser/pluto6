@@ -77,7 +77,12 @@ PAngularDistribution::PAngularDistribution(const Char_t *id,const  Char_t *de) :
     fParErrors.resize(fNpar);
     fParMin.resize(fNpar);
     fParMax.resize(fNpar);
+
+#if ROOT_VERSION_CODE  >= ROOT_VERSION(6,24,0)
+    fParams = std::unique_ptr<TF1Parameters>(new TF1Parameters(fNpar));
+#else
     fParams = new TF1Parameters(fNpar);
+#endif
    
     fParErrors[0]  = 0;
     fParMin[0]     = 0;
