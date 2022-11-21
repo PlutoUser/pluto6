@@ -659,7 +659,7 @@ void PReaction::SetReactionId() {
     PChannel *pch0 = channel[0];  // 1st channel in reaction
     Int_t n = pch0->GetNumPar();  // nb of decay products
     Int_t *ids = pch0->GetPids(); // array of product ids
-    if (ids[0]/100 != 5) {
+    if (ids[0] < 500 || ids[0] > 1000) {
 	Int_t fac = 1;
 	reactionId = 0;
 	if(n>5) n = 5;              // cannot handle more in 32 bits
