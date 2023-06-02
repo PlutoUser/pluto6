@@ -19,7 +19,7 @@
 //
 //
 // If "align" is set, the reference will be the composite particle
-// of the primary + align 
+// of the primary + align
 // This can be used for the alignment of two particles
 //
 // The 2nd parameter for TF2 is the mass of the reference
@@ -30,15 +30,18 @@
 //                                  Author:  I. Froehlich
 //                                  Written: 01.10.2006
 //                                  Revised: 24.10.2010
-//                                  
-//                                  
+//
+//
 /////////////////////////////////////////////////////////////////////
 
+#include "pluto_private.h"
 
-using namespace std;
 #include <sstream>
 #include <iostream>
 #include <iomanip>
+#include <memory>
+
+using namespace std;
 
 #include "PAngularDistribution.h"
 
@@ -77,12 +80,12 @@ PAngularDistribution::PAngularDistribution(const Char_t *id,const  Char_t *de) :
     fParErrors.resize(fNpar);
     fParMin.resize(fNpar);
     fParMax.resize(fNpar);
-    fParams = new TF1Parameters(fNpar);
-   
+    fParams = std::move(std::make_unique<TF1Parameters>(fNpar));
+
     fParErrors[0]  = 0;
     fParMin[0]     = 0;
     fParMax[0]     = 0;
-    
+
     fParams->SetParName(0, "Mass reference for 2-dim angular distributions");
     fParams->SetParameter(0, 0);
 
@@ -105,7 +108,7 @@ PAngularDistribution::PAngularDistribution(const Char_t *id,const  Char_t *de) :
     fParams[0]=0;
 #endif
 
-    fNpx  = 1000;   
+    fNpx  = 1000;
     fXmin = -1;
     fXmax = 1;
 
@@ -141,7 +144,7 @@ Bool_t PAngularDistribution::Init(void) {
     mass_reference = GetParticle("mass_reference");
     ang_reference  = GetParticle("ang_reference");
     align = GetParticle("align");
-    
+
     if (align) {//check if align is a daughter or parent
 	if ((current_flag == PARTICLE_LIST_PARENT) ||
 	    (current_flag == PARTICLE_LIST_DAUGHTER))
@@ -166,11 +169,11 @@ Bool_t PAngularDistribution::Init(void) {
     }
 
     if (!reference) reference = parent;
-    
+
     for (int i=0; i<position; i++) {
-	if ((particle_flag[i] & PARTICLE_LIST_GRANDPARENT) 
-	    | (particle_flag[i] & PARTICLE_LIST_GRANDGRANDPARENT) 
-	    | (particle_flag[i] & PARTICLE_LIST_SIBLING)) 
+	if ((particle_flag[i] & PARTICLE_LIST_GRANDPARENT)
+	    | (particle_flag[i] & PARTICLE_LIST_GRANDGRANDPARENT)
+	    | (particle_flag[i] & PARTICLE_LIST_SIBLING))
 	    check_abort = kTRUE;
     }
 
@@ -180,11 +183,11 @@ Bool_t PAngularDistribution::Init(void) {
 	daughter[n_daughters] = GetParticle("daughter");
 	if (!daughter[n_daughters]) {
 	    myloop = 0;
-	} 
+	}
     }
     n_daughters--;
 
-    direct_sampling_possible = kFALSE; 
+    direct_sampling_possible = kFALSE;
 
     if (!align &&             // no composite
 	!mass_reference &&    // too complicated
@@ -195,7 +198,7 @@ Bool_t PAngularDistribution::Init(void) {
 	direct_sampling_possible=kTRUE;
     //N.B. this is overwritten by inherited models (e.g.PDeltaAngularDistribution)
     //cout << direct_sampling_possible << endl;
-    return kTRUE;    
+    return kTRUE;
 };
 
 Bool_t PAngularDistribution::Prepare(void) {
@@ -220,25 +223,25 @@ Bool_t PAngularDistribution::SampleAngle(void) {
     //the rejection method. This works
     //in the simple cases, and only if there
     //are no correlated angular distributions
-    
+
     if (!direct_sampling_possible) return kFALSE;
-    
+
     // primary->Print();
     // for (int i=0;i<n_daughters;i++) daughter[i]->Print();
-    
-    if (!Rotate(1)) return kFALSE;    
-    
+
+    if (!Rotate(1)) return kFALSE;
+
     // cout << "---" << endl;
     // primary_tmp.Print();
     // for (int i=0;i<n_daughters;i++) daughter[i]->Print();
     // cout << "*********************" << endl;
-    
+
     //now we rotate all daughters such that primary_tmp is pointing to the z-axis
     double prim_phi   = primary_tmp.Phi();
     double prim_theta = primary_tmp.Theta();
 
 #if 1
-    
+
     //primary->Print();
     // primary_tmp.Print();
     // for (int i=0;i<n_daughters;i++) daughter[i]->Print();
@@ -251,7 +254,7 @@ Bool_t PAngularDistribution::SampleAngle(void) {
     }
 
     //sample the polar angle
-    double polar_angle = acos(SamplePolarAngle(0.5*(cos(prim_theta)+1)));   
+    double polar_angle = acos(SamplePolarAngle(0.5*(cos(prim_theta)+1)));
     //2r=cos_theta-1 was the definition in the baryon_cos alg of the original PChannel
     //polar_angle=prim_theta;
     //cout << polar_angle << endl;
@@ -272,13 +275,13 @@ Bool_t PAngularDistribution::SampleAngle(void) {
 	daughter[i]->RotateZ(prim_phi);
 #endif
     //rotate back to the old frame
-    if (!RotateBack(1)) return kFALSE;        
+    if (!RotateBack(1)) return kFALSE;
 
     //if all worked out we can copy the primary :
     *primary = primary_tmp;
-       
+
     direct_sampling_done = kTRUE;
-    
+
     return kTRUE;
 }
 
@@ -289,10 +292,10 @@ Bool_t PAngularDistribution::Rotate(Int_t rotate_daughters) {
     //are rotated as well. This is needed for direct samplings
 
     Int_t loc_n_daughters = n_daughters * rotate_daughters;
-    
+
     primary_tmp = primary;  //particle under investigation. Make better a copy
     primary_tmp.Boost(parent->BoostVector());  // go back to lab frame
-    for (int i=0; i<loc_n_daughters; i++) 
+    for (int i=0; i<loc_n_daughters; i++)
 	daughter[i]->Boost(parent->BoostVector());
     PParticle compound(primary_tmp);
     PParticle atmp;
@@ -323,7 +326,7 @@ Bool_t PAngularDistribution::Rotate(Int_t rotate_daughters) {
 	} else {
 	    primary_tmp.Boost(-reference->BoostVector());
 	    for (int i=0; i<loc_n_daughters; i++) {
-		daughter[i]->Boost(-reference->BoostVector());	
+		daughter[i]->Boost(-reference->BoostVector());
 	    }
 	}
     } else { // first go to 2nd reference (e.g. base_reference=eta), then
@@ -331,7 +334,7 @@ Bool_t PAngularDistribution::Rotate(Int_t rotate_daughters) {
 	reference_tmp = reference;
 
 	primary_tmp.Boost(-base_reference->BoostVector());  // daughter in base_reference
-	ang_tmp.Boost(-base_reference->BoostVector());  
+	ang_tmp.Boost(-base_reference->BoostVector());
 	reference_tmp.Boost(-base_reference->BoostVector()); // reference in base_reference
 	for (int i=0; i<loc_n_daughters; i++) {
 	    daughter[i]->Boost(-base_reference->BoostVector());
@@ -341,7 +344,7 @@ Bool_t PAngularDistribution::Rotate(Int_t rotate_daughters) {
 	    primary_tmp.RotateY(-reference_tmp.Theta());
 	    primary_tmp.Boost(0, 0, -reference_tmp.Beta());
 	    ang_tmp.RotateZ(-reference_tmp.Phi());
-	    ang_tmp.RotateY(-reference_tmp.Theta());	 
+	    ang_tmp.RotateY(-reference_tmp.Theta());
 	    ang_tmp.Boost(0, 0, -reference_tmp.Beta());
 	    for (int i=0; i<loc_n_daughters; i++) {
 		daughter[i]->RotateZ(-reference_tmp.Phi());
@@ -350,11 +353,11 @@ Bool_t PAngularDistribution::Rotate(Int_t rotate_daughters) {
 	    }
 	} else {
 	    primary_tmp.Boost(-reference_tmp.BoostVector()); // go to reference
-	    for (int i=0; i<loc_n_daughters; i++) 
+	    for (int i=0; i<loc_n_daughters; i++)
 		daughter[i]->Boost(-reference_tmp.BoostVector());
 	}
     }
-    
+
     //finally take ang_reference into account
     if (ang_reference && rotate) {
 	primary_tmp.RotateZ(-ang_tmp.Phi());  // rotate daughter reference onto z-axis
@@ -362,7 +365,7 @@ Bool_t PAngularDistribution::Rotate(Int_t rotate_daughters) {
 	for (int i=0; i<loc_n_daughters; i++) {
 	    daughter[i]->RotateZ(-ang_tmp.Phi());
 	    daughter[i]->RotateY(-ang_tmp.Theta());
-	}	    
+	}
     }
 
     return kTRUE;
@@ -379,12 +382,12 @@ Bool_t PAngularDistribution::RotateBack(Int_t rotate_daughters) {
 	for (int i=0; i<loc_n_daughters; i++) {
 	    daughter[i]->RotateY(ang_tmp.Theta());
 	    daughter[i]->RotateZ(ang_tmp.Phi());
-	}	    
+	}
     }
 
     if (base_reference==NULL) {  // no 2nd reference frame
 	if (rotate) {
-	    primary_tmp.Boost(0, 0, reference->Beta()); // go to 1st reference frame	    
+	    primary_tmp.Boost(0, 0, reference->Beta()); // go to 1st reference frame
 	    primary_tmp.RotateY(reference->Theta());
 	    primary_tmp.RotateZ(reference->Phi());
 	    for (int i=0; i<loc_n_daughters; i++) {
@@ -408,16 +411,16 @@ Bool_t PAngularDistribution::RotateBack(Int_t rotate_daughters) {
 	    daughter[i]->Boost(0, 0, reference_tmp.Beta());
 	    daughter[i]->RotateY(reference_tmp.Theta());
 	    daughter[i]->RotateZ(reference_tmp.Phi());
-	}	
+	}
 
 	primary_tmp.Boost(base_reference->BoostVector());  // daughter in base_reference
 	reference_tmp.Boost(base_reference->BoostVector()); // reference in base_reference
 	for (int i=0; i<loc_n_daughters; i++) {
-	    daughter[i]->Boost(base_reference->BoostVector()); 
+	    daughter[i]->Boost(base_reference->BoostVector());
 	}
     }
     primary_tmp.Boost(-parent->BoostVector());  // go back to parent frame
-    for (int i=0; i<loc_n_daughters; i++) 
+    for (int i=0; i<loc_n_daughters; i++)
 	daughter[i]->Boost(-parent->BoostVector());
     return kTRUE;
 }
@@ -427,11 +430,11 @@ Bool_t PAngularDistribution::IsNotRejected(void) {
     if (direct_sampling_done) return kTRUE;
 
     Double_t tmp_c0, f;
- 
+
     if (!Rotate(0)) return kFALSE;
 
     tmp_c0 = cos(primary_tmp.Theta());
-    
+
     if ((reflection_symmetry) && (tmp_c0<0.)) {
         tmp_c0 = -tmp_c0;
     }
@@ -453,9 +456,9 @@ Bool_t PAngularDistribution::IsNotRejected(void) {
 	Warning("IsNotRejected", "[%s] Weight > max, new max is %lf", GetName(), weight_max);
     }
 
-    if ((f/weight_max) > PUtils::sampleFlat()) 
+    if ((f/weight_max) > PUtils::sampleFlat())
 	return kTRUE; // sample now distribution
-    
+
     return kFALSE;
 };
 
@@ -486,7 +489,7 @@ Double_t PAngularDistribution::EvalPar(const Double_t *x, const Double_t *params
     }
     return Eval(x[0]);
 }
- 
+
 Double_t PAngularDistribution::Eval(Double_t x, Double_t, Double_t, Double_t) const
 {
     if ((reflection_symmetry) && (x<0.)) x = -x;
@@ -501,7 +504,7 @@ void PAngularDistribution::Print(const Option_t *) const {
     BasePrint();
 
     cout << "    Formula used: ";
-    if (angles1) { 
+    if (angles1) {
 	if (angles1->GetExpFormula() != TString("")) cout << angles1->GetExpFormula();
 	else cout << "<compiled>";
     } else if (angles2) {
@@ -510,7 +513,7 @@ void PAngularDistribution::Print(const Option_t *) const {
     } else if (anglesg) {
         cout << "<TGraph>";
     } else cout << "NONE";
-    
+
     cout << endl;
 }
 

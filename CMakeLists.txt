@@ -93,6 +93,9 @@ ROOT_GENERATE_DICTIONARY(G__Pluto ${INCL_FILES} LINKDEF PlutoLinkDef.h)
 #---Create a shared library with geneated dictionary
 add_library(Pluto SHARED ${SOURCES} G__Pluto.cxx ${CMAKE_CURRENT_BINARY_DIR}/Compiled.h)
 target_link_libraries(Pluto ${ROOT_LIBRARIES})
+target_include_directories(Pluto PRIVATE
+    inc
+)
 
 #---Create  a main program using the library
 #add_executable(Main MainEvent.cxx)
