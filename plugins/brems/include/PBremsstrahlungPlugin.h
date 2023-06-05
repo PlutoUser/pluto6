@@ -15,7 +15,7 @@
 
 #include "PBremsstrahlung.h"
 #include "PInclusiveModel.h"
-#include "../elementary/PNNFSI.h"
+#include "PNNFSI.h"
 #include "PArray.h"
 
 using namespace std;
