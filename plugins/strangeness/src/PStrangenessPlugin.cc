@@ -151,8 +151,10 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
                 makeStaticData()->SetParticleParity("Lambda1520", 1);
 
                 if (hyperon_hadron_decays) {
-                    makeStaticData()->AddDecay("Lambda(1520) --> Lambda + pi0 + pi0", "Lambda1520", "Lambda,pi0,pi0", 0.2 / 3); // -
-                    makeStaticData()->AddDecay("Lambda(1520) --> Lambda + pi+ + pi-", "Lambda1520", "Lambda,pi+,pi-", 0.1 / 3); // old BR .014638
+                    makeStaticData()->AddDecay("Lambda(1520) --> n + K0S",            "Lambda1520", "n,K0S",          0.45 / 2); // N + /K from PDG
+                    makeStaticData()->AddDecay("Lambda(1520) --> n + K0L",            "Lambda1520", "n,K0L",          0.45 / 2); // N + /K from PDG
+                    makeStaticData()->AddDecay("Lambda(1520) --> Lambda + pi0 + pi0", "Lambda1520", "Lambda,pi0,pi0", 0.2 / 3);  // -
+                    makeStaticData()->AddDecay("Lambda(1520) --> Lambda + pi+ + pi-", "Lambda1520", "Lambda,pi+,pi-", 0.1 / 3);  // old BR .014638
                 }
 
                 if (hyperon_photon_decays) {
