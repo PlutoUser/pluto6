@@ -33,6 +33,8 @@ class PStrangenessPlugin : public PDistributionCollection {
     static void EnablePhotonDecays(Bool_t enabled) { hyperon_photon_decays = enabled; }
     static void EnableDalitzDecays(Bool_t enabled) { hyperon_dalitz_decays = enabled; }
     static void EnableExperimentalDecays(Bool_t enabled) { hyperon_experimental_decays = enabled; }
+    static void ShowFlags();
+
  private:
 
     Int_t is_initialized;
