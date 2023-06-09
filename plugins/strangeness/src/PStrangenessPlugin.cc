@@ -20,6 +20,16 @@ Bool_t PStrangenessPlugin::hyperon_photon_decays{kTRUE};
 Bool_t PStrangenessPlugin::hyperon_dalitz_decays{kTRUE};
 Bool_t PStrangenessPlugin::hyperon_experimental_decays{kFALSE};
 
+void PStrangenessPlugin::ShowFlags()
+{
+    fprintf(stderr, "Strangeness plugin - flags status:\n"
+    "- Hadron:       %d\n"
+    "- Photon:       %d\n"
+    "- Dalitz:       %d\n"
+    "- Experimental: %d\n",
+    hyperon_hadron_decays, hyperon_photon_decays, hyperon_dalitz_decays, hyperon_experimental_decays);
+}
+
 PStrangenessPlugin::PStrangenessPlugin(const Char_t *id, const Char_t *de): PDistributionCollection(id, de),
     is_initialized(0) {
     //    RequiresPlugin("elementary");
@@ -38,13 +48,6 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
     if (strcmp (command,"init") == 0) {
         if (!is_initialized) {
             is_initialized = 1;
-
-            fprintf(stderr, "Strangeness plugin - flags status:\n"
-                   "- Hadron:       %d\n"
-                   "- Photon:       %d\n"
-                   "- Dalitz:       %d\n"
-                   "- Experimental: %d\n",
-                   hyperon_hadron_decays, hyperon_photon_decays, hyperon_dalitz_decays, hyperon_experimental_decays);
 
             Double_t *system_alloc_verbosity = makeStaticData()->GetBatchValue("_system_alloc_verbosity");
             Double_t old = (*system_alloc_verbosity);
