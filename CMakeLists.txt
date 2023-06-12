@@ -65,8 +65,10 @@ message(STATUS "Found ROOT version: " ${ROOT_VERSION})
 #---Define useful ROOT functions and macros (e.g. ROOT_GENERATE_DICTIONARY)
 include(${ROOT_USE_FILE})
 
+SET(ROOT_VERSION_LEGACY 6.22.00)
+
 #---Create a shared library with geneated dictionary
-add_library(Pluto SHARED ${SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/Compiled.h)
+add_library(Pluto SHARED ${SOURCES} ${CMAKE_BINARY_DIR}/Compiled.h)
 add_library(Pluto::Pluto ALIAS Pluto)
 
 target_include_directories(Pluto
@@ -75,8 +77,12 @@ target_include_directories(Pluto
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/inc>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_BINARY_DIR}
 )
+
+if (${ROOT_VERSION} VERSION_LESS ${ROOT_VERSION_LEGACY})
+    include_directories(${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/include)
+endif()
 
 file(WRITE ${CMAKE_BINARY_DIR}/Plugins.h)
 file(WRITE ${CMAKE_BINARY_DIR}/Plugins.cc)
@@ -111,19 +117,25 @@ macro(add_plugin plugin_target)
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PLUTO_SLOT}/plugins
     )
 
+    target_include_directories(Pluto
+        PUBLIC
+            $<INSTALL_INTERFACE:include/plugins>
+        PRIVATE
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    )
+    if (${ROOT_VERSION} VERSION_LESS ${ROOT_VERSION_LEGACY})
+        get_property(incdir DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+        set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include;${incdir}")
+    endif()
+
     if (IS_DIRECTORY macros)
         install(DIRECTORY macros/
             DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PLUTO_SLOT}/plugins/${plugin_target})
     endif()
 
-    target_include_directories(Pluto
-     PUBLIC
-        $<INSTALL_INTERFACE:include/plugins>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
-
     # dynamically generate source files and Plugins LinkDef
     foreach(f ${PLUGIN_CLASSES})
-       file(APPEND ${CMAKE_BINARY_DIR}/PluginLinkDef.h "\#pragma link C++ class ${f};\n")
+        file(APPEND ${CMAKE_BINARY_DIR}/PluginLinkDef.h "\#pragma link C++ class ${f};\n")
     endforeach()
 endmacro()
 
@@ -137,22 +149,16 @@ target_link_libraries(Pluto PRIVATE ROOT::Core ROOT::Tree ROOT::EG)
 
 ###########################################################
 
-#---Create a main program using the library
-#add_executable(Main MainEvent.cxx)
-#target_link_libraries(Main Event)
-
 add_custom_target(Compiled.h)
 add_custom_command(OUTPUT Compiled.h COMMAND echo char *date_string = \\\(char*\\\) \\\"\$\$\(date +\"%e %B %Y\"\)\\\"  > ${CMAKE_CURRENT_BINARY_DIR}/Compiled.h DEPENDS G__Pluto.cxx ${SOURCES})
 
-export(PACKAGE Pluto)
-
 # Install logic
-set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME}-${PROJECT_VERSION})
+set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/Pluto-${PROJECT_VERSION})
 
 install(TARGETS Pluto
-        EXPORT PlutoTargets
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PLUTO_SLOT})
+    EXPORT PlutoTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PLUTO_SLOT})
 
 install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/libPluto.rootmap
@@ -164,6 +170,12 @@ INSTALL(DIRECTORY macros/
 INSTALL(DIRECTORY include/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PLUTO_SLOT})
 
+install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/libPluto.rootmap
+        ${CMAKE_CURRENT_BINARY_DIR}/libPluto_rdict.pcm
+        DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+# Install Cionfig files
 include(CMakePackageConfigHelpers)
 configure_package_config_file(Config.cmake.in PlutoConfig.cmake
         INSTALL_DESTINATION ${CMAKE_INSTALL_CMAKEDIR}
@@ -178,13 +190,15 @@ install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/PlutoConfigVersion.cmake
         DESTINATION ${CMAKE_INSTALL_CMAKEDIR})
 
+# Create and install export/targets package
+export(PACKAGE Pluto)
+
 # Add all targets to the build-tree export set
 export(TARGETS Pluto
-       FILE PlutoTargets.cmake
-       NAMESPACE Pluto::)
+        NAMESPACE Pluto
+        FILE PlutoTargets.cmake)
 
-# Install the export set for use with the install-tree
 install(EXPORT PlutoTargets
+        FILE PlutoTargets.cmake
         NAMESPACE Pluto::
-        DESTINATION ${CMAKE_INSTALL_CMAKEDIR}
-        COMPONENT dev)
+        DESTINATION ${CMAKE_INSTALL_CMAKEDIR})
