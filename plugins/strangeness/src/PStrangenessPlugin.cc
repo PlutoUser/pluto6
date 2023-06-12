@@ -53,28 +53,27 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
             Double_t old = (*system_alloc_verbosity);
             (*system_alloc_verbosity) = 0;
 
-            if (makeStaticData()->AddParticle(70, "Lambda1405", 1.406) > 0) {
-                makeStaticData()->AddAlias("Lambda1405", "Lambda(1405)");
 
-                makeStaticData()->SetParticleTotalWidth("Lambda1405", 0.05);
-                makeStaticData()->SetParticleBaryon("Lambda1405", 1);
-                makeStaticData()->SetParticleSpin("Lambda1405", 1);
-                makeStaticData()->SetParticleParity("Lambda1405", -1);
+            if (makeStaticData()->AddParticle(70, "Sigma13850", 1.3837) > 0) {
+                makeStaticData()->AddAlias("Sigma13850", "Sigma(1385)0");
+
+                makeStaticData()->SetParticleTotalWidth("Sigma13850", 0.0365);
+                makeStaticData()->SetParticleBaryon("Sigma13850", 1);
+                makeStaticData()->SetParticleLMass("Sigma13850", 1.2);
+                makeStaticData()->SetParticleSpin("Sigma13850", 3);
+                makeStaticData()->SetParticleParity("Sigma13850", 1);
 
                 if (hyperon_hadron_decays) {
-                    makeStaticData()->AddDecay("Lambda(1405) --> Sigma+ + pi-",   "Lambda1405", "Sigma+,pi-", 1. / 3);
-                    makeStaticData()->AddDecay("Lambda(1405) --> Sigma- + pi+",   "Lambda1405", "Sigma-,pi+", 1. / 3);
-                    makeStaticData()->AddDecay("Lambda(1405) --> Sigma0 + pi0",   "Lambda1405", "Sigma0,pi0", 1. / 3);
-                }
-
-                if (hyperon_photon_decays) {
-                    makeStaticData()->AddDecay("Lambda(1405) --> Lambda + gamma", "Lambda1405", "Lambda,g",   0.0085);
+                    makeStaticData()->AddDecay("Sigma(1385)0 --> Lambda + pi0",   "Sigma13850", "Lambda,pi0", 0.87000);
+                    makeStaticData()->AddDecay("Sigma(1385)0 --> Lambda + g",     "Sigma13850", "Lambda,g",   0.01300 * (1. - 1./137.));
+                    makeStaticData()->AddDecay("Sigma(1385)0 --> Sigma+ + pi-",   "Sigma13850", "Sigma+,pi-", 0.117 / 3);
+                    makeStaticData()->AddDecay("Sigma(1385)0 --> Sigma- + pi+",   "Sigma13850", "Sigma-,pi+", 0.117 / 3);
+                    makeStaticData()->AddDecay("Sigma(1385)0 --> Sigma0 + pi0",   "Sigma13850", "Sigma0,pi0", 0.117 / 3);
                 }
 
                 if (hyperon_dalitz_decays) {
-                    makeStaticData()->AddDecay("Lambda(1405) --> Lambda + dilepton", "Lambda1405", "Lambda,dilepton", 0.0085 / 137.);
-
-                    PResonanceDalitz * dalitz = new PResonanceDalitz("Lambda1405_dalitz@Lambda1405_to_Lambda_dilepton", "dgdm from Zetenyi/Wolf", -1);
+                    makeStaticData()->AddDecay("Sigma(1385)0 --> Lambda + dilepton", "Sigma13850", "Lambda,dilepton", 0.013 / 137.);
+                    PResonanceDalitz * dalitz = new PResonanceDalitz("Sigma13850_dalitz@Sigma13850_to_Lambda_dilepton", "dgdm from Zetenyi/Wolf", -1);
                     dalitz->setGm(0.719);
                     makeDistributionManager()->Add(dalitz);
                 }
@@ -117,26 +116,29 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
             }
 
 
-            if (makeStaticData()->AddParticle(-1, "Sigma13850", 1.3837) > 0) {
-                makeStaticData()->AddAlias("Sigma13850", "Sigma(1385)0");
+            if (makeStaticData()->AddParticle(-1, "Lambda1405", 1.406) > 0) {
+                makeStaticData()->AddAlias("Lambda1405", "Lambda(1405)");
 
-                makeStaticData()->SetParticleTotalWidth("Sigma13850", 0.0365);
-                makeStaticData()->SetParticleBaryon("Sigma13850", 1);
-                makeStaticData()->SetParticleLMass("Sigma13850", 1.2);
-                makeStaticData()->SetParticleSpin("Sigma13850", 3);
-                makeStaticData()->SetParticleParity("Sigma13850", 1);
+                makeStaticData()->SetParticleTotalWidth("Lambda1405", 0.05);
+                makeStaticData()->SetParticleBaryon("Lambda1405", 1);
+                makeStaticData()->SetParticleSpin("Lambda1405", 1);
+                makeStaticData()->SetParticleParity("Lambda1405", -1);
 
                 if (hyperon_hadron_decays) {
-                    makeStaticData()->AddDecay("Sigma(1385)0 --> Lambda + pi0",   "Sigma13850", "Lambda,pi0", 0.87000);
-                    makeStaticData()->AddDecay("Sigma(1385)0 --> Lambda + g",     "Sigma13850", "Lambda,g",   0.01300 * (1. - 1./137.));
-                    makeStaticData()->AddDecay("Sigma(1385)0 --> Sigma+ + pi-",   "Sigma13850", "Sigma+,pi-", 0.117 / 3);
-                    makeStaticData()->AddDecay("Sigma(1385)0 --> Sigma- + pi+",   "Sigma13850", "Sigma-,pi+", 0.117 / 3);
-                    makeStaticData()->AddDecay("Sigma(1385)0 --> Sigma0 + pi0",   "Sigma13850", "Sigma0,pi0", 0.117 / 3);
+                    makeStaticData()->AddDecay("Lambda(1405) --> Sigma+ + pi-",   "Lambda1405", "Sigma+,pi-", 1. / 3);
+                    makeStaticData()->AddDecay("Lambda(1405) --> Sigma- + pi+",   "Lambda1405", "Sigma-,pi+", 1. / 3);
+                    makeStaticData()->AddDecay("Lambda(1405) --> Sigma0 + pi0",   "Lambda1405", "Sigma0,pi0", 1. / 3);
+                }
+
+                if (hyperon_photon_decays) {
+                    makeStaticData()->AddDecay("Lambda(1405) --> Lambda + gamma", "Lambda1405", "Lambda,g",   0.0085);
+                    makeStaticData()->AddDecay("Lambda(1405) --> Sigma(1385)0 + gamma", "Lambda1405", "Sigma13850,g",   0.0085);
                 }
 
                 if (hyperon_dalitz_decays) {
-                    makeStaticData()->AddDecay("Sigma(1385)0 --> Lambda + dilepton", "Sigma13850", "Lambda,dilepton", 0.013 / 137.);
-                    PResonanceDalitz * dalitz = new PResonanceDalitz("Sigma13850_dalitz@Sigma13850_to_Lambda_dilepton", "dgdm from Zetenyi/Wolf", -1);
+                    makeStaticData()->AddDecay("Lambda(1405) --> Lambda + dilepton", "Lambda1405", "Lambda,dilepton", 0.0085 / 137.);
+
+                    PResonanceDalitz * dalitz = new PResonanceDalitz("Lambda1405_dalitz@Lambda1405_to_Lambda_dilepton", "dgdm from Zetenyi/Wolf", -1);
                     dalitz->setGm(0.719);
                     makeDistributionManager()->Add(dalitz);
                 }
@@ -154,22 +156,20 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
                 makeStaticData()->SetParticleParity("Lambda1520", 1);
 
                 if (hyperon_hadron_decays) {
-                    makeStaticData()->AddDecay("Lambda(1520) --> n + K0S",            "Lambda1520", "n,K0S",          0.45 / 2); // N + /K from PDG
-                    makeStaticData()->AddDecay("Lambda(1520) --> n + K0L",            "Lambda1520", "n,K0L",          0.45 / 2); // N + /K from PDG
-                    makeStaticData()->AddDecay("Lambda(1520) --> Lambda + pi0 + pi0", "Lambda1520", "Lambda,pi0,pi0", 0.2 / 3);  // -
-                    makeStaticData()->AddDecay("Lambda(1520) --> Lambda + pi+ + pi-", "Lambda1520", "Lambda,pi+,pi-", 0.1 / 3);  // old BR .014638
+                    makeStaticData()->AddDecay("Lambda(1520) --> n + K0S",            "Lambda1520", "n,K0S",          0.45 / 3); // N + /K from PDG
+                    makeStaticData()->AddDecay("Lambda(1520) --> n + K0L",            "Lambda1520", "n,K0L",          0.45 / 3); // N + /K from PDG
+                    makeStaticData()->AddDecay("Lambda(1520) --> p + K-",             "Lambda1520", "p,K-",           0.45 / 3); // N + /K from PDG
+                    makeStaticData()->AddDecay("Lambda(1520) --> Lambda + pi0 + pi0", "Lambda1520", "Lambda,pi0,pi0", 0.2 / 3);  // 10% * 2/3
+                    makeStaticData()->AddDecay("Lambda(1520) --> Lambda + pi+ + pi-", "Lambda1520", "Lambda,pi+,pi-", 0.1 / 3);  // 10% * 1/3 , old BR .014638
+                    makeStaticData()->AddDecay("Lambda(1520) --> Sigma0 + pi0",       "Lambda1520", "Sigma0,pi0",     0.139096); // 42% / 3
+                    makeStaticData()->AddDecay("Lambda(1520) --> Sigma+ + pi-",       "Lambda1520", "Sigma+,pi-",     0.139096); // 42% / 3
+                    makeStaticData()->AddDecay("Lambda(1520) --> Sigma- + pi+",       "Lambda1520", "Sigma-,pi+",     0.139096); // 42% / 3
+                    makeStaticData()->AddDecay("Lambda(1520) --> Sigma0 + pi0 + pi0", "Lambda1520", "Sigma0,pi0,pi0", 0.009/5.0); //
+                    makeStaticData()->AddDecay("Lambda(1520) --> Sigma0 + pi+ + pi-", "Lambda1520", "Sigma0,pi+,pi-", 0.009/5.0); //
                 }
 
                 if (hyperon_photon_decays) {
                     makeStaticData()->AddDecay("Lambda(1520) --> Lambda + g",         "Lambda1520", "Lambda,g",       0.0085);
-                }
-
-                if (hyperon_experimental_decays) {
-                    makeStaticData()->AddDecay("Lambda(1520) --> Sigma0 + pi0",       "Lambda1520", "Sigma0,pi0",     0.139096); // -
-                    makeStaticData()->AddDecay("Lambda(1520) --> Sigma+ + pi-",       "Lambda1520", "Sigma+,pi-",     0.139096); // -
-                    makeStaticData()->AddDecay("Lambda(1520) --> Sigma- + pi+",       "Lambda1520", "Sigma-,pi+",     0.139096); // -
-                    makeStaticData()->AddDecay("Lambda(1520) --> Sigma0 + pi0 + pi0", "Lambda1520", "Sigma0,pi0,pi0", 0.009/5.0); // -
-                    makeStaticData()->AddDecay("Lambda(1520) --> Sigma0 + pi+ + pi-", "Lambda1520", "Sigma0,pi+,pi-", 0.009/5.0); // -
                 }
 
                 if (hyperon_dalitz_decays) {
