@@ -22,8 +22,12 @@ public:
     Bool_t ExecCommand(const char *command, Double_t value);
     Bool_t Activate(void);
 
+    static void EnableExperimentalDecays(Bool_t enabled) { experimental_decays = enabled; }
+
 private:
     Int_t is_initialized;
+
+    static Bool_t experimental_decays;
 
     ClassDef(PMesonsPlugin, 0) //Plugin to add new particles with mesons and their decays
 };
