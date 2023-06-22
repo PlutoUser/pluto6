@@ -97,6 +97,11 @@ target_include_directories(Pluto PRIVATE
     inc
 )
 
+SET(ROOT_VERSION_LEGACY 6.22.00)
+if (${ROOT_VERSION} VERSION_LESS ${ROOT_VERSION_LEGACY})
+    target_compile_definitions(LEGACY_ROOT)
+endif()
+
 #---Create  a main program using the library
 #add_executable(Main MainEvent.cxx)
 #target_link_libraries(Main Event)

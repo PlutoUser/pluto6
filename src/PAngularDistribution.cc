@@ -80,8 +80,11 @@ PAngularDistribution::PAngularDistribution(const Char_t *id,const  Char_t *de) :
     fParErrors.resize(fNpar);
     fParMin.resize(fNpar);
     fParMax.resize(fNpar);
+#ifdef LEGACY_ROOT
+    fParams = new TF1Parameters(fNpar);
+#else
     fParams = std::move(std::make_unique<TF1Parameters>(fNpar));
-
+#endif
     fParErrors[0]  = 0;
     fParMin[0]     = 0;
     fParMax[0]     = 0;

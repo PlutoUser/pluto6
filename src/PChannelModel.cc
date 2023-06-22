@@ -181,7 +181,11 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
     fParErrors.resize(fNpar);
     fParMin.resize(fNpar);
     fParMax.resize(fNpar);
+#ifdef LEGACY_ROOT
+    fParams = new TF1Parameters(fNpar);
+#else
     fParams = std::move(std::make_unique<TF1Parameters>(fNpar));
+#endif
     for (int i = 0; i < fNpar; i++) {
 	fParErrors[i]  = 0;
 	fParMin[i]     = 0;
