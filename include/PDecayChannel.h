@@ -62,7 +62,7 @@ class PDecayChannel : public TObject {
     void AddChannel(Double_t w, const char *d1, const char *d2);
     void AddChannel(Double_t w, const char *d1, const char *d2, const char *d3);
     void AddChannel(Double_t w, const char *d1, const char *d2, const char *d3, const char *d4);
-    void AddChannel(Double_t w, Int_t nd, char **ld);
+    void AddChannel(Double_t w, Int_t nd, const char **ld);
 
     // Get the information out of the class ...
     Double_t GetWeight();
