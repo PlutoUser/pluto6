@@ -8,7 +8,7 @@
 
 #include "PFermiMomentumDD.h"
 
-PFermiMomentumDD::PFermiMomentumDD(const Char_t *id, const Char_t *de, Int_t key) : 
+PFermiMomentumDD::PFermiMomentumDD(const Char_t *id, const Char_t *de, Int_t key) :
     PFermiMomentum(id, de, key) {
 };
 
@@ -43,7 +43,7 @@ Bool_t PFermiMomentumDD::Init(void) {
 
 
 Bool_t PFermiMomentumDD::SampleMass(void) {
-   
+
     PParticle participant1, participant2;
     Int_t pair1_is_beam = 0;
 
@@ -66,14 +66,14 @@ Bool_t PFermiMomentumDD::SampleMass(void) {
 	else if (!target->GetValue(P_SCATTER, &dummy)) {
 	    //randomize if value not used
 	    pair1_is_beam = (PUtils::sampleFlat() < 0.5 ? 0 : 1);
-	}	
+	}
 	participant1.SetID(13);
 	participant2.SetID(14);
     } else if ((spectator1->ID() == 13) && (spectator2->ID() == 14)){
 	//spectator2 is proton.
 	//We have to check if "target" contains the scattered proton:
 	Double_t dummy = 0;
-	pair1_is_beam = 1; 
+	pair1_is_beam = 1;
 	if (target->GetValue(P_SCATTER, &dummy)) //value used
 	    pair1_is_beam = 0; //p from target
 	else if (!beam->GetValue(P_SCATTER, &dummy)) {
@@ -86,7 +86,7 @@ Bool_t PFermiMomentumDD::SampleMass(void) {
     } else {
 	Warning("SampleMass", "Unknown reaction");
     }
-    
+
     Double_t massS, eS, eP, ptot, px, py, pz, t=-1., mdeut;
 
     //sample participant1
@@ -123,7 +123,7 @@ Bool_t PFermiMomentumDD::SampleMass(void) {
     eP = sqrt(ptot*ptot + t);         // participant total energy
 
     participant2.SetPxPyPzE(-px,-py,-pz,eP);  // initialize participant nucleon
-    spectator2->SetPxPyPzE(px,py,pz,eS);      // initialize spectator nucleon   
+    spectator2->SetPxPyPzE(px,py,pz,eS);      // initialize spectator nucleon
 
     //Up to now we are in the (breakup-)deuteron frame.
     //Let us go into the lab frame first

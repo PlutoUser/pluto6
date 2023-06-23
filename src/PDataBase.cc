@@ -1,11 +1,11 @@
 ////////////////////////////////////////////////////////
 //  Particle ID, properties and decay data base
 //
-//  
+//
 //
 //                    Author: I. Froehlich
 //                    Written: 11.04.2007
-//                    Revised: 
+//                    Revised:
 //
 ////////////////////////////////////////////////////////
 
@@ -51,7 +51,7 @@ PDataBase::PDataBase() {
 	param_int_key_max[j] = 0;
     }
 
-    MakeParamString("name", "Database name"); 
+    MakeParamString("name", "Database name");
 //this is absolute minimum and required for testing for existence
     Info("PDataBase()", "(%s)", PRINT_CTOR);
 }
@@ -73,7 +73,7 @@ void PDataBase::Print(const Option_t *) const {
     cout << param_tobj_pointer << " TOBJ's booked (out of " << PDATABASE_MAX_TOBJ_PARAM <<")" << endl;
     for (int i=0; i<param_tobj_pointer; i++)
 	cout << "TOBJ:" << param_tobj_name[i] << ":" << param_tobj_descr[i] << endl;
-    
+
 }
 
 void PDataBase::SetFastKey(Int_t pkey, Int_t maxkey) {
@@ -82,7 +82,7 @@ void PDataBase::SetFastKey(Int_t pkey, Int_t maxkey) {
     //set the maxkey to max "pid" value
     param_int_key[pkey] = new Int_t[maxkey] ;
     param_int_key_max[pkey] = maxkey;
-    for (int i=0; i<maxkey; i++) 
+    for (int i=0; i<maxkey; i++)
 	param_int_key[pkey][i] = -1;
 }
 
@@ -188,7 +188,7 @@ Int_t PDataBase ::GetParamInt(const char *paramname, Int_t length) {
 	    if (strncmp(paramname,param_int_name[i],length) == 0) return i;
 	}
     }
-    return -1;    
+    return -1;
 }
 
 Int_t PDataBase::GetParamTObj(const char* paramname) {
@@ -211,7 +211,7 @@ Int_t  PDataBase::ConvertParamKey(const char * &newparamname, Int_t key) {
 	    newparamname = newparamname + i + 1;
 
 	    return *newkey;
-	}	
+	}
     }
     return -1;
 }
@@ -316,9 +316,9 @@ Bool_t PDataBase::GetParamInt(Int_t key, const char *paramname, Int_t **result, 
     }
     paramname = newparamname;
     Int_t pp = GetParamInt(paramname, length);
-    if (pp < 0) 
+    if (pp < 0)
 	return kFALSE;
-    
+
     if (ints[key][pp] == NULL) return kFALSE;
 
     *result = ints[key][pp];
@@ -367,7 +367,7 @@ Bool_t PDataBase::SetParamDouble(Int_t key, const char *paramname, Double_t *res
 	Error("SetParamDouble", "key %i not existing", key);
 	return kFALSE;
     }
-    
+
     Int_t pp = GetParamDouble(paramname);
     if (pp < 0) {
 	Error("SetParamDouble", "paramname %s not existing", paramname);
@@ -384,7 +384,7 @@ Bool_t PDataBase::SetParamString (Int_t key, const char *paramname, char *result
 	Error("SetParamString", "key %i not existing", key);
 	return kFALSE;
     }
-    
+
     Int_t pp = GetParamString(paramname);
     if (pp < 0) {
 	Error("SetParamString", "paramname %s not existing", paramname);
@@ -401,7 +401,7 @@ Bool_t PDataBase::SetParamInt (Int_t key, const char *paramname, Int_t *result) 
 	Error("SetParamInt", "key %i not existing", key);
 	return kFALSE;
     }
-    
+
     Int_t pp = GetParamInt(paramname);
     if (pp < 0) {
 	Error("SetParamInt", "paramname %s not existing", paramname);
@@ -418,7 +418,7 @@ Bool_t PDataBase::SetParamTObj(Int_t key, const char *paramname, TObject *result
 	Error("SetParamTObj", "key %i not existing", key);
 	return kFALSE;
     }
-    
+
     Int_t pp = GetParamTObj(paramname);
     if (pp < 0) {
 	Error("SetParamTObj", "paramname %s not existing", paramname);
@@ -435,7 +435,7 @@ Bool_t PDataBase::SetParamTObj(Int_t key, Int_t pp, TObject *result) {
 	Error("SetParamTObj", "key %i not existing", key);
 	return kFALSE;
     }
-    
+
     tobjs[key][pp] = result;
     return kTRUE;
 }
@@ -445,7 +445,7 @@ Int_t PDataBase::GetEntry(const char *name) {
 	if (strings[i][0])
 	    if (strcmp(name,strings[i][0]) == 0) return i;
     }
-    return -1;	
+    return -1;
 }
 
 Int_t PDataBase::GetEntryInt(const char *paramname, Int_t value) {
@@ -514,7 +514,7 @@ Int_t PDataBase::AddEntry(const char *name) {
     return -1;
 }
 
-Int_t PDataBase::AddListEntry(const char *name, const char *count, 
+Int_t PDataBase::AddListEntry(const char *name, const char *count,
 			      const char *link, const char *newname) {
     //This is used to add linked-lists the the entry "name"
     //The "count" (which should be an int param) holds the number of links
@@ -581,7 +581,7 @@ Int_t PDataBase::AddListEntry(const char *name, const char *count,
     return targetkey;
 }
 
-Bool_t PDataBase::MakeListIterator(Int_t key, const char *count, 
+Bool_t PDataBase::MakeListIterator(Int_t key, const char *count,
 				   const char *link, Int_t *listkey) {
     //get the list entries which belongs to "key" and is described by "counts" and "link"
     //(both has to be defined in a proper way)
@@ -589,7 +589,7 @@ Bool_t PDataBase::MakeListIterator(Int_t key, const char *count,
     //on the value kTRUE, *listkey contains the key link to the list entry
     //on the value kFALSE, the iteration has been finished (or not started due to an error)
     Int_t *i_count, *loc_listkey_p;
-    
+
     if (key == -1) return kFALSE;
     if (*listkey ==- 1) { //first call: check list header entry
 	if (count) {
@@ -621,7 +621,7 @@ Bool_t PDataBase::MakeListIterator(Int_t key, Int_t count, Int_t link, Int_t *li
     //on the value kTRUE, *listkey contains the key link to the list entry
     //on the value kFALSE, the iteration has been finished (or not started due to an error)
     Int_t *i_count, *loc_listkey_p;
-    
+
     if (key == -1) return kFALSE;
     if (*listkey == -1) { //first call: check list header entry
 	if (count >= 0) {
@@ -650,15 +650,15 @@ Bool_t PDataBase::ListEntries(Int_t key, Int_t option, const char *pattern) {
     //key=line (or -1 for all)
     //option=0 : line break =1: no line break
     //pattern like "mass,width"
-    
+
     Int_t start = 0;
     Int_t end   = PDATABASE_MAX_LINES-1;
     Double_t   *result;
     const char *result2;
     Int_t   *result3;
     TObject *result4;
-    Int_t sz[PDATABASE_MAX_LINES][PDATABASE_MAX_DOUBLE_PARAM+PDATABASE_MAX_STRING_PARAM]; 
-    Int_t max_sz[PDATABASE_MAX_DOUBLE_PARAM+PDATABASE_MAX_STRING_PARAM]; 
+    Int_t sz[PDATABASE_MAX_LINES][PDATABASE_MAX_DOUBLE_PARAM+PDATABASE_MAX_STRING_PARAM];
+    Int_t max_sz[PDATABASE_MAX_DOUBLE_PARAM+PDATABASE_MAX_STRING_PARAM];
     Int_t valid_key[PDATABASE_MAX_LINES];
 
     for (int i=0; i<(PDATABASE_MAX_DOUBLE_PARAM+PDATABASE_MAX_STRING_PARAM); i++) {
@@ -679,7 +679,7 @@ Bool_t PDataBase::ListEntries(Int_t key, Int_t option, const char *pattern) {
 	//run1: print info
 	for (int i=start; i<=end; i++) {
 	    //TODO: check if at least one param is there
-	    if (run && valid_key[i]>0) { 
+	    if (run && valid_key[i]>0) {
 		if (option) {
 		    cout << i << ":";
 		    if (i<10) cout << " ";
@@ -707,18 +707,18 @@ Bool_t PDataBase::ListEntries(Int_t key, Int_t option, const char *pattern) {
 		    options++;
 		    checkline = kFALSE;
 		}
-		if (options[0] == '!') { 
+		if (options[0] == '!') {
 		    options++;
 		    invert = kTRUE;
 		}
 
 		if (GetParamDouble (i, options, &result)) {
 		    if (run) {
-			if (valid_key[i]>0) {	   
+			if (valid_key[i]>0) {
 			    if (option) cout << options <<  "=";
 			    else  cout << GetDescription(options) <<  "=";
 			    printf("%f", *result);
-			    if (option) cout << " "; 
+			    if (option) cout << " ";
 			    else        cout << " \n";
 			}
 		    } else {
@@ -726,23 +726,23 @@ Bool_t PDataBase::ListEntries(Int_t key, Int_t option, const char *pattern) {
 			// (if somebody has an idea -> help yourself)
 			sprintf(bla, "%f", *result);
 			sz[i][pat] = strlen(bla);
-			if (sz[i][pat] > max_sz[pat]) 
+			if (sz[i][pat] > max_sz[pat])
 			    max_sz[pat] = sz[i][pat];
-			if (checkline && !invert) 
+			if (checkline && !invert)
 			    valid_key[i]++;
-			else if (invert && checkline) 
+			else if (invert && checkline)
 			    valid_key[i] = -999;
 		    }
 		} else if (GetParamInt (i, options, &result3)) {
 		    if (run) {
 			if (valid_key[i]>0) {
-			    if (option) 
+			    if (option)
 				cout << options <<  "=";
-			    else  
+			    else
 				cout << GetDescription(options) <<  "=";
 			    printf("%i", *result3);
-			    if (option) 
-				 cout << " "; 
+			    if (option)
+				 cout << " ";
 			    else cout << " \n";
 			}
 		    } else {
@@ -750,54 +750,54 @@ Bool_t PDataBase::ListEntries(Int_t key, Int_t option, const char *pattern) {
 			// (if somebody has an idea -> help yourself)
 			sprintf(bla, "%i", *result3);
 			sz[i][pat] = strlen(bla);
-			if (sz[i][pat] > max_sz[pat]) 
+			if (sz[i][pat] > max_sz[pat])
 			    max_sz[pat] = sz[i][pat];
-			if (checkline && !invert) 
+			if (checkline && !invert)
 			    valid_key[i]++;
-			else if (invert && checkline) 
+			else if (invert && checkline)
 			    valid_key[i] = -999;
 		    }
 		} else if (GetParamString (i, options, &result2)) {
 		    if (run) {
 			if (valid_key[i] > 0) {
-			    if (option) 
+			    if (option)
 				cout << options << "=" << result2;
-			    else 
+			    else
 				cout << GetDescription(options) << "="<< result2;
-			    if (option) cout << " "; 
+			    if (option) cout << " ";
 			    else        cout << " \n";
 			}
 		    } else {
 			sz[i][pat] = strlen(result2);
-			if (sz[i][pat] > max_sz[pat]) 
+			if (sz[i][pat] > max_sz[pat])
 			    max_sz[pat] = sz[i][pat];
-			if (checkline && !invert) 
+			if (checkline && !invert)
 			    valid_key[i]++;
-			else if (invert && checkline) 
+			else if (invert && checkline)
 			    valid_key[i] = -999;
 		    }
 		} else if (GetParamTObj (i, options,&result4)) {
 		    if (run) {
 			if (valid_key[i]>0) {
-			   
-			    if (option) 
+
+			    if (option)
 				cout << options << "=<yes>";
-			    else 
+			    else
 				cout << GetDescription(options) << "=<yes>";
-			    if (option) cout << " "; 
+			    if (option) cout << " ";
 			    else        cout << " \n";
 			}
 		    } else {
 			sz[i][pat] = 4; //for the yes
-			if (sz[i][pat] > max_sz[pat]) 
+			if (sz[i][pat] > max_sz[pat])
 			    max_sz[pat] = sz[i][pat];
-			if (checkline && !invert) 
+			if (checkline && !invert)
 			    valid_key[i]++;
-			else if (invert && checkline) 
+			else if (invert && checkline)
 			    valid_key[i] = -999;
 		    }
-		} 
-		 
+		}
+
 		if (option && run && valid_key[i]>0) {
 		    //fill missing gaps
 		    int ga = sz[i][pat];
@@ -808,8 +808,8 @@ Bool_t PDataBase::ListEntries(Int_t key, Int_t option, const char *pattern) {
 		    }
 		}
 	    }
-	     
-	    if (run && valid_key[i]>0) cout << "\n"; 
+
+	    if (run && valid_key[i]>0) cout << "\n";
 	}
     }
     delete array;
@@ -840,8 +840,8 @@ void PDataBase::Performance(void) {
 	    GetFastParamInt("pid", &pid_param);
 	    if (!GetParamInt(GetEntry(strings[i][0]), pid_param, &i_result)) {
 //	    if (!getFastParamInt (pid_param,i, &i_result)) {
-		Error("Performance", "ID %i not found", i);	
-	    } 
+		Error("Performance", "ID %i not found", i);
+	    }
 	    mypid += *i_result;
 	}
     cout << timer.RealTime() << endl;

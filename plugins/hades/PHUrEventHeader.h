@@ -12,7 +12,7 @@
 using namespace std;
 
 
-class PHUrEventHeader : public TObject {  
+class PHUrEventHeader : public TObject {
 public:
 
     Int_t    id;               // 1 : Int_t    The first integer in the event header is a -1.
@@ -29,9 +29,9 @@ public:
     Bool_t Read(ifstream& in){
 	if(in.eof()) return kFALSE;
 	if(!in.good()) return kFALSE;
-	in >> id >> evtnum >> mass_proj >> mass_target >> impact_par >> 
+	in >> id >> evtnum >> mass_proj >> mass_target >> impact_par >>
 	    E_reaction >> tot_sig >> E_beam >> mom_per_particle;
-	if(evtnum!=-2 && !in.eof() && !in.good()) 
+	if(evtnum!=-2 && !in.eof() && !in.good())
 	    return kFALSE;
         return kTRUE;
     }

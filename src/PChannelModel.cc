@@ -46,11 +46,11 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 	Int_t alt_position = 0,
 	    path_position  = 0;
 	for (Int_t i=strlen(id); i>=0; i--) {
-	    if (id[i] == '@') 
+	    if (id[i] == '@')
 		alt_position = i;
 	}
 
-	if (alt_position) { 
+	if (alt_position) {
 	    alt_position++; //skip "@"
 	}
 
@@ -58,11 +58,11 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 	strcpy(db_id, &(id[alt_position]));
 
 	for (Int_t i=strlen(id); i>=alt_position; i--) {
-	    if (id[i] == path_delim) 
+	    if (id[i] == path_delim)
 		path_position = i;
 	}
 
-	if (path_position) { 
+	if (path_position) {
 	    path_position++; //skip "/"
 	    model_def_key = makeStaticData()->
 		MakeDirectoryEntry("modeldef", NMODEL_NAME, LMODEL_NAME, &(id[path_position]));
@@ -74,7 +74,7 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 
 	PUtils::Tokenize(&(id[alt_position]), parser_delim, arr1, &arr1_s);
 
-	if (path_position) { 
+	if (path_position) {
 	    char *nid = new char[strlen(id)+1];
 	    strcpy(nid,id);
 	    nid[path_position-1] = path_delim;
@@ -101,8 +101,8 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 
 	    Int_t arr1_id[10+2];
 	    arr1_id[0] = makeStaticData()->GetParticleID(arr1[0]);
-	    	   
-	    for (int i=1; i<=(arr1_s-2); i++) 
+
+	    for (int i=1; i<=(arr1_s-2); i++)
 		arr1_id[i] = makeStaticData()->GetParticleID(arr1[i+1]);
 
 	    key = makeStaticData()->GetDecayKey(arr1_id, arr1_s-2);
@@ -117,7 +117,7 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 		sec_key = makeStaticData()->GetSecondaryKey(key, model_def_key);
 		if (sec_key > 0) {
 		    key = sec_key;
-		} else {		    
+		} else {
 		    key = makeStaticData()->AddAlias(makeStaticData()->GetDecayNameByKey(key), db_id);
 		    //defkey has to be stored for future use!
 		    makeDataBase()->SetParamInt (key, "defkey", &model_def_key);
@@ -128,12 +128,12 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 
 	    //To make life more easy, add "default" track template
  	    Add(arr1[0], "parent");
- 	    for (int i=1; i<=(arr1_s-2); i++) 
+ 	    for (int i=1; i<=(arr1_s-2); i++)
  		Add(arr1[i+1], "daughter");
  	    preliminary_particles = 1;
 	} // end "decay"
 
-	if (alt_position) { 
+	if (alt_position) {
 	    //reset ID:
 	    char *newid = new char[alt_position];
 	    strncpy(newid, id, alt_position);
@@ -154,7 +154,7 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
     if (sec_key < 0) { //No sec. model
 	is_channel = makeStaticData()->GetDecayIdxByKey(key);
 	is_pid     = makeStaticData()->GetParticleIDByKey(key);
-    } 
+    }
 
     if (is_pid<0 && !is_channel) {
 	Warning("PChannelModel", "Undetermined particle for key %i", key);
@@ -170,7 +170,7 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 
     draw_option = 0;
     didx_option = -1;
-    
+
     //some TF1 defaults...
 
     //ROOT6
@@ -232,7 +232,7 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 
     mc_max = 1000; //for the integration methods in Width-mesh calculation
 
-    if (is_pid >= 0) 
+    if (is_pid >= 0)
 	SetDynamicRange(PData::LMass(is_pid), PData::UMass(is_pid));
 
     if ((is_channel>=0) && (sec_key<0)) {
@@ -244,7 +244,7 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
     didx_param     = makeDataBase()->GetParamInt("didx");
     scfactor_param = makeDataBase()->GetParamDouble("scfactor");
     unstable_width = makeStaticData()->GetBatchValue("_system_unstable_width");
-    
+
 };
 
 PDistribution *PChannelModel::Clone(const char *) const {
@@ -274,7 +274,7 @@ PChannelModel *PChannelModel::GetSecondaryModel(const char *name) {
 Bool_t PChannelModel::SampleMass(Double_t*,  Int_t*) {
     //Samples the masses of the known decay products (or single particle)
     //Order of particles is the same as in data base
-    
+
     return kFALSE;
 }
 
@@ -286,7 +286,7 @@ Double_t PChannelModel::EvalPar(const Double_t *x, const Double_t *params) {
 
     return Eval(x[0]);
 }
- 
+
 Double_t PChannelModel::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     Double_t res;
     Double_t my_x[11];
@@ -316,7 +316,7 @@ Double_t PChannelModel::Eval(Double_t x, Double_t, Double_t, Double_t) const {
 }
 
 Double_t PChannelModel::GetWeight(Double_t *mass, Int_t *didx) {
-    //Get the weight for the masses of the known decay products 
+    //Get the weight for the masses of the known decay products
     //(or single particle)
     //Decay: Order of particles is the same as in data base,
     //mass[0] is the parent mass
@@ -334,7 +334,7 @@ Double_t PChannelModel::GetWeight(Double_t *mass, Int_t *didx) {
 }
 
 TComplex PChannelModel::GetAmplitude(Double_t *mass, Int_t *didx) {
-    //Get the amplitude for the masses of the known decay products 
+    //Get the amplitude for the masses of the known decay products
     //(or single particle)
     //Decay: Order of particles is the same as in data base,
     //mass[0] is the parent mass
@@ -381,7 +381,7 @@ Bool_t PChannelModel::GetBR(Double_t mass, Double_t *br, Double_t totalwidth) {
 
     if (is_pid >= 0)
 	return kFALSE;
-    
+
     Double_t lwidth;
 
     //test if the GetWidth was overloaded
@@ -390,7 +390,7 @@ Bool_t PChannelModel::GetBR(Double_t mass, Double_t *br, Double_t totalwidth) {
  	*br = makeStaticData()->GetDecayBR(is_channel);
  	return kTRUE;
     }
-    
+
     //Make everything coherent to Dyn.Data
     Double_t sc = 1.;
     Double_t *scfactor = &sc;
@@ -402,13 +402,13 @@ Bool_t PChannelModel::GetBR(Double_t mass, Double_t *br, Double_t totalwidth) {
     if (totalwidth < 0.)
 	totalwidth = makeStaticData()->GetParticleTotalWidth(makeStaticData()->GetDecayParent(is_channel));
 
-    if (totalwidth <= (*unstable_width)) 
+    if (totalwidth <= (*unstable_width))
 	*br = makeStaticData()->GetDecayBR(is_channel);
     else  {
 	//if we have a local width, the BR is the partial width divided by total
 	*br = lwidth/totalwidth;
     }
-    return kTRUE; 
+    return kTRUE;
 }
 
 int PChannelModel::GetDepth(int) {

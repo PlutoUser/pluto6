@@ -1,6 +1,6 @@
 // Author: Jochen Markert
 // Written: 05/12/2007
-// Modified: 
+// Modified:
 // PHGeantOutput Class Header
 
 #ifndef _PHGEANTOUTPUT_H_
@@ -28,13 +28,13 @@ class PHGeantOutput: public PFileOutput {
 
     bool OpenFile(const char *_filename);      //filename
     bool CloseFile(void);                //
-    bool WriteEventHeader(void);          
+    bool WriteEventHeader(void);
     bool WriteParticle(PParticle *par);  //write one particle
     void SetWriteSeqNumber(Bool_t write) { writeSEQNUMBER = write; }
 
     ClassDef(PHGeantOutput, 0) // Pluto ascii file output for HGEANT
 };
-#endif 
+#endif
 
 
 

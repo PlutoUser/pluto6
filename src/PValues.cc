@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////
 //  Value container implementation file
 //
-//  Just a small container class for user-defined values  
+//  Just a small container class for user-defined values
 //
 ////////////////////////////////////////////////////////
 
@@ -68,5 +68,5 @@ void PValues::Print(const Option_t *) const {
     }
 }
 
- 
+
 ClassImp(PValues)

@@ -27,7 +27,7 @@ class UParticle : public TObject {
     Double32_t fZ;            // z (fm)
     Double32_t fT;            // t (fm)
     Double32_t fWeight;       // weight
-    
+
  public:
     UParticle();
     UParticle(Int_t index, Int_t pdg, Int_t status,
@@ -95,7 +95,7 @@ class UParticle : public TObject {
     inline void SetPosition(Double_t x, Double_t y, Double_t z, Double_t t) {fX = x; fY = y; fZ = z; fT = t;}
     inline void SetPosition(TLorentzVector pos)   {fX=pos.X(); fY=pos.Y(); fZ=pos.Z(); fT=pos.T();}
     inline void SetWeight     (Double_t weight)   {fWeight = weight;}
-    
+
     ClassDef(UParticle, 1);
 };
 

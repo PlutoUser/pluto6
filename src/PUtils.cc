@@ -49,7 +49,7 @@ void PUtils::dsort(Double_t *a, int n) {
   Double_t x, w;
   lt[0] = 1;
   rt[0] = n;
- a: 
+ a:
   l = lt[level-1];
   r = rt[level-1];
   --level;
@@ -146,9 +146,9 @@ Double_t PUtils::cgc(const int &jx1, const int &jx2, const int &jx3,
 	fact[(j3-m1-m2)/2]*fact[jz1]*fact[jz3]*fact[jt4]*fact[jt5]*(j3+1)/
 	(fact[j4]*fact[j4]*fact[(j1+j2+j3)/2+1]*fact[j5]*fact[j5]);
     vcc *= sqrt(fctor);
-    if (icntr < 0) 
+    if (icntr < 0)
 	vcc *= phasef(jz1);
-    else if (icntr > 0) 
+    else if (icntr > 0)
 	vcc *= sqrt(Double_t(j2+1)/Double_t(j3+1))*phasef(jt3);
     return vcc;
 }
@@ -157,10 +157,10 @@ Double_t PUtils::s3j(const Double_t &jx1, const Double_t &jx2, const Double_t &j
 		     const Double_t &jm1, const Double_t &jm2, Double_t jm3) {
     // 3j-symbol, related to Clebsch-Gordan coefficient
     if (jm3!=0 && jm1+jm2+jm3!=0.) return 0.;
-    int j1 = 2*int(jx1), 
-	j2 = 2*int(jx2), 
+    int j1 = 2*int(jx1),
+	j2 = 2*int(jx2),
 	j3 = 2*int(jx3),
-	m1 = 2*int(jm1), 
+	m1 = 2*int(jm1),
 	m2 = 2*int(jm2);
     return cgc(j1,j2,j3,m1,m2)*phasef((j1-j2+m1+m2)/2)/sqrt(1.+j3);
 }
@@ -168,7 +168,7 @@ Double_t PUtils::s3j(const Double_t &jx1, const Double_t &jx2, const Double_t &j
 Double_t PUtils::racah(const int &j1, const int &j2, const int &j3,
 		       const int &j4, const int &j5, const int &j6) {
     // Racah coefficients (arguments are 2 x j or m)
-    Double_t z1 = j123(j1, j2, j5), 
+    Double_t z1 = j123(j1, j2, j5),
 	z2 = j123(j1, j3, j6);
     if (z1==0. || z2==0.) return 0.;
     z1 *= j123(j3, j4, j5);
@@ -176,28 +176,28 @@ Double_t PUtils::racah(const int &j1, const int &j2, const int &j3,
     z2 *= j123(j2, j4, j6);
     if (z2 == 0.) return 0.;
     z1 = z2*sqrt(z1/z2);
-    int jt1 = (j1+j2+j5)/2, 
-	jt2 = (j3+j4+j5)/2, 
+    int jt1 = (j1+j2+j5)/2,
+	jt2 = (j3+j4+j5)/2,
 	jt3 = (j1+j3+j6)/2,
-	jt4 = (j2+j4+j6)/2, 
-	jz1 = (j1+j2+j3+j4)/2, 
+	jt4 = (j2+j4+j6)/2,
+	jz1 = (j1+j2+j3+j4)/2,
 	jz2 = (j1+j4+j5+j6)/2,
-	jz3 = (j2+j3+j5+j6)/2, 
+	jz3 = (j2+j3+j5+j6)/2,
 	numin = TMath::Max(TMath::Max(jt1,jt2), TMath::Max(jt3,jt4)),
 	numax = TMath::Min(TMath::Min(jz1,jz2), jz3);
     if (numax < numin) return 0.;
-    Double_t phase = phasef(numin+jz1)*z1, 
+    Double_t phase = phasef(numin+jz1)*z1,
 	r = 0.;
     for (int nu=numin; nu<=numax; ++nu) {
-	int jy1 = nu-jt1, 
-	    jy2 = nu-jt2, 
+	int jy1 = nu-jt1,
+	    jy2 = nu-jt2,
 	    jy3 = nu-jt3,
-	    jy4 = jz1-nu, 
-	    jy5 = jz2-nu, 
+	    jy4 = jz1-nu,
+	    jy5 = jz2-nu,
 	    jy6 = jz3-nu;
 	Double_t fctor = fact[jy1]*fact[jy2]*fact[jy3]*fact[nu-jt4]*
 	    fact[jy4]*fact[jy5]*fact[jy6]/fact[nu+1];
-	if (fctor > 0.) 
+	if (fctor > 0.)
 	    r += phase/fctor;
     }
     return r;
@@ -206,24 +206,24 @@ Double_t PUtils::racah(const int &j1, const int &j2, const int &j3,
 Double_t PUtils::s6j(const Double_t &x1, const Double_t &x2, const Double_t &x3,
 		     const Double_t &x4, const Double_t &x5, const Double_t &x6) {
     // 6j-symbol, related to Racah coefficient
-    int j1 = 2*int(x1), 
-	j2 = 2*int(x2), 
+    int j1 = 2*int(x1),
+	j2 = 2*int(x2),
 	j3 = 2*int(x3),
-	j4 = 2*int(x4), 
-	j5 = 2*int(x5), 
+	j4 = 2*int(x4),
+	j5 = 2*int(x5),
 	j6 = 2*int(x6);
     return racah(j1,j2,j5,j4,j3,j6)*phasef((j1+j2+j4+j5)/2);
 }
 
 Double_t PUtils::j123(const int &j1, const int &j2, const int &j3) {
     // used by Racah
-    int jz1 = (j1+j2-j3)/2, 
-	jz2 = (j1-j2+j3)/2, 
-	jz3 = (j2+j3-j1)/2, 
+    int jz1 = (j1+j2-j3)/2,
+	jz2 = (j1-j2+j3)/2,
+	jz3 = (j2+j3-j1)/2,
 	jz4 = (j1+j2+j3)/2+1;
     return (jz1<0||jz2<0||jz3<0) ? 0. : fact[jz1]*fact[jz2]*fact[jz3]/fact[jz4];
 }
-  
+
 Int_t PUtils::FindIndex(Int_t n, Double_t *a, Double_t r) {
     // return index i of first element a[i] which is larger than r.
     // a[] is assumed to be sorted in ascending order
@@ -232,9 +232,9 @@ Int_t PUtils::FindIndex(Int_t n, Double_t *a, Double_t r) {
     Int_t ihalf = (imin+imax)/2;
     if (a[0] > r) return 0;
     while (ihalf > imin) {  // algorithm is by binary search
-	if (a[ihalf] < r) 
+	if (a[ihalf] < r)
 	    imin = ihalf;
-	else 
+	else
 	    imax = ihalf;
 	ihalf = (imin+imax)/2;
     }
@@ -245,7 +245,7 @@ Int_t PUtils::FindIndex(Int_t n, Double_t *a, Double_t r) {
 
 Bool_t PUtils::Tokenize(const char *options, const char *delimiter, char **array, int *size) {
     //Tokenize the string "options" using
-    //the "delimiter" 
+    //the "delimiter"
     //(like "+" or ",")
     //The char array is constructed but never deleted
     //in addition, any spaces before and after the delimiter are cleaned
@@ -256,15 +256,15 @@ Bool_t PUtils::Tokenize(const char *options, const char *delimiter, char **array
     //
     //The ROOT version is buggy:
     //TString spattern("a - b -> c");
-    //TObjArray *carray = spattern.Tokenize(TString("->"));     
+    //TObjArray *carray = spattern.Tokenize(TString("->"));
     //carray->GetEntriesFast()
     //(const Int_t)3
-    
+
 
     //cout << options << " -> " << delimiter << endl;
-    for (int i=0; i<*size; i++) 
+    for (int i=0; i<*size; i++)
 	array[i] = NULL;
-    
+
     char *mystack = new char[strlen(options)+1];
     strcpy(mystack, options);
 
@@ -273,7 +273,7 @@ Bool_t PUtils::Tokenize(const char *options, const char *delimiter, char **array
 
     while (strstr(mystack, delimiter)) {
 	if (pat == *size) {
-	    cout << "Warning (PUtils::Tokenize): Size " << *size<< " is too small for " << 
+	    cout << "Warning (PUtils::Tokenize): Size " << *size<< " is too small for " <<
 		options << ", delim:" << delimiter << endl;
 	}
 	char *pos = strstr(mystack, delimiter);
@@ -294,10 +294,10 @@ Bool_t PUtils::Tokenize(const char *options, const char *delimiter, char **array
 }
 
 void PUtils::remove_spaces(char **partc) {
-    
-    while (**partc == ' ') 
+
+    while (**partc == ' ')
 	(*partc)++;
-    
+
     if (strlen(*partc)) {
 	int partend = strlen(*partc)-1;
 //	    cout << partc << ":" << partc[partend] << endl;
@@ -311,7 +311,7 @@ void PUtils::remove_spaces(char **partc) {
 Int_t PUtils::remove_brackets(char **partc, char a, char b) {
     //remove matching brackets like a=(, b=)
     //cout << "in: " << *partc << endl;
-    
+
     remove_spaces(partc);
 
     if ((*partc)[0] != a) return 0;
@@ -331,7 +331,7 @@ Int_t PUtils::remove_brackets(char **partc, char a, char b) {
 	    Int_t brackets = 0;
 	    for (UInt_t i=0; i<strlen(*partc); i++) {
 
-		if ((*partc)[i] == a) { 
+		if ((*partc)[i] == a) {
 		    max_br++;
 		    brackets++;
 		}
@@ -347,7 +347,7 @@ Int_t PUtils::remove_brackets(char **partc, char a, char b) {
 		found++;
 		(*partc)[(strlen(*partc)-1)] = '\0';
 		(*partc)++;
-		
+
 		remove_spaces(partc);
 		loop=1;
 	    }
@@ -383,7 +383,7 @@ Bool_t PUtils::IsInt(const char *name) {
 
     for (unsigned int i=1; i<strlen(name); i++)
 	if (!isdigit(name[i])) isvar = kFALSE;
-    
+
     return isvar;
 }
 
@@ -397,15 +397,15 @@ PUtilsREngine *makePUtilsREngine() {
 }
 
 
-PUtilsREngine::PUtilsREngine () {  
-    rnd = new TRandom3();     
-    SetSeed(SEED);  
-} 
+PUtilsREngine::PUtilsREngine () {
+    rnd = new TRandom3();
+    SetSeed(SEED);
+}
 
-void PUtilsREngine::SetSeed(UInt_t s) { 
-    rnd->SetSeed(s); 
+void PUtilsREngine::SetSeed(UInt_t s) {
+    rnd->SetSeed(s);
     UInt_t seed = (UInt_t)rnd->Rndm()*kMaxUInt; // get a different seed for gRandom
-    gRandom->SetSeed(seed);//TODOv6 
+    gRandom->SetSeed(seed);//TODOv6
 
     if (s)
 	Warning("PUtilsREngine", "Seed set FIXED to %i", s);

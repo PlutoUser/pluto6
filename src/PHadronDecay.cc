@@ -25,10 +25,10 @@ PHadronDecay::PHadronDecay(const Char_t *id, const Char_t *de, Int_t key) :
 
     if (is_channel < 0)
 	Warning("PHadronDecay", "The model (%s) should be bound to CHANNELS only", de);
-  
+
     //Get particles
     Int_t tid[11];
-    tid[0] = 10; 
+    tid[0] = 10;
     makeStaticData()->GetDecayModeByKey(key, tid); // retrieve current mode info
 
     //Parent ALWAYS important (also for the inherited classes)
@@ -36,7 +36,7 @@ PHadronDecay::PHadronDecay(const Char_t *id, const Char_t *de, Int_t key) :
     parent_g0   = makeStaticData()->GetParticleTotalWidth(parent_id);
     parent_mass = makeStaticData()->GetParticleMass(parent_id);
 
-    if (tid[0] != 2) 
+    if (tid[0] != 2)
 	Warning("PHadronDecay", "(%s):  Only 2 body decay", de);
 
     mass1 = makeStaticData()->GetParticleMass(tid[1]);
@@ -50,21 +50,21 @@ PHadronDecay::PHadronDecay(const Char_t *id, const Char_t *de, Int_t key) :
 	PData::IsDelta(parent_id)) {
 	use_fixed_delta = 1;
 	fixed_delta     = 0.09;
-    } else 
+    } else
 	use_fixed_delta = 0;
 
-    angular_l = (makeStaticData()->IsParticleMeson(parent_id)) ? 
-	makeStaticData()->GetParticleSpin(parent_id)/2 : 
+    angular_l = (makeStaticData()->IsParticleMeson(parent_id)) ?
+	makeStaticData()->GetParticleSpin(parent_id)/2 :
 	PData::LPW(parent_id, id1, id2);
 
-    if (!makeStaticData()->IsParticleMeson(parent_id)) 
+    if (!makeStaticData()->IsParticleMeson(parent_id))
 	cutoff_l = 1;
-    else 
+    else
 	cutoff_l = 0; //cutoff=pow(cutoff,l+1); in HadronWidth
 
-    if (makeStaticData()->IsParticleMeson(parent_id)) 
+    if (makeStaticData()->IsParticleMeson(parent_id))
 	use_m0_over_m = 1;
-    else 
+    else
 	use_m0_over_m = 0;
 
     if ((makeStaticData()->GetParticleID("D++") == parent_id) ||
@@ -72,7 +72,7 @@ PHadronDecay::PHadronDecay(const Char_t *id, const Char_t *de, Int_t key) :
 	(makeStaticData()->GetParticleID("D0") == parent_id) ||
 	(makeStaticData()->GetParticleID("D-") == parent_id))
 	use_m0_over_m = 1;
-    
+
     cutoff_version = 0;
 
     version_flag |= VERSION_MASS_SAMPLING;  //Only one mass sampling in the PChannel
@@ -92,11 +92,11 @@ Bool_t PHadronDecay::Init(void) {
 Double_t PHadronDecay::EvalPar(const Double_t *x, const Double_t *) {
     return Eval(x[0]);
 };
- 
+
 Double_t PHadronDecay::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     Double_t res;
     Double_t mass[3];
-    mass[0] = x; 
+    mass[0] = x;
     mass[1] = mass1;
     mass[2] = mass2;
 
@@ -114,7 +114,7 @@ Double_t PHadronDecay::Eval(Double_t x, Double_t, Double_t, Double_t) const {
 };
 
 int PHadronDecay::GetDepth(int) {
-    
+
     makeStaticData()->SetDecayEmin(is_channel, mass1+mass2);
     return 0; //2 stable products -> depth is 0
 };
@@ -139,14 +139,14 @@ Bool_t PHadronDecay::SampleMass(Double_t *mass, Int_t *) {
 //     //the totalwidth may be set by the user, otherwise we use the static one
 //     //We take the 2body-ps into account
 
-   
+
 //     if (!GetWidth(mass,&width)) return kFALSE;
 //     *br = width/totalwidth;
 
 //     double sc_pole=
 
-//     return kTRUE; 
-	
+//     return kTRUE;
+
 // }
 
 
@@ -169,12 +169,12 @@ Bool_t PHadronDecay::GetWidth(Double_t mass, Double_t *width, Int_t) {
 // double PHadronDecay::HW(const double & ecm, const int & id, const int & ia=0, const int & ib=0) {
 //     // for stable products
 
-//     const double mproton=makeStaticData()->GetParticleMass("p"), 
+//     const double mproton=makeStaticData()->GetParticleMass("p"),
 // 	m2pi0=2.*makeStaticData()->GetParticleMass("pi0");
 //     double m0=makeStaticData()->GetParticleMass(id), ma, mb, ms;
-    
+
 //     if (!(ia+ib)) {             // flag identifying N + 2-pion s-wave production
-//       ma=mproton;               // in this case treat as two-body decay: 
+//       ma=mproton;               // in this case treat as two-body decay:
 //       mb=m2pi0;                 // 1st product is N, 2nd quasi-product is di-pion
 //     } else {                    // two-hadron decay
 //       ma=makeStaticData()->GetParticleMass(ia);  // 1st hadron mass
@@ -194,9 +194,9 @@ double PHadronDecay::HadronWidth(const double &m, const double &ma, const double
     // Uses data members:
     // * parent_mass
     // * parent_g0
-    
-    double m0 = parent_mass, 
-	ms = ma+mb, 
+
+    double m0 = parent_mass,
+	ms = ma+mb,
 	md = m0-ms;
     //    if (m<=ms||md<=0.) return 0.;        // kinematically inaccessible
     if (m <= ms) return 0.;
@@ -204,10 +204,10 @@ double PHadronDecay::HadronWidth(const double &m, const double &ma, const double
     double qr2 = PKinematics::pcms2(m0, ma, mb),
 	q2 = PKinematics::pcms2(m, ma, mb);
     if (qr2 == 0) //Below threshold production
-	qr2 = 1;   
+	qr2 = 1;
     double q = sqrt(q2/qr2);
 
-    if (!id1) 
+    if (!id1)
 	return parent_g0*q*m0/m;  // ia=ib=0 is two pions coupled to s-wave
 
     double delta2 = (use_fixed_delta) ? fixed_delta : md*md+0.25*parent_g0*parent_g0;
@@ -215,7 +215,7 @@ double PHadronDecay::HadronWidth(const double &m, const double &ma, const double
 
     if (angular_l) {
 	q = pow(q,2*angular_l+1);
-	if (cutoff_l) 
+	if (cutoff_l)
 	    cutoff = pow(cutoff, angular_l+1);
     }
 

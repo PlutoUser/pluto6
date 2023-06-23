@@ -11,14 +11,14 @@
 //  Revised:  26.09.00 R. Holzmann (adjusted to gcc 2.95.2 20000220)
 //  Revised:  08.08.00 R. Holzmann (weight treatment fixed)
 //  Revised:  21.06.00 MK (adjustments for decay modes from PData)
-//  Revised:  14.04.00 R. Holzmann (minor adjustments for 
+//  Revised:  14.04.00 R. Holzmann (minor adjustments for
 //                                  PFireball and HGeant operation)
 //  Revised:  27.07.07 IF: Changes for the new framework,
 //                         Removed beam smearing as covered by the Distr.Manager
-// 
+//
 //  The purpose of PDecayManager is to produce a set of possible
 //  decay branches of a initial particle using a list of particle
-//  decay modes. The list of decay modes is empty by default. The 
+//  decay modes. The list of decay modes is empty by default. The
 //  user has to take care about the filling of this list. This can
 //  be done using the defaults supplied by this file (at end) or
 //  by hand.
@@ -28,9 +28,9 @@
 //  The following templates and the class PReactionList are
 //  private members of PDecayManager, but I due to problems using
 //  ClassImp() and ClassDef() with nested classes, they are not
-//  derived from TObject and not known inside ROOT. The members are 
+//  derived from TObject and not known inside ROOT. The members are
 //  all public for better use inside PDecayManager.
-//  
+//
 //  template<class T> class PNextList
 //    It implements a linked list of pointers to object T. All elements
 //    of this templates are public. The destructor does not imply a
@@ -43,7 +43,7 @@
 //    PNextList();		// standard constructor
 //    PNextList(T*);		// initalized with object T
 //    ~PNextList();		// standard destructor
-//				
+//
 //    void Add(T*);		// add object T to list
 //    void Delete();            // delete the objects T in the list
 //
@@ -66,16 +66,16 @@
 //
 //    PStack<T> *Clone(PStack<T> *UseThis);
 //				// returns a pointer to a clone of the stack.
-// 				// either an existing, empty stack is used 
+// 				// either an existing, empty stack is used
 //				// (giving UseThis as an optional argument)
 //				// or a new stack is constructed internally.
 //
 //
 //  class PReactionList
-//    It implements two connected stacks of PChannel objects to organize 
+//    It implements two connected stacks of PChannel objects to organize
 //    the already processed decay channels and the work to do.
 //    'Processed' means that all possible decay channels of the daughter
-//    particles have been put on the ToDo stack.  
+//    particles have been put on the ToDo stack.
 //    The variable ReactionWeight contains the overall weight of
 //    this specific channel. All elements of this class are public.
 //
@@ -84,15 +84,15 @@
 //    Double_t		ReactionWeight;	// overall branching ratio
 //    Int_t		ID;		// serial number of this object
 //    static Int_t	maxID;		// maximum serial number
-//  
-//    PReactionList(); 
+//
+//    PReactionList();
 //    ~PReactionList(); 		// again: deletes only the stacks,
 //					// not the objects in it.
 //    PReactionList *Clone(); 		// doubles the whole PReactionList
-//					// returning a pointer to the 
+//					// returning a pointer to the
 //					// new one.
 //
-// 
+//
 ////////////////////////////////////////////////////////////////////
 using namespace std;
 //#include <strstream>
@@ -123,13 +123,13 @@ PDecayManager::PDecayManager() {
     makeDistributionManager()->ExecAll("init"); //init physics, if not yet done, and allow for didx-plugins
 
     Int_t key = makeDataBase()->GetEntry("std_set");
-    if (key<0) 
+    if (key<0)
 	Warning("PDecayManager()", "std_set not found");
     Int_t listkey = -1;
     while (makeDataBase()->MakeListIterator(key, "snpart", "slink" ,&listkey)) {
 	PDecayChannel *ch = new PDecayChannel();
 	//loop over all particles
-	makeDataBase()->SetParamTObj(listkey, "decaychannel", ch);   
+	makeDataBase()->SetParamTObj(listkey, "decaychannel", ch);
     }
     decaychannel_param = makeDataBase()->GetParamTObj("decaychannel");
 
@@ -178,8 +178,8 @@ void PDecayManager::SetVerbose(Int_t v) {
 
 // --------------------------------------------------------------------------
 void PDecayManager::AddChannel(Int_t id, PDecayChannel *n) {
-    // Adds a specific PDecayChannel 'n' to the particle with ID 'id'. 
-    if (!makeStaticData()->IsParticleValid(id)) { 
+    // Adds a specific PDecayChannel 'n' to the particle with ID 'id'.
+    if (!makeStaticData()->IsParticleValid(id)) {
 	Warning("AddChannel", "id %i s unvalid", id);
 	return;
     } else {
@@ -190,7 +190,7 @@ void PDecayManager::AddChannel(Int_t id, PDecayChannel *n) {
 	if (!makeDataBase()->GetParamTObj(key, "decaychannel", &o)) return;
 	ch = (PDecayChannel*)o;
 	if (ch == NULL) {
-	    makeDataBase()->SetParamTObj(key, "decaychannel", ch);   
+	    makeDataBase()->SetParamTObj(key, "decaychannel", ch);
 	} else
 	    ch->AddChannel(n);
     }
@@ -200,16 +200,16 @@ void PDecayManager::AddChannel(Int_t id, PDecayChannel *n) {
 // --------------------------------------------------------------------------
 void PDecayManager::AddChannel(PParticle *p, PDecayChannel *n) {
     // Adds a specific PDecayChannel 'n' to the particle represented by a
-    // pointer to a PParticle object. 
-    if (p) AddChannel(p->ID(), n);  
+    // pointer to a PParticle object.
+    if (p) AddChannel(p->ID(), n);
 }
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
 void PDecayManager::AddChannel(const char *p, PDecayChannel *n) {
     // Adds a specific PDecayChannel 'n' to the particle represented just
-    // by its name. 
-    AddChannel(makeStaticData()->GetParticleID(p), n);  
+    // by its name.
+    AddChannel(makeStaticData()->GetParticleID(p), n);
 }
 // --------------------------------------------------------------------------
 
@@ -217,7 +217,7 @@ void PDecayManager::AddChannel(const char *p, PDecayChannel *n) {
 PDecayChannel *PDecayManager::GetChannel(Int_t id) const {
     // Returns a pointer to PDecayChannel for the particle with the ID 'id.'
 
-    Int_t key = makeStaticData()->GetParticleKey(id); 
+    Int_t key = makeStaticData()->GetParticleKey(id);
     if (key < 0) {
 	Warning("GetChannel", "id %i not found in data base", id);
 	return NULL;
@@ -255,7 +255,7 @@ PDecayChannel *PDecayManager::GetChannel(char *p) const {
 void PDecayManager::SetDefault(Int_t id, Int_t recursive) {
     // Sets the default decay branches for the particle with ID 'id'.
     if (!makeStaticData()->IsParticleValid(id)) return;
-    
+
     Clear(id);
     PDecayChannel *c = GetChannel(id);
     if (!c) {
@@ -263,22 +263,22 @@ void PDecayManager::SetDefault(Int_t id, Int_t recursive) {
     }
 
     const char *name = GetName(id);
-    if (verbose) cout << endl << "Setting defaults for particle #" << id << ", " 
+    if (verbose) cout << endl << "Setting defaults for particle #" << id << ", "
 		      << name << endl;
-    
+
     if (verbose) {
 	cout << "Information found:" << endl;
-	makeStaticData()->PrintParticle(id); 
+	makeStaticData()->PrintParticle(id);
     }
-  
+
     //now loop over decay modes
     Int_t key = makeDataBase()->GetEntryInt("pid", id);
     Int_t listkey = -1;
     Int_t tid[11];
     while (makeDataBase()->MakeListIterator(key, "pnmodes", "link", &listkey)) {
-	tid[0] = 10; 
+	tid[0] = 10;
 	makeStaticData()->GetDecayModeByKey(listkey, tid); // retrieve current mode info
-	
+
 	int *pos;
 	makeDataBase()->GetParamInt(listkey, "didx", &pos); //small workaround
 	Double_t weight = makeStaticData()->GetDecayBR(*pos);        // static branching ratio
@@ -295,7 +295,7 @@ void PDecayManager::SetDefault(Int_t id, Int_t recursive) {
 void PDecayManager::SetDefault(PParticle *p,Int_t recursive) {
     // Sets the default decay branches for the particle represented by a
     // a pointer to a PParticle object.
-    if (p) SetDefault(p->ID(), recursive);  
+    if (p) SetDefault(p->ID(), recursive);
 }
 // --------------------------------------------------------------------------
 
@@ -303,7 +303,7 @@ void PDecayManager::SetDefault(PParticle *p,Int_t recursive) {
 void PDecayManager::SetDefault(const char *p,Int_t recursive) {
     // Sets the default decay branches for the particle represented by its
     // name.
-    SetDefault(makeStaticData()->GetParticleID(p), recursive);  
+    SetDefault(makeStaticData()->GetParticleID(p), recursive);
 }
 // --------------------------------------------------------------------------
 
@@ -313,7 +313,7 @@ void PDecayManager::Clear(Int_t id) {
     // ID 'id'. This is necessary when one wants to introduce a new set
     // of branches to a particle. The SetDefault() functions are calling
     // this function automatically.
-    
+
     Int_t key = makeDataBase()->GetEntryInt("pid", id); //TODO: make this faster
     /* if (key < 0); */
     TObject *ch;
@@ -329,7 +329,7 @@ void PDecayManager::Clear(Int_t id) {
 void PDecayManager::Clear(PParticle *p) {
     // Deletes the current list of decay branches for the particle represented
     // by a pointer to a PParticle object.
-    Clear(p->ID());  
+    Clear(p->ID());
 }
 // --------------------------------------------------------------------------
 
@@ -337,7 +337,7 @@ void PDecayManager::Clear(PParticle *p) {
 void PDecayManager::MyClear(char *p) {
     // Deletes the current list of decay branches for the particle represented
     // by its name.
-    Clear(makeStaticData()->GetParticleID(p));  
+    Clear(makeStaticData()->GetParticleID(p));
 }
 // --------------------------------------------------------------------------
 
@@ -350,44 +350,44 @@ void PDecayManager::InitReaction(PParticle *start, PDecayChannel *CurrentChannel
     // Calling this function is mandatory as an initialization step
     // before producing any data.
 
-    if (UsedParticles) {  
+    if (UsedParticles) {
 	UsedParticles->Delete();
 	delete UsedParticles;
 	UsedParticles = new PNextList<PParticle>;
     }
-    if (UsedParticleArrays) { 
-	UsedParticleArrays->Delete();  
+    if (UsedParticleArrays) {
+	UsedParticleArrays->Delete();
 	delete UsedParticleArrays;
 	UsedParticleArrays = new PNextList<PParticle*>;
     }
-    if (UsedChannels) {   
+    if (UsedChannels) {
 	UsedChannels->Delete();
 	delete UsedChannels;
 	UsedChannels = new PNextList<PChannel>;
     }
-    if (ReactionList) {   
+    if (ReactionList) {
 	ReactionList->Delete();
 	delete ReactionList;
 	ReactionList = new PNextList<PReactionList>;
     }
     CurrentReactionNumber = 0;
     CurrentReactionListPointer = NULL;
-  
+
 
     // build the initial channels to start with
-  
-    if (verbose) cout << endl << "processing decay:" << endl; 
-  
+
+    if (verbose) cout << endl << "processing decay:" << endl;
+
     // if no channel given use the standard one.
     if (!CurrentChannel) CurrentChannel = GetChannel(start);
-    
+
     Int_t copyFlag = ( start->IsFireball() || start->IsFileInput() )
 	? 0 : 1; // don't want to make clones
     Int_t nReac1 = 0, nReac2 = 0;
     while (CurrentChannel) {
 	//CurrentChannel->Print();
 	//start->Print();
-	PReactionList *tempRL = new PReactionList; 
+	PReactionList *tempRL = new PReactionList;
 	ConstructPChannel(start, CurrentChannel, tempRL, copyFlag);
 	ReactionList->Add(tempRL);
 	nReac1++;
@@ -396,30 +396,30 @@ void PDecayManager::InitReaction(PParticle *start, PDecayChannel *CurrentChannel
 
     // ok, now we are processing ReactionList as long as there are some
     // channels to process
-   
+
     Int_t MoreToDo = 1;
     while (MoreToDo) {
 	MoreToDo = 0;
 	PNextList<PReactionList> *x = ReactionList;
 	// process the whole reaction list
-	while (x) {	 
+	while (x) {
 	    PReactionList* tempRL = x->Curr;
 	    PChannel* tempPC = tempRL->ToDo->Pop();
 	    // process the whole ToDo stack
 	    while (tempPC) {
 		MoreToDo = 1;
 		tempRL->Finished->Push(tempPC);
- 
+
 		Int_t           i, loop;
 		Int_t           NOP = tempPC->GetNumPar();	// number of products
 		PParticle     **LOP = tempPC->GetParticles();   // list of products
 		PDecayChannel **pdc = new PDecayChannel*[NOP];  // array of decay channels
 		// one for each product
-      
 
-		for(i=0; i<NOP; i++) 
+
+		for(i=0; i<NOP; i++)
 		    pdc[i] = GetChannel(LOP[i+1]);
-      
+
 		// like a multi digit counter, the decay channels for one particle
 		// are processed via the Next entry one by one. If the last has been
 		// processed, it is restored and loop is set to 1. Then the channels
@@ -447,24 +447,24 @@ void PDecayManager::InitReaction(PParticle *start, PDecayChannel *CurrentChannel
 		    } // end of collecting channels
 		    // if the last channel has not reached the end, store the newly
 		    // created reaction list and switch to it, otherwise delete it.
-		    if (pdc[NOP-1]) { 
+		    if (pdc[NOP-1]) {
 			ReactionList->Add(newRL);
 			nReac2++;
-			tempRL = newRL; 
-		    } else 
+			tempRL = newRL;
+		    } else
 			delete newRL;
 		} // end of loop over all channel combinations
-     
+
 		// Get the next parent channel from the ToDo stack
 		tempPC = tempRL->ToDo->Pop();
 
 	    } // end of ToDo stack.
-      
+
 	    // Get next entry in reaction list.
 	    x = x->Next;
-	} // end of ReactionList    
+	} // end of ReactionList
     } // there is nothing left to do
-    NumberOfReactions = nReac1 + nReac2;  // number of reactions in ReactionList 
+    NumberOfReactions = nReac1 + nReac2;  // number of reactions in ReactionList
 }
 // --------------------------------------------------------------------------
 
@@ -473,24 +473,24 @@ void PDecayManager::ConstructPChannel(PParticle *p, PDecayChannel *c1,
 				      PReactionList *RL, Int_t CopyFlag) {
     // This function is used internally inside InitReaction(). For one
     // given parent particle 'p' and PDecayChannel 'c1' it constructs
-    // a PChannel and puts it in the ToDo stack of the PReactionList *RL.    
+    // a PChannel and puts it in the ToDo stack of the PReactionList *RL.
 
     //    cout << "***enter for  " << p->ID() << endl;
 
     // multiplying all the channel weights
     Double_t CurrentWeight = c1->GetWeight();
-    if (CurrentWeight<1.0e-20) return;  
+    if (CurrentWeight<1.0e-20) return;
     RL->ReactionWeight *= CurrentWeight;
-  
+
     // Get daughter particles, create a new array (for PChannel) and store
     // the original particle in it.
     Int_t  NumOfProducts;
     Int_t* ListOfProducts = c1->GetDaughters(NumOfProducts);
     PParticle** array = new PParticle*[NumOfProducts+1];
     UsedParticleArrays->Add(array);
-    if (CopyFlag)     
+    if (CopyFlag)
 	array[0] = p->Clone();
-    else 		    
+    else
 	array[0] = p;
 //   if (verbose) {
 //     cout << "(" << setw(2) << RL->ID << ", " << setw(8) << setprecision(2);
@@ -500,7 +500,7 @@ void PDecayManager::ConstructPChannel(PParticle *p, PDecayChannel *c1,
 //     cout.setf(ios::left, ios::scientific);
 //     cout << GetName(array[0]->ID()) << " --> ";
 //   }
-  
+
     // Process the daughter particles.
     for (Int_t i=0; i<NumOfProducts; i++) {
 	Int_t id = ListOfProducts[i];
@@ -520,7 +520,7 @@ void PDecayManager::ConstructPChannel(PParticle *p, PDecayChannel *c1,
 	cout << "Next channel for " << p->Name() << ", weight: " << setw(8) << setprecision(2);
 	cout.setf(ios::scientific);
 	cout << RL->ReactionWeight << setprecision(0) << endl;
-	//cout << " is: " << tempPC->GetName() 
+	//cout << " is: " << tempPC->GetName()
 	//   << endl;
 	tempPC->Print();
     }
@@ -535,20 +535,20 @@ PReaction *PDecayManager::GetNextReaction(int wf, const char *name, int f0,
 					  int f1, int f2, int f3,
 					  TTree *tt) {
     // GetNextReaction() looks for the next decay tree in 'ReactionList'
-    // and constructs a new PReaction. If the weight flag 'wf' is set, 
+    // and constructs a new PReaction. If the weight flag 'wf' is set,
     // the channel weight is copied to the parent particle of the first
-    // PChannel. This results in equal statistics of all channels. 
+    // PChannel. This results in equal statistics of all channels.
     // The options are passed to the appropriate PReaction constructor.
     //
     // Normally this routine is called internally from the loop() function.
-  
+
     char *filename;
-  
+
     if (verbose) cout << "Selecting next reaction:" << endl;
     if (ListForReaction) delete [] ListForReaction;
-  
+
     if (CurrentReaction) delete CurrentReaction;
-  
+
     if (!ReactionList) {
 	if (verbose) cout << " No initialization done." << endl;
 	return NULL;
@@ -556,19 +556,19 @@ PReaction *PDecayManager::GetNextReaction(int wf, const char *name, int f0,
 
     if (!CurrentReactionListPointer) CurrentReactionListPointer = ReactionList;
     else CurrentReactionListPointer = CurrentReactionListPointer->Next;
-  
+
     if (!CurrentReactionListPointer) {
 	if (verbose) cout << " No reaction left." << endl;
 	return NULL;
     }
-    
+
     CurrentReactionNumber++;
     if (verbose) cout << endl << "This is reaction #" << CurrentReactionNumber << endl;
 
     filename = new char[1024];
-    if (f3 == 2) sprintf(filename,"%s",name);  // all in 1 file 
+    if (f3 == 2) sprintf(filename,"%s",name);  // all in 1 file
     else sprintf(filename, "%s_%03d", name, CurrentReactionNumber);
-  
+
     PReactionList *tempRL = CurrentReactionListPointer->Curr->Clone();
     Int_t NumOfChannels = tempRL->Finished->Count;
     ListForReaction = new PChannel*[NumOfChannels];
@@ -626,7 +626,7 @@ Int_t PDecayManager::Loop(int num, int wf, const char *name, int f0,
     // into this weight. This results in equal statistics for each channel.
     // The other parameters are the same as for the PReaction::loop() call.
     // The real number of events is returned.
-  
+
     if (rf==1 && f3==1) f3 = 2;   // for random decays, we want common ascii file
 
     Int_t rStart, rStop, rEntries;
@@ -638,7 +638,7 @@ Int_t PDecayManager::Loop(int num, int wf, const char *name, int f0,
     char* filename = new char[1024];
     sprintf(filename, "%s.root", name);
     TFile *f  = NULL;
-    TTree *td = NULL, *ti = NULL;  
+    TTree *td = NULL, *ti = NULL;
     CurrentReaction = NULL;
     ListForReaction = NULL;
 
@@ -655,7 +655,7 @@ Int_t PDecayManager::Loop(int num, int wf, const char *name, int f0,
 
     if (rf == 1) { // random decay mix of all reactions
 	PReaction *pReactionArray[NumberOfReactions];
-	double     rWeights[NumberOfReactions];  
+	double     rWeights[NumberOfReactions];
 
 	Double_t wsave[NumberOfReactions];
 	for (int i=0; i<NumberOfReactions; i++) {
@@ -679,7 +679,7 @@ Int_t PDecayManager::Loop(int num, int wf, const char *name, int f0,
 
 	TStopwatch timer;                        // time loop
 	timer.Start();
-	int percentevents = (num/100) * (*makeStaticData()->GetBatchValue("_system_printout_percent")), 
+	int percentevents = (num/100) * (*makeStaticData()->GetBatchValue("_system_printout_percent")),
 	    cpc = 1, ipc = cpc*percentevents;
 	double t0 = timer.RealTime();
 	timer.Continue();
@@ -723,7 +723,7 @@ Int_t PDecayManager::Loop(int num, int wf, const char *name, int f0,
 //      PReactionList* RL = CurrentReactionListPointer->Curr->Clone();
 //      PrintReactionListEntry(RL,os);
 //      os << ends; //do not use it at the moment!!!
-	    rStart = SumOfEvents + 1;  
+	    rStart = SumOfEvents + 1;
 	    if (verbose) r->Print();
 	    rWeight = GetCurrentWeight();
 	    WeightSum += rWeight;
@@ -765,8 +765,8 @@ void PDecayManager::MyPrint() const {
     // Prints the particle decay list.
     cout << "Particle Decay List:" << endl;
     cout << "--------------------" << endl;
-//  for (Int_t i=0;i<PData::maxnumpar;Print(i++)); 
-  
+//  for (Int_t i=0;i<PData::maxnumpar;Print(i++));
+
     Int_t key = makeDataBase()->GetEntry("std_set");
     if (key < 0)
 	Warning("MyPrint", "std_set not found");
@@ -777,7 +777,7 @@ void PDecayManager::MyPrint() const {
 	if (id < 1000) Print(id); //Skip Quasi-Particles
     }
     PrintReactionList();
-} 
+}
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
@@ -786,7 +786,7 @@ void PDecayManager::Print(Int_t id) const  {
     if (!makeStaticData()->IsParticleValid(id)) return;
     PDecayChannel *DC = GetChannel(id);
     if (!DC) return;
-    
+
     if (DC->GetWeight()) {
 
 	cout.setf(ios::left);
@@ -827,7 +827,7 @@ void PDecayManager::PrintReactionList() const {
 	    PReactionList *RL = x->Curr->Clone();
 	    Entry++;
 	    cout << "-----" << endl;
-	    cout << "Decay chain #" << Entry << ", probability " 
+	    cout << "Decay chain #" << Entry << ", probability "
 		 << RL->ReactionWeight << endl;
 	    PrintReactionListEntry(RL,cout);
 	    delete RL;
@@ -838,7 +838,7 @@ void PDecayManager::PrintReactionList() const {
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayManager::PrintReactionListEntry(PReactionList *RL, 
+void PDecayManager::PrintReactionListEntry(PReactionList *RL,
 					   ostream &os) const{
     // Prints one entry of the reaction list (used internally).
     Int_t count = RL->Finished->Count;
@@ -846,13 +846,13 @@ void PDecayManager::PrintReactionListEntry(PReactionList *RL,
     for (Int_t i=count-1; i>=0; i--) {
 	temp[i] = RL->Finished->Pop();
     }
-    PrintChain((temp[0]->GetParticles())[0], temp, count, os);  
-    delete [] temp; 
+    PrintChain((temp[0]->GetParticles())[0], temp, count, os);
+    delete [] temp;
 }
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayManager::PrintChain(PParticle *p, PChannel **l, Int_t c, 
+void PDecayManager::PrintChain(PParticle *p, PChannel **l, Int_t c,
 			       ostream &os) const {
     // Prints one reaction chain (used internally).
     static Int_t indent = 0;
@@ -862,10 +862,10 @@ void PDecayManager::PrintChain(PParticle *p, PChannel **l, Int_t c,
 	PParticle **plist  = l[i]->GetParticles();
 	if (p == plist[0]) {
 	    if (i == 0) indent = 2;
-	    os.width(indent) ; 
+	    os.width(indent) ;
 	    os << " ";
 	    os.setf(ios::left);
-	    os << setw(12) << GetName(p->ID()) 
+	    os << setw(12) << GetName(p->ID())
 	       << setw(0) << " --> ";
 	    for (Int_t k=1; k<=pcount; k++) {
 		os << GetName((plist[k])->ID()) << " ";
@@ -883,7 +883,7 @@ void PDecayManager::PrintChain(PParticle *p, PChannel **l, Int_t c,
 // --------------------------------------------------------------------------
 const char *PDecayManager::GetName(Int_t id) const {
     // Returns the name of a particle (specified by its id).
-    if (id <=0 ) 	
+    if (id <=0 )
 	return "???";
     if (id < 1000)
 	return (char*)makeStaticData()->GetParticleName(id);
@@ -908,7 +908,7 @@ Bool_t PDecayManager::AddBulk(PBulkInterface *mybulk) {
     //Add a bulk interface to the list
     //Each bulk object will be executed during the event loop
     //after the normal decay
-  
+
     if (bulkdecay_pos == MAX_BULKDECAY ) {
 	Error("AddBulk", "MAX_BULKDECAY reached");
 	return kFALSE;

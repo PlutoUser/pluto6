@@ -37,11 +37,11 @@ PDistribution *PDalitzDistribution::Clone(const char *) const {
 void PDalitzDistribution::MakeVars() {
     if (!projector) projector = new PProjector();
 
-    vprimary   = makeDynamicData()->GetBatchParticle("_primary"); 
-    vs1        = makeDynamicData()->GetBatchParticle("_s1"); 
-    vs2        = makeDynamicData()->GetBatchParticle("_s2"); 
- 
-    vf         = makeStaticData()->GetBatchValue("_f"); 
+    vprimary   = makeDynamicData()->GetBatchParticle("_primary");
+    vs1        = makeDynamicData()->GetBatchParticle("_s1");
+    vs2        = makeDynamicData()->GetBatchParticle("_s2");
+
+    vf         = makeStaticData()->GetBatchValue("_f");
 };
 
 Bool_t PDalitzDistribution::AddEquation(const char *command) {
@@ -54,7 +54,7 @@ Bool_t PDalitzDistribution::AddHistogram(TH2 *histo, const char *command) {
     return projector->AddHistogram(histo, command, 0);
 };
 
-Bool_t PDalitzDistribution::Init(void) {   
+Bool_t PDalitzDistribution::Init(void) {
     //looking for primary. This is mandatory
     primary = GetParticle("primary");
     if (!primary) {
@@ -85,7 +85,7 @@ Bool_t PDalitzDistribution::Init(void) {
 	return kFALSE;
     }
 
-    return kTRUE;    
+    return kTRUE;
 };
 
 Bool_t PDalitzDistribution::Prepare(void) {
@@ -101,13 +101,13 @@ Bool_t PDalitzDistribution::CheckAbort(void) {
 };
 
 Bool_t PDalitzDistribution::IsNotRejected(void) {
-    
+
     // eta -> pi+ pi- pi0
-    // see e.g. Ref. 8 
+    // see e.g. Ref. 8
 
     double factor = 1.;
 
-    if (projector) {	
+    if (projector) {
 	*vprimary = primary;
 	*vs1 = *side_particle[0];
 	*vs2 = *side_particle[1];
@@ -121,17 +121,17 @@ Bool_t PDalitzDistribution::IsNotRejected(void) {
 	    - primary->M()
 	    - side_particle[0]->M()
 	    - side_particle[1]->M();
-		
+
 	double pi0_T = primary->E() - primary->M();
-	
+
 	double dalitz_y = (3*pi0_T / eta_Q) -1;
 	factor = 1 + slope1*dalitz_y + slope2*dalitz_y*dalitz_y;
     }
-    
+
     if (factor > max) Warning("IsNotRejected", "Dalitz factor > max");
- 
+
     if ((factor/max) > PUtils::sampleFlat()) return kTRUE; // sample now angular distribution
-    
+
     return kFALSE;
 };
 

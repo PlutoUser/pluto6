@@ -8,7 +8,7 @@ using namespace std;
 //____________________________________________________________________
 //
 // URun
-// 
+//
 // Class for handling the run description.
 // See the standard constructor and public accessors
 //
@@ -33,7 +33,7 @@ URun::URun() : TNamed("run", "Run Header") {
 URun::URun(const char *generator, const char *comment, Int_t aProj,
 	   Int_t zProj, Double_t pProj, Int_t aTarg, Int_t zTarg,
 	   Double_t pTarg, Double_t bMin, Double_t bMax, Int_t bWeight,
-	   Double_t phiMin, Double_t phiMax, Double_t sigma, 
+	   Double_t phiMin, Double_t phiMax, Double_t sigma,
 	   Int_t nEvents) : TNamed("run", "Run Header") {
     // Standard constructor
     fGenerator = generator;

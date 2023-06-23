@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////
 //  PDistributionManagerUtil Class implementation file
 //
-//  PDistributionManagerUtil is the private implementation of 
+//  PDistributionManagerUtil is the private implementation of
 //  the PDistributionManager
-// 
+//
 //
 //                                  Author:  I. Froehlich
 /////////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ void PDistributionManagerUtil::AlternativeTo(const char *a, const char *b) {
 	alt_distribution[bpos] = apos;
 	alt_distribution[apos] = bpos;
     } else {
-	Int_t bold=alt_distribution[bpos];	
+	Int_t bold=alt_distribution[bpos];
 	alt_distribution[bpos] = apos;
 	alt_distribution[apos] = bold;
     }
@@ -90,11 +90,11 @@ void PDistributionManagerUtil::AlternativeTo(const char *a, const char *b) {
 }
 
 int PDistributionManagerUtil::Add(PDistribution *dist) {
-    //Adds a distribution to the list 
+    //Adds a distribution to the list
     //return value -1 on failure
 
     Int_t num_channels;
-    
+
     if (makeDynamicData()->GetPChannels(&num_channels) && (no_warning==kFALSE)) {
         Warning("Add", "You add a distribution (%s) after PChannels have been created", dist->GetIdentifier());
         Warning("Add", "Please add the PDistribution in the very beginning");
@@ -116,15 +116,15 @@ int PDistributionManagerUtil::Add(PDistribution *dist) {
 
     distribution[position] = dist;
     alt_distribution[position] = -1;
-    AddCorrelation(current_group, position);    
+    AddCorrelation(current_group, position);
     position++;
 
     if (dist->GetKey() >= 0) { //is channel model?
 	Int_t key = makeDataBase()->GetEntry(dist->GetIdentifier());
-	if (key < 0) 
+	if (key < 0)
 	    key = makeDataBase()->AddEntry(dist->GetIdentifier());
 	if (key >= 0) {
-	    makeDataBase()->SetParamTObj(dist->GetIdentifier(), "batch_models", dist);	    
+	    makeDataBase()->SetParamTObj(dist->GetIdentifier(), "batch_models", dist);
 	}
     }
 
@@ -138,7 +138,7 @@ int PDistributionManagerUtil::Add(PDistribution *dist) {
 }
 
 int PDistributionManagerUtil::Add(PDistribution *dist, const Char_t *gr) {
-    
+
     Int_t save = current_group;
     if (GetGroup(gr) < 0) return -1;
     current_group = GetGroup(gr);
@@ -148,7 +148,7 @@ int PDistributionManagerUtil::Add(PDistribution *dist, const Char_t *gr) {
 	return -1;
     }
     current_group = save;
-    return 0; 
+    return 0;
 }
 
 int PDistributionManagerUtil::Add(TObjArray *arr) {
@@ -175,7 +175,7 @@ int PDistributionManagerUtil::Attach(PChannel *ch) {
     if (ch->GetQuasi()) {
 	Attach(ch->GetQuasi()); //Attach also dummy quasi-free scattering
     }
-    
+
     for (int i=0; i<position; i++) {
 	if (distribution[i]->GetEnable()) {
 	    if (ch->SetDistribution(distribution[i]) == 0) {
@@ -227,12 +227,12 @@ Int_t PDistributionManagerUtil::PrintGroup(Int_t group_id, Int_t width, Int_t in
     for (int gr=0; gr<group_position; gr++) {
 	if (group_corr[gr] == group_id) {
 	    Int_t local_width = PrintGroup(gr, 0, indent+2, name, &local_num_enabled_mods,
-					   &local_num_total_mods, &local_num_subs, 
+					   &local_num_total_mods, &local_num_subs,
 					   &dummy_will_print);
 	    if (local_width > return_width) return_width = local_width;
 	    if (dummy_will_print) local_will_print = 1;
 	}
-    }    
+    }
 
     for (int corr=0; corr<corr_position; corr++) {
 	if (corr_gr[corr] == group_id) { //has found correlation
@@ -245,7 +245,7 @@ Int_t PDistributionManagerUtil::PrintGroup(Int_t group_id, Int_t width, Int_t in
 	    if (group_expanded[group_id] ||
 		matched || local_will_print) { //Print List
 		Int_t local_width = strlen(distribution[corr_dis[corr]]->GetIdentifier())+indent;
-		if (local_width > return_width) 
+		if (local_width > return_width)
 		    return_width = local_width;
 
 		if (alt_distribution[corr_dis[corr]] != -1 ) {
@@ -253,10 +253,10 @@ Int_t PDistributionManagerUtil::PrintGroup(Int_t group_id, Int_t width, Int_t in
 		    int mylist = alt_distribution[corr_dis[corr]];
 		    while (mylist != corr_dis[corr]) {
 			local_width = strlen(distribution[mylist]->GetIdentifier())+indent;
-			if (local_width > return_width) 
+			if (local_width > return_width)
 			    return_width = local_width;
 			mylist = alt_distribution[mylist];
-			if (mylist == -1) 
+			if (mylist == -1)
 			    mylist = corr_dis[corr];
 		    }
 		}
@@ -270,11 +270,11 @@ Int_t PDistributionManagerUtil::PrintGroup(Int_t group_id, Int_t width, Int_t in
 	*num_total_mods   += local_num_total_mods;
 	*num_subs         += local_num_subs+1;
 	Int_t local_width = strlen(group_identifier[group_id])+indent;
-	if (local_width > return_width) 
+	if (local_width > return_width)
 	    return_width = local_width;
 
 	if (name)
-	    if ((strcmp(name,group_identifier[group_id]) == 0)  || (group_expanded[group_id]) 
+	    if ((strcmp(name,group_identifier[group_id]) == 0)  || (group_expanded[group_id])
 		|| local_will_print) {
 		*will_print = 1;
 		return return_width;
@@ -284,7 +284,7 @@ Int_t PDistributionManagerUtil::PrintGroup(Int_t group_id, Int_t width, Int_t in
     }
 
     if (!local_num_total_mods) return 0; //nothing to print
-        
+
     //Print group header
     cout << "    ";
     for (Int_t  k=0; k<indent; k++) cout << " ";
@@ -299,9 +299,9 @@ Int_t PDistributionManagerUtil::PrintGroup(Int_t group_id, Int_t width, Int_t in
     if (local_num_subs)
 	cout << ", subgroups: " << local_num_subs << endl;
     else cout << endl;
-    
+
     if (name != NULL)
-	if ((strcmp(name,group_identifier[group_id]) !=0) && (group_expanded[group_id] ==0) 
+	if ((strcmp(name,group_identifier[group_id]) !=0) && (group_expanded[group_id] ==0)
 	    && (local_will_print ==0)) {
 	    return 0; //Unexpanded group
 	}
@@ -309,11 +309,11 @@ Int_t PDistributionManagerUtil::PrintGroup(Int_t group_id, Int_t width, Int_t in
     //first the sub-groups
     for (int gr=0; gr<group_position; gr++) {
 	if (group_corr[gr] == group_id) {
-	    PrintGroup(gr, width, indent+2, name, &local_num_enabled_mods, &local_num_total_mods, 
-		       &local_num_subs, 
+	    PrintGroup(gr, width, indent+2, name, &local_num_enabled_mods, &local_num_total_mods,
+		       &local_num_subs,
 		       &dummy_will_print);
 	}
-    }    
+    }
 
     //Now we loop over the distributions
 
@@ -326,7 +326,7 @@ Int_t PDistributionManagerUtil::PrintGroup(Int_t group_id, Int_t width, Int_t in
 		if (strcmp(name,group_identifier[group_id]) == 0) matched = kTRUE;
 	    if (group_expanded[group_id] ||
 		matched) { //Print List
-		
+
 		if (alt_distribution[corr_dis[corr]] == -1 ) {
 		    if (distribution[corr_dis[corr]]->GetEnable())
 			cout << "[X] ";
@@ -349,7 +349,7 @@ Int_t PDistributionManagerUtil::PrintGroup(Int_t group_id, Int_t width, Int_t in
 		cout << distribution[corr_dis[corr]]->GetDescription() << endl;;
 		if (verbosity == 2)  { //Print out parameters etc... for the given Model
 		    distribution[corr_dis[corr]]->Print();
-		}		
+		}
 		if (alt_distribution[corr_dis[corr]] != -1 ) {
 		    int mylist=alt_distribution[corr_dis[corr]];
 		    while (mylist != corr_dis[corr]) {
@@ -359,7 +359,7 @@ Int_t PDistributionManagerUtil::PrintGroup(Int_t group_id, Int_t width, Int_t in
 			    cout << distribution[mylist]->GetIdentifier();
 
 			    if ((width-indent-strlen(distribution[mylist]->GetIdentifier()))>0) {
-				for (UInt_t k=0; k<((width-indent-strlen(distribution[mylist]->GetIdentifier()))); k++) 
+				for (UInt_t k=0; k<((width-indent-strlen(distribution[mylist]->GetIdentifier()))); k++)
 				    cout << " ";
 				cout << distribution[mylist]->GetDescription() << endl;
 			    }
@@ -369,13 +369,13 @@ Int_t PDistributionManagerUtil::PrintGroup(Int_t group_id, Int_t width, Int_t in
 			    cout << distribution[mylist]->GetIdentifier();
 
 			    if ((width-indent-strlen(distribution[mylist]->GetIdentifier())) > 0) {
-				for (UInt_t k=0;k<((width-indent-strlen(distribution[mylist]->GetIdentifier())));k++) 
+				for (UInt_t k=0;k<((width-indent-strlen(distribution[mylist]->GetIdentifier())));k++)
 				    cout << " ";
 			    }
 			    cout << distribution[mylist]->GetDescription() << endl;
 			}
 			mylist = alt_distribution[mylist];
-			if (mylist == -1) 
+			if (mylist == -1)
 			    mylist = corr_dis[corr];
 		    }
 		}
@@ -411,7 +411,7 @@ void PDistributionManagerUtil::Print(const Option_t *delme) const {
 	if (group_corr[gr] < 0) {
 	    Int_t local_width = PrintGroup(gr, 0, 0, (char*)delme,
 					 &a, &b, &c, &d);
-	    if (local_width > max_width)  
+	    if (local_width > max_width)
 		max_width = local_width;
 	}
     }
@@ -421,7 +421,7 @@ void PDistributionManagerUtil::Print(const Option_t *delme) const {
 	    PrintGroup(gr, max_width+2, 0, (char*) delme,
 		   &a, &b, &c, &d);
     }
-    
+
 //     if (!group_expanded[gr] && (print == 0) && (sum>0)) { //Print Summary
 // 	print=1;
 // 	cout << endl << "    ";
@@ -430,7 +430,7 @@ void PDistributionManagerUtil::Print(const Option_t *delme) const {
 // 	    cout << " ";
 // 	cout << group_description[gr] << ": " << enable << " enabled (out of " << sum << ")" << endl;
 //     }
-// } 
+// }
 //end loop over groups
 
     cout << "--------------------" << endl;
@@ -454,7 +454,7 @@ Bool_t PDistributionManagerUtil::Disable(const Char_t *id) {
 	    retval = kTRUE;
 	    if (distribution[i]->GetEnable())
 		distribution[i]->SetEnable(0);
-	    
+
 	}
     }
     //look for groups
@@ -470,13 +470,13 @@ Bool_t PDistributionManagerUtil::Disable(const Char_t *id) {
 	    for (int i=0; i<group_position; i++) {
 		if (group_corr[i] == mygr) {
 		    //i has id as parent
-		    if (Disable(group_identifier[i])) 
+		    if (Disable(group_identifier[i]))
 			retval = kTRUE;
 		}
 	    }
 	}
     }
-    
+
     if (!retval) Warning("Disable", "%s not found", id);
     return retval;
 }
@@ -485,7 +485,7 @@ Bool_t PDistributionManagerUtil::Enable(const Char_t *id) {
     //Enable the distribution "id"
     //If "id" is a group, enable all distributions
     //which are members
-    //If the distribution is part of an alternatice chain, disable all 
+    //If the distribution is part of an alternatice chain, disable all
     //other distributions
 
     Bool_t retval = kFALSE;
@@ -513,7 +513,7 @@ Bool_t PDistributionManagerUtil::Enable(const Char_t *id) {
 	    for (int i=0; i<group_position; i++) {
 		if (group_corr[i] == mygr) {
 		    //i has id as parent
-		    if (Enable(group_identifier[i])) 
+		    if (Enable(group_identifier[i]))
 			retval = kTRUE;
 		}
 	    }
@@ -539,7 +539,7 @@ void PDistributionManagerUtil::LinkDB(void) {
     //Links the list of distributions to the PDataBase
     //This makes coupled-channel calculations possible
 
-    for (int i=0; i<position; i++) 
+    for (int i=0; i<position; i++)
 	if (distribution[i]->GetKey()>=0 && distribution[i]->GetEnable()) {
 
  	    if (makeDynamicData()->GetDecayModelByKey(distribution[i]->GetKey()) && (linkdb_done==0)) {
@@ -547,17 +547,17 @@ void PDistributionManagerUtil::LinkDB(void) {
 		Warning("LinkDB", "'%s' would overwrite'%s' ", distribution[i]->GetDescription(),
 			makeDynamicData()->GetDecayModelByKey(distribution[i]->GetKey())->GetDescription());
  	    } else {
-		makeDynamicData()->SetDecayModelByKey(distribution[i]->GetKey(), 
+		makeDynamicData()->SetDecayModelByKey(distribution[i]->GetKey(),
 						      (PChannelModel *)distribution[i] );
 	    }
 	}
-    
-    for (int i=0; i<position; i++) 
+
+    for (int i=0; i<position; i++)
 	if (distribution[i]->GetKey()>=0 && distribution[i]->GetEnable()) {
 	    distribution[i]->FreezeOut();
 	}
-    
-    linkdb_done = 1;   
+
+    linkdb_done = 1;
 }
 
 //BUGBUG: Check if 2 keys are used
@@ -584,7 +584,7 @@ int PDistributionManagerUtil::AddSubGroup(const Char_t *id, const Char_t *de, co
     Int_t par  = GetGroup(parent_group);
     if (par < 0) return -1;
     group_corr[mygr] = par;
-    
+
     return 0;
 }
 

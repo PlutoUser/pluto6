@@ -1,17 +1,17 @@
 // Author: I. Froehlich
 // Written: 13.11.2007
-// Revised: 
+// Revised:
 
 #include "PFermiMomentum.h"
 
 //Class definition
 
 class PFermiMomentumDD : public PFermiMomentum  {
-  
+
  public:
 
     PFermiMomentumDD(const Char_t *id, const Char_t *de, Int_t key);
-    
+
     PDistribution *Clone(const char *delme=NULL) const;
 
     Bool_t Init(void);

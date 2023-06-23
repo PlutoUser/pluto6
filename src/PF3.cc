@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////
-//  
+//
 // Adapted TF1
 //
 ////////////////////////////////////////////////////////
@@ -19,7 +19,7 @@ using namespace std;
 
 PF3::PF3() :
     TF3() {
-    projector = NULL;    
+    projector = NULL;
 };
 
 PF3::PF3(const char *name, const char *formula, Double_t xmin, Double_t xmax, Double_t, Double_t, Double_t, Double_t) :
@@ -34,7 +34,7 @@ PF3::PF3(const char *name, void *fcn, Double_t xmin, Double_t xmax, Double_t, Do
 };
 #endif
 
-PF3::PF3(const char *name, Double_t (*fcn)(Double_t *, Double_t *), 
+PF3::PF3(const char *name, Double_t (*fcn)(Double_t *, Double_t *),
 	 Double_t xmin, Double_t xmax, Double_t, Double_t, Double_t, Double_t, Int_t npar) :
     TF3(name, fcn, xmin, xmax, npar) {
     projector = NULL;
@@ -43,7 +43,7 @@ PF3::PF3(const char *name, Double_t (*fcn)(Double_t *, Double_t *),
 PF3::PF3(const char *name, ROOT::Math::ParamFunctor f, Double_t xmin, Double_t xmax, Double_t, Double_t, Double_t, Double_t, Int_t npar) :
     TF3(name, f, xmin, xmax, npar) {
     projector = NULL;
-};  
+};
 
 PF3::PF3(const PF3 &f3) :
     TF3(f3) {
@@ -55,10 +55,10 @@ PF3::PF3(const char *name, Double_t xmin, Double_t xmax, Double_t, Double_t, Dou
     TF3(name,"x+y+z", xmin, xmax) {
     SetTitle(name);
     projector = new PProjector();
-    vf = makeStaticData()->GetBatchValue("_f"); 
-    vx = makeStaticData()->GetBatchValue("_x"); 
-    vy = makeStaticData()->GetBatchValue("_y"); 
-    vz = makeStaticData()->GetBatchValue("_z"); 
+    vf = makeStaticData()->GetBatchValue("_f");
+    vx = makeStaticData()->GetBatchValue("_x");
+    vy = makeStaticData()->GetBatchValue("_y");
+    vz = makeStaticData()->GetBatchValue("_z");
 }
 
 Bool_t PF3::Add(char *command) {

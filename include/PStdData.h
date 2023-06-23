@@ -19,24 +19,24 @@ PStdData *makeStdData();
 PStdData &fStdData();
 
 class PStdData : public TObject {
-      
+
  public:
 
     //constructor
     PStdData();
     //destructor
     ~PStdData();
-    
+
     Bool_t fillDataBase(void); //Copies the static entries into the PDataBase
-    
-    
+
+
  private:
-    
+
     int disable;
-    
+
     void resetPosition() {
 	// Resets the array PPosition
-	
+
 	int i, nm, position=0;
 	for (i=0; i<maxnumpar; ++i) {
 	    nm = PNModes[i];              // number of decay modes of particle pid=i
@@ -55,14 +55,14 @@ class PStdData : public TObject {
 	cachesize, save, nfiles;
     static double *PMass, *PWidth, *PBR, *dblcache, scale;
     static char **PName, **PMDescription, **PMode;
-    
-    
+
+
     // local storage area
     static int *pmes_tmp, *pbar_tmp, *plep_tmp, *pchar_tmp, *pspin_tmp,
 	*pparity_tmp, *pispin_tmp, *pnmod_tmp, *id_tmp, *pkf_tmp;
     static double *pmass_tmp, *pwidth_tmp, *pbr_tmp;
     static char **pnam_tmp, **pmdescr_tmp, **pmod_tmp;
-    
+
     static const char *MESSAGE[];
     static const char *NAME[];
     static double MASS[];
@@ -79,9 +79,9 @@ class PStdData : public TObject {
     static double BRR[];
     static const char *MODE[];
     static const char *DESCRIPTION[];
-    
+
     static const long double hbar;
-    
+
     ClassDef(PStdData, 0) //Pluto Particle Std Data Class
 };
 

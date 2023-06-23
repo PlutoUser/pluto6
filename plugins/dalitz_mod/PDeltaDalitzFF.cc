@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////
-// 
+//
 // Dalitz decay form factor models
 //
 // QED: Version with factors from M.I. Krivoruchenko, nucl-th/0104045
@@ -13,7 +13,7 @@
 //      Provided by B. Ramstein
 //         SetCC(G_m,G_e,G_c); -> re-normalize VMD model such that
 //                                it matches to the QED at pole mass
-// 
+//
 //                                  Author:  I. Froehlich / B. Ramstein
 /////////////////////////////////////////////////////////////////////
 
@@ -27,7 +27,7 @@ PDistribution *PDeltaDalitzFF::Clone(const char*) const {
     return new PDeltaDalitzFF((const PDeltaDalitzFF &)* this);
 };
 
-PDeltaDalitzFF::PDeltaDalitzFF(const Char_t *id ,const Char_t *de, Int_t key) : 
+PDeltaDalitzFF::PDeltaDalitzFF(const Char_t *id ,const Char_t *de, Int_t key) :
     PChannelModel(id, de, key) {
     //Constructor
 
@@ -57,16 +57,16 @@ PDeltaDalitzFF::PDeltaDalitzFF(const Char_t *id ,const Char_t *de, Int_t key) :
 };
 
 Double_t PDeltaDalitzFF::gk2(Double_t t) {
-    // intrinsic form_factor 
+    // intrinsic form_factor
     Double_t denom2 = 1 + a2*a2*t*t + 2.*a2*t*cos(theta*TMath::Pi()/180.);
     //cout <<"t= "<<t<< " g= "<<1-1./denom2<<endl;
     return 1/denom2;
 }
 
 Double_t PDeltaDalitzFF::facteur_rho(Double_t x) {
-    // rho propagator term 
+    // rho propagator term
 
-    //Iachello "old" version			
+    //Iachello "old" version
     if ((x < fm_pis) && (useQED != -2)) return mass_rho*mass_rho
 					    /(mass_rho*mass_rho - x);
     //scaling to avoid "step"
@@ -77,7 +77,7 @@ Double_t PDeltaDalitzFF::facteur_rho(Double_t x) {
 
     if (useQED == -1)
 	gamma_rho  = makeDynamicData()->GetParticleTotalWidth(sqrt(x), rhopid);
-    
+
     if  ((useQED == -2) &&  (x < fm_pis)) { //TODO: Make a more meaningfull flag name
 	alpha = sqrt((fm_pis - x)/x)*(1.-2/TMath::Pi() *atan(sqrt((fm_pis - x)/x)));
 	beta = 0.;
@@ -87,14 +87,14 @@ Double_t PDeltaDalitzFF::facteur_rho(Double_t x) {
 	alpha = 2/TMath::Pi()*sqrt((x - fm_pis )/x)*log(logpart);
 	beta  = sqrt(pow(qnorm-1.,3)/qnorm);
     }
-    
+
     //     Double_t logpart = (sqrt(x - fm_pis ) + sqrt(x))/(2*mass_pi);
     //     Double_t alpha= 2/TMath::Pi()*sqrt((x - fm_pis )/x)*log(logpart);
     Double_t denom_reel = mass_rho*mass_rho - x + (fm_pis -x)*gamma_rho*alpha/mass_pi;
     //    Double_t qnorm=x/fm_pis;
     //    Double_t beta = sqrt(pow(qnorm-1.,3)/qnorm);
     double denom_im = gamma_rho*4*mass_pi*beta;
-    return scale*(mass_rho*mass_rho + 
+    return scale*(mass_rho*mass_rho +
 	    8*gamma_rho*mass_pi/TMath::Pi())
 	/sqrt(denom_reel*denom_reel+denom_im*denom_im);
 }

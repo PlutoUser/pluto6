@@ -5,7 +5,7 @@
 //
 // The particles named with "corr1" and "corr2" can be
 // folded with the mass distribution named "/correlation"
-// 
+//
 //
 //                                  Author: Kagarlis
 //                                  Reimplemented: IF
@@ -27,7 +27,7 @@ PGenBod::PGenBod() {
     Fatal("PGenBod()", "Wrong constructor");
 };
 
-PGenBod::PGenBod(const Char_t *id, const Char_t *de, Int_t key) : 
+PGenBod::PGenBod(const Char_t *id, const Char_t *de, Int_t key) :
     PChannelModel (id, de, key) {
 
     parent  = NULL;
@@ -54,10 +54,10 @@ Bool_t PGenBod::Init(void) {
 
     daughter[0] = GetParticle("corr1");
     daughter[1] = GetParticle("corr2");
-    
+
     bool myloop=1;
     for (n_daughters=0; n_daughters<MAX_GENBOD_NUM && myloop; n_daughters++) {
-	if (!daughter[n_daughters]) 
+	if (!daughter[n_daughters])
 	    daughter[n_daughters] = GetParticle("daughter");
 	if (!daughter[n_daughters]) {
 	    myloop = 0;
@@ -68,7 +68,7 @@ Bool_t PGenBod::Init(void) {
     correlator = GetSecondaryModel("correlation");
     //if (correlator) SetVersionFlag(VERSION_NO_PHASE_SPACE);
 
-    return kTRUE;    
+    return kTRUE;
 };
 
 Double_t PGenBod::GetWeight() {
@@ -86,7 +86,7 @@ Bool_t PGenBod::SampleMomentum(void) {
     double tm=0., emmin=0., emmax, bang, etm, wtmax=1., c, s, cb, sb, r,
 	esys, beta=-1, gamma=-1, aa, w0, em[n_daughters], emm[n_daughters],
 	sm[n_daughters], ems[n_daughters], pd[n_daughters], rno[nnm4], pv[4*n_daughters];
-     
+
     for (i=0; i<n_daughters; ++i) {
 	em[i] = daughter[i]->M();
     }
@@ -101,7 +101,7 @@ Bool_t PGenBod::SampleMomentum(void) {
     etm = ecm-tm;
     emm[nm1] = ecm;
     emmax = etm+em[0];
-    
+
     for (i=1; i<n_daughters; ++i) {
 	emmin += em[i-1];
 	emmax += em[i];
@@ -109,7 +109,7 @@ Bool_t PGenBod::SampleMomentum(void) {
     }
     if (wtmax == 0.) {
 	Warning("SampleMomentum", "wtmax==0");
-	return kFALSE;    
+	return kFALSE;
     }
 
     Int_t w_counter = 0;
@@ -119,15 +119,15 @@ Bool_t PGenBod::SampleMomentum(void) {
     if (correlator) {
 	Double_t corr;
 	correlator->SampleMass(&corr);
-	rno[0] = (corr-sm[1])/etm; 
+	rno[0] = (corr-sm[1])/etm;
     }
 
  repeat2:
     if (correlator) {
-	for (i=1; i<nnm4; ++i) 
+	for (i=1; i<nnm4; ++i)
 	    rno[i]=PUtils::sampleFlat();
     } else {
-	for (i=0; i<nnm4; ++i) 
+	for (i=0; i<nnm4; ++i)
 	    rno[i]=PUtils::sampleFlat();
     }
 
@@ -136,17 +136,17 @@ Bool_t PGenBod::SampleMomentum(void) {
 	    PUtils::dsort(rno, nm2);
 	else if (nm2 > 3)
 	    PUtils::dsort(rno+2, nm2-2);
-	for (i=1; i<nm1; ++i) 
+	for (i=1; i<nm1; ++i)
 	    emm[i] = rno[i-1]*etm+sm[i];
     }
     w0 = 1./wtmax;
-    
+
     for (i=0; i<nm1; ++i) {
 	pd[i] = PKinematics::pcms(emm[i+1], emm[i], em[i+1]);
-	
-	if (i>0 || !correlator) 
+
+	if (i>0 || !correlator)
 	    w0 *= pd[i];
-	else if (pd[i] == 0) 
+	else if (pd[i] == 0)
 	    w0 = 0;
     }
 
@@ -163,17 +163,17 @@ Bool_t PGenBod::SampleMomentum(void) {
 	}
 	return kFALSE;
     }
-    
+
     local_weight = 1.;
 
     if (GetVersionFlag(VERSION_SAMPLING) && !GetVersionFlag(VERSION_NO_PHASE_SPACE)) {
 	if (w0 > weight_max) {
 	    Warning("SampleMomentum", "Weight (%lf) > max (%lf)", w0, weight_max);
 	    weight_max = w0*1.1;
-	    goto repeat2; 
+	    goto repeat2;
 	}
 	if (w0/weight_max < PUtils::sampleFlat()) {
-	    if (w_counter < 10000) { 
+	    if (w_counter < 10000) {
 		w_counter++;
 		goto repeat2; // take weight into account (R.H.)
 	    } else { // happens very rare (fixed bug Nr. 359)
@@ -182,7 +182,7 @@ Bool_t PGenBod::SampleMomentum(void) {
 	}
     } else if (GetVersionFlag(VERSION_WEIGHTING)) {
 	local_weight = w0;
-    } 
+    }
 
     pv[0] = 0.;
     pv[1] = pd[0];
@@ -199,7 +199,7 @@ Bool_t PGenBod::SampleMomentum(void) {
 	sb   = sin(bang);          // sin(phi)
 	++ir;
 	r = rno[ir];
-	c = 2.*r-1.;             // here comes the scattering angle sampling 
+	c = 2.*r-1.;             // here comes the scattering angle sampling
 
 	s = sqrt(1.-c*c);        // sin(theta)
 	if (i != nm1) {
@@ -215,15 +215,15 @@ Bool_t PGenBod::SampleMomentum(void) {
 		 pv[jj2] *  pv[jj2] );
 	    pv[jj3]=sqrt(aa + ems[j]);
 	    PKinematics::rotes(c, s, cb, sb, pv+jj);
-	    if (i != nm1) 
+	    if (i != nm1)
 		pv[jj1] = gamma*( pv[jj1] + beta * pv[jj3] );
 	}
   }
-    
+
     for (i=0; i<n_daughters; ++i) {
 	//k=i+1;
 	i4 = 4*i;
-	
+
 	// ______________________________________________________________
 	// In the original GENBOD the beam was oriented along the y axis.
 	// This is irrelevant so long as theta and phi are isotropic.
@@ -235,7 +235,7 @@ Bool_t PGenBod::SampleMomentum(void) {
 	//                                                     MAK 7.10.99
 	//	cout << "set:" << -pv[i4]  <<":"<<  pv[i4+2]  <<":"<<  pv[i4+1]   <<":"<<   pv[i4+3] << endl;
 	daughter[i]->SetPxPyPzE(-pv[i4], pv[i4+2], pv[i4+1], pv[i4+3]);
-	
+
 	// ______________________________________________________________
     }
 

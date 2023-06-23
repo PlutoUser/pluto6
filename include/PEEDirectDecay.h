@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 27.5.2007
-// Revised: 
+// Revised:
 
 #ifndef _PEEDIRECTDECAY_H_
 #define _PEEDIRECTDECAY_H_
@@ -12,7 +12,7 @@
 #include "PKinematics.h"
 
 class PEEDirectDecay : public PChannelModel  {
-  
+
  public:
     PEEDirectDecay();
     PEEDirectDecay(const Char_t *id, const Char_t *de, Int_t key=-1);
@@ -24,7 +24,7 @@ class PEEDirectDecay : public PChannelModel  {
 
     Bool_t GetWidth(Double_t mass, Double_t *width, Int_t didx=-1);
 
-    using PDistribution::GetWeight;   
+    using PDistribution::GetWeight;
     Double_t GetWeight(Double_t *mass, Int_t *didx=NULL);
     int GetDepth(int i=0);
 
@@ -39,9 +39,9 @@ class PEEDirectDecay : public PChannelModel  {
     };
 
  protected:
-  
+
     PParticle *parent, *e1, *e2;
-    
+
     int use_pi_cutoff, use_hadronic_ps;
     int parent_id;
     double cv, mlep;

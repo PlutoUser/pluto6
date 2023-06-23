@@ -39,22 +39,22 @@ PDistribution *PFunction::Clone(const char *) const {
 };
 
 Bool_t PFunction::Init(void) {
-    return kTRUE;    
+    return kTRUE;
 };
 
 Bool_t PFunction::AddEquation(const char *command) {
 
     if (!batch) batch = new PBatch();
-    
-    vx = makeStaticData()->GetBatchValue("_x"); 
-    vf = makeStaticData()->GetBatchValue("_f"); 
+
+    vx = makeStaticData()->GetBatchValue("_x");
+    vf = makeStaticData()->GetBatchValue("_f");
 
     return batch->AddCommand(command);
 };
 
 Double_t PFunction::GetWeight(Double_t *mass, Int_t *) {
 
-    if (batch) {	
+    if (batch) {
 	*vx = mass[0];
 	batch->Execute();
 	return *vf;
@@ -64,7 +64,7 @@ Double_t PFunction::GetWeight(Double_t *mass, Int_t *) {
     if (tf2) return tf2->Eval(mass[0],mass[1]);
     if (tf2) return tf3->Eval(mass[0],mass[1],mass[2]);
 
-    return constant;  
+    return constant;
 };
 
 

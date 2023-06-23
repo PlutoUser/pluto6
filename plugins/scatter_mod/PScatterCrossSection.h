@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 14.8.2012
-// Revised: 
+// Revised:
 
 #ifndef _PSCATTERCROSSSECTION_H_
 #define _PSCATTERCROSSSECTION_H_
@@ -14,7 +14,7 @@
 
 
 class PScatterCrossSection : public PAngularDistribution  {
-  
+
  public:
     PScatterCrossSection();
     PScatterCrossSection(const Char_t *id, const Char_t *de);
@@ -36,18 +36,18 @@ class PScatterCrossSection : public PAngularDistribution  {
 
     void SetNpx(Int_t my_npx);
     void SetNpy(Int_t my_npy);
-  
+
     PF2 *GetFunction(void) {return pf2;};
 
  protected:
-    
+
     double SamplePolarAngle(double);
 
     Double_t qmin,qmax;
     Double_t costheta, q;
 
     PF2 *pf2;
-    
+
     PParticle *vprimary;
     Double_t  *vf;
     Bool_t MakeVars(void);

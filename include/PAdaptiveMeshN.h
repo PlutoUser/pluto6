@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 1.02.2008
-// Revised: 
+// Revised:
 
 #ifndef _PADAPTIVEMESHN_H_
 #define _PADAPTIVEMESHN_H_
@@ -33,7 +33,7 @@ class PAdaptiveMeshN : public TObject {
 
     void ReCalc(void);      //re-calculate all volumes
     void FixArray(void);    //set the fixed array contributions
-    
+
     UInt_t pattern;
     Int_t mcpoints;
     Double_t threshold_diff;
@@ -45,10 +45,10 @@ class PAdaptiveMeshN : public TObject {
 
     //constructor
     //pattern sets the variables to be sampled in the GetWeight method in PChannelModel
-    PAdaptiveMeshN(UInt_t my_pattern, Int_t my_max_dimensions, 
+    PAdaptiveMeshN(UInt_t my_pattern, Int_t my_max_dimensions,
 		   PChannelModel *my_model, Double_t my_y_max);
     PAdaptiveMeshN();
-    void SetDefaults(UInt_t my_pattern, Int_t my_max_dimensions, 
+    void SetDefaults(UInt_t my_pattern, Int_t my_max_dimensions,
 		     PChannelModel *my_model, Double_t my_y_max);
     void ReCalcYMax(void);
     ~PAdaptiveMeshN();
@@ -61,7 +61,7 @@ class PAdaptiveMeshN : public TObject {
     Bool_t GetRandom();
 
     Double_t GetArea() {return area_size;};
-    
+
     Double_t GetArrayValue(Int_t dimension)  {
 	if (dimension > num_dimensions) {
 	    Warning("GetArrayValue", "dimension>num_dimensions");
@@ -87,7 +87,7 @@ class PAdaptiveMeshN : public TObject {
     void SetYMax(Double_t  d) {y_max = d;};
 
     void SetMCPoints(Int_t n) {mcpoints = n;};
-    
+
     void SetThreshold(Double_t diff, Double_t abs) {
 	threshold_diff = diff;
 	threshold_abs  = abs;

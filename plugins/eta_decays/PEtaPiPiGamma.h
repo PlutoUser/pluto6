@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 01.10.2009
-// Revised: 
+// Revised:
 
 #ifndef _PETAPIPIGAMMA_H_
 #define _PETAPIPIGAMMA_H_
@@ -12,7 +12,7 @@
 #include "PKinematics.h"
 
 class PEtaPiPiGamma : public PChannelModel  {
-  
+
  public:
     PEtaPiPiGamma();
     PEtaPiPiGamma(const Char_t *id, const Char_t *de, Int_t key);
@@ -28,13 +28,13 @@ class PEtaPiPiGamma : public PChannelModel  {
     Bool_t IsNotRejected(void);
 
  protected:
-  
+
     PParticle *parent, *pip, *pim, *gamma;
 
     PChannelModel *m_formfactor_model;     //form factor object
 
     Double_t weight_max;               //Maximum
-  
+
     ClassDef(PEtaPiPiGamma, 0)  // Decay eta -> pi+ pi- gamma
 };
 

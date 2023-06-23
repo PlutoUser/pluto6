@@ -5,7 +5,7 @@
 //
 //                             Author:  I. Froehlich
 //                             Written: 17.9.2009
-//                           
+//
 //////////////////////////////////////////////////////////////////////
 
 #include "PEtaDoubleDalitz.h"
@@ -41,38 +41,38 @@ Double_t PEtaDoubleDalitz::Gen2lepton1(Double_t m) {
 
 
 Bool_t PEtaDoubleDalitz::Init(void) {
-  
+
     parent = GetParticle("parent");
     if (!parent) {
 	Warning("Init", "Parent not found");
 	return kFALSE;
     }
-    
+
     dil1 = GetParticle("dilepton");
     dil2 = GetParticle("dilepton");
-    
+
     if (!dil1 || !dil2) {
 	Warning("Init", "Dileptons not found");
 	return kFALSE;
     }
-    
+
     formfactor_model =
 	GetSecondaryModel("formfactor");
     if (formfactor_model)
 	ff_w_max = formfactor_model->GetWeightMax();
     if (ff_w_max < 0) {
 	Warning("Init", "Max value of the FF model not initialized, FF disabled");
-	formfactor_model = NULL;	
-    } 
+	formfactor_model = NULL;
+    }
     if (!formfactor_model) ff_w_max = 1.;
-  
+
     return kTRUE;
 }
 
 Bool_t PEtaDoubleDalitz::SampleMass(void) {
 
     Double_t MEta = parent->M();
-    
+
     Double_t weight = 1.;
     Double_t mVV[2];
     do {
@@ -85,11 +85,11 @@ Bool_t PEtaDoubleDalitz::SampleMass(void) {
 	}
 
     } while((mVV[0]+mVV[1]>MEta) || ((weight/ff_w_max) < PUtils::sampleFlat())  );
-    
-    
+
+
     dil1->SetM(mVV[0]);
     dil2->SetM(mVV[1]);
-    
+
     return kTRUE;
 };
 

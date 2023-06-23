@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 23.5.2007
-// Revised: 
+// Revised:
 
 #ifndef _PCHANNELMODEL_H_
 #define _PCHANNELMODEL_H_
@@ -13,13 +13,13 @@
 
 
 class PChannelModel : public PDistribution {
-  
+
  public:
     PChannelModel();
     PChannelModel(const Char_t *id, const Char_t *de, Int_t key=-1);
     PDistribution* Clone(const char*delme=NULL) const;
 
-    using PDistribution::SampleMass;   
+    using PDistribution::SampleMass;
 
     virtual Bool_t SampleMass(Double_t *mass, Int_t *didx=NULL);
 
@@ -28,15 +28,15 @@ class PChannelModel : public PDistribution {
 	if (SampleMass(&mass, &didx)) return mass;
 	return 0.;
     }
-    Double_t SampleTotalMass(void) { 
-	return SampleMass(-1); 
-    } 
+    Double_t SampleTotalMass(void) {
+	return SampleMass(-1);
+    }
 
 
     //weight/amplitude calculations: To avoid endless loops,
-    using PDistribution::GetWeight;   
+    using PDistribution::GetWeight;
     virtual Double_t GetWeight(Double_t *mass, Int_t *didx=NULL);
-    
+
     Double_t GetWeight(Double_t mass, Int_t *didx=NULL) {
 	//wrapper for models with single variable only
 	return GetWeight(&mass, didx);
@@ -56,7 +56,7 @@ class PChannelModel : public PDistribution {
 	m[2] = mass3;
 	return GetWeight(m, didx);
     };
-    Double_t GetWeight(Double_t mass, Double_t mass2, Double_t mass3, Double_t mass4, 
+    Double_t GetWeight(Double_t mass, Double_t mass2, Double_t mass3, Double_t mass4,
 		       Int_t *didx=NULL) {
 	//wrapper for models with 4 variables
 	Double_t m[4];
@@ -66,7 +66,7 @@ class PChannelModel : public PDistribution {
 	m[3] = mass4;
 	return GetWeight(m, didx);
     };
-    Double_t GetWeight(Double_t mass, Double_t mass2, Double_t mass3, Double_t mass4, Double_t mass5, 
+    Double_t GetWeight(Double_t mass, Double_t mass2, Double_t mass3, Double_t mass4, Double_t mass5,
 		       Int_t *didx=NULL) {
 	//wrapper for models with 5 variables
 	Double_t m[5];
@@ -94,13 +94,13 @@ class PChannelModel : public PDistribution {
 	Bool_t res = GetBR(mass, &br);
 	if (res) return br;
 	return 0.;
-    }   
+    }
 
 
     virtual Bool_t GetBR(Double_t mass, Double_t *br, Double_t totalwidth=-1.);
 
     virtual int GetDepth(int i=0);
-    // Returns the total number of embedded recursive decays 
+    // Returns the total number of embedded recursive decays
     // (TDepth if flag=0) or the number of embedded recursive
     // hadronic decays (HDepth if flag=1).
     // The default value 0 means the index has not been accessed yet.
@@ -145,7 +145,7 @@ class PChannelModel : public PDistribution {
     void SetWidthInit (Int_t w) {width_init=w;};
 
  protected:
-  
+
     Double_t width;     //Mass-dependent width container
     PMesh *mesh;        //Linear mesh container for fast lookup
     Int_t width_init;   //flag for the 1st initialization in getWidth

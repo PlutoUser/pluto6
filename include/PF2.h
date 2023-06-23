@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 18.8.2010
-// Revised: 
+// Revised:
 
 #ifndef _PF2_H_
 #define _PF2_H_
@@ -13,7 +13,7 @@ class PF2: public TF2 {
 
  public:
 
-    
+
     //Standard ROOT ctors
     PF2();
     PF2(const char *name, const char *formula, Double_t xmin=0, Double_t xmax=1, Double_t ymin=0, Double_t ymax=1);
@@ -21,16 +21,16 @@ class PF2: public TF2 {
 
     PF2(const char *name, Double_t (*fcn)(Double_t *, Double_t *), Double_t xmin=0, Double_t xmax=1, Double_t ymin=0, Double_t ymax=1, Int_t npar=0);
     PF2(const char *name, Double_t (*fcn)(const Double_t *, const Double_t *), Double_t xmin=0, Double_t xmax=1, Double_t ymin=0, Double_t ymax=1, Int_t npar=0);
-    PF2(const char *name, ROOT::Math::ParamFunctor f, Double_t xmin = 0, Double_t xmax = 1, Double_t ymin = 0, Double_t ymax = 1, Int_t npar = 0);  
+    PF2(const char *name, ROOT::Math::ParamFunctor f, Double_t xmin = 0, Double_t xmax = 1, Double_t ymin = 0, Double_t ymax = 1, Int_t npar = 0);
     PF2(const PF2 &f2);
-  
+
     //Pluto ctor
     PF2(const char *name, Double_t xmin, Double_t xmax, Double_t ymin, Double_t ymax);
 
     virtual Double_t    EvalPar(const Double_t *x, const Double_t *params);
     //TF wrapper
 
-  
+
     Bool_t Add(const char *command);
     Bool_t Add(TH1 *histo, const char *command = "");
     Bool_t Add(TH2 *histo, const char *command = "");

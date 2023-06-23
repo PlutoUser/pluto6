@@ -23,12 +23,12 @@
 
 
 void PParticle::defaults(void) {
-  
+
     SetVertex(*makeStaticData()->GetBatchValue("_event_vertex_x"),
 	      *makeStaticData()->GetBatchValue("_event_vertex_y"),
 	      *makeStaticData()->GetBatchValue("_event_vertex_z"), 0.);
     pParticle  = NULL;
-    qParticle1 = NULL; 
+    qParticle1 = NULL;
     qParticle2 = NULL;
     index = -1;
     decayModeIndex = -1;
@@ -101,7 +101,7 @@ PParticle::PParticle(int id, Double_t * pt, Double_t w):
     defaults();
 }
 
-  
+
 PParticle::PParticle(int id, float * pt, Double_t w):
     TLorentzVector( pt ), pid( id ), wt( w ), active(kTRUE) {
     // id, pointer to 4-dim array (Px, Py, Pz, E) (GeV/c, GeV), weight
@@ -116,7 +116,7 @@ PParticle::PParticle(const PParticle & p):
     parentIndex( p.GetParentIndex() ),
     daughterIndex( p.GetDaughterIndex() ),
     siblingIndex( p.GetSiblingIndex() ),
-    decayTime( p.GetProperTime() ), 
+    decayTime( p.GetProperTime() ),
     wt( p.W() ), active( p.IsActive() ) {
     // copy constructor
     SetVertex(p.X(),p.Y(),p.Z(),p.T());
@@ -126,9 +126,9 @@ PParticle::PParticle(const PParticle & p):
 
     make_new_qParticle = p.make_new_qParticle;
     if (p.make_new_qParticle) {
-	qParticle1 = (p.qParticle1 ? 
+	qParticle1 = (p.qParticle1 ?
 		      new PParticle(p.qParticle1) : NULL); //Copy, because it will destroy in dtor
-    } 
+    }
 
     if (p.make_new_qParticle) {
 	qParticle2 = (p.qParticle2 ?
@@ -136,7 +136,7 @@ PParticle::PParticle(const PParticle & p):
     }
 
     sParticle  = p.sParticle;
-    //      if (p.debug) 
+    //      if (p.debug)
     // 	     debug=p.debug;
     //       else
     debug  = "";
@@ -144,7 +144,7 @@ PParticle::PParticle(const PParticle & p):
     destroyDecayModeIndex = p.destroyDecayModeIndex;
     decayModeIndex = p.decayModeIndex;
 
-    if (p.values) 
+    if (p.values)
 	values = new PValues(*(p.values));
     mult      = p.mult;
     spectator = p.spectator;
@@ -154,13 +154,13 @@ PParticle::PParticle(const PParticle & p):
 
 
 PParticle::PParticle(const PParticle *p):
-    TLorentzVector( p->Vect4() ), pid( p->ID() ), 
+    TLorentzVector( p->Vect4() ), pid( p->ID() ),
     sourceId( p->GetSourceId() ),
     parentId( p->GetParentId() ),
     parentIndex( p->GetParentIndex() ),
     daughterIndex( p->GetDaughterIndex() ),
     siblingIndex( p->GetSiblingIndex() ),
-    decayTime( p->GetProperTime() ), 
+    decayTime( p->GetProperTime() ),
     wt( p->W() ), active( p->IsActive() ) {
     // copy constructor
     SetVertex(p->X(),p->Y(),p->Z(),p->T());
@@ -172,7 +172,7 @@ PParticle::PParticle(const PParticle *p):
     if (p->make_new_qParticle) {
 	qParticle1 = (p->qParticle1 ?
 		      new PParticle(p->qParticle1): NULL); //Copy, because it will destroy in dtor
-    } 
+    }
 
     if (p->make_new_qParticle) {
 	qParticle2 = (p->qParticle2 ?
@@ -180,15 +180,15 @@ PParticle::PParticle(const PParticle *p):
     }
 
     sParticle = p->sParticle;
- 
+
     //      if (p->debug) debug=p->debug;
-    //       else 
+    //       else
     debug  = "";
     values = NULL;
     destroyDecayModeIndex = p->destroyDecayModeIndex;
     decayModeIndex = p->decayModeIndex;
 
-    if (p->values) 
+    if (p->values)
 	values = new PValues(*(p->values));
 
     mult      = p->mult;
@@ -200,7 +200,7 @@ PParticle::PParticle(const PParticle *p):
 
 void PParticle::SetKE(Double_t T) {
     // reset by kinetic energy
-    Double_t m=M(), th=Theta(), ph=Phi(), 
+    Double_t m=M(), th=Theta(), ph=Phi(),
 	ptot=sqrt(T*T+2*T*m), e=T+m, pxy=ptot*sin(th),
 	px=pxy*cos(ph), py=pxy*sin(ph), pz=ptot*cos(th);
     SetPxPyPzE(px,py,pz,e);
@@ -211,7 +211,7 @@ void PParticle::SetM(Double_t m) {
     Double_t m1, px=Px(), py=Py(), pz=Pz();
     if (m > 0.) m1 = m;        // if non-zero reset mass to argument value
     else {                     // else sample from Breit-Wigner if width > 1 MeV
-	Double_t g0 = makeStaticData()->GetParticleTotalWidth(pid), 
+	Double_t g0 = makeStaticData()->GetParticleTotalWidth(pid),
 	    m0 = makeStaticData()->GetParticleMass(pid);
 	if (g0 < 1.e-3) m1 = m0;     // else fix to centroid value
 	else do { m1 = PUtils::sampleBW(m0,g0); } while (m1<0.);
@@ -236,11 +236,11 @@ Double_t PParticle::Life(Double_t m, int idx) {
     Double_t r, tau=Gamma()*makeDynamicData()->GetParticleLife(pid, m, idx);
     do { r = PUtils::sampleFlat(); } while (r==0.);
     return -tau*log(r);
-}    
+}
 
 void PParticle::SetProperTime() {
     // lifetime in particle's frame  (in mm/c)
- 
+
     Double_t r, tau;
 
     if (makeStaticData()->GetParticleTotalWidth(pid) > 0) {
@@ -268,7 +268,7 @@ Double_t PParticle::InvariantT(Double_t m3, Double_t m4, Double_t cos_th_cm) {
 
     if (!qParticle1 || !qParticle2) {
 	Warning("InvariantT", "No beam & target found");
-	return 0;	
+	return 0;
     }
 
     //Boost into target c.m. frame
@@ -352,7 +352,7 @@ PParticle & PParticle::operator += ( const PParticle & p) {
     }
 
     make_new_qParticle=kTRUE;
-    qParticle1 = new PParticle(this); 
+    qParticle1 = new PParticle(this);
     qParticle2 = new PParticle(p);
     Info("operator+","(%s) Keeping beam and target particle for further reference", PRINT_AUTO_ALLOC);
     make_new_qParticle=kTRUE;
@@ -360,7 +360,7 @@ PParticle & PParticle::operator += ( const PParticle & p) {
 	Int_t len=strlen(makeStaticData()->GetParticleName(ID()))+
 	    strlen(makeStaticData()->GetParticleName(p.ID()))+6;
 	char * delme=new char[len];
-	
+
 	sprintf(delme,"%s + %s",makeStaticData()->GetParticleName(ID()),
 		makeStaticData()->GetParticleName(p.ID()));
 	if (!makeStaticData()->AddParticle(id2+ID(), delme,M()+p.M())) {
@@ -371,7 +371,7 @@ PParticle & PParticle::operator += ( const PParticle & p) {
 	    sprintf(delme2,"%s+%s",makeStaticData()->GetParticleName(ID()),
 		    makeStaticData()->GetParticleName(p.ID()));
 	    makeStaticData()->AddAlias(delme,delme2);
-	    Info("operator+","(%s) The composite %s has been added", 
+	    Info("operator+","(%s) The composite %s has been added",
 		 PRINT_AUTO_ALLOC,makeStaticData()->GetParticleName(id2+ID()));
 	}
     }
@@ -406,7 +406,7 @@ void PParticle::Scatter(PParticle *p1, PParticle *p2) {
     }
 
     make_new_qParticle=kFALSE;
-    qParticle1 = p1; 
+    qParticle1 = p1;
     qParticle2 = p2;
     pid =id1 + id2*1000;
 
@@ -414,7 +414,7 @@ void PParticle::Scatter(PParticle *p1, PParticle *p2) {
 	Int_t len=strlen(makeStaticData()->GetParticleName(id1))+
 	    strlen(makeStaticData()->GetParticleName(id2))+6;
 	char * delme=new char[len];
-	
+
 	sprintf(delme,"%s + %s",makeStaticData()->GetParticleName(id1),
 		makeStaticData()->GetParticleName(id2));
 	if (!makeStaticData()->AddParticle(pid, delme,p1->M()+p2->M())) {
@@ -425,7 +425,7 @@ void PParticle::Scatter(PParticle *p1, PParticle *p2) {
 	    sprintf(delme2,"%s+%s",makeStaticData()->GetParticleName(id1),
 		    makeStaticData()->GetParticleName(id2));
 	    makeStaticData()->AddAlias(delme,delme2);
-	    Info("Scatter","(%s) The composite %s has been added", 
+	    Info("Scatter","(%s) The composite %s has been added",
 		 PRINT_AUTO_ALLOC,makeStaticData()->GetParticleName(pid));
 	}
     }
@@ -442,7 +442,7 @@ void PParticle::Scatter(PParticle *p1, PParticle *p2) {
 
 PParticle & PParticle::operator = ( const PParticle & p ) {
     // assignment
-    
+
     SetVect4(p.Vect4());
     wt = p.W();
     pid = p.ID();

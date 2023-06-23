@@ -9,7 +9,7 @@
 //     the the following equation is used:
 //       FF = m_V^2 / (m_V^2 - q^2)
 //
-// ii) or one can use a self-defined equation using the 
+// ii) or one can use a self-defined equation using the
 //     PBatch syntax
 //     in this case the batch variables "_q" and "_q2"
 //     are the dilepton mass (resp. squared)
@@ -54,9 +54,9 @@ PDistribution* PSimpleVMDFF::Clone(const char *) const {
 Bool_t PSimpleVMDFF::AddEquation(const char *command) {
     if (!batch) batch = new PBatch();
 
-    vq   = makeStaticData()->GetBatchValue("_q"); 
-    vq2  = makeStaticData()->GetBatchValue("_q2"); 
-    vff2 = makeStaticData()->GetBatchValue("_ff2"); 
+    vq   = makeStaticData()->GetBatchValue("_q");
+    vq2  = makeStaticData()->GetBatchValue("_q2");
+    vff2 = makeStaticData()->GetBatchValue("_ff2");
 
     return batch->AddCommand(command);
 }
@@ -91,9 +91,9 @@ Bool_t PSimpleVMDFF::Init(void) {
     if (vector_meson_mass2<0 && !batch) {
 	Error("Init", "Vector meson mass OR eqn. must be initialized");
 	return kFALSE;
-    } 
+    }
 
-    return kTRUE;    
+    return kTRUE;
 };
 
 
@@ -106,7 +106,7 @@ Double_t PSimpleVMDFF::GetWeight(void) {
 	TLorentzVector dil = (*(TLorentzVector*)ep)+(*(TLorentzVector*)em);
 	q = dil.M();
     }
-	
+
     Double_t pmass = parent->M();
     Double_t ff = GetWeight(q, pmass);
 
@@ -121,7 +121,7 @@ Double_t PSimpleVMDFF::GetWeight(void) {
 Double_t PSimpleVMDFF::GetWeight(Double_t *mass, Int_t *) {
     Double_t q2 = mass[0]*mass[0];
 
-    if (batch) {	
+    if (batch) {
 	*vq  = mass[0];
 	*vq2 = q2;
 	batch->Execute();

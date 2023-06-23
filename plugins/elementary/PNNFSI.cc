@@ -16,7 +16,7 @@ using namespace std;
 
 
 ClassImp(PNNFSI)
-    
+
 PNNFSI::PNNFSI() {
     Setup();
 };
@@ -64,12 +64,12 @@ Bool_t PNNFSI::Init(void) {
     //Now get all daugthers
     for (int i=0; i<NNFSI_MAX_DAUGHTERS; i++) {
 	daughters[i]= GetParticle("daughter");
-	if (daughters[i]) {	    
+	if (daughters[i]) {
 	    daughter_pos++;
 	}
     }
 
-    return kTRUE;    
+    return kTRUE;
 };
 
 Double_t PNNFSI::GetWeight(Double_t *mass, Int_t *) {
@@ -105,7 +105,7 @@ Double_t PNNFSI::GetWeight(void) {
 
     Double_t k = b.P();
     weight = GetWeight(&k);
-    
+
     return weight;
 }
 

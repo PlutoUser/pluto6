@@ -12,7 +12,7 @@
 //
 //  Commands for the batch can be added in 2 ways: Either
 //  with AddCommand(char * command) or
-//  in one step together with a histogram which will 
+//  in one step together with a histogram which will
 //  be filled after the command has been executed.
 //
 //  Input: The input for the commands must be particles
@@ -25,7 +25,7 @@
 //
 //                    Author:  Ingo Froehlich
 //                    Written: 14/02/2008
-//                    Revised: 
+//                    Revised:
 //
 ////////////////////////////////////////////////////////
 
@@ -38,30 +38,30 @@
 PProjector::PProjector() {
     batch_pos = 0;
     pid_param = makeDataBase()->GetParamInt("batch_pid");
-    if (pid_param < 0) 
+    if (pid_param < 0)
 	pid_param = makeDataBase()->MakeParamInt("batch_pid", "PID for batch");
-    
+
     link_param = makeDataBase()->GetParamInt("batch_position");
-    if (link_param < 0) 
+    if (link_param < 0)
 	link_param = makeDataBase()->MakeParamInt("batch_position", "PID position for batch");
-    
+
     batch_particle_param = makeDataBase()->GetParamTObj("batch_particle");
     w = makeStaticData()->GetBatchValue("_w");
-    
-    if (batch_particle_param < 0) 
+
+    if (batch_particle_param < 0)
 	batch_particle_param = makeDataBase()->MakeParamTObj("batch_particle", "PParticle storage for batch");
 
     batch_value_param = makeDataBase()->GetParamDouble("batch_value");
 
     stream_default_pos_param = makeDataBase()->GetParamInt(STREAM_DEFAULT_POS);
-    if (stream_default_pos_param < 0)  
+    if (stream_default_pos_param < 0)
 	stream_default_pos_param = makeDataBase()->MakeParamInt(STREAM_DEFAULT_POS, "Default position");
     stream_max_pos_param = makeDataBase()->GetParamInt(STREAM_MAX_POS);
-    if (stream_max_pos_param < 0)  
+    if (stream_max_pos_param < 0)
 	stream_max_pos_param = makeDataBase()->MakeParamInt(STREAM_MAX_POS, "Max position in stream");
 
 
-    for (int i=0; i<PROJECTOR_MAX_BATCH; i++) { 
+    for (int i=0; i<PROJECTOR_MAX_BATCH; i++) {
 	hist3[i]       = NULL;
 	hist2[i]       = NULL;
 	hist1[i]       = NULL;
@@ -85,7 +85,7 @@ PProjector::PProjector() {
 }
 
 PProjector::~PProjector() {
-    for (int i=0; i<batch_pos; i++) 
+    for (int i=0; i<batch_pos; i++)
 	delete batch[i];
 }
 
@@ -96,7 +96,7 @@ Bool_t PProjector::AddCommand(const char *command) {
 	Error("AddCommand", "PROJECTOR_MAX_BATCH reached");
 	return kFALSE;
     }
-    
+
     batch[batch_pos] = new PBatch();
     batch[batch_pos]->SetSizeBranches(size_branches);
     batch[batch_pos]->SetKeysBranches(key_branches);
@@ -125,7 +125,7 @@ Bool_t PProjector::AddCommand(const char *command) {
 }
 
 Bool_t PProjector::AddHistogram(TH3 *histo, const char *command, Int_t fillflag) {
-    
+
     if (!AddCommand(command)) return kFALSE;
     hist3[batch_pos-1] = histo;
 
@@ -160,7 +160,7 @@ Bool_t PProjector::AddHistogram(TH3 *histo, const char *command, Int_t fillflag)
 	return kFALSE;
     }
 
-    if (batch[batch_pos-1]->IsReadonly()) 
+    if (batch[batch_pos-1]->IsReadonly())
 	fillflag = 0;
     batch[batch_pos-1]->SetToolObject(histo);
     fFillFlag[batch_pos-1] = fillflag;
@@ -169,7 +169,7 @@ Bool_t PProjector::AddHistogram(TH3 *histo, const char *command, Int_t fillflag)
 }
 
 Bool_t PProjector::AddHistogram(TH2 *histo, const char *command, Int_t fillflag) {
-    
+
     if (!AddCommand(command)) return kFALSE;
     hist2[batch_pos-1] = histo;
 
@@ -195,7 +195,7 @@ Bool_t PProjector::AddHistogram(TH2 *histo, const char *command, Int_t fillflag)
 	return kFALSE;
     }
 
-    if (batch[batch_pos-1]->IsReadonly()) 
+    if (batch[batch_pos-1]->IsReadonly())
 	fillflag = 0;
     batch[batch_pos-1]->SetToolObject(histo);
     fFillFlag[batch_pos-1] = fillflag;
@@ -204,7 +204,7 @@ Bool_t PProjector::AddHistogram(TH2 *histo, const char *command, Int_t fillflag)
 }
 
 Bool_t PProjector::AddHistogram(TH1 *histo, const char *command, Int_t fillflag) {
-    
+
     if (!AddCommand(command)) return kFALSE;
     hist1[batch_pos-1] = histo;
 
@@ -221,8 +221,8 @@ Bool_t PProjector::AddHistogram(TH1 *histo, const char *command, Int_t fillflag)
 	Error ("AddHistogram", "Double _x not found");
 	return kFALSE;
     }
-    
-    if (batch[batch_pos-1]->IsReadonly()) 
+
+    if (batch[batch_pos-1]->IsReadonly())
 	fillflag = 0;
     batch[batch_pos-1]->SetToolObject(histo);
     fFillFlag[batch_pos-1] = fillflag;
@@ -231,7 +231,7 @@ Bool_t PProjector::AddHistogram(TH1 *histo, const char *command, Int_t fillflag)
 }
 
 Bool_t PProjector::AddTGraph(TGraph *graph, const char *command) {
-    
+
     if (!AddCommand(command)) return kFALSE;
 
     //get the result
@@ -253,7 +253,7 @@ Bool_t PProjector::AddTGraph(TGraph *graph, const char *command) {
 }
 
 Bool_t PProjector::AddTGraph2D(TGraph2D *graph, const char *command) {
-    
+
     if (!AddCommand(command)) return kFALSE;
 
     //get the result
@@ -299,7 +299,7 @@ Bool_t PProjector::AddOutputTNtuple(TNtuple *n, const char *command) {
 	const char *name = br->GetName();
 
 	//Each branch should be correlated to the batch key
-	
+
 	if (key_pos_out[batch_pos-1] == PROJECTOR_MAX_BRANCHES) {
 	    Error("AddNTuple", "Too many branches in NTuple");
 	    return kFALSE;
@@ -313,7 +313,7 @@ Bool_t PProjector::AddOutputTNtuple(TNtuple *n, const char *command) {
 
 	key_pos_out[batch_pos-1]++;
     }
-    return kTRUE;    
+    return kTRUE;
 }
 
 Bool_t PProjector::AddInputASCII(const char *filename, const char *command) {
@@ -328,7 +328,7 @@ Bool_t PProjector::AddInputASCII(const char *filename, const char *command) {
     }
     batch[batch_pos-1]->SetToolObject(file);
     fPriority = FILEINPUT_PRIORITY;
-    return kTRUE;   
+    return kTRUE;
 }
 
 Bool_t PProjector::AddOutputASCII(const char *filename, const char *command) {
@@ -342,7 +342,7 @@ Bool_t PProjector::AddOutputASCII(const char *filename, const char *command) {
 	return kFALSE;
     }
     batch[batch_pos-1]->SetToolObject(file);
-    return kTRUE;   
+    return kTRUE;
 }
 
 Bool_t PProjector::AddInputTNtuple(TNtuple *n,const  char *command) {
@@ -364,7 +364,7 @@ Bool_t PProjector::AddInputTNtuple(TNtuple *n,const  char *command) {
 	const char *name = br->GetName();
 
 	//Each branch should be correlated to the batch key
-	
+
 	if (key_pos_in[batch_pos-1] == PROJECTOR_MAX_BRANCHES) {
 	    Error("AddNTuple", "Too many branches in NTuple");
 	    return kFALSE;
@@ -393,7 +393,7 @@ Bool_t PProjector::AddInputTNtuple(TNtuple *n,const  char *command) {
 
     fPriority = FILEINPUT_PRIORITY;
 
-    return kTRUE;    
+    return kTRUE;
 }
 
 Int_t  PProjector::SetParticles(PParticle **mstack, int *, int *num, int, Int_t first_time) {
@@ -409,23 +409,23 @@ Int_t  PProjector::SetParticles(PParticle **mstack, int *, int *num, int, Int_t 
  	    particle_key = makeStaticData()->GetParticleKey(mstack[i]->ID());
  	    if (makeDataBase()->GetParamInt(particle_key, stream_default_pos_param, &i_result)) {
  		(*i_result) = 0;
- 	    } 
+ 	    }
  	}
 	particle_key = makeStaticData()->GetParticleKey(0); //DUMMY=all particles
 	if (makeDataBase()->GetParamInt(particle_key, stream_default_pos_param, &i_result)) {
 	    (*i_result) = 0;
-	} 
+	}
 	for (int i=0; i<*num; i++) {
  	    //Delete old max pos list
  	    particle_key = makeStaticData()->GetParticleKey(mstack[i]->ID());
  	    if (makeDataBase()->GetParamInt(particle_key, stream_max_pos_param, &i_result)) {
  		(*i_result) = 0;
- 	    } 
+ 	    }
  	}
 	particle_key = makeStaticData()->GetParticleKey(0); //DUMMY=all particles
 	if (makeDataBase()->GetParamInt(particle_key, stream_max_pos_param, &i_result)) {
 	    (*i_result) = 0;
-	} 
+	}
 	for (int i=0; i<*num; i++) {
 	    //Create max list
 	    if (mstack[i]->IsActive()) { //count only active particles
@@ -446,7 +446,7 @@ Int_t  PProjector::SetParticles(PParticle **mstack, int *, int *num, int, Int_t 
 		counter_all++;
 	    }
 	    mstack[i]->SetScatterClone(kFALSE); //disable making clones when copy constructor is called -> memory leak
-	} 
+	}
 	//cout << "counted max " << counter_all << endl;
     }//END first_time
 
@@ -465,7 +465,7 @@ Int_t  PProjector::SetParticles(PParticle **mstack, int *, int *num, int, Int_t 
 	    //First clear the entry to avoid the use of old objects
 	    if (pos >= 0) {
 		makeDataBase()->SetParamTObj(listkey, batch_particle_param, NULL);
-	    } else if ((pos == -112) && first_time && (*(proj_nr) == bulk_id)) { 
+	    } else if ((pos == -112) && first_time && (*(proj_nr) == bulk_id)) {
 		//stumbled over "+"
 		//cout << "CALLED + in "<< bulk_id << endl;
 		new_particles++;
@@ -485,7 +485,7 @@ Int_t  PProjector::SetParticles(PParticle **mstack, int *, int *num, int, Int_t 
 		makeDataBase()->SetParamTObj(listkey, batch_particle_param, &(stack[new_particles-1]));
 		(*num)++;
 	    } else if (pos == -1) {
-		//No pos, default 
+		//No pos, default
 		makeDataBase()->SetParamTObj(listkey, batch_particle_param, NULL);
 		Int_t particle_key = makeStaticData()->GetParticleKey(pid);
 		if (makeDataBase()->GetParamInt(particle_key, stream_default_pos_param, &i_result)) {
@@ -513,7 +513,7 @@ Int_t  PProjector::SetParticles(PParticle **mstack, int *, int *num, int, Int_t 
 	    for (int i=0; i<*num; i++) {
 		//cout << mstack[i]->IsActive() << endl;
 		if (mstack[i]->IsActive()) {
-		    
+
 		    //cout << "stack_pid:"<< mstack[i]->ID() << endl;
 		    //mstack[i]->Print();
 		    if ((mstack[i]->ID() == pid) || (pid==0)) { //0=DUMMY
@@ -522,12 +522,12 @@ Int_t  PProjector::SetParticles(PParticle **mstack, int *, int *num, int, Int_t 
 			    TObject *delme =  (TObject *) mstack[i];
 			    makeDataBase()->SetParamTObj(listkey, batch_particle_param, delme);
 			    //makeDataBase()->ListEntries(listkey,1,"name,*pid,*batch_particle");
-			} 
+			}
 			pos--;
 		    }
 		}
 	    }
-	}	
+	}
     }
     return 0;
 }
@@ -536,7 +536,7 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
     //cout << "Modify " << endl;
 
     *w = current_weight;
-    
+
     SetParticles(mstack, decay_done, num, stacksize, 1);
     //cout << "num:  " << *num << endl;
     //excuting batch
@@ -551,7 +551,7 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 	startcommand = 0;
 
 	if (retval & kTRUE) {
-	    
+
 	    current_weight = *w;
 
 	    if (hist3[i] && fFillFlag[i]) {
@@ -573,7 +573,7 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 		    hist1[i]->Fill((*x));
 		}
 	    }
-	    
+
 	    if (fp_out[i]) {
 		//fill the ntuple
 		Double_t *val;
@@ -586,7 +586,7 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 		    }
 		    else values[j] = 0;
 		}
-		
+
 		fp_out[i]->Fill(values);
 	    }
 
@@ -608,8 +608,8 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 		}
 		num_events_in_c[i]++;
 	    }
-	} 
-	
+	}
+
 	int redo = 0;
 	int setparticle = 0;
 	if (retval & kGOTO) {
@@ -624,7 +624,7 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 		Error("Modify", "Jumping with a GOTO over different Projector not yet implemented");
 	    }
 	    retval &= ~kGOTO;
-	} 
+	}
 	if (retval & kPUSH) {
 	    startcommand = batch[i]->GetOldCommand();
 	    //cout << startcommand << endl;
@@ -644,7 +644,7 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 	    //i -= 1; //stay in same batch
 	    redo = 1;
 	    retval &= ~kPUSH;
-	} 
+	}
 	if (retval & kPUSHBRANCH) {
 	    startcommand = batch[i]->GetOldCommand();
 	    if (batch[i]->GetBranch() > (*size_branches))  {
@@ -655,7 +655,7 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 		Warning("Modify (kPUSHBRANCH)", "Stack size too small, increase '_system_particle_stacksize'");
 		return kTRUE;
 	    }
-	    
+
 	    if (batch[i]->GetCurrentParticle()) {
 		*((particle_array_branches[batch[i]->GetBranch()-1])
 		  [*(current_size_branches[batch[i]->GetBranch()-1])] )
@@ -666,25 +666,25 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 	    }
 	    redo = 1;
 	    retval &= ~kPUSHBRANCH;
-	} 
+	}
 	if (retval & kFOREACHEND) {
 	    setparticle = 1;
 	    //SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles like for "formore"
 	    startcommand = 0;
 	    retval &= ~kFOREACHEND;
 	    retval &= ~kFOREACH;
-	} 
+	}
 	if (retval & kUPDATE) {
 	    setparticle = 1;
 	    //SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles like for "formore"
 	    startcommand = batch[i]->GetOldCommand();
 	    redo = 1;
 	    retval &= ~kUPDATE;
-	} 
+	}
 	if (retval & kEOF) {
 	    Info("Modify", "EOF reached");
 	    return kFALSE;
-	} 
+	}
 	if (retval & kFOREACH) {
 	    startcommand = batch[i]->GetOldCommand();
 	    //cout << "sc foreach " << startcommand << endl;
@@ -692,18 +692,18 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 	    setparticle = 1;
 	    //SetParticles(mstack, decay_done, num, stacksize, 0);  //reset particles like for "formore"
 	    retval &= ~kFOREACHEND;
-	} 
+	}
 	if (retval & kELSE) {
 	    if (batch[i]->GetElsePosition()>-1 &&  //only if else is provided
 		batch[i]->GetCurrentPosition() < batch[i]->GetElsePosition() ) { //avoid deadlocks
 		startcommand = batch[i]->GetElsePosition();
 		redo = 1;
-		//i -= 1; //stay in same batch		
+		//i -= 1; //stay in same batch
 	    }
 	}
 	if (setparticle == 1) SetParticles(mstack, decay_done, num, stacksize, 0);
 	if (setparticle == 2) SetParticles(mstack, decay_done, num, stacksize, 1);
-	if (redo) i -= 1; //stay in same batch	
+	if (redo) i -= 1; //stay in same batch
 
 	retval &= ~kTRUE; //clean true flag for next loop
     }
@@ -715,7 +715,7 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 	Int_t particle_key = makeStaticData()->GetParticleKey(mstack[i]->ID());
 	if (makeDataBase()->GetParamInt (particle_key, stream_max_pos_param, &i_result)) {
 	    (*i_result) = 0;
-	} 
+	}
     }
 
     return kTRUE;
@@ -723,7 +723,7 @@ Bool_t PProjector::Modify(PParticle **mstack, int *decay_done, int * num, int st
 
 
 void PProjector::Print(const Option_t*) const {
-    for (int i=0; i<batch_pos; i++) 
+    for (int i=0; i<batch_pos; i++)
 	batch[i]->Print();
 }
 

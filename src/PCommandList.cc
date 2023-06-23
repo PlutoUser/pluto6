@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////
-//  
+//
 //
 //                    Author: I. Froehlich
 //                    Written: 6.10.2007
@@ -59,13 +59,13 @@ Bool_t PCommandList::AddCommand(TObject *obj, const char *cmd, const char *basen
 	    TString tmp(basename);
 	    tmp += "_";
 	    tmp += (level+1);
-	    fNextP = new PCommandList(obj, tmp, cmd);    
+	    fNextP = new PCommandList(obj, tmp, cmd);
 	    fNext.SetString(PUtils::NewString(tmp));
 	    return kTRUE;
 	} else {
 	    TString tmp(GetName());
 	    tmp += "_1";
-	    fNextP = new PCommandList(obj, tmp, cmd);  
+	    fNextP = new PCommandList(obj, tmp, cmd);
 	    fNext.SetString(PUtils::NewString(tmp));
 	    return kTRUE;
 	}
@@ -91,7 +91,7 @@ Bool_t PCommandList::GetCommand(char **cmd, int level, TObject **obj) {
     }
 
     if (fNextP) return fNextP->GetCommand(cmd, level-1, obj);
- 
+
     if (fNext.GetString().Data() && strlen(fNext.GetString().Data())) {
 	fNextP = (PCommandList*)gROOT->FindObject(fNext.GetString().Data());
 	if (!fNextP) return kFALSE;
@@ -102,7 +102,7 @@ Bool_t PCommandList::GetCommand(char **cmd, int level, TObject **obj) {
 }
 
 void PCommandList::Print(const Option_t *) const {
-    
+
     if (fTool.GetString().Data() && strlen(fTool.GetString().Data())) {
 	cout<< "<" <<  fTool.GetString().Data() << "> " << fCmd.GetString() << endl;
     } else {
@@ -121,8 +121,8 @@ void PCommandList::Print(const Option_t *) const {
 
 
 Int_t PCommandList::Write(const char *name, Int_t option, Int_t bufsize) const {
-    
-    if (fNextP) 
+
+    if (fNextP)
 	fNextP->Write(name, option, bufsize);
     return TObject::Write(name, option, bufsize);
 }

@@ -14,9 +14,9 @@
 
 
 class PFermiMomentumGA : public PChannelModel  {
-   
+
  public:
-    
+
     PFermiMomentumGA();
     PFermiMomentumGA(const Char_t *id, const Char_t *de, Int_t key);
     PDistribution *Clone(const char *delme=NULL) const;
@@ -25,10 +25,10 @@ class PFermiMomentumGA : public PChannelModel  {
     Bool_t SampleMass(void);
     Bool_t SampleMomentum(void);
     Double_t GetRandomFermiMomentum(Double_t &px, Double_t &py, Double_t &pz);
-  
+
 private:
 
-    //    PFermiDistributions *Dist;   
+    //    PFermiDistributions *Dist;
     PParticle *beam;
     PParticle *target;
     PParticle *spectator;
@@ -40,7 +40,7 @@ private:
     PChannelModel *fermi_model;
 
 
-    ClassDef(PFermiMomentumGA, 0) 
+    ClassDef(PFermiMomentumGA, 0)
 
 };
 

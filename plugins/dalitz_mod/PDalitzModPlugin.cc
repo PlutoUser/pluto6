@@ -2,12 +2,12 @@
 //Plugin to modify the Dalitz decays
 //
 //This plugin is part of the distribution manager
-//It can be activated with 
+//It can be activated with
 //makeDistributionManager()->Exec("dalitz_mod: command");
 //
 //where the plugin supports the following commands:
 //static_br_thresh=value   Threshold for disabling static br in GeV
-//flat_generator           Enables a flat generator for all registered 
+//flat_generator           Enables a flat generator for all registered
 //                         Dalitz decays. Instead of the static br we
 //                         use the dG/dm directly, if the parent res
 //                         width is > static_br_thresh
@@ -29,7 +29,7 @@
 
 PDalitzModPlugin::PDalitzModPlugin(const Char_t *id, const Char_t *de):
     PDistributionCollection(id, de) {
-    
+
     resonances_done = kFALSE;
     RequiresPlugin("pdg:extend_resonances");
 }
@@ -60,8 +60,8 @@ Bool_t PDalitzModPlugin::ExecCommand(const char *command, Double_t value) {
 	pdmutil->SetGroup("dalitz_zetenyi_wolf");
 
 	makeStaticData()->AddDecay(-1, "N*(1520)+ -> p + dilepton", "ND13+", "p, dilepton", 4.0e-5);
-	
-	PResonanceDalitz *newmodel = 
+
+	PResonanceDalitz *newmodel =
 	    new PResonanceDalitz("ND13+_dalitz@ND13+_to_p_dilepton",
 				 "dgdm from Zetenyi/Wolf", -1);
 	newmodel->setGm(0.793);
@@ -90,7 +90,7 @@ Bool_t PDalitzModPlugin::ExecCommand(const char *command, Double_t value) {
 	makeStaticData()->AddDecay(-1, "N*(1440)0 -> n + dilepton", "N*(1440)0", "n, dilepton", 1.1e-5);
 	newmodel = new PResonanceDalitz("NP110_dalitz@NP110_to_n_dilepton",
 					"dgdm from Zetenyi/Wolf", -1);
-	newmodel->setGm(0.098); 
+	newmodel->setGm(0.098);
 	pdmutil->Add(newmodel);
 
 
@@ -100,7 +100,7 @@ Bool_t PDalitzModPlugin::ExecCommand(const char *command, Double_t value) {
 	newmodel->setGm(0.549);
 	pdmutil->Add(newmodel);
 
-	
+
 
 
 	// setGm(0 , 1.98  , 1.980, 1, 3);              // D1232
@@ -118,8 +118,8 @@ Bool_t PDalitzModPlugin::ExecCommand(const char *command, Double_t value) {
 	// setGm(12, 0.549 , 0.549,-1, 3);              // D1700
 	// setGm(13, 0.713 , 0.713, 1, 5);              // D1905
 	// setGm(14, 0.066 , 0.066, 1, 1);              // D1910
-	// setGm(15, 0.479 , 0.479,-1, 5);              // D1930 
-	
+	// setGm(15, 0.479 , 0.479,-1, 5);              // D1930
+
 	resonances_done = kTRUE;
     }
 
@@ -141,19 +141,19 @@ Bool_t PDalitzModPlugin::ExecCommand(const char *command, Double_t value) {
 
 	//loop over particles
 	while (makeDataBase()->MakeListIterator(header, "snpart", "slink", &particlekey)) {
-	
+
 	    Int_t decaykey = -1;
 	    Int_t pid = makeStaticData()->GetParticleIDByKey(particlekey);
 
 	    //loop over decays
-	    while ((makeStaticData()->GetParticleNChannelsByKey(particlekey)>0) && 
+	    while ((makeStaticData()->GetParticleNChannelsByKey(particlekey)>0) &&
 		   (makeDataBase()->MakeListIterator(particlekey, "pnmodes", "link", &decaykey))) {
 		Int_t tid[11];
-		tid[0] = 10; 
+		tid[0] = 10;
 		makeStaticData()->GetDecayModeByKey(decaykey, tid); // retrieve current mode info
 
 		if (PData::IsDalitz(pid, tid[1], tid[2])) {
-	    
+
 		    TString *id = new TString(makeStaticData()->GetParticleName(pid));
 		    id->Append("_generator_");
 		    for (int p=1; p<=tid[0]; p++) {
@@ -169,12 +169,12 @@ Bool_t PDalitzModPlugin::ExecCommand(const char *command, Double_t value) {
 		    }
 		    id->Append("&generator");
 
-		    PInclusiveModel *dilepton_generator = 
-			new PInclusiveModel((char*)id->Data(), "Dilepton generator", -2);    
+		    PInclusiveModel *dilepton_generator =
+			new PInclusiveModel((char*)id->Data(), "Dilepton generator", -2);
 		    dilepton_generator->Set("dilepton,primary");
 		    dilepton_generator->SetSampleFunction(flat);
 		    dilepton_generator->EnableGenerator();
-	    
+
 		    pdmutil->Add(dilepton_generator);
 
 		    PChannelModel *pmodel = makeDynamicData()->GetDecayModelByKey(decaykey);
@@ -187,14 +187,14 @@ Bool_t PDalitzModPlugin::ExecCommand(const char *command, Double_t value) {
 			    pmodel->SetExpectedWeightMean(-1);
 			    Info("ExecCommand","Model <%s> uses dGamma/dM for the branching ratio",
 				 pmodel->GetIdentifier());
-			} 
+			}
 		    } else {
 			Warning("ExecCommand", "Primary model not found");
 		    }
 		} //isDalitz
 	    }
 	}
-      
+
 	return kTRUE;
 
     } else if (strcmp (command,"static_br_thresh") == 0) {
@@ -226,7 +226,7 @@ Bool_t PDalitzModPlugin::ExecCommand(const char *command, Double_t value) {
 	vmd_newmodel = new PDeltaDalitzFF("D0_iachello_ff@D0_to_n_dilepton/formfactor",
 					  "Iachello ff for D0 -> n e+e-", -1);
 	pdmutil->Add(vmd_newmodel);
-	
+
 
 	//Add QED-FF in the qed group
 	pdmutil->AddSubGroup("qed", "QED form factors", "root");
@@ -243,8 +243,8 @@ Bool_t PDalitzModPlugin::ExecCommand(const char *command, Double_t value) {
 	qed_newmodel->SetCC(3.0,0,0);
 	pdmutil->Add(qed_newmodel);
 	return kTRUE;
-    } 
-	
+    }
+
     return kFALSE;
 }
 
@@ -254,4 +254,4 @@ ClassImp(PDalitzModPlugin)
 
 
 
-    
+

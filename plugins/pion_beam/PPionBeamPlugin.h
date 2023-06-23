@@ -9,7 +9,7 @@
 
 #include "PChannelModel.h"
 #include "PDistributionManagerUtil.h"
-#include "PDistributionCollection.h"   
+#include "PDistributionCollection.h"
 
 #include "PPionBeamAmplitude.h"
 #include "PPropagator.h"
@@ -19,7 +19,7 @@
 using namespace std;
 
 class PPionBeamPlugin : public PDistributionCollection {
-    
+
  public:
 
     //constructor
@@ -27,16 +27,16 @@ class PPionBeamPlugin : public PDistributionCollection {
     //destructor
     ~PPionBeamPlugin();
 
-    Bool_t ExecCommand(const char *command, Double_t value); 
+    Bool_t ExecCommand(const char *command, Double_t value);
     Bool_t Activate(void);
 
  private:
 
-    PPionBeamAmplitude *Pi_minusBeamAmplitude, *Pi_plusBeamAmplitude; 
-    PPropagator        *Rho0Propagator, *OmegaPropagator; 
+    PPionBeamAmplitude *Pi_minusBeamAmplitude, *Pi_plusBeamAmplitude;
+    PPropagator        *Rho0Propagator, *OmegaPropagator;
     PInclusiveModel    *Pi_minusBeamAmplitude_gen, *Pi_plusBeamAmplitude_gen;
-   
-    ClassDef(PPionBeamPlugin, 0) 
+
+    ClassDef(PPionBeamPlugin, 0)
 };
 
 #endif //_PPionBeam_PLUGIN_H_

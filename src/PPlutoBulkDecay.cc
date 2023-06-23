@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////
-//  Pluto bulk decay base 
+//  Pluto bulk decay base
 //
-//  This class let all particles with tau<tauMax 
+//  This class let all particles with tau<tauMax
 //  decay in the pluto way
 //
 //                    Author:  Ingo Froehlich
@@ -42,18 +42,18 @@ bool PPlutoBulkDecay::Modify(PParticle ** stack, int *decay_done, int * num, int
     //This is needed because I first HAVE to end a decay chain, before re-using the PChannel
     //BUGBUG: This might not work with a self-decay like Delta->Delta+gamma
     st_i1 = size_ini-1;
-    
+
     //st_i2 = st_i3 = size_ini;
     st_i3 = size_ini;
 
     while (st_i1 > -1) {
 	cur_p = stack[st_i1];  //set current pointer
 	//if (cur_p->ID() == 17)
-	//  cout << cur_p->IsActive()  << ":"<<  makeDynamicData()->GetParticleLife(cur_p->ID() )<< ":"<< 
+	//  cout << cur_p->IsActive()  << ":"<<  makeDynamicData()->GetParticleLife(cur_p->ID() )<< ":"<<
 	//	decay_done[st_i1] << endl;
 
-	if (cur_p->IsActive() && 
-	    makeDynamicData()->GetParticleLife(cur_p->ID()) 
+	if (cur_p->IsActive() &&
+	    makeDynamicData()->GetParticleLife(cur_p->ID())
 	    < tauMax && !decay_done[st_i1]) {
 
  	    //cout << "Current stack particle: " << st_i1 << endl;
@@ -61,19 +61,19 @@ bool PPlutoBulkDecay::Modify(PParticle ** stack, int *decay_done, int * num, int
 
 	    //	    cout << "cur_p" << cur_p->ID()<< ":"<< cur_p->M()<< endl;
 
-	    Int_t channel_idx = 
-		makeDynamicData()->PickDecayChannel(cur_p->ID(), cur_p->M(), child_ids);	    
+	    Int_t channel_idx =
+		makeDynamicData()->PickDecayChannel(cur_p->ID(), cur_p->M(), child_ids);
 
 	    //cout << channel_idx << endl;
 
-	    if (channel_idx>-1) { 
+	    if (channel_idx>-1) {
 
 		Int_t np = child_ids[0];   // number of decay products
 		if (np > 0) { // np==0 can happen if M()<threshold
 		    //First we check if we have already the PChannel on stock
 		    TObject * ch;
 		    PChannel* d_ch;
-		    
+
 		    if (!makeDataBase()->GetParamTObj (didx, channel_idx , stackchannel, &ch)) {
 			Info("Modify", "(%s) Making new channel for didx %i", PRINT_AUTO_ALLOC, channel_idx);
 
@@ -101,9 +101,9 @@ bool PPlutoBulkDecay::Modify(PParticle ** stack, int *decay_done, int * num, int
 			work[0]->SetSourceId(sourceIdSave);           // Reset them here.
 			work[0]->SetParentId(parentIdSave);
 
-			makeDataBase()->SetParamTObj(makeDataBase()->GetEntryInt("didx", channel_idx) , 
-						     "stackchannel", d_ch);	
-			
+			makeDataBase()->SetParamTObj(makeDataBase()->GetEntryInt("didx", channel_idx) ,
+						     "stackchannel", d_ch);
+
 		    }
 
 		    if (makeDataBase()->GetParamTObj(didx, channel_idx, stackchannel, &ch)) {
@@ -130,7 +130,7 @@ bool PPlutoBulkDecay::Modify(PParticle ** stack, int *decay_done, int * num, int
 				work[k]->SetSibling(work[1]);
 			    }
 			}
-			
+
 			//--> otherwise we are not doing sampling with the total width
 		    } else {
 			Fatal("Modify", "Unable to get PChannel");
@@ -146,7 +146,7 @@ bool PPlutoBulkDecay::Modify(PParticle ** stack, int *decay_done, int * num, int
 		    }
 #endif
 		    //end debug
-		    
+
 
 		    (d_ch->GetParticles()[0])->SetParent(work[0]->GetParent());
 		    //now Init in background
@@ -168,7 +168,7 @@ bool PPlutoBulkDecay::Modify(PParticle ** stack, int *decay_done, int * num, int
 		    work[0]->SetDecayModeIndex(channel_idx, 1); //set the index, but destroy it later
 		    //-->has to happen after decay()
 
-		    decay_done[st_i1] = 1;  
+		    decay_done[st_i1] = 1;
 		    //never let this particle decay again in this event
 
 		    //after the decay we put all local particles to stack
@@ -200,7 +200,7 @@ bool PPlutoBulkDecay::Modify(PParticle ** stack, int *decay_done, int * num, int
 	    if(st_i3>(stacksize-maxnp))   {  // check for stack overflow, taking into account next particles
 		printf("PPlutoBulkDecay::decayAll: st_i3=%d > stacksize%i\n", st_i3, stacksize);
 	    }
-	
+
 	} // if (cur_p->isActive()...
 
 	//set the focus to the last particle, and let us drop to the first one
@@ -208,8 +208,8 @@ bool PPlutoBulkDecay::Modify(PParticle ** stack, int *decay_done, int * num, int
     }
 
     *num = st_i3;  //Output size
-	    
+
     return kTRUE;
 }
 
-ClassImp(PPlutoBulkDecay) 
+ClassImp(PPlutoBulkDecay)

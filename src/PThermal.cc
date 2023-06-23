@@ -34,10 +34,10 @@ double PThermal::dNdE(double *x, double *par) {
     double p2 = E*E - M*M;
     if (p2 <= 0.) return 0.;
     double p = sqrt(p2);
-  
+
     if (beta < 0.01 || beta > 0.99) {   // simple thermal source
 	val = f*exp(-E/T1);
-	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);  
+	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);
     } else {                            // thermal + blast
 	double gamma = 1./sqrt(1.-beta*beta);
 	double alpha = beta*gamma*p/T1;
@@ -51,7 +51,7 @@ double PThermal::dNdE(double *x, double *par) {
     }
 
     // Another definition of f is given if dNdE is normalized to 1:
-    // val -> val/[M*M*T*K2(M/T)]  (See e.g. NP A612 (1997) 512) 
+    // val -> val/[M*M*T*K2(M/T)]  (See e.g. NP A612 (1997) 512)
 
     return 100000.*p*E*val;
 }
@@ -69,11 +69,11 @@ double PThermal::dNdE1(double *x, double *par) {
     double p2 = E*E - M*M;
     if (p2 <= 0.) return 0.;
     double p = sqrt(p2);
-  
+
     if (beta < 0.01 || beta > 0.99) {   // simple thermal source
 	val = f*exp(-E/T1);
-	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);    
-    } else {                            // thermal + blast   
+	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);
+    } else {                            // thermal + blast
 	double gamma = 1./sqrt(1.-beta*beta);
 	double alpha = beta*gamma*p/T1;
 	val = f*exp(-gamma*E/T1)
@@ -84,7 +84,7 @@ double PThermal::dNdE1(double *x, double *par) {
 		* ((gamma+T2/E)*sinh(alpha)/alpha -T2/E*cosh(alpha));
 	}
     }
-  
+
     return 100000.*sqrt(p)*E*val;
 }
 
@@ -101,11 +101,11 @@ double PThermal::dNdE2(double *x, double *par) {
     double p2 = E*E - M*M;
     if (p2 <= 0.) return 0.;
     double p = sqrt(p2);
-  
+
     if (beta < 0.01 || beta > 0.99) {   // simple thermal source
 	val = f*exp(-E/T1);
-	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);    
-    } else {                            // thermal + blast    
+	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);
+    } else {                            // thermal + blast
 	double gamma = 1./sqrt(1.-beta*beta);
 	double alpha = beta*gamma*p/T1;
 	val = f*exp(-gamma*E/T1)
@@ -116,7 +116,7 @@ double PThermal::dNdE2(double *x, double *par) {
 		* ((gamma+T2/E)*sinh(alpha)/alpha -T2/E*cosh(alpha));
 	}
     }
-  
+
     return 100000.*p*p*p*E*val;
 }
 
@@ -133,10 +133,10 @@ double PThermal::dNdE3(double *x, double *par) {
     double p2 = E*E - M*M;
     if (p2 <= 0.) return 0.;
     double p = sqrt(p2);
-  
+
     val = f*exp(-E/T1);
     if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);
-    
+
     return 1000000.*pow(p,n)*val;
 }
 
@@ -148,7 +148,7 @@ double PThermal::d2NdEdM(double *x, double *par) {
     double f  = par[2];
     double beta = par[3];
     int id  = int(par[4]+0.001);
-    int idx = int(par[5]+0.001); 
+    int idx = int(par[5]+0.001);
 
     double val;
     double E = x[0];
@@ -163,30 +163,30 @@ double PThermal::d2NdEdM(double *x, double *par) {
     double p2 = E*E - M*M;
 
     if (p2 <= 0.) return 0.;
-    
+
     double p = sqrt(p2);
-  
+
     if (beta < 0.01 || beta > 0.99) {   // simple thermal source
 	val = f*exp(-E/T1);
-	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);	
-    } else {                            // thermal + blast	
+	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);
+    } else {                            // thermal + blast
 	double gamma = 1./sqrt(1.-beta*beta);
 	double alpha = beta*gamma*p/T1;
 	val = f*exp(-gamma*E/T1)
 	    * ((gamma+T1/E)*sinh(alpha)/alpha -T1/E*cosh(alpha));
-	
+
 	if (f < 1. && T2 > 0.) {
 	    alpha = beta*gamma*p/T2;
 	    val += (1.-f)*exp(-gamma*E/T2)
 		* ((gamma+T2/E)*sinh(alpha)/alpha -T2/E*cosh(alpha));
 	}
     }
-    
-    //if (makeStaticData()->GetParticleTotalWidth(id) > *thermal_unstable_width) 
+
+    //if (makeStaticData()->GetParticleTotalWidth(id) > *thermal_unstable_width)
     val *= makeDynamicData()->GetParticleTotalWeight(M,id,idx);
-  
+
     // Another definition of f is given if d2NdEdM is normalized to 1
-    
+
     return 100000.*p*E*val;
 }
 
@@ -205,11 +205,11 @@ double PThermal::d2NdEdM1(double *x, double *par) {
     double p2 = E*E - M*M;
     if (p2 <= 0.) return 0.;
     double p = sqrt(p2);
-  
+
     if (beta < 0.01 || beta > 0.99) {   // simple thermal source
 	val = f*exp(-E/T1);
-	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);    
-    } else {                            // thermal + blast   
+	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);
+    } else {                            // thermal + blast
 	double gamma = 1./sqrt(1.-beta*beta);
 	double alpha = beta*gamma*p/T1;
 	val = f*exp(-gamma*E/T1)
@@ -220,8 +220,8 @@ double PThermal::d2NdEdM1(double *x, double *par) {
 		* ((gamma+T2/E)*sinh(alpha)/alpha -T2/E*cosh(alpha));
 	}
     }
- 
-    //if (makeStaticData()->GetParticleTotalWidth(id) > *thermal_unstable_width) 
+
+    //if (makeStaticData()->GetParticleTotalWidth(id) > *thermal_unstable_width)
     val *= makeDynamicData()->GetParticleTotalWeight(M,id,idx);
     // else
     //       val *= makeDynamicData()->GetParticleTotalWeight(M,id);
@@ -243,11 +243,11 @@ double PThermal::d2NdEdM2(double *x, double *par) {
     double p2 = E*E - M*M;
     if (p2 <= 0.) return 0.;
     double p = sqrt(p2);
-  
+
     if (beta < 0.01 || beta > 0.99) {   // simple thermal source
 	val = f*exp(-E/T1);
-	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);    
-    } else {                            // thermal + blast   
+	if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);
+    } else {                            // thermal + blast
 	double gamma = 1./sqrt(1.-beta*beta);
 	double alpha = beta*gamma*p/T1;
 	val = f*exp(-gamma*E/T1)
@@ -258,8 +258,8 @@ double PThermal::d2NdEdM2(double *x, double *par) {
 		* ((gamma+T2/E)*sinh(alpha)/alpha -T2/E*cosh(alpha));
 	}
     }
-  
-    //if (makeStaticData()->GetParticleTotalWidth(id) > *thermal_unstable_width) 
+
+    //if (makeStaticData()->GetParticleTotalWidth(id) > *thermal_unstable_width)
     val *= makeDynamicData()->GetParticleTotalWeight(M,id,idx);
     //  else
     //       val *= makeDynamicData()->GetParticleTotalWeight(M,id);
@@ -281,11 +281,11 @@ double PThermal::d2NdEdM3(double *x, double *par) {
     double p2 = E*E - M*M;
     if (p2 <= 0.) return 0.;
     double p = sqrt(p2);
-  
+
     val = f*exp(-E/T1);
     if (f < 1. && T2 > 0.) val += (1.-f)*exp(-E/T2);
-    
-    if (makeStaticData()->GetParticleTotalWidth(id) > *thermal_unstable_width) 
+
+    if (makeStaticData()->GetParticleTotalWidth(id) > *thermal_unstable_width)
 	val *= makeDynamicData()->GetParticleTotalWeight(M,id,idx);
     //  else
     //       val *= makeDynamicData()->GetParticleTotalWeight(M,id);
@@ -329,7 +329,7 @@ double PThermal::d2NdEdTheta(double *x, double *par) {
 }
 
 
-double PThermal::dNdTheta(double *x, double *par) {  
+double PThermal::dNdTheta(double *x, double *par) {
     // polar angular distribution
 
     double theta = x[0];
@@ -340,7 +340,7 @@ double PThermal::dNdTheta(double *x, double *par) {
     return sin(theta)*(1. + A2*cost2 + A4*cost2*cost2);
 }
 
-double PThermal::dNdy(double *x, double *par) {  
+double PThermal::dNdy(double *x, double *par) {
     // rapidity distribution
 
     double y = x[0];
@@ -351,7 +351,7 @@ double PThermal::dNdy(double *x, double *par) {
     return m*m*T*(1.+2.*chi*(1.+chi))*exp(-1./chi);
 }
 
-double PThermal::dNdMt(double *x, double *par) {  
+double PThermal::dNdMt(double *x, double *par) {
     // transverse-mass distribution
 
     double mt = x[0];
@@ -365,7 +365,7 @@ double PThermal::dNdMt(double *x, double *par) {
     return mt*mt*val;
 }
 
-double PThermal::dNdPt(double *x, double *par) {  
+double PThermal::dNdPt(double *x, double *par) {
     // transverse-momentum distribution
 
     double pt = x[0];
@@ -377,7 +377,7 @@ double PThermal::dNdPt(double *x, double *par) {
 
 double PThermal::IntThermal(double m, double T, int n) {
     //
-    // return Integral|m,inf| E*p**n exp(-E/T)  n=0,1,2,3,4,5,6,7 
+    // return Integral|m,inf| E*p**n exp(-E/T)  n=0,1,2,3,4,5,6,7
     //
     double sum = 1;
 
@@ -418,13 +418,13 @@ Double_t PThermal::mtScaleFactor(Int_t id, const Float_t T) {
     //
     // Compute the yield enhancement factor due to thermal weighting of a
     // resonance with id at temperature T.
-    // 
-    // Factor = 1/B(M0) x Integral[M=0,Inf](B(M)*BW(M))/Integral[M=0,Inf](BW(M)) 
+    //
+    // Factor = 1/B(M0) x Integral[M=0,Inf](B(M)*BW(M))/Integral[M=0,Inf](BW(M))
     //
     // where BW(M) is the bare resonance shape and B(M) is the integral of the
     // Boltzmann distribution: B(M) = Integral[E=M,Inf](exp(-E/T)*E*sqrt(E^2-M^2))
     //                              = M^2*T*BesselK(2,M/T)
-    // 
+    //
     // Tool function copied from PData (IF)
 
     Double_t val = 0.;

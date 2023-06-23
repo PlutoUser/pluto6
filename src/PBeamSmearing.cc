@@ -1,14 +1,14 @@
 /////////////////////////////////////////////////////////////////////
 //
-// Beam smearing models: Angular semaring is possible as well 
-// as momentum smearing using TF1 objects. 
+// Beam smearing models: Angular semaring is possible as well
+// as momentum smearing using TF1 objects.
 // Particles needed: beam and target (as grandparent), parent
-// The particle from(beam, target) 
+// The particle from(beam, target)
 // with higher momentum is defined as the real beam
 //
 //                                  Author: I. Froehlich
 //                                  Written: 18.7.2007
-//                                  Revised: 
+//                                  Revised:
 /////////////////////////////////////////////////////////////////////
 
 
@@ -89,13 +89,13 @@ Bool_t PBeamSmearing::Prepare(void) {
     //the mass and momentum sampling done in the next steps
 
     Double_t angle = 0;
-    if (ang_smearing) 
+    if (ang_smearing)
 	angle = ang_smearing->GetRandom() *TMath::Pi() / 180.;
 
     Double_t mom = 1.;
-    if (mom_smearing) 
+    if (mom_smearing)
 	mom = mom_smearing->GetRandom();
-    if (mom_smearing_histo) 
+    if (mom_smearing_histo)
 	mom *= mom_smearing->GetRandom();
 
     //restore saved particles
@@ -106,18 +106,18 @@ Bool_t PBeamSmearing::Prepare(void) {
     //because the following step includes tilting
     if (beam->P() > target->P()) {
 	Double_t mymom = beam->Rho();
-	if (mom_function) 
+	if (mom_function)
 	    mymom = mom_function->GetRandom();
-	if (mom_function_histo) 
+	if (mom_function_histo)
 	    mymom = mom_function_histo->GetRandom();
 	beam->SetMom(mymom*mom);
 	beam->RotateX(angle);
 	beam->RotateZ(PUtils::sampleFlat()*2*TMath::Pi());
     } else {
 	Double_t mymom = target->Rho();
-	if (mom_function) 
+	if (mom_function)
 	    mymom = mom_function->GetRandom();
-	if (mom_function_histo) 
+	if (mom_function_histo)
 	    mymom = mom_function_histo->GetRandom();
 	target->SetMom(mymom*mom);
 	target->RotateX(angle);
@@ -131,7 +131,7 @@ Bool_t PBeamSmearing::Prepare(void) {
 	if (sigmaBeam > 0.) {   // gaussian smearing of beam axis
 	    //  thB = TMath::Abs(PUtils::sampleGaus(0.,sigmaBeam));
 	    //  phB = 6.283185308*PUtils::sampleFlat();
-	    Double_t thx = PUtils::sampleGaus(0., sigmaBeam);   
+	    Double_t thx = PUtils::sampleGaus(0., sigmaBeam);
 	    // this gives better results
 	    Double_t thy = PUtils::sampleGaus(0., sigmaBeam);
 	    thB = sqrt(thx*thx+thy*thy);
@@ -147,7 +147,7 @@ Bool_t PBeamSmearing::Prepare(void) {
 			  TMath::Cos(thetaBeam));
 	    beamAxis.RotateUz(skew);
 	}
-	
+
 	if (beam->P() > target->P()) {
 	    beam->RotateUz(beamAxis);
 
@@ -155,7 +155,7 @@ Bool_t PBeamSmearing::Prepare(void) {
 	    target->RotateUz(beamAxis);
 	}
     }
-    
+
     parent->Reconstruct();
 
     return kTRUE;

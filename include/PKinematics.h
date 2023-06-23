@@ -24,14 +24,14 @@ class PKinematics {
     // cm momentum^2 for the decay of M to m1 and m2
     return (M>0.) ? 0.25*lambda(M,m1,m2)/(M*M) : 0.;
   }
-  
+
   static double pcms(double M, double m1, double m2) {
     // cm momentum for the decay of M to m1 and m2
       return sqrt(pcms2(M,m1,m2));
   }
-  
+
   static double pcmt(double m, double t) {
-    const double mp = makeStaticData()->GetParticleMass("p"), 
+    const double mp = makeStaticData()->GetParticleMass("p"),
 	mp2 = mp*mp;
     double m2 = m*m;
     double arg = m2+mp2-t;
@@ -41,8 +41,8 @@ class PKinematics {
 
   static void rotes(double c, double s, double c2, double s2, double *pr) {
     // rotation used by GENBOD
-    double sa = *pr, 
-	sb = *(pr+1), 
+    double sa = *pr,
+	sb = *(pr+1),
 	a = sa*c-sb*s;
     *(pr+1) = sa*s+sb*c;
     double b = *(pr+2);

@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 19.2.2009
-// Revised: 
+// Revised:
 // PFormula Class Header
 
 #ifndef _PFORMULA_H_
@@ -15,7 +15,7 @@ class PFormula: public ROOT::v5::TFormula {
 
     PFormula();
     PFormula(const char *name,const char *expression);
-    
+
     TString error_string;
     Int_t   error_code;
     TString chaine;

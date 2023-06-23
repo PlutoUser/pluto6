@@ -100,7 +100,7 @@ void PHUrDilep::Dilep() {
     Double_t tgamma;                         // changed in gamma_star()
     Double_t xgstar, ygstar, zgstar, tgstar; // changed in gamma_star()
     Double_t xgamma, ygamma, zgamma;         // changed in gamma_star()
-    
+
     Double_t dgamma;       // changed in dalpi(),daleta(),daletaprime(),dalomega()
     Double_t mgstar;       // mgstar=s s from gamma_star()
     Double_t p0_gstar, p0_nucleon, p0_pion, p0_gamma; // local variables
@@ -161,7 +161,7 @@ void PHUrDilep::Dilep() {
 
 		if(p0_gstar > mgstar) {
 		    validm++;
-		    
+
 		    lobo_dal(p0_gstar, p0_pion,
 			     mgstar, beta, gamma,
 			     xgstar, ygstar, zgstar, tgstar, xgamma, ygamma, zgamma, particleOut->mass);// em,ep output
@@ -317,7 +317,7 @@ void PHUrDilep::Dilep() {
 
 
 	    if (t <= dgamma) {
-		
+
 		mgstar = s ;
 
 		p0_gstar   = particleOut->mass/2. - (pow(mass_nucleon,2) - pow(mgstar,2))/(2.*particleOut->mass);
@@ -338,7 +338,7 @@ void PHUrDilep::Dilep() {
 
 void PHUrDilep::dalpi(Double_t mx, Double_t &dgamma) {
     // form factor from Landsberg 1985 (Phys.Rept.128,301-376)
-   
+
     Double_t t1 = ((4.*alpha_em)/(3.*TMath::Pi()*mx))*
 	sqrt(1.-(4.*pow(mass_electron,2))/(pow(mx,2)))*
 	(1.+(2.*pow(mass_electron,2))/(pow(mx,2)));
@@ -348,7 +348,7 @@ void PHUrDilep::dalpi(Double_t mx, Double_t &dgamma) {
 }
 
 void PHUrDilep::daleta(Double_t mx, Double_t &dgamma) {
-                               
+
     //### integration dgamma, for more details please refer to (REFERENCE, MANUAL) ####
 
     Double_t t1 =((4.*alpha_em)/(3.*TMath::Pi()*mx))*
@@ -379,7 +379,7 @@ void PHUrDilep::daletaprime(Double_t mx, Double_t &dgamma) {
 		    (pow(lambda_etaprime,2)+pow(gamma_etaprime,2)))/
 	(pow((pow(lambda_etaprime,2)-pow(mx,2)),2)+
 	 (pow(lambda_etaprime,2)*pow(gamma_etaprime,2)));
-    
+
     dgamma = t1*t2*f1*br_etaprime;
 }
 
@@ -415,7 +415,7 @@ void PHUrDilep::daldelta(Double_t tau, Double_t mx, Double_t mres, Double_t &dga
 }
 
 void PHUrDilep::dalomega(Double_t tau, Double_t mx, Double_t &dgamma) {
-    
+
     //######### Landsberg 85
 
     Double_t  t1 = ((2.*alpha_em)/(3.*TMath::Pi()*mx))*
@@ -442,7 +442,7 @@ void  PHUrDilep::diromega(Double_t tau, Double_t mres, Int_t multi, Double_t &we
 }
 
 void PHUrDilep::dirphi(Double_t, Double_t mres, Int_t multi, Double_t &weight) {
-            
+
     const Double_t gamma_tot = 0.00426;
     const Double_t cv        = 0.0000012411;
 
@@ -453,13 +453,13 @@ void PHUrDilep::dirphi(Double_t, Double_t mres, Int_t multi, Double_t &weight) {
 }
 
 void PHUrDilep::dirrho(Double_t tau, Double_t mres, Int_t multi, Double_t &weight) {
-      
+
     const Double_t cv = 0.0000090545;
 
     Double_t dwidth = (cv/ pow(mres,3))*pow(vacmass_rho,4);
     Double_t br     =  dwidth*(tau/gev);
 
-    weight = br/multi;  
+    weight = br/multi;
 }
 
 void PHUrDilep::lobo_dal(Double_t p0_gstar, Double_t,
@@ -907,7 +907,7 @@ void  PHUrDilep::dgamma_sum(Int_t ityp, Double_t tau, Int_t multi,
     Double_t mx = 0, t1 = 0, t2 = 0, f1 = 0;
     Int_t z = 0;
     if(ityp == pion) { //     pi0
- 
+
 	smin = 0.0013;
 	smax = 0.1348;
 	tmax = 1.9065;
@@ -928,7 +928,7 @@ void  PHUrDilep::dgamma_sum(Int_t ityp, Double_t tau, Int_t multi,
 	}
 
 	weight = dgamma_sum*dx/multi;
-	
+
     } else if(ityp == omega) {  //     omega
 
 	smin = 0.0013;
@@ -1025,8 +1025,8 @@ void PHUrDilep::dgamma_sum_delta(Double_t tau,Double_t mres,Int_t multi,
       Double_t mx, pf, q0, e, f, mt, ml, lambda, gamma0, dgamma, dgamma_sum=0;
       //Double_t q,qr;
       //     cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-      
-  
+
+
       smin_del = 0.0013;
       tmax_del = 0.00903;
       smax_del = mres-mass_nucleon;
@@ -1035,9 +1035,9 @@ void PHUrDilep::dgamma_sum_delta(Double_t tau,Double_t mres,Int_t multi,
       Int_t z_del = (Int_t)((smax_del-smin_del)/dx);
 
       for(Int_t i=1; i <= z_del; i++) {
-      
+
 	  mx = smin_del+dx*i;
-      
+
 	  pf = sqrt((pow(mres,2)-pow((mass_nucleon+mx),2))*
 		  (pow(mres,2)-pow((mass_nucleon-mx),2)))/2./mres;
 
@@ -1052,16 +1052,16 @@ void PHUrDilep::dgamma_sum_delta(Double_t tau,Double_t mres,Int_t multi,
 */
 	  f = (-3./2.)*(mres+mass_nucleon)/
 	      (mass_nucleon*(pow((mres+mass_nucleon),2)-mx*mx));
-      
+
 	  e = sqrt(4.*TMath::Pi()*alpha_em);
-      
+
 	  mt = pow((e*f*g),2)*pow(mres,2)/9./mass_nucleon*
 	      (pow(q0,2)*(5.*mres-3.*(q0+mass_nucleon))-
 	       pow(mx,2)*(mres+mass_nucleon+q0));
-      
+
 	  ml = pow((e*f*g),2)*pow(mres,2)/9./mass_nucleon*mx*mx*4.*
 	      (mres-mass_nucleon-q0);
-      
+
 	  lambda = pow(mx,4)+pow(mass_nucleon,4)+pow(mres,4)-2.*
 	      (mx*mx*pow(mass_nucleon,2)+mx*mx*pow(mres,2)+pow(mass_nucleon,2)*mres*mres);
 
@@ -1069,7 +1069,7 @@ void PHUrDilep::dgamma_sum_delta(Double_t tau,Double_t mres,Int_t multi,
 	  if(fabs(lambda) <= 1e-15) {
 	      lambda = 0;
 	  }
-            
+
 	  if(mx <= q0) {
 	      gamma0     = sqrt(lambda)/(16.*TMath::Pi()*mres*mres)*mass_nucleon*(2.*mt+ml);
 	      dgamma     = (2.*alpha_em)/(3.*TMath::Pi()*mx)*gamma0*(tau/gev);
@@ -1078,7 +1078,7 @@ void PHUrDilep::dgamma_sum_delta(Double_t tau,Double_t mres,Int_t multi,
 	      dgamma_sum = 0; // added
 	  }
       }
- 
+
       weight_delta = dgamma_sum*dx/multi;
 }
 

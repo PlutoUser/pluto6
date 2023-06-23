@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 27.5.2007
-// Revised: 
+// Revised:
 
 #ifndef _PHADRONDECAY_H_
 #define _PHADRONDECAY_H_
@@ -12,7 +12,7 @@
 #include "PKinematics.h"
 
 class PHadronDecay : public PChannelModel  {
-  
+
  public:
     PHadronDecay();
     PHadronDecay(const Char_t *id, const Char_t *de, Int_t key);
@@ -39,7 +39,7 @@ class PHadronDecay : public PChannelModel  {
     int    parent_id, id1, id2;          //PIDs
     double parent_mass, mass1, mass2;  //Static Masses
     double parent_g0; //Static Width of parent
-    
+
     //Width Configuration
     int use_fixed_delta;
     double fixed_delta;

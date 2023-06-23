@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 1.08.2009
-// Revised: 
+// Revised:
 // PArray
 // 1 or 2dim array from file(s)
 
@@ -27,14 +27,14 @@ class PArray : public TObject {
     TArrayD *vals_2d;
     Int_t    real_size_1d;
     Double_t scaling;
-   
+
 
  public:
 
     //constructor
     PArray(Int_t dimension);
     ~PArray();
- 
+
     void Scaling(Double_t sc) {
 	scaling=sc;
     };
