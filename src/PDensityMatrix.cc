@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////
-//  
+//
 // Reads an ASCII-matrix and samples observables
 // in 1-, 2- or 3-dimensional space. The sampled
 // observables can be written to PParticles via
@@ -36,18 +36,18 @@ Bool_t PDensityMatrix::GetBin(Double_t *x, Int_t *bins) {
 	    bins[i] = j;
 	    if (x[i] <= (axes[i])[j]) {
 		j = axes_size[i];
-	    } 
+	    }
 	}
     }
-    
+
     return kTRUE;
 }
 
 Bool_t PDensityMatrix::GetBin(Int_t bin, Int_t *bins) {
     bins[0] = bin % axes_size[0];
-    if (dimension > 1) 
+    if (dimension > 1)
 	bins[1] = ((bin - bins[0]) / axes_size[0]) % axes_size[1];
-    if (dimension > 2) 
+    if (dimension > 2)
 	bins[2] = ((bin - bins[0] - bins[1]*axes_size[1]) / (axes_size[0] * axes_size[1])) % axes_size[2];
     return kTRUE;
 }
@@ -57,13 +57,13 @@ Double_t PDensityMatrix::GetBinWidth(Int_t dim, Int_t bin) {
 	return ((axes[dim])[1] - (axes[dim])[0]);
     } else if (bin >= axes_size[dim]-1) {
 	return ((axes[dim])[axes_size[dim]-1] - (axes[dim])[axes_size[dim]-2]);
-    } 
+    }
     return ((axes[dim])[bin+1] - (axes[dim])[bin-1]) / 2.0;
 }
 
 Int_t PDensityMatrix::GetRandomBin(Int_t num) {
     Int_t lower_bound = -1;
-    Int_t upper_bound = matrixsize - 1;    
+    Int_t upper_bound = matrixsize - 1;
     Int_t middle_point;
 
     while ((upper_bound - lower_bound) > 1) {
@@ -77,7 +77,7 @@ Int_t PDensityMatrix::GetRandomBin(Int_t num) {
 	else
 	    frac = ((matrix_integral[num])[middle_point] - (matrix_integral[num])[lower_bound]) /
 		((matrix_integral[num])[upper_bound] - (matrix_integral[num])[lower_bound]);
-	
+
 	if (PUtils::sampleFlat() > frac) {
 	    lower_bound = middle_point;
 	} else {
@@ -117,7 +117,7 @@ Bool_t PDensityMatrix::ReadDensityMatrix(const char *filename, Int_t dim, Bool_t
     //x [y] [z] f0 f1 f2 ....
     //...
     //
-    //Here, the syntax is like in method 1, but if lines have only one number, 
+    //Here, the syntax is like in method 1, but if lines have only one number,
     //they are considered to be a "selection number". Which of the sections should be read
     //and used to fill the internal matrix, can be selected by "min_selection" and "max_selection"
     //The section is used if "min_selection" <= "section value" <= "max_selection"
@@ -147,18 +147,18 @@ Bool_t PDensityMatrix::ReadDensityMatrix(const char *filename, Int_t dim, Bool_t
 	Error("ReadDensityMatrix", "File '%s' not found", filename);
 	return kFALSE;
     }
-    
+
     Int_t numargs = 0;
     char line [1024];
-    
+
     while(!found_selection && (fgets (line, sizeof line, file) != NULL)) {
 	line_number++;
 	numargs = sscanf(line, "%le %le %le %le %le %le %le %le %le %le %le %le %le %le %le %le\n",
-			 &(numbers[0]), &(numbers[1]), &(numbers[2]), &(numbers[3]), &(numbers[4]), 
-			 &(numbers[5]), &(numbers[6]), &(numbers[7]), &(numbers[8]), &(numbers[9]), 
-			 &(numbers[10]), &(numbers[11]), &(numbers[12]), &(numbers[13]), &(numbers[14]), 
+			 &(numbers[0]), &(numbers[1]), &(numbers[2]), &(numbers[3]), &(numbers[4]),
+			 &(numbers[5]), &(numbers[6]), &(numbers[7]), &(numbers[8]), &(numbers[9]),
+			 &(numbers[10]), &(numbers[11]), &(numbers[12]), &(numbers[13]), &(numbers[14]),
 			 &(numbers[15]));
-	
+
 	if (numargs == 1) {
 	    found_single_numbers = kTRUE;
 	    if (numbers[0] >= min_selection && numbers[0] <= max_selection)
@@ -170,7 +170,7 @@ Bool_t PDensityMatrix::ReadDensityMatrix(const char *filename, Int_t dim, Bool_t
 	fclose(file);
 	file = fopen(filename,"r");
 	line_number = 0;
-    } 
+    }
 
     Int_t num_matrices = 0;
 
@@ -178,11 +178,11 @@ Bool_t PDensityMatrix::ReadDensityMatrix(const char *filename, Int_t dim, Bool_t
     while(fgets (line, sizeof line, file) != NULL) {
 	line_number++;
 	numargs = sscanf(line, "%le %le %le %le %le %le %le %le %le %le %le %le %le %le %le %le\n",
-			 &(numbers[0]), &(numbers[1]), &(numbers[2]), &(numbers[3]), &(numbers[4]), 
-			 &(numbers[5]), &(numbers[6]), &(numbers[7]), &(numbers[8]), &(numbers[9]), 
-			 &(numbers[10]), &(numbers[11]), &(numbers[12]), &(numbers[13]), &(numbers[14]), 
+			 &(numbers[0]), &(numbers[1]), &(numbers[2]), &(numbers[3]), &(numbers[4]),
+			 &(numbers[5]), &(numbers[6]), &(numbers[7]), &(numbers[8]), &(numbers[9]),
+			 &(numbers[10]), &(numbers[11]), &(numbers[12]), &(numbers[13]), &(numbers[14]),
 			 &(numbers[15]));
-	
+
 	if (numargs == 1) {
 	    if (numbers[0] >= min_selection && numbers[0] <= max_selection)
 		found_selection = kTRUE;
@@ -201,7 +201,7 @@ Bool_t PDensityMatrix::ReadDensityMatrix(const char *filename, Int_t dim, Bool_t
 			return kFALSE;
 		    }
 		    (axes[i])[axes_size[i]] = numbers[i];
-		    axes_size[i]++;		    
+		    axes_size[i]++;
 		}
 	    }
 	    if (!num_matrices) {
@@ -215,18 +215,18 @@ Bool_t PDensityMatrix::ReadDensityMatrix(const char *filename, Int_t dim, Bool_t
 	}
     }
 
-    if (!found_single_numbers) 
+    if (!found_single_numbers)
 	Info("ReadDensityMatrix", "...done (no sections found)");
     else
 	Info("ReadDensityMatrix", "...done");
 
-    Info("ReadDensityMatrix", "Dimension 1 (_x) has %i bins within the range [%f,%f]", 
+    Info("ReadDensityMatrix", "Dimension 1 (_x) has %i bins within the range [%f,%f]",
 	 axes_size[0], (axes[0])[0], (axes[0])[axes_size[0]-1]);
     if (dimension > 1)
-	Info("ReadDensityMatrix", "Dimension 2 (_y) has %i bins within the range [%f,%f]", 
+	Info("ReadDensityMatrix", "Dimension 2 (_y) has %i bins within the range [%f,%f]",
 	     axes_size[1], (axes[1])[0], (axes[1])[axes_size[1]-1]);
     if (dimension > 2)
-	Info("ReadDensityMatrix", "Dimension 3 (_z) has %i bins within the range [%f,%f]", 
+	Info("ReadDensityMatrix", "Dimension 3 (_z) has %i bins within the range [%f,%f]",
 	     axes_size[2], (axes[2])[0], (axes[2])[axes_size[2]-1]);
 
     //TODO: check axis size against dim and DENSITYMATRIX_MAX_MATRICES
@@ -243,7 +243,7 @@ Bool_t PDensityMatrix::ReadDensityMatrix(const char *filename, Int_t dim, Bool_t
 	    matrixsize = axes_size[0];
 	else if (dim == 2)
 	    matrixsize = axes_size[0]*axes_size[1];
-	else 
+	else
 	    matrixsize = axes_size[0]*axes_size[1]*axes_size[2];
 	matrix[i] = new Double_t[matrixsize];
 	for (int j=0; j<matrixsize; j++) {
@@ -256,11 +256,11 @@ Bool_t PDensityMatrix::ReadDensityMatrix(const char *filename, Int_t dim, Bool_t
     while(fgets (line, sizeof line, file) != NULL) {
 	line_number = 0;
 	numargs = sscanf(line, "%le %le %le %le %le %le %le %le %le %le %le %le %le %le %le %le\n",
-			 &(numbers[0]), &(numbers[1]), &(numbers[2]), &(numbers[3]), &(numbers[4]), 
-			 &(numbers[5]), &(numbers[6]), &(numbers[7]), &(numbers[8]), &(numbers[9]), 
-			 &(numbers[10]), &(numbers[11]), &(numbers[12]), &(numbers[13]), &(numbers[14]), 
+			 &(numbers[0]), &(numbers[1]), &(numbers[2]), &(numbers[3]), &(numbers[4]),
+			 &(numbers[5]), &(numbers[6]), &(numbers[7]), &(numbers[8]), &(numbers[9]),
+			 &(numbers[10]), &(numbers[11]), &(numbers[12]), &(numbers[13]), &(numbers[14]),
 			 &(numbers[15]));
-	
+
 	if (numargs == 1) {
 	    if (numbers[0] >= min_selection && numbers[0] <= max_selection) {
 		Info("ReadDensityMatrix", "Found section [%f], reading...", numbers[0]);
@@ -290,19 +290,19 @@ Bool_t PDensityMatrix::ReadDensityMatrix(const char *filename, Int_t dim, Bool_t
 		Int_t bins[3];
 		GetBin(j, bins);
 
-		if (dimension == 1) 
+		if (dimension == 1)
 		    bin_content *= GetBinWidth(0, bins[0]);
-		else if (dimension == 2) 
+		else if (dimension == 2)
 		    bin_content *= GetBinWidth(0, bins[0]) * GetBinWidth(1, bins[1]);
 		else
 		    bin_content *= GetBinWidth(0, bins[0]) * GetBinWidth(1, bins[1]) * GetBinWidth(2, bins[2]);
 	    }
-	   
+
 	    if (j)
 		(matrix_integral[i])[j] = bin_content + (matrix_integral[i])[j-1];
-	    else 
+	    else
 		(matrix_integral[i])[j] = bin_content;
-	}	
+	}
     }
 
     return kTRUE;
@@ -323,13 +323,13 @@ Bool_t PDensityMatrix::Modify(PParticle **mstack, int *decay_done, int *num, int
 	xf[i] = (axes[i])[xb[i]];
 	xf[i] += GetBinWidth(i, xb[i])*(PUtils::sampleFlat() - 0.5); //avoid binning effects
     }
-    
+
     *x = xf[0];
     if (dimension>1) *y = xf[1];
     if (dimension>2) *z = xf[2];
 
     projector->Modify(mstack, decay_done, num, stacksize);
-			    
+
     return kTRUE;
 }
 

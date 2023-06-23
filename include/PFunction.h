@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 07.4.2008
-// Revised: 
+// Revised:
 
 #ifndef _PFUNCTION_H_
 #define _PFUNCTION_H_
@@ -15,7 +15,7 @@
 
 
 class PFunction : public PChannelModel  {
-  
+
  public:
     PFunction();
     PFunction(const Char_t *id, const Char_t *de, Int_t key);
@@ -23,8 +23,8 @@ class PFunction : public PChannelModel  {
 
     Bool_t Init(void);
 
-    using PDistribution::GetWeight;   
-    Double_t GetWeight(Double_t *mass, Int_t *didx=NULL);	
+    using PDistribution::GetWeight;
+    Double_t GetWeight(Double_t *mass, Int_t *didx=NULL);
 
     using TF1::SetFunction;
     void SetFunction(TF1 *my_tf1) {tf1 = my_tf1;};
@@ -33,7 +33,7 @@ class PFunction : public PChannelModel  {
     void SetFunction(Double_t c)  {constant = c;};
     Bool_t AddEquation(const char *command);
 
-    using PDistribution::SampleMass;   
+    using PDistribution::SampleMass;
     Bool_t SampleMass(Double_t *mass, Int_t *didx=NULL);
 
  private:

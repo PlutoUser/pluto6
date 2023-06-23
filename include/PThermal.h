@@ -13,7 +13,7 @@
 class PThermal : public TObject {
 
  private:
-    
+
     static double thermal_unstable_width_default;
 
  public:

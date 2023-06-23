@@ -19,17 +19,17 @@ class URun : public TNamed {
     Double32_t fPTarg;         // Target momentum per nucleon (GeV)
     Double32_t fBMin;          // Minimum impact parameter
     Double32_t fBMax;          // Maximum impact parameter
-    
-    Int_t      fBWeight;       
+
+    Int_t      fBWeight;
     // Impact parameter weighting
     // 0 for geometrical weights (bdb)
     // 1 for flat distribution
-    
+
     Double32_t fPhiMin;        // Event plane minimum angle (rad)
     Double32_t fPhiMax;        // Event plane maximum angle (rad)
     Double32_t fSigma;         // Cross-section (mb)
     Int_t      fNEvents;       // Requested number of events
-    
+
  public:
     URun();
     URun(const char *generator, const char *comment, Int_t aProj,
@@ -64,7 +64,7 @@ class URun : public TNamed {
     inline void SetPProj  (Double_t pProj)  {fPProj   = pProj;}
     inline void SetPTarg  (Double_t pTarg)  {fPTarg   = pTarg;}
     inline void SetDecayer(TString decayer) {fDecayer = decayer;}
-    
+
     ClassDef(URun, 1);
 };
 

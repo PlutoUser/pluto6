@@ -13,16 +13,16 @@
 class PSaidPN : public PAngularDistribution {
 
  public:
-    
+
     PSaidPN();
     PSaidPN(const Char_t *id, const Char_t *de);
-    
+
     PDistribution* Clone(const char *delme=NULL) const;
 
     Bool_t Init(void);
     Bool_t Prepare(void);
-    Bool_t IsNotRejected(void); 
-    
+    Bool_t IsNotRejected(void);
+
     double SamplePolarAngle(double);
 
  private:

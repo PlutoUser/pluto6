@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////
-// 
+//
 // Decay eta -> pi+ pi- gamma
 //
 // References:
 // [L1] Thimo Petri and Andreas Wirzba
 //      Internal Report, Juelich
-// 
+//
 //                                  Author:  I. Froehlich
 /////////////////////////////////////////////////////////////////////
 
@@ -38,7 +38,7 @@ PDistribution* PEtaPiPiGamma::Clone(const char *) const {
 
 Bool_t PEtaPiPiGamma::Init(void) {
     //Init function called once for each PChannel
-    
+
     //looking for parent. This is mandatory
     parent = GetParticle("parent");
     if (!parent) {
@@ -60,7 +60,7 @@ Bool_t PEtaPiPiGamma::Init(void) {
 	Warning("Init", "Gamma not found");
 	return kFALSE;
     }
-    
+
     m_formfactor_model =
 	GetSecondaryModel("formfactor");
 
@@ -117,19 +117,19 @@ Double_t PEtaPiPiGamma::GetWeight(void) {
 Bool_t PEtaPiPiGamma::IsNotRejected(void) {
     //Use rejection mode...
 
-    if (GetVersionFlag() & VERSION_WEIGHTING) return kTRUE; 
+    if (GetVersionFlag() & VERSION_WEIGHTING) return kTRUE;
     //...but not if weighting enabled.
 
     Double_t weight = GetWeight();
-    
+
     if (weight > weight_max) {
 	weight_max = weight*1.1;
 	Warning("IsNotRejected", "Weight > max, new max is %lf", weight_max);
     }
 
-    if ((weight/weight_max) > PUtils::sampleFlat()) 
+    if ((weight/weight_max) > PUtils::sampleFlat())
 	return kTRUE; // sample now distribution
-    
+
     return kFALSE;
 }
 

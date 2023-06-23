@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////
-//  
+//
 // Adapted TF1
 //
 ////////////////////////////////////////////////////////
@@ -19,7 +19,7 @@ using namespace std;
 
 PF1::PF1() :
     TF1() {
-    projector = NULL;    
+    projector = NULL;
 };
 
 PF1::PF1(const char *name, const char *formula, Double_t xmin, Double_t xmax) :
@@ -34,7 +34,7 @@ PF1::PF1(const char *name, void *fcn, Double_t xmin, Double_t xmax, Int_t npar) 
 };
 #endif
 
-PF1::PF1(const char *name, Double_t (*fcn)(Double_t *, Double_t *), 
+PF1::PF1(const char *name, Double_t (*fcn)(Double_t *, Double_t *),
 	 Double_t xmin, Double_t xmax, Int_t npar) :
     TF1(name,fcn,xmin,xmax,npar) {
     projector = NULL;
@@ -43,7 +43,7 @@ PF1::PF1(const char *name, Double_t (*fcn)(Double_t *, Double_t *),
 PF1::PF1(const char *name, ROOT::Math::ParamFunctor f, Double_t xmin, Double_t xmax, Int_t npar) :
     TF1(name, f, xmin, xmax,npar) {
     projector = NULL;
-};  
+};
 
 PF1::PF1(const PF1 &f1) :
     TF1(f1) {
@@ -55,8 +55,8 @@ PF1::PF1(const char *name, Double_t xmin, Double_t xmax) :
     TF1(name,"x", xmin, xmax) {
     SetTitle(name);
     projector = new PProjector();
-    vf = makeStaticData()->GetBatchValue("_f"); 
-    vx = makeStaticData()->GetBatchValue("_x"); 
+    vf = makeStaticData()->GetBatchValue("_f");
+    vx = makeStaticData()->GetBatchValue("_x");
 }
 
 Bool_t PF1::Add(char *command) {

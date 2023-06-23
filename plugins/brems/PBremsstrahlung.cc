@@ -2,7 +2,7 @@
 //
 // Parameterization of the virtual pn/pp Bremsstrahlung
 // Ref. 19 and Ref. 20
-// 
+//
 //
 //                                  Author:  Wuestenfeld/Dohrmann
 /////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ Double_t PBremsstrahlung::Pol3(Double_t z, Double_t par1, Double_t par2, Double_
 
 Double_t PBremsstrahlung::DLines(Double_t x, Double_t par0, Double_t par1, Double_t par2, Double_t par3) const {
     Double_t m,n;
-    
+
     if(x < 1.9) {
 	m = (par1-par0)/(0.65);
 	n = par0-m*1.25;
@@ -52,9 +52,9 @@ Double_t PBremsstrahlung::DLines(Double_t x, Double_t par0, Double_t par1, Doubl
 Double_t PBremsstrahlung::AGauss(Double_t x, Double_t *par) const
 {
     Double_t result;
-    
+
     if(par[0] == 0) return 0;
-    
+
     if(x-par[2] > 0) {
 	result = par[0]*exp(-0.5*pow((x-par[2])/(TMath::Max(1.e-10,((1.0 + par[3])*par[1]))),2));
     } else {
@@ -71,7 +71,7 @@ PDistribution *PBremsstrahlung::Clone(const char*) const {
     return new PBremsstrahlung((const PBremsstrahlung &)* this);
 };
 
-PBremsstrahlung::PBremsstrahlung(const Char_t *id, const Char_t *de, Int_t key) : 
+PBremsstrahlung::PBremsstrahlung(const Char_t *id, const Char_t *de, Int_t key) :
     PChannelModel(id, de, key) {
     //Constructor
 
@@ -81,7 +81,7 @@ PBremsstrahlung::PBremsstrahlung(const Char_t *id, const Char_t *de, Int_t key) 
     //try to figure out if the model is pp or pn
     //in addition make some consistency checks
     Int_t tid[11];
-    tid[0] = 10; 
+    tid[0] = 10;
 
     makeStaticData()->GetDecayModeByKey(primary_key, tid); // retrieve current mode info
 
@@ -160,10 +160,10 @@ Double_t PBremsstrahlung::EvalSM(Double_t x, Double_t, Double_t, Double_t) const
     Double_t kinLim;
     Double_t M = x;
     Double_t b0=0, b1=0, b2=0, b3=0;
-    
+
     if(neutron_position > -1) {
 	// p + n case
-	
+
 	kinLim = TMath::Sqrt(pow((mn + mp),2)+2*mp* p2_energy)-(mn+mp);
 	if(M>kinLim) { // FD this is somewhat clumsy, but ...
 	    return 0;
@@ -218,7 +218,7 @@ Double_t PBremsstrahlung::EvalSM(Double_t x, Double_t, Double_t, Double_t) const
 		b0 = Pol2(p2_energy, 2.13375, 7.31236, -1.44497);
 		b1 = Pol2(p2_energy, 49.7263, -40.9453, 6.24139);
 		b2 = Pol2(p2_energy, 1.93576, -2.96657, 1.02646);
-		b3 = Pol2(p2_energy, 0.621623, 1.22859, -0.160213);    
+		b3 = Pol2(p2_energy, 0.621623, 1.22859, -0.160213);
 	    } else {
 		if(model == gN1520) {
 		    b0 = Pol2(p2_energy, 43.3482, -24.036, 3.24966);
@@ -297,7 +297,7 @@ Double_t PBremsstrahlung::Eval(Double_t x, Double_t y , Double_t z , Double_t t)
 				    parA[1] = Pol1(p2_energy, -0.008866, 0.00908);
 				    parA[2] = Pol1(p2_energy,  0.7693,   0.004265);
 				    parA[3] = Pol1(p2_energy,  0.5262,  -0.2392);
-									
+
 				    parB[0] = Pol2(p2_energy, -0.7279,   0.4763, -0.04907);
 				    parB[1] = Pol1(p2_energy, -0.1483,   0.09447);
 				    parB[2] = Pol1(p2_energy,  0.7329,   0.009148);
@@ -320,7 +320,7 @@ Double_t PBremsstrahlung::Eval(Double_t x, Double_t y , Double_t z , Double_t t)
 	    }
 	}
 	return (1./1000000.)*pow(fabs(M - kinLim),b3)/(b2*exp(b0*M+b1*M*M));
-	//FD probably could omit 'fabs' function here 
+	//FD probably could omit 'fabs' function here
     } else {
 	// p + p case
 
@@ -328,7 +328,7 @@ Double_t PBremsstrahlung::Eval(Double_t x, Double_t y , Double_t z , Double_t t)
 	if(M > kinLim) { // FD this is somewhat clumsy again, but ...
 	    return 0;
 	}
-	
+
 	//FD 24/01/08 Take either this block (note return function)
 	//FD do NOT delete this set of parameters
 	/*       b0 = Pol2(Teff,33.6382,-15.3112,2.10402);
@@ -359,7 +359,7 @@ Double_t PBremsstrahlung::Eval(Double_t x, Double_t y , Double_t z , Double_t t)
 		    b3 = Pol2(p2_energy,  2.48228,    0.668239, -0.0493283);
 		} else {
 		    if(model == FSI) {
-			
+
 		    } else {
 			if(model == VMD) {
 			} else {
@@ -401,20 +401,20 @@ Double_t PBremsstrahlung::GetWeight(void) {
 Bool_t PBremsstrahlung::SampleMass(void) {
 
     //boost particle 2 such to be in particle 1 rest frame
-  
+
     PParticle tmp(p2);  //particle under investigation. Make better a copy
     tmp.Boost(-p1->BoostVector());
     p2_energy = tmp.KE();
 
     if (!bin) {
 	bin = new PAdaptiveMesh(0, 3, 0.5);
-	
+
 	bin->SetTF1((TF1*)this);
 //bin->Divide(5,3);
 	bin->Divide(3, 3);
 	bin->Print();
     }
-    
+
     //dilepton->SetM(this->GetRandom());
 
     dilepton->SetM(bin->GetRandom());

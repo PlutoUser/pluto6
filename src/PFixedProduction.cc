@@ -22,10 +22,10 @@ PFixedProduction::PFixedProduction(const Char_t *id, const Char_t *de, Int_t key
 
     if (is_channel < 0)
 	Warning("PFixedProduction", "The model (%s) should be bound to CHANNELS only",de);
-    
+
     //Get particles
     Int_t tid[11];
-    tid[0] = 10; 
+    tid[0] = 10;
     makeStaticData()->GetDecayModeByKey(primary_key, tid); // retrieve current mode info
 
     //Parent ALWAYS important (also for the inherited classes)
@@ -51,13 +51,13 @@ PDistribution *PFixedProduction::Clone(const char*) const {
 
 Bool_t PFixedProduction::Init(void) {
     //Init function called once for each PChannel
-    
+
     parent = GetParticle("parent");
     if (!parent) {
 	Warning("Init", "Parent not found");
 	return kFALSE;
     }
- 
+
     daughter=GetParticle(makeStaticData()->GetParticleName(d_id));
 	if (!daughter) {
 	  Warning("Init", "daughter not found");
@@ -67,13 +67,13 @@ Bool_t PFixedProduction::Init(void) {
 }
 
 int PFixedProduction::GetDepth(int) {
-    return 0; 
+    return 0;
 }
 
 Bool_t PFixedProduction::SampleMass(void) {
     //Mass-sampling wrapper
     //mass=parent mass
-    
+
     //check if we are in the allowed mass region
     if ((parent->M() < PData::LMass(d_id)) ||
 	(parent->M() > PData::UMass(d_id))) return kFALSE;
@@ -86,9 +86,9 @@ Bool_t PFixedProduction::SampleMass(void) {
 Bool_t PFixedProduction::SampleMass(Double_t *mass, Int_t *) {
     //Not much to do here...
     //mass=parent mass
-    
+
     mass[0]=parent_mass;
-    
+
     return kTRUE;
 };
 

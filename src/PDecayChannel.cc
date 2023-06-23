@@ -6,8 +6,8 @@
 //  Revised:  30.06.00 MK
 //  Revised:  23.07.07 IF (adaption for new framework)
 //
-//  PDecayChannel implements a linked list of decay modes. 
-// 
+//  PDecayChannel implements a linked list of decay modes.
+//
 ////////////////////////////////////////////////////////////////////
 using namespace std;
 #include <sstream>
@@ -20,10 +20,10 @@ ClassImp(PDecayChannel)
 
 // --------------------------------------------------------------------------
     PDecayChannel::PDecayChannel() {
-    // 
+    //
     // Contructs an 'empty' channel (indicated by 'Daughters' containing
     // a NULL pointer).
-    //  
+    //
     Weight = 0;
     NumOfDaughters = 0;
     Next = NULL;
@@ -39,7 +39,7 @@ PDecayChannel::~PDecayChannel() {
 
 // --------------------------------------------------------------------------
 PDecayChannel *PDecayChannel::Unlink() {
-    // 
+    //
     // The 'Next' element is set to NULL. The old value (i.e. the pointer
     // to the next possible decay mode) is returned.
     //
@@ -51,14 +51,14 @@ PDecayChannel *PDecayChannel::Unlink() {
 
 // --------------------------------------------------------------------------
 void PDecayChannel::AddChannel(PDecayChannel *newchannel) {
-    // If the current channel is empty, it is filled with the contents of 
+    // If the current channel is empty, it is filled with the contents of
     // 'newchannel'. The object pointed to by 'newchannel' is deleted and
     // the value of 'newchannel' is replaced by a pointer to the current
     // channel.
     // If the current channel is not empty, but has no successor in 'Next',
     // 'Next' will point to 'newchannel'.
     // If the current channel contains a 'Next' object, the add request
-    // is passed to this one. 
+    // is passed to this one.
     // The other AddChannel functions work in the same way. The channel is
     // filled in the order current channel, 'Next' pointer and 'Next' object.
     if (!Daughters.GetArray()) {
@@ -68,7 +68,7 @@ void PDecayChannel::AddChannel(PDecayChannel *newchannel) {
 	w  = newchannel->GetWeight();
 	ld = newchannel->GetDaughters(nd);
 	AddChannel(w, nd, ld);
-	if (newchannel->GetNext()) 
+	if (newchannel->GetNext())
 	    AddChannel(newchannel->Unlink());
 	delete newchannel;
 	newchannel = this;
@@ -82,7 +82,7 @@ void PDecayChannel::AddChannel(PDecayChannel *newchannel) {
 // --------------------------------------------------------------------------
 void PDecayChannel::AddChannel(Double_t w, Int_t d1) {
     // The channel describes a decay into 1 daughter particle with particle id
-    // d1 and branching ratio w. 
+    // d1 and branching ratio w.
     // (This strange case is implemented only for completeness.)
     if (!Daughters.GetArray()) {
 	Weight = w;
@@ -98,8 +98,8 @@ void PDecayChannel::AddChannel(Double_t w, Int_t d1) {
 
 // --------------------------------------------------------------------------
 void PDecayChannel::AddChannel(Double_t w, Int_t d1, Int_t d2) {
-    // The channel describes a decay into 2 daughter particles with particle 
-    // ids d1, d2 and branching ratio w. 
+    // The channel describes a decay into 2 daughter particles with particle
+    // ids d1, d2 and branching ratio w.
     if (!Daughters.GetArray()) {
 	Weight = w;
 	NumOfDaughters = 2;
@@ -115,8 +115,8 @@ void PDecayChannel::AddChannel(Double_t w, Int_t d1, Int_t d2) {
 
 // --------------------------------------------------------------------------
 void PDecayChannel:: AddChannel(Double_t w, Int_t d1, Int_t d2, Int_t d3) {
-    // The channel describes a decay into 3 daughter particles with particle 
-    // ids d1, d2, d3 and branching ratio w. 
+    // The channel describes a decay into 3 daughter particles with particle
+    // ids d1, d2, d3 and branching ratio w.
     if (!Daughters.GetArray()) {
 	Weight = w;
 	NumOfDaughters = 3;
@@ -133,8 +133,8 @@ void PDecayChannel:: AddChannel(Double_t w, Int_t d1, Int_t d2, Int_t d3) {
 
 // --------------------------------------------------------------------------
 void PDecayChannel:: AddChannel(Double_t w, Int_t d1, Int_t d2, Int_t d3, Int_t d4) {
-    // The channel describes a decay into 4 daughter particles with particle 
-    // ids d1, d2, d3, d4 and branching ratio w. 
+    // The channel describes a decay into 4 daughter particles with particle
+    // ids d1, d2, d3, d4 and branching ratio w.
     if (!Daughters.GetArray()) {
 	Weight = w;
 	NumOfDaughters = 4;
@@ -151,9 +151,9 @@ void PDecayChannel:: AddChannel(Double_t w, Int_t d1, Int_t d2, Int_t d3, Int_t 
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayChannel::AddChannel(Double_t w, Int_t nd, Int_t *ld) {  
-    // The channel describes a decay into nd daughter particles with particle 
-    // ids stored in the integer array ld and branching ratio w. 
+void PDecayChannel::AddChannel(Double_t w, Int_t nd, Int_t *ld) {
+    // The channel describes a decay into nd daughter particles with particle
+    // ids stored in the integer array ld and branching ratio w.
     if (!Daughters.GetArray()) {
 	Weight = w;
 	NumOfDaughters = nd;
@@ -171,7 +171,7 @@ void PDecayChannel::AddChannel(Double_t w, Int_t nd, Int_t *ld) {
 // --------------------------------------------------------------------------
 void PDecayChannel::AddChannel(Double_t w, PParticle *d1) {
     // The channel describes a decay into 1 daughter particle represented by
-    // a pointer to PParticle d1 and branching ratio w. 
+    // a pointer to PParticle d1 and branching ratio w.
     // (This strange case is implemented only for completeness.)
     if (!Daughters.GetArray()) {
 	Weight = w;
@@ -188,7 +188,7 @@ void PDecayChannel::AddChannel(Double_t w, PParticle *d1) {
 // --------------------------------------------------------------------------
 void PDecayChannel::AddChannel(Double_t w, PParticle *d1, PParticle *d2) {
     // The channel describes a decay into 2 daughter particles represented by
-    // pointers to PParticle d1, d2 and branching ratio w. 
+    // pointers to PParticle d1, d2 and branching ratio w.
     if (!Daughters.GetArray()) {
 	Weight = w;
 	NumOfDaughters = 2;
@@ -205,7 +205,7 @@ void PDecayChannel::AddChannel(Double_t w, PParticle *d1, PParticle *d2) {
 // --------------------------------------------------------------------------
 void PDecayChannel::AddChannel(Double_t w, PParticle *d1, PParticle *d2, PParticle *d3) {
     // The channel describes a decay into 3 daughter particles represented by
-    // pointers to PParticle d1, d2, d3 and branching ratio w. 
+    // pointers to PParticle d1, d2, d3 and branching ratio w.
     if (!Daughters.GetArray()) {
 	Weight = w;
 	NumOfDaughters = 3;
@@ -223,7 +223,7 @@ void PDecayChannel::AddChannel(Double_t w, PParticle *d1, PParticle *d2, PPartic
 // --------------------------------------------------------------------------
 void PDecayChannel::AddChannel(Double_t w, PParticle *d1, PParticle *d2, PParticle *d3, PParticle *d4) {
     // The channel describes a decay into 4 daughter particles represented by
-    // pointers to PParticle d1, d2, d3, d4 and branching ratio w. 
+    // pointers to PParticle d1, d2, d3, d4 and branching ratio w.
     if (!Daughters.GetArray()) {
 	Weight = w;
 	NumOfDaughters = 4;
@@ -240,9 +240,9 @@ void PDecayChannel::AddChannel(Double_t w, PParticle *d1, PParticle *d2, PPartic
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayChannel::AddChannel(Double_t w, Int_t nd, PParticle **ld) {  
+void PDecayChannel::AddChannel(Double_t w, Int_t nd, PParticle **ld) {
     // The channel describes a decay into nd daughter particles represented by
-    // pointers to PParticle stored in the array ld and branching ratio w. 
+    // pointers to PParticle stored in the array ld and branching ratio w.
     if (!Daughters.GetArray()) {
 	Weight = w;
 	NumOfDaughters = nd;
@@ -329,13 +329,13 @@ void PDecayChannel::AddChannel(Double_t w, const char *d1, const char *d2, const
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayChannel::AddChannel(Double_t w, Int_t nd, char **ld) {  
+void PDecayChannel::AddChannel(Double_t w, Int_t nd, const char **ld) {
     // The channel describes a decay into nd daughter particles represented by
     // an array of their names ld and branching ratio w.
     if (!Daughters.GetArray()) {
 	Weight = w;
 	NumOfDaughters = nd;
-	Daughters.Set(nd);;	
+	Daughters.Set(nd);;
 	for (Int_t i=0; i<nd; i++) {
 	    Daughters[i] = makeStaticData()->GetParticleID(ld[i]);
 	}
@@ -383,10 +383,10 @@ PDecayChannel *PDecayChannel::GetLast() {
 void PDecayChannel::Print(const Option_t *) const {
     //
     // Prints the channel information.
-    // 
+    //
 
     Int_t dalitz = 0;
-  
+
     if (!NumOfDaughters) {
 	cout << "Empty Channel." << endl;
 	return;
@@ -401,7 +401,7 @@ void PDecayChannel::Print(const Option_t *) const {
 	    dalitz = 2;
 	} else {
 	    cout << makeStaticData()->GetParticleName(Daughters[i]);
-	    if (!(--dalitz)) cout << ")"; 
+	    if (!(--dalitz)) cout << ")";
 	}
     }
 //    cout << endl;

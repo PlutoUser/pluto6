@@ -13,7 +13,7 @@
 
 
 PFileOutput::PFileOutput() {
-    cnt       = -1; 
+    cnt       = -1;
     getVERTEX = 0;
     filename  = "<user file>";
 }
@@ -45,4 +45,4 @@ bool PFileOutput::WriteParticle(PParticle *) {
 }
 
 
-ClassImp(PFileOutput) 
+ClassImp(PFileOutput)

@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 27.5.2007
-// Revised: 
+// Revised:
 
 #ifndef _PFIXEDDECAY_H_
 #define _PFIXEDDECAY_H_
@@ -14,7 +14,7 @@
 #define MAX_FIXED_NUM 10
 
 class PFixedDecay : public PChannelModel  {
-  
+
  public:
     PFixedDecay();
     PFixedDecay(const Char_t *id, const Char_t *de, Int_t key);

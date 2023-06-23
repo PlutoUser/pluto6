@@ -14,12 +14,12 @@
 using namespace std;
 
 class PData : public TObject {
-      
+
  public:
 
   static void SetWeightVersion(Int_t i) {
       //PData::WeightVersion = i;
-      *(makeStaticData()->GetBatchValue("_system_weight_version")) 
+      *(makeStaticData()->GetBatchValue("_system_weight_version"))
 	  = (Double_t) i;
   }
 
@@ -30,7 +30,7 @@ class PData : public TObject {
 
 
   static double LMass(const int &id) {
-      // lower mass limit, by particle pid      
+      // lower mass limit, by particle pid
 
       Double_t *mass;
 
@@ -40,31 +40,31 @@ class PData : public TObject {
 
       if ( makeStaticData()->GetParticleTotalWidth(id) < 1.e-3 ) {
 	  // (quasi)stable
-	  return 0.999*makeStaticData()->GetParticleMass(id);      
+	  return 0.999*makeStaticData()->GetParticleMass(id);
       }
 //  else if ( id==41 ) return 2.*PMass[8];                 // rho0
       else if (id == 41)                                   // rho0
-	  return 2.*makeStaticData()->GetParticleMass(2);                 
+	  return 2.*makeStaticData()->GetParticleMass(2);
       else if (id == 42 || id == 43)                          // rho+,rho-
 	  return makeStaticData()->GetParticleMass(8)+
-	      makeStaticData()->GetParticleMass(7);  
+	      makeStaticData()->GetParticleMass(7);
       else if (id == 52)                                   // omega
-	  return 2.*makeStaticData()->GetParticleMass(2);                 
+	  return 2.*makeStaticData()->GetParticleMass(2);
       else if (id == 55)                                   // phi
-	  return 3.*makeStaticData()->GetParticleMass(2);                 
+	  return 3.*makeStaticData()->GetParticleMass(2);
       else if (makeStaticData()->GetParticleBaryon(id))  // resonance
-	  return makeStaticData()->GetParticleMass(14);               
-      else if (makeStaticData()->GetParticleTotalWidth(id) > 0.01) 
+	  return makeStaticData()->GetParticleMass(14);
+      else if (makeStaticData()->GetParticleTotalWidth(id) > 0.01)
 	  return TMath::Max(0., 0.999*(makeStaticData()->GetParticleMass(id)-
 				       5.*makeStaticData()->GetParticleTotalWidth(id)));
-      else 
+      else
 	  return TMath::Max(0., 0.999*(makeStaticData()->GetParticleMass(id)-
 				       15.*makeStaticData()->GetParticleTotalWidth(id)));
   }
-  
-  static double LMass(const char *id) { 
+
+  static double LMass(const char *id) {
       // lower mass limit, by name
-      return LMass(makeStaticData()->IsParticleValid(id)); 
+      return LMass(makeStaticData()->IsParticleValid(id));
   }
 
   static double UMass(const int &id) {
@@ -74,18 +74,18 @@ class PData : public TObject {
       if (makeDataBase()->GetParamDouble ((char*)"pid", id, (char*)"umass", &mass)) return *mass;
 
       if (id==50 || makeStaticData()->IsParticle(id,"dilepton")) // dilepton
-	  return 1.e10;        
+	  return 1.e10;
       else if (makeStaticData()->GetParticleTotalWidth(id) < 1.e-3)   // (quasi)stable
-	  return 1.001*makeStaticData()->GetParticleMass(id); 
+	  return 1.001*makeStaticData()->GetParticleMass(id);
       //      else return makeStaticData()->GetParticleMass(id)+1.;      // just go 1 GeV above pole
       else return makeStaticData()->GetParticleMass(id)
 	       +10.*makeStaticData()->GetParticleTotalWidth(id);  //better in units of sigma
   }
 
-  
-  static double UMass(const char * id) { 
+
+  static double UMass(const char * id) {
       // upper mass limit, by name
-      return UMass(makeStaticData()->IsParticleValid(id)); 
+      return UMass(makeStaticData()->IsParticleValid(id));
   }
 
 
@@ -106,122 +106,122 @@ public:
     return (id == makeStaticData()->GetParticleID("NS11+")||
 	    id == makeStaticData()->GetParticleID("NS110"));
   }
-  
+
   static int IsPi(const int &id) {
     // check if id corresponds to a pion
     return (id == makeStaticData()->GetParticleID("pi0")||
 	    id == makeStaticData()->GetParticleID("pi+")||
 	    id == makeStaticData()->GetParticleID("pi-"));
   }
-  
-  static int IsN(const int &id) { 
+
+  static int IsN(const int &id) {
       // check if id corresponds to a nucleon
       return (id == makeStaticData()->GetParticleID("p")||
 	      id == makeStaticData()->GetParticleID("n")); }
-  
+
   static int IsRho(const int &id) {
       // check if id corresponds to a rho meson
       return (id == makeStaticData()->GetParticleID("rho0")||
 	      id == makeStaticData()->GetParticleID("rho+")||
 	      id == makeStaticData()->GetParticleID("rho-"));
   }
-  
+
   static int IsNPiPi(const int &i1, const int &i2, const int &i3) {
       // checks if i1+i2+i3 are N+pi+pi
       return ((IsN(i1) && IsPi(i2) && IsPi(i3))||
-	      (IsN(i2) && IsPi(i1) && IsPi(i3))|| 
+	      (IsN(i2) && IsPi(i1) && IsPi(i3))||
 	      (IsN(i3) && IsPi(i1) && IsPi(i2)));
   }
-  
+
   static int IsDalitz(const int &id, const int &i1, const int &i2) {
       // checks if the decay id->i1+i2 is a known Dalitz decay
-      int eeg = 
-	  (makeStaticData()->IsParticle(i1,"dilepton") && 
-	   makeStaticData()->IsParticle(i2,"g")) || 
-	  (makeStaticData()->IsParticle(i1,"g") && 
+      int eeg =
+	  (makeStaticData()->IsParticle(i1,"dilepton") &&
+	   makeStaticData()->IsParticle(i2,"g")) ||
+	  (makeStaticData()->IsParticle(i1,"g") &&
 	   makeStaticData()->IsParticle(i2,"dilepton")); // e+e-gamma?
-      int mumug = 
-	  (makeStaticData()->IsParticle(i1,"dimuon") && 
-	   makeStaticData()->IsParticle(i2,"g")) || 
-	  (makeStaticData()->IsParticle(i1,"g") && 
+      int mumug =
+	  (makeStaticData()->IsParticle(i1,"dimuon") &&
+	   makeStaticData()->IsParticle(i2,"g")) ||
+	  (makeStaticData()->IsParticle(i1,"g") &&
 	   makeStaticData()->IsParticle(i2,"dimuon"));   // mu+mu-gamma?
-      int eepi = 
-	  (makeStaticData()->IsParticle(i1,"dilepton") && 
-	   makeStaticData()->IsParticle(i2,"pi0")) || 
-	  (makeStaticData()->IsParticle(i1,"pi0") && 
+      int eepi =
+	  (makeStaticData()->IsParticle(i1,"dilepton") &&
+	   makeStaticData()->IsParticle(i2,"pi0")) ||
+	  (makeStaticData()->IsParticle(i1,"pi0") &&
 	   makeStaticData()->IsParticle(i2,"dilepton")); // e+e-pi0?
-      int mumupi = 
-	  (makeStaticData()->IsParticle(i1,"dimuon") && 
-	   makeStaticData()->IsParticle(i2,"pi0")) || 
-	  (makeStaticData()->IsParticle(i1,"pi0") && 
+      int mumupi =
+	  (makeStaticData()->IsParticle(i1,"dimuon") &&
+	   makeStaticData()->IsParticle(i2,"pi0")) ||
+	  (makeStaticData()->IsParticle(i1,"pi0") &&
 	   makeStaticData()->IsParticle(i2,"dimuon"));   // mu+mu-pi0?
 //  int eeeta = (Is(i1,"dilepton")&&Is(i2,"eta")) || (Is(i1,"eta")&&Is(i2,"dilepton")); // e+e-eta?
-      
-      int pseudo = 
-	  (makeStaticData()->IsParticle(id,"eta") || 
-	   makeStaticData()->IsParticle(id,"eta'") || 
+
+      int pseudo =
+	  (makeStaticData()->IsParticle(id,"eta") ||
+	   makeStaticData()->IsParticle(id,"eta'") ||
 	   makeStaticData()->IsParticle(id,"pi0")); // pseudo-scalar meson?
-      int vector = 
-	  (makeStaticData()->IsParticle(id,"w") || 
-	   makeStaticData()->IsParticle(id,"phi") || 
+      int vector =
+	  (makeStaticData()->IsParticle(id,"w") ||
+	   makeStaticData()->IsParticle(id,"phi") ||
 	   makeStaticData()->IsParticle(id,"J/Psi"));  // vector meson?
 
       int d = makeStaticData()->GetParticleBaryon(id) &&  // Baryon Dalitz decay in general?
-	  ((makeStaticData()->IsParticle(i1,"dilepton") && 
-	    makeStaticData()->GetParticleBaryon(i2)) || 
-	   (makeStaticData()->GetParticleBaryon(i1) && 
+	  ((makeStaticData()->IsParticle(i1,"dilepton") &&
+	    makeStaticData()->GetParticleBaryon(i2)) ||
+	   (makeStaticData()->GetParticleBaryon(i1) &&
 	    makeStaticData()->IsParticle(i2,"dilepton")));
 
 #if 1
-      int D0 = 
+      int D0 =
 	  makeStaticData()->IsParticle(id,"D0") &&  // Delta0 Dalitz decay?
-	  ((makeStaticData()->IsParticle(i1,"dilepton") && 
-	    makeStaticData()->IsParticle(i2,"n")) || 
-	   (makeStaticData()->IsParticle(i1,"n") && 
+	  ((makeStaticData()->IsParticle(i1,"dilepton") &&
+	    makeStaticData()->IsParticle(i2,"n")) ||
+	   (makeStaticData()->IsParticle(i1,"n") &&
 	    makeStaticData()->IsParticle(i2,"dilepton")));
-      int Dp = 
+      int Dp =
 	  makeStaticData()->IsParticle(id,"D+") &&  // Delta+ Dalitz decay?
-	  ((makeStaticData()->IsParticle(i1,"dilepton") && 
-	    makeStaticData()->IsParticle(i2,"p")) || 
-	   (makeStaticData()->IsParticle(i1,"p") && 
+	  ((makeStaticData()->IsParticle(i1,"dilepton") &&
+	    makeStaticData()->IsParticle(i2,"p")) ||
+	   (makeStaticData()->IsParticle(i1,"p") &&
 	    makeStaticData()->IsParticle(i2,"dilepton")));
-      int D0m = 
+      int D0m =
 	  makeStaticData()->IsParticle(id,"D0") &&  // Delta0 Dalitz decay?
-	  ((makeStaticData()->IsParticle(i1,"dimuon") && 
-	    makeStaticData()->IsParticle(i2,"n")) || 
-	   (makeStaticData()->IsParticle(i1,"n") && 
+	  ((makeStaticData()->IsParticle(i1,"dimuon") &&
+	    makeStaticData()->IsParticle(i2,"n")) ||
+	   (makeStaticData()->IsParticle(i1,"n") &&
 	    makeStaticData()->IsParticle(i2,"dimuon")));
-      int Dpm = 
+      int Dpm =
 	  makeStaticData()->IsParticle(id,"D+") &&  // Delta+ Dalitz decay?
-	  ((makeStaticData()->IsParticle(i1,"dimuon") && 
-	    makeStaticData()->IsParticle(i2,"p")) || 
-	   (makeStaticData()->IsParticle(i1,"p") && 
+	  ((makeStaticData()->IsParticle(i1,"dimuon") &&
+	    makeStaticData()->IsParticle(i2,"p")) ||
+	   (makeStaticData()->IsParticle(i1,"p") &&
 	    makeStaticData()->IsParticle(i2,"dimuon")));
-      int pn = 
+      int pn =
 	  makeStaticData()->IsParticle(id,"pn") &&   // pn bremsstrahlung?
-	  ((makeStaticData()->IsParticle(i1,"dilepton") && 
-	    makeStaticData()->IsParticle(i2,"p")) || 
-	   (makeStaticData()->IsParticle(i1,"p") && 
+	  ((makeStaticData()->IsParticle(i1,"dilepton") &&
+	    makeStaticData()->IsParticle(i2,"p")) ||
+	   (makeStaticData()->IsParticle(i1,"p") &&
 	    makeStaticData()->IsParticle(i2,"dilepton")));
-      int NS0 = 
+      int NS0 =
 	  makeStaticData()->IsParticle(id,"NS110") && // N(1535)0 Dalitz decay?
-	  ((makeStaticData()->IsParticle(i1,"dilepton") && 
-	    makeStaticData()->IsParticle(i2,"n")) || 
-	   (makeStaticData()->IsParticle(i1,"n") && 
+	  ((makeStaticData()->IsParticle(i1,"dilepton") &&
+	    makeStaticData()->IsParticle(i2,"n")) ||
+	   (makeStaticData()->IsParticle(i1,"n") &&
 	    makeStaticData()->IsParticle(i2,"dilepton")));
-      int NSp = 
+      int NSp =
 	  makeStaticData()->IsParticle(id,"NS11+") && // N(1535)+ Dalitz decay?
-	  ((makeStaticData()->IsParticle(i1,"dilepton") && 
-	    makeStaticData()->IsParticle(i2,"p")) || 
-	   (makeStaticData()->IsParticle(i1,"p") && 
+	  ((makeStaticData()->IsParticle(i1,"dilepton") &&
+	    makeStaticData()->IsParticle(i2,"p")) ||
+	   (makeStaticData()->IsParticle(i1,"p") &&
 	    makeStaticData()->IsParticle(i2,"dilepton")));
-#endif     
- 
-      return (pseudo&&eeg) || (pseudo&&mumug) || 
+#endif
+
+      return (pseudo&&eeg) || (pseudo&&mumug) ||
 	  (vector&&eepi) || (vector&&mumupi)
 	  || D0m || Dpm || D0 || Dp || pn || NS0 || NSp || d;
   }
-  
+
   static int IsDalitz(int * i) {
     // as above, for pid array
 
@@ -233,7 +233,7 @@ public:
     // checks if idx is the index of a Dalitz decay mode
 
       int i[10];
-      
+
       i[0] = 2; //max 2 particles
       makeStaticData()->GetDecayMode(idx,i);
       if (*i != 2) return 0; // other than two products in this decay mode
@@ -243,22 +243,22 @@ public:
   static int IsPseudoscalarDalitz(const int &id, const int &i1, const int &i2) {
     // checks if the decay id->i1+i2 is a known pseudoscalar Dalitz decay
 
-    int eeg = 
-	(makeStaticData()->IsParticle(i1,"dilepton") && 
-	 makeStaticData()->IsParticle(i2,"g")) || 
-	(makeStaticData()->IsParticle(i1,"g") && 
+    int eeg =
+	(makeStaticData()->IsParticle(i1,"dilepton") &&
+	 makeStaticData()->IsParticle(i2,"g")) ||
+	(makeStaticData()->IsParticle(i1,"g") &&
 	 makeStaticData()->IsParticle(i2,"dilepton")); // e+e-gamma?
-    int mumug = 
-	(makeStaticData()->IsParticle(i1,"dimuon") && 
-	 makeStaticData()->IsParticle(i2,"g")) || 
-	(makeStaticData()->IsParticle(i1,"g") && 
+    int mumug =
+	(makeStaticData()->IsParticle(i1,"dimuon") &&
+	 makeStaticData()->IsParticle(i2,"g")) ||
+	(makeStaticData()->IsParticle(i1,"g") &&
 	 makeStaticData()->IsParticle(i2,"dimuon"));   // mu+mu-gamma?
 
-    int pseudo = 
-	(makeStaticData()->IsParticle(id,"eta") || 
-	 makeStaticData()->IsParticle(id,"eta'") || 
+    int pseudo =
+	(makeStaticData()->IsParticle(id,"eta") ||
+	 makeStaticData()->IsParticle(id,"eta'") ||
 	 makeStaticData()->IsParticle(id,"pi0")); // pseudo-scalar meson?
-    
+
     return (pseudo&&eeg) || (pseudo&&mumug);
   }
 
@@ -275,20 +275,20 @@ public:
 
     i[0]=2; //max 2 particles
     makeStaticData()->GetDecayMode(idx, i);
-    if (*i != 2) 
+    if (*i != 2)
 	return 0; // other than two products in this decay mode
-    return 
+    return
 	IsPseudoscalarDalitz(makeStaticData()->GetDecayParent(idx), i[1], i[2]);
   }
 
   static int IsDirectEE(const int &id, const int &i1, const int &i2) {
     // checks if the decay id->i1+i2 is a direct vector-meson ee decay
-    
-    return 
-	(makeStaticData()->IsParticleMeson(id) && 
-	 ((makeStaticData()->IsParticle(i1,"e+") && 
+
+    return
+	(makeStaticData()->IsParticleMeson(id) &&
+	 ((makeStaticData()->IsParticle(i1,"e+") &&
 	   makeStaticData()->IsParticle(i2,"e-"))||
-	  (makeStaticData()->IsParticle(i1,"e-") && 
+	  (makeStaticData()->IsParticle(i1,"e-") &&
 	   makeStaticData()->IsParticle(i2,"e+"))));
   }
 
@@ -297,27 +297,27 @@ public:
       int i[10];
     i[0] = 2; //max 2 particles
     makeStaticData()->GetDecayMode(idx, i);
-    if (*i != 2) 
+    if (*i != 2)
 	return 0; // other than two products in this decay mode
-    return 
+    return
 	IsDirectEE(makeStaticData()->GetDecayParent(idx), i[1], i[2]);
   }
 
   static int IsDirectMuMu(const int &id, const int &i1, const int &i2) {
     // checks if the decay id->i1+i2 is a direct vector-meson mumu decay
-    
-    return 
-	(makeStaticData()->IsParticleMeson(id) && 
-	 ((makeStaticData()->IsParticle(i1,"mu+") && 
+
+    return
+	(makeStaticData()->IsParticleMeson(id) &&
+	 ((makeStaticData()->IsParticle(i1,"mu+") &&
 	   makeStaticData()->IsParticle(i2,"mu-"))||
-	  (makeStaticData()->IsParticle(i1,"mu-") && 
+	  (makeStaticData()->IsParticle(i1,"mu-") &&
 	   makeStaticData()->IsParticle(i2,"mu+"))));
   }
 
   static int IsDirectMuMu(const int &idx) {
     // checks if idx is the index of a direct vector-meson mumu decay
       int i[10];
- 
+
     i[0] = 2; //max 2 particles
     makeStaticData()->GetDecayMode(idx, i);
     if (*i != 2) return 0; // other than two products in this decay mode
@@ -332,7 +332,7 @@ public:
 
   static int IsMDalitz(const int &);
   // checks if decay mode with index idx is a mesonic Dalitz decay
-  
+
 
   static Float_t mtIntegral(Double_t m, Float_t T) { // integral of thermal
                                                      // mt distribution
@@ -353,7 +353,7 @@ class PSplash : public TObject {
  public:
 
     PSplash();
-    
+
  protected:
     ClassDef(PSplash, 0) //Pluto welcome message
 

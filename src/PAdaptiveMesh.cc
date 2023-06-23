@@ -1,21 +1,21 @@
 ////////////////////////////////////////////////////////
 //  An adaptive mesh for enveloping the TF1 function
-//  Used for fast random sapmling when the ROOT 
+//  Used for fast random sapmling when the ROOT
 //  GetRandom function cannot be used
 //  The build-in ROOT random sampling has really big
-//  disadvantages when parameters (e.g. kinetic energy of the 
+//  disadvantages when parameters (e.g. kinetic energy of the
 //  parent) are not stable and the shape of the function is changes
-//  In this case ROOT re-creates the polymonials and this 
+//  In this case ROOT re-creates the polymonials and this
 //  takes AGES!
 //
 //  The adaptive mesh method here is based on the rejection
-//  meshod, the test function is a step function which is 
+//  meshod, the test function is a step function which is
 //  adaptable: If the function is steep, more bins are created
-//  
+//
 //
 //                    Author: I. Froehlich
 //                    Written: 1.02.2003
-//                    Revised: 
+//                    Revised:
 //
 ////////////////////////////////////////////////////////
 
@@ -44,7 +44,7 @@ PAdaptiveMesh::~PAdaptiveMesh() {
 }
 
 void PAdaptiveMesh::ReCalc() {
-    
+
     if (sub_size) {
 	area_size = 0;
 	for (int i=0; i<sub_size; i++) {
@@ -60,7 +60,7 @@ void PAdaptiveMesh::ReCalc() {
 
 PAdaptiveMesh *PAdaptiveMesh::GetRandomBin(Double_t f_random) {
     if (!sub_size) return this;
-    
+
     for (int i=0; i<sub_size; i++) {
 	if (f_random < sub_area[i]) {
 	    if (i) return sub_tree[i]->GetRandomBin(f_random - sub_area[i-1]);
@@ -116,14 +116,14 @@ void PAdaptiveMesh::Divide(Int_t num, Int_t my_layer) {
 	Double_t min  = x_min+((x_max- x_min)/(Double_t)num)*(Double_t)i;
 	Double_t max  = min+((x_max- x_min)/(Double_t)num);
 	Double_t ymax = tf1->Eval(min);
-	if (tf1->Eval(max)> ymax) 
+	if (tf1->Eval(max)> ymax)
 	    ymax = tf1->Eval(max);
 
 	if (ymax < 0) ymax = 0;
 
 	sub_tree[i] = new PAdaptiveMesh(min, max, ymax);
 	sub_tree[i]->SetTF1(tf1);
-	
+
 	layer = my_layer;
 
 	if (layer > 0) {

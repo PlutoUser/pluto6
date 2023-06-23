@@ -74,13 +74,13 @@ Bool_t PInclusiveModel::Init(void) {
     //Now get all daughters
     for (int i=0; i<INCLUSIVE_MAX_DAUGHTERS; i++) {
 	daughters[i] = GetParticle("daughter");
-	if (daughters[i]) {	    
+	if (daughters[i]) {
 	    daughter_pos++;
 	}
     }
 //    cout <<"daughter_pos"<< daughter_pos << endl;
 
-    return kTRUE;    
+    return kTRUE;
 };
 
 int PInclusiveModel::GetDepth(int) {
@@ -89,7 +89,7 @@ int PInclusiveModel::GetDepth(int) {
     //returns 0 in case of stable daughters BUGBUG->check all others
 
     Int_t a1 = -1; //Default is stable decay products
-    
+
     for (int i=0; i<daughter_pos; i++) {
 	daughter_models[i] = makeDynamicData()->GetParticleModel(daughters[i]->ID());
 	if (daughter_models[i]) {
@@ -98,12 +98,12 @@ int PInclusiveModel::GetDepth(int) {
 	}
     }
 
-    return a1; 
+    return a1;
 }
 
 Bool_t PInclusiveModel::SampleMass(void) {
     //In the sampling function, we first call the sub-models to
-    
+
     Double_t mass, total_mass = 0;
     for (int i=0; i<daughter_pos; i++) {
 	if (daughter_models[i]) {
@@ -123,15 +123,15 @@ Bool_t PInclusiveModel::SampleMass(void) {
     weight = 1.;
 
     if (sample) {
-	
+
 	frac=sample->GetRandom();
 	weight = sample->Eval(frac);
-    } 
+    }
 
     primary->SetM(frac*(q-total_mass));
     //cout << total_mass << ":" << q-total_mass  << ":" << frac*(q-total_mass) << endl;
     dynamic_range = q-total_mass;
-    
+
     return kTRUE;
 }
 

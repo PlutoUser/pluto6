@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 25.7.2007
-// Revised: 
+// Revised:
 
 #ifndef _PHADRONDECAYM2_H_
 #define _PHADRONDECAYM2_H_
@@ -12,7 +12,7 @@
 #include "PKinematics.h"
 
 class PHadronDecayM2 : public PHadronDecayM1  {
-  
+
  public:
     PHadronDecayM2();
     PHadronDecayM2(const Char_t *id, const Char_t *de, Int_t key);
@@ -24,14 +24,14 @@ class PHadronDecayM2 : public PHadronDecayM1  {
     Bool_t SampleMass(void);
     Bool_t SampleMass(Double_t *mass, Int_t *didx=NULL);
 
-    
+
     Bool_t   GetWidth(Double_t mass, Double_t *width, Int_t didx=-1);
 
-    using PHadronDecayM1::GetWeight;   
+    using PHadronDecayM1::GetWeight;
     Double_t GetWeight(Double_t *mass, Int_t *didx=NULL);
     int      GetDepth(int i=0);
 
- 
+
  protected:
 
     Double_t dynamic_mass1, dynamic_mass2; //return value from sampleM2

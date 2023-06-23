@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 23.6.2007
-// Revised: 
+// Revised:
 
 #ifndef _PPIOMEGAANGULARDISTRIBUTION_H_
 #define _PPIOMEGAANGULARDISTRIBUTION_H_
@@ -15,19 +15,19 @@
 
 
 class PPiOmegaAngularDistribution : public PAngularDistribution {
-  
+
  public:
     PPiOmegaAngularDistribution();
     PPiOmegaAngularDistribution(const Char_t *id, const Char_t *de);
-    
+
     PDistribution *Clone(const char *delme=NULL) const;
 
     Bool_t Init(void);
     Bool_t Prepare(void);
     Bool_t IsNotRejected(void);
-    
+
     void   Print(const Option_t *delme=NULL) const;  //Debug info
-    
+
     double SamplePolarAngle(double);
 
     void   SetVersion(int i) {
@@ -35,7 +35,7 @@ class PPiOmegaAngularDistribution : public PAngularDistribution {
     };
 
  private:
-  
+
     double e_cm;
     int version;
     void getPiN_wN_param();

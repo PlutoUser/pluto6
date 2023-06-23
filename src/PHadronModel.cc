@@ -45,7 +45,7 @@ Bool_t PHadronModel::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
     //It is based on first principles and is valid for arbitrary resonances
     //given the pole mass, vacuum width, and decay modes (units GeV/c**2).
     //
- 
+
     if (didx >= 0) {
 	//Do not calculate the width from first principles
 	//but use the partial width only
@@ -57,10 +57,10 @@ Bool_t PHadronModel::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
     double g0 =	makeStaticData()->GetParticleTotalWidth(is_pid); // vacuum width
 
     if (!width_init) // if 1st call, initialize flags
-	makeDynamicData()->GetParticleDepth(is_pid);   
+	makeDynamicData()->GetParticleDepth(is_pid);
 
-    if (twidx==-1 || g0 < (*unstable_width) || mass==0. || 
-	makeStaticData()->GetParticleNChannels(is_pid)==0) { 
+    if (twidx==-1 || g0 < (*unstable_width) || mass==0. ||
+	makeStaticData()->GetParticleNChannels(is_pid)==0) {
 	*width = g0; // no mass-dependent width
 	return kTRUE;
     }
@@ -72,37 +72,37 @@ Bool_t PHadronModel::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
     Bool_t self_consistency_loop      = kTRUE;
     Bool_t next_self_consistency_loop = kFALSE;
 
-    if (!width_init) {   
+    if (!width_init) {
 	// Below: enter once on the first call
 	width_init++;
-	
+
 	global_weight_scaling = makeDynamicData()->GetParticleScalingFactor(is_pid);
 
 	mmin = PData::LMass(is_pid);   // mass threshold
 	mmax = PData::UMass(is_pid);   // mass ceiling
 	dm   = (mmax-mmin)/(maxmesh-3.); // mass increment for the mesh
- 
+
 	Info("GetWidth", "Width 1st call for %s, mass range %f GeV to %f GeV",
 	     description, mmin, mmax);
 
 	while (self_consistency_loop) {
 	    // The mass-dependent width is evaluated on a mesh as a function of mass.
-	    
+
 	    // now loop over decay modes
 	    Int_t listkey = -1;
 	    Int_t tid[11];
 	    while (makeDataBase()->MakeListIterator(primary_key, "pnmodes", "link", &listkey)) {
-		tid[0] = 10; 
-		makeStaticData()->GetDecayModeByKey(listkey, tid); 
+		tid[0] = 10;
+		makeStaticData()->GetDecayModeByKey(listkey, tid);
 		// retrieve current mode info
 		didx2 = makeStaticData()->GetDecayIdxByKey(listkey);
 		//np=tid[0];
-		if (makeStaticData()->GetPWidx(didx2) != -1 ) {  
-		    // Note: The next call is required 
-		    // if the current particle has nested decays via 
+		if (makeStaticData()->GetPWidx(didx2) != -1 ) {
+		    // Note: The next call is required
+		    // if the current particle has nested decays via
 		    // any recognized modes.
-		    // The innermost widths must be available by the time 
-		    // the local Width sampling 
+		    // The innermost widths must be available by the time
+		    // the local Width sampling
 		    // is called and their calculation is forced here.
 		    makeDynamicData()->GetDecayPartialWidth(mass, didx2);
 		}
@@ -135,9 +135,9 @@ Bool_t PHadronModel::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
 	    Double_t global_weight = 0;
 	    for (j=0; j<maxmesh-2; ++j) {  // loop over the mesh points [0-200]
 		mm = mmin+j*dm;            // update mass on the mesh
-		global_weight += dm*makeDynamicData()->GetParticleTotalWeight(mm, is_pid);		
+		global_weight += dm*makeDynamicData()->GetParticleTotalWeight(mm, is_pid);
 	    }
-	    
+
 	    if (global_weight)
 		makeDynamicData()->SetParticleScalingFactor(is_pid, 1/(global_weight));
 	    global_weight_scaling = makeDynamicData()->GetParticleScalingFactor(is_pid);
@@ -150,13 +150,13 @@ Bool_t PHadronModel::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
 		//Loop again over decay modes
 		didx2 = makeStaticData()->GetDecayIdxByKey(listkey);
 		Double_t partial_weight = 0.; // reset the sum of mass-dependent branching ratio
-		global_weight = 0.; 
+		global_weight = 0.;
 
 		int brflag = makeStaticData()->GetDecayBRFlag(didx2);
-		if (brflag) { //Do integration 
+		if (brflag) { //Do integration
 		    for (j=0; j<maxmesh-2; ++j) {  // loop over the mesh points [0-200]
 			mm = mmin+j*dm;            // update mass on the mesh
-			
+
 			if (makeDynamicData()->GetParticleTotalWidth(mm,is_pid) > 0)
 
 			    partial_weight += dm*(makeDynamicData()->GetDecayPartialWidth(mm,didx2)*
@@ -167,10 +167,10 @@ Bool_t PHadronModel::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
 			//PWidth/TWidth is the mass-dependent BR
 			//*TWeight will be the Partial mass shape
 			//Int(Partial mass shape)/Int(Total mass shape) must be the static BR
-			
+
 			global_weight += dm*makeDynamicData()->GetParticleTotalWeight(mm,is_pid);
-			
-			
+
+
 		    }
 		} else { //pole width
 		    mm = makeStaticData()->GetParticleMass(is_pid);
@@ -180,7 +180,7 @@ Bool_t PHadronModel::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
 				      makeDynamicData()->GetParticleTotalWidth(mm,is_pid));
 		    global_weight = makeDynamicData()->GetParticleTotalWeight(mm,is_pid);
 		}
-		
+
 		//Global weight should be 1 after Scaling
 
 		Double_t calculated_br = 0;
@@ -191,29 +191,29 @@ Bool_t PHadronModel::GetWidth(Double_t mass, Double_t *width, Int_t didx) {
 
 		if (global_weight) //Compare the calculated partial width to the static one
 		    calculated_br = tot_sc*partial_weight/global_weight;
-								      
+
 		if ((calculated_br/makeStaticData()->GetDecayPartialWidth(didx2) > 1.001)
-		    || (calculated_br/makeStaticData()->GetDecayPartialWidth(didx2) < 0.999)) { 
+		    || (calculated_br/makeStaticData()->GetDecayPartialWidth(didx2) < 0.999)) {
 		    //set SC factor and go on...
 		    if (!makeDynamicData()->CheckSCAbort(didx2)) { //check for endless loop
 			Warning("GetWidth", "Self consistency calculation failed for decay: %s (%i)",
 				makeStaticData()->GetDecayName(didx2), didx2);
-			Warning("GetWidth", "Calculated Width: %f, Static Width: %f", 
-				calculated_br, 
+			Warning("GetWidth", "Calculated Width: %f, Static Width: %f",
+				calculated_br,
 				makeStaticData()->GetDecayPartialWidth(didx2));
-			next_self_consistency_loop = kTRUE; //break the complete loop			
+			next_self_consistency_loop = kTRUE; //break the complete loop
 		    } else {
 			if (calculated_br > 0) {
 			    self_consistency_loop = kTRUE;
-			    makeDynamicData()->SetDecaySCFactor(didx2, 
+			    makeDynamicData()->SetDecaySCFactor(didx2,
 								makeStaticData()->GetDecayPartialWidth(didx2)/
 								calculated_br);
 			}
 		    }
 		}
 	    } //END modes iterator
-	    if (next_self_consistency_loop) 
-		self_consistency_loop = kFALSE; 
+	    if (next_self_consistency_loop)
+		self_consistency_loop = kFALSE;
 	}  //END	while (self_consistency_loop) {
     } //width init
 

@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  Pluto cross section class
 //  This utility class computes number of participants according to Gosset
-//  and meson production probabilities for pi0, eta, omega and phi. 
+//  and meson production probabilities for pi0, eta, omega and phi.
 //  pi0 and eta are averages of C+C and Ca+Ca TAPS (and KaoS) data,
 //  omega and phi are mt-scaled from the eta averages.
 //
 //                             Author:  K.Tyminska
-//                             Written: 20/12/2001 
+//                             Written: 20/12/2001
 //                             Revised: 08/07/2004   R.H.
 //   Better calc. of source T  Revised: 04/09/2006   R.H.
 //
@@ -16,7 +16,7 @@
 // Ref 3: chemical freeze-out temperature Cleymans et al. PRC 73 (2006) 034905
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "PCross.h"    
+#include "PCross.h"
 #include "PData.h"
 
 Int_t PCross::ZP=0;
@@ -32,13 +32,13 @@ ClassImp(PCross)
 
 PCross::PCross() {sys=0;}
 
-void PCross::print(int Part=0, Double_t blow, Double_t bup) {  
+void PCross::print(int Part=0, Double_t blow, Double_t bup) {
     Double_t pmes, sigmes;
 
     if (check(Part)) {
 
 	//  empirical fireball temperature
-     
+
 	Double_t bmin = 0.;
 	Double_t bmax = 1.14*(pow(AP,0.3333)+pow(AT,0.3333));   // in fm
 	Double_t sigmax = 3.14159*bmax*bmax*10.;   // in mb
@@ -46,9 +46,9 @@ void PCross::print(int Part=0, Double_t blow, Double_t bup) {
 
 	if (bup>bmax) bup = bmax;
 	bmin = blow;
-  
+
 	Double_t sigreac = 3.1416*(bup*bup - blow*blow)*10.;  // in mb
-	Double_t frac = sigreac/sigmax*100;   // in %  
+	Double_t frac = sigreac/sigmax*100;   // in %
 
 	//  average Apart
 	Double_t Apart = (AP*pow(AT,0.667) + AT*pow(AP,0.667))
@@ -62,13 +62,13 @@ void PCross::print(int Part=0, Double_t blow, Double_t bup) {
 	//  ratio of pi-/pi0 in isobar model
 	Double_t pim = (5.*N*(N-1.) + N*Z)/(Z*(Z-1.) + N*(N-1) + 4.*N*Z);
 	//  ratio of pi+/pi0 in isobar model
-	Double_t pip = (5.*Z*(Z-1.) + N*Z)/(Z*(Z-1.) + N*(N-1) + 4.*N*Z);  
+	Double_t pip = (5.*Z*(Z-1.) + N*Z)/(Z*(Z-1.) + N*(N-1) + 4.*N*Z);
 
 	Double_t bstep = (bup-blow)/100.;  // in fm
 	Double_t sum1 = 0.;
 	Double_t sum2 = 0.;
 
-	for (Int_t i=1;i<101;i++){    
+	for (Int_t i=1;i<101;i++){
 	    Double_t b=blow + i*bstep;
 	    sum1 = sum1+b;
 	    sum2 = sum2 + b*(Npart(AP,AT,b)+Npart(AT,AP,b));  // Gosset function
@@ -80,7 +80,7 @@ void PCross::print(int Part=0, Double_t blow, Double_t bup) {
 
 	cout << endl;
 	cout <<"For reaction ("<<AP<<","<<ZP<<") + ("<<AT<<","<<ZT<<") at "<<Ebeam
-	     <<" AGeV"<<" (sqrt(s) ="<<sqrts<<") with b = "<<bmin<<"-"<<bmax<<" fm:"<<endl<<endl; 
+	     <<" AGeV"<<" (sqrt(s) ="<<sqrts<<") with b = "<<bmin<<"-"<<bmax<<" fm:"<<endl<<endl;
 	cout <<" <A>geom = "<<Apart<<" <N>Gosset = "<< NGosset<< endl;
 	cout <<" sigR = "<< sigreac<<" mb  ("<<frac<<"% of total)"<<   endl;
 	cout <<" Temp at "<< Ebeam<<" AGeV = "<<T<<" MeV"<< endl<<endl;
@@ -122,14 +122,14 @@ Double_t PCross::Npart(int AP, int AT, Double_t b) {
     Double_t F;
     if (nu>0.5) {    //  Ap>At
 	if (nu>0.5*(1.0+beta)) {
-	    F= (1.0-pow((1.0-pow(mu,2)),1.5))*sqrt(1.0-pow((beta/nu),2));      
+	    F= (1.0-pow((1.0-pow(mu,2)),1.5))*sqrt(1.0-pow((beta/nu),2));
 	} else {
-	    F = 0.75*sqrt(1.0-nu)*pow(((1.0-beta)/nu),2) 
-		- 0.125*(3.0*sqrt(1.0-nu)/mu - 
+	    F = 0.75*sqrt(1.0-nu)*pow(((1.0-beta)/nu),2)
+		- 0.125*(3.0*sqrt(1.0-nu)/mu -
 			 ((1.0-pow((1.0-pow(mu,2)),1.5))*
 			  sqrt(1.0-pow((1.0-mu),2)))/pow(mu,3))*pow(((1.0-beta)/nu),3);
 	}
-    } else {        //  Ap<At 
+    } else {        //  Ap<At
 	if (nu>0.5*(1.0-beta)) {
 	    F = 0.75*sqrt(1.0-nu)*pow(((1.0-beta)/nu),2) -
 		0.125*(3.0*sqrt(1.0-nu) - 1.0)*pow(((1.0-beta)/nu),3);
@@ -142,12 +142,12 @@ Double_t PCross::Npart(int AP, int AT, Double_t b) {
 }
 
 
-Double_t PCross::ratiosignew(Double_t T, Double_t mm) { 
+Double_t PCross::ratiosignew(Double_t T, Double_t mm) {
     // T in MeV, mm = MeV
     //    mt scaling applied to the eta and a meson of mass m(1)
-    //    using integral[m,infinity] of dsigma/dmt = 1/T*mt**3/2*exp(-mt/T) 
+    //    using integral[m,infinity] of dsigma/dmt = 1/T*mt**3/2*exp(-mt/T)
 
-    Double_t a=T*exp(-mm/T)*sqrt(mm)*(1.5*T+mm) 
+    Double_t a=T*exp(-mm/T)*sqrt(mm)*(1.5*T+mm)
 	+ 0.75*1.772454*pow(T,2.5)*(1.-TMath::Erf(sqrt(mm/T)));
     Double_t b= T*exp(-547./T)*sqrt(547.)*(1.5*T+547.)
 	+ 0.75*1.772454*pow(T,2.5)*(1.-TMath::Erf(sqrt(547./T)));
@@ -173,21 +173,21 @@ void PCross::print(char * Part, Double_t blow, Double_t bup) {
 }
 
 
-void PCross::plot(char * Part, Double_t Rangl, Double_t Rangu, 
+void PCross::plot(char * Part, Double_t Rangl, Double_t Rangu,
 		  Double_t blow, Double_t bup, const char * Opt, Int_t color) {
 
     PCross::plot(makeStaticData()->GetParticleID(Part), Rangl,Rangu,blow,bup,Opt,color);
 }
 
 
-void PCross::plot(int Part, Double_t Rangl,Double_t Rangu, 
+void PCross::plot(int Part, Double_t Rangl,Double_t Rangu,
 		  Double_t blow, Double_t bup, const char *Opt, Int_t color) {
 
     if (check(Part)) {
 	TF1 *fn1 = new TF1("fn1",PCross::calc,Rangl,Rangu,7);
 	fn1 -> SetParameters(Part,blow,bup,AT,ZT,AP,ZP);
 	fn1 -> SetLineWidth(3);
-	fn1 -> SetLineColor(color);    
+	fn1 -> SetLineColor(color);
 	fn1 -> DrawCopy(Opt);
 	delete fn1;
     }
@@ -210,12 +210,12 @@ Double_t PCross::calc(Double_t *x, Double_t *par) {
     Double_t T = 1000.*calcT(Ene); //  empirical meson temperature in MeV
     //Double_t bmin = 0.;
     Double_t bmax = 1.14*(pow(Ap,0.3333)+pow(At,0.3333));  // in fm
-    Double_t sigmax = 3.14159*bmax*bmax*10.;  // in mb 
+    Double_t sigmax = 3.14159*bmax*bmax*10.;  // in mb
 
     if (bup>bmax) bup = bmax;
     //bmin = blow;
-  
-    Double_t sigreac = 3.1416*(bup*bup - blow*blow)*10.;  // in mb 
+
+    Double_t sigreac = 3.1416*(bup*bup - blow*blow)*10.;  // in mb
     if (doMult) sigreac = 1.;
 
     Double_t Apart = (Ap*pow(At,0.667) + At*pow(Ap,0.667))
@@ -228,7 +228,7 @@ Double_t PCross::calc(Double_t *x, Double_t *par) {
 
     // pion ratios in isobar model
     Double_t pim = (5.*N*(N-1.) + N*Z)/(Z*(Z-1.) + N*(N-1) + 4.*N*Z);
-    Double_t pip = (5.*Z*(Z-1.) + N*Z)/(Z*(Z-1.) + N*(N-1) + 4.*N*Z);  
+    Double_t pip = (5.*Z*(Z-1.) + N*Z)/(Z*(Z-1.) + N*(N-1) + 4.*N*Z);
 
     Double_t bstep = (bup-blow)/100.;  // in fm
     Double_t sum1 = 0.;
@@ -242,7 +242,7 @@ Double_t PCross::calc(Double_t *x, Double_t *par) {
 
     Double_t NGosset = sum2/sum1;
     Double_t xa = Ene;    //  use TAPS data now (PRC 56 (1997) R2920)
-   
+
     Double_t sigpi0;
     Double_t sigother;
     Double_t sigeta;
@@ -263,40 +263,40 @@ Double_t PCross::calc(Double_t *x, Double_t *par) {
 
 	Double_t kpi0 =1.05*sqrt(spi0CC*spi0CaCa)/pow(12*40,alfapi0);
 
-	Double_t spi0ApAt = kpi0*pow((Ap*At),alfapi0); 
+	Double_t spi0ApAt = kpi0*pow((Ap*At),alfapi0);
 	//extrapolate pi0 cross sec. (in mb)
 	ppi0 = spi0ApAt/(sigmax*Apart);
 	sigpi0 = ppi0*NGosset*sigreac;    // in mb
 	if (Part==7) {
 	    pom = sigpi0;
 	} else if (Part==8) {
-	    pom = sigpi0*pip; 
+	    pom = sigpi0*pip;
 	} else {
-	    pom = sigpi0*pim; 
+	    pom = sigpi0*pim;
 	}
 
     } else {
 
-	Double_t setaCC = exp(0.470+4.860*log(xa)-1.321*pow(log(xa),2)); 
+	Double_t setaCC = exp(0.470+4.860*log(xa)-1.321*pow(log(xa),2));
 	// eta C + C
-	Double_t setaCaCa = exp(2.6885+4.2342*log(xa)-1.774*pow(log(xa),2)); 
+	Double_t setaCaCa = exp(2.6885+4.2342*log(xa)-1.774*pow(log(xa),2));
 	// eta Ca + Ca
 	Double_t alfaeta = 1.0757 - 0.19524*xa;
 
-	Double_t keta = 1.05*sqrt(setaCC*setaCaCa)/pow(12*40,alfaeta); 
-	Double_t setaApAt = keta*pow((Ap*At),alfaeta);   
+	Double_t keta = 1.05*sqrt(setaCC*setaCaCa)/pow(12*40,alfaeta);
+	Double_t setaApAt = keta*pow((Ap*At),alfaeta);
 	//  extrapolate eta cross sec. (in mb)
 	peta = setaApAt/(sigmax*Apart);
 	sigeta = peta*NGosset*sigreac;   // in mb
-  
-	pother = peta*ratiosignew(T,(1000*makeStaticData()->GetParticleMass(Part)));  
+
+	pother = peta*ratiosignew(T,(1000*makeStaticData()->GetParticleMass(Part)));
 	// mt-scale eta for other particles
-	sigother = pother*NGosset*sigreac; 
+	sigother = pother*NGosset*sigreac;
 	if (Part==17) {
 	    pom = sigeta;
 	} else {
 	    pom = sigother;
-	}  
+	}
     }
     return pom;  // return cross section in mb
 }

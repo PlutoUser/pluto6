@@ -25,20 +25,20 @@ class PFireball: public PParticle {
     int prodId;    // product id
     float T1;      // temperature of component 1 (in GeV)
     float T2;      // temperature of component 2 (in GeV)
-    float frac;    // fraction of component 1  (0 < frac < 1) 
+    float frac;    // fraction of component 1  (0 < frac < 1)
     float blast;   // radial blast velocity  (0 < blast < 1)
     float power1;  // power of p**n term in p**n exp(-E/T) sampling at 0 deg
     float power2;  // power of p**n term at 90 deg
     float A2;      // polar anisotropy (dN/dOmega = 1 + A2*cost**2 + A4*cost**4)
-    float A4;      // 
+    float A4;      //
     float v1;      // directed flow parameter at mid-rapidity
     float v2;      // elliptic flow (squeeze out) at mid-rapidity
     float Ap;      // projectile mass
     float At;      // target mass
     float prob;    // particle production probability per participant nucleon
-    float bmin;    // min impact parameter 
+    float bmin;    // min impact parameter
     float bmax;    // max impact parameter
-    float meanN;   // mean multiplicity 
+    float meanN;   // mean multiplicity
     int   nProd;   // number of product particles
     bool  flag;    //! if set, sample impact parameter first, then Poisson Npart
     float mt_fac;  //! mt scaling of mass distribution
@@ -72,28 +72,28 @@ class PFireball: public PParticle {
     PFunction *pfE;      //!Envelope for thermal channel model E
     PAdaptiveMeshN *afE; //!Mesh for  thermal channel model E
 
-    Float_t y0;          // mid-rapidity of source 
+    Float_t y0;          // mid-rapidity of source
 
  public:
     PFireball(const char *particle, float AGeV, float t1, float t2=0.0, float f=1.0,
 	      float b=0.0, float a2=0.0, float a4=0.0, float w1=0.0, float w2=0.0, int sp=0);
 
     void setTemperature(float t1, float t2, float f, int id=0) {
-	T1 = t1; 
-	T2 = t2; 
+	T1 = t1;
+	T2 = t2;
 	frac = f;
 	updateFunctions(id);
-	if (mt_fac > 0.) 
+	if (mt_fac > 0.)
 	    mt_fac = mtIntegral(makeStaticData()->GetParticleMass(prodId),T1);
     }
 
     //Rapidity sampling:
     void setSigma(double s) {
 	SetSigma(s);
-    } 
+    }
     void SetSigma(double s) {
 	sig = s;
-    } 
+    }
     void SetRapidityDistribution(TF1 *f) {
 	rapidity_function = f;
     };
@@ -104,11 +104,11 @@ class PFireball: public PParticle {
     }
     void setAnisotropy(float a2, float a4, int id=0) {
 	A2 = a2;
-	A4 = a4; 
+	A4 = a4;
 	updateFunctions(id);
     }
     void setFlow(float a, float b) {
-	v1 = a; 
+	v1 = a;
 	v2 = b;
     }
 
@@ -118,20 +118,20 @@ class PFireball: public PParticle {
 	    /pow((pow(ap,0.333)+pow(at,0.333)),2);  // average Apart
     }
     void setRandomB(float ap, float at, float p=0., float bn=0., float bx=20.) {
-	Ap = ap; 
-	At = at; 
-	prob = p; 
-	flag = 1; 
-	bmin = bn; 
+	Ap = ap;
+	At = at;
+	prob = p;
+	flag = 1;
+	bmin = bn;
 	bmax = bx;
-	if (prob <= 0.) 
+	if (prob <= 0.)
 	    prob = meanN/AvApart(Ap, At);
 	meanN = prob*AvApart(Ap, At, bmin, bmax);
 	if (bmax > 1.14*(pow((double)Ap,(double)0.333) + pow((double)At,(double)0.333))+2.)
 	    bmax = 1.14*(pow((double)Ap,(double)0.333) + pow((double)At,(double)0.333)+2.);
 	if (bmin > bmax) {
-	    float temp = bmin; 
-	    bmin = bmax; 
+	    float temp = bmin;
+	    bmin = bmax;
 	    bmax = temp;
 	}
     }
@@ -181,12 +181,12 @@ class PFireball: public PParticle {
 
 
     void sampleECM(Double_t &E, Double_t &M, int didx);
-  
+
     void sampleECM1(Double_t &E, Double_t &M, int didx) {
 	if (fE1) {
 	    if (didx != didx_old) {
 		didx_old = didx; //prevent random initialization each time
-		if (didx < 0) 
+		if (didx < 0)
 		    fE1->SetParameter(5, -1.1);
 		else
 		    fE1->SetParameter(5, (double) didx);
@@ -203,7 +203,7 @@ class PFireball: public PParticle {
 	if (fE2) {
 	    if (didx != didx_old) {
 		didx_old = didx; //prevent random initialization each time
-		if (didx<0) 
+		if (didx<0)
 		    fE2->SetParameter(5, -1.1);
 		else
 		    fE2->SetParameter(5, (double) didx);
@@ -215,7 +215,7 @@ class PFireball: public PParticle {
 	    Error("sampleECM2", "fE2 not found");
 	}
     }
-  
+
     void sampleECM3(Double_t &E, Double_t &Theta) {
 	fE3->GetRandom2(E, Theta);
     }
@@ -230,10 +230,10 @@ class PFireball: public PParticle {
     int IsFireball()   {return 1;}
 
     PChannel *makeChannel(Int_t nMax, Float_t nAverage=0.);
- 
+
     void setTrueThermal(Bool_t flag=kTRUE) {
 	trueThermal = flag;
-    } 
+    }
     void setMtScaling() {
 	mt_fac = mtIntegral(makeStaticData()->GetParticleMass(prodId),T1);
     }
@@ -258,7 +258,7 @@ class PFireball: public PParticle {
 	if (*(makeStaticData()->GetBatchValue("_system_weight_version"))) {
 	    Info("SetW", "Use old weighting method (pure chain based)");
 	}
-	*(makeStaticData()->GetBatchValue("_system_weight_version")) = 0.;      
+	*(makeStaticData()->GetBatchValue("_system_weight_version")) = 0.;
 	PParticle::SetW(w);
     };
 

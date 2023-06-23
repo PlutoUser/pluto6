@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 09.11.2010
-// Revised: 
+// Revised:
 
 #ifndef _PETAPIPIDILEPTON_H_
 #define _PETAPIPIDILEPTON_H_
@@ -12,7 +12,7 @@
 #include "PKinematics.h"
 
 class PEtaPiPiDilepton : public PChannelModel  {
-  
+
  public:
     PEtaPiPiDilepton();
     PEtaPiPiDilepton(const Char_t *id, const Char_t *de, Int_t key);
@@ -34,11 +34,11 @@ class PEtaPiPiDilepton : public PChannelModel  {
     Bool_t IsNotRejected(void);
 
  protected:
-  
+
     PParticle *parent, *pip, *pim, *ep, *em;
     Double_t  m_pi, mass_ee, mass_e, mass_eta;
     Double_t weight_max;               //Maximum
-  
+
     ClassDef(PEtaPiPiDilepton, 0)  // pipi correlation in eta -> pi+ pi- dilepton
 };
 

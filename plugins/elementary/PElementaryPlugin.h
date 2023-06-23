@@ -1,7 +1,7 @@
 // Author: I. Froehlich
 // Written: 21.8.2008
-// Revised: 
-// 
+// Revised:
+//
 
 
 #ifndef _PTEISPLUGIN_H_
@@ -21,7 +21,7 @@
 using namespace std;
 
 class PElementaryPlugin : public PDistributionCollection {
-    
+
  public:
 
     //constructor
@@ -30,7 +30,7 @@ class PElementaryPlugin : public PDistributionCollection {
     //destructor
     ~PElementaryPlugin();
 
-    Bool_t ExecCommand(const char *command, Double_t value); 
+    Bool_t ExecCommand(const char *command, Double_t value);
 
     Bool_t Activate(void);
 

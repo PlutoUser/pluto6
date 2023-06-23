@@ -1,7 +1,7 @@
 // Author: I. Froehlich
 // Written: 27.5.2007
-// Revised: 
-// 
+// Revised:
+//
 // (copied in part from PData) IF
 
 #ifndef _PSTDMODELS_H_
@@ -29,14 +29,14 @@
 using namespace std;
 
 class PStdModels : public TObject {
-    
+
  public:
 
     //constructor
     PStdModels();
     //destructor
     ~PStdModels();
-    
+
     void Add(PDistributionManagerUtil *pdmutil);
 
  private:

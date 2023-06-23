@@ -20,7 +20,7 @@ class UEvent : public TObject {
     Double_t      fStepT;        // Event step time
     Int_t         fNpa;          // Number of particles
     TClonesArray *fParticles;    // Array of particles
-    
+
  public:
     UEvent();
     UEvent(const UEvent& right);
@@ -59,7 +59,7 @@ class UEvent : public TObject {
     using TObject::Clear;
     void Clear(const Option_t * = NULL);
     void RemoveAt(Int_t i);
-    
+
     ClassDef(UEvent, 1);
 };
 

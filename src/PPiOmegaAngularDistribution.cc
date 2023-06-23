@@ -34,11 +34,11 @@ PDistribution *PPiOmegaAngularDistribution::Clone(const char *) const {
 };
 
 Bool_t PPiOmegaAngularDistribution::IsNotRejected(void) {
-    
+
     if (!direct_sampling_done) {
 	Fatal("IsNotRejected", "Sampling not finished");
     }
-    
+
     return kTRUE;
 };
 
@@ -63,17 +63,17 @@ Bool_t PPiOmegaAngularDistribution::Prepare(void) {
 
 
 void PPiOmegaAngularDistribution::getPiN_wN_param() {
-    // energy-dependent parameters of the cm angular distribution 
+    // energy-dependent parameters of the cm angular distribution
     // for w production in pi+N --> N+w
-    if (parent->M() != e_cm) 
+    if (parent->M() != e_cm)
 	e_cm = parent->M();
     else return;                         // no change in values
-    
+
     const double y[] = {exp(-8.),exp(-4.),exp(-3.2),exp(-2.4),1.},
 	dx[] = {1.,.2,.2,.6}, dy[]={y[1]-y[0],y[2]-y[1],y[3]-y[2],y[4]-y[3]};
 	int i;
 	double h = .0069*exp(2.873*e_cm), // h parametrized by J.Messchendorp
-	    a = 0.;   
+	    a = 0.;
 	PiN_w_y[0] = 1.+h*y[0];
 	PiN_w_h    = h;
 	for (i=0; i<4; ++i) {
@@ -94,8 +94,8 @@ double PPiOmegaAngularDistribution::SamplePolarAngle(double r) {
     if (version == PI_OMEGA_piNNw) {          // pi + N --> N + w, PRD2 (1970) 2564
 	fl = 2;
 	rr = r1*PiN_w_area[3];
-	for (i=0; i<4; ++i) 
-	    if (rr < PiN_w_area[i]) 
+	for (i=0; i<4; ++i)
+	    if (rr < PiN_w_area[i])
 		break;
 	area  = (i)?PiN_w_area[i-1]:0.;
 	x1    = PiN_w_y[i];
@@ -112,13 +112,13 @@ double PPiOmegaAngularDistribution::SamplePolarAngle(double r) {
 	tf = 9. * exp(c0); c0 = -c0;
     } else if (version==PI_OMEGA_piPDw) {      // pi+ + P --> pi+ P + w,
 	// Alff PR 145 (1966) 361
-	fl = 4;         
+	fl = 4;
 	c0 = log((r1*23.504+3.679)/10.);
 	f  = 2. + exp(2.3*c0);
 	tf = 10. * exp(c0); c0 = -c0;
-    } else 
+    } else
 	return c0 = PUtils::sampleFlat()*2.-1.; // leave it isotropic for the moment
-    
+
     r2 = PUtils::sampleFlat();
     if (r2 > f/tf) {                        // reject
 	r1 = PUtils::sampleFlat();

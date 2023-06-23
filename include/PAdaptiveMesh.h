@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 1.02.2003
-// Revised: 
+// Revised:
 
 #ifndef _PADAPTIVEMESH_H_
 #define _PADAPTIVEMESH_H_
@@ -22,7 +22,7 @@ class PAdaptiveMesh : public TObject {
     PAdaptiveMesh *sub_tree[MAX_SUBMESH];
     Double_t  sub_area[MAX_SUBMESH];
     TF1   *tf1;
-    TLine *line;  //upper line for the Draw() function 
+    TLine *line;  //upper line for the Draw() function
     void ReCalc(void);
     PAdaptiveMesh *GetRandomBin(Double_t f_random);
 
@@ -31,11 +31,11 @@ class PAdaptiveMesh : public TObject {
     //constructor
     PAdaptiveMesh(Double_t my_x_max, Double_t my_x_min, Double_t my_y_max);
     ~PAdaptiveMesh();
- 
+
     void SetTF1(TF1 * t) {tf1 = t;};
     Double_t GetRandom();
     Double_t GetArea() {return area_size;};
-   
+
     Double_t GetXMax() {return x_max;};
     Double_t GetXMin() {return x_min;};
     Double_t GetYMax() {return y_max;};

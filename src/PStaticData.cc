@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////
 //  Pluto Data Wrapper
 //  Provides a lot of helpfull wrapper function to deal with the data
-//  base. 
+//  base.
 //
 //
 //                             Author:  M.A. Kagarlis
@@ -40,7 +40,7 @@ PStaticData::PStaticData() {
     c_result = NULL;
     d_result = NULL;
     t_result = NULL;
-    
+
     freeze = kFALSE;
 
     pid_param    = base->GetParamInt("pid");
@@ -80,7 +80,7 @@ PStaticData::PStaticData() {
 
     nalias_param = base->GetParamInt("nalias");
     lalias_param = base->GetParamInt("lalias");
-    
+
     enhance_br_param = base->MakeParamDouble ("enhance_br", "Enhancement for the free decay BR");
 
     //now loop over particles and normalize BRs
@@ -132,13 +132,13 @@ PStaticData::PStaticData() {
     AddAlias("NS110", "N*(1535)0");
 
     //Increase mesh array for resonances
-    makeDataBase()->SetParamInt("NS110", "maxmesh", 2000); 
-    makeDataBase()->SetParamInt("NS11+", "maxmesh", 2000); 
-    makeDataBase()->SetParamInt("NS11-", "maxmesh", 2000); 
+    makeDataBase()->SetParamInt("NS110", "maxmesh", 2000);
+    makeDataBase()->SetParamInt("NS11+", "maxmesh", 2000);
+    makeDataBase()->SetParamInt("NS11-", "maxmesh", 2000);
 
 
     //Ingo's additions:
-    makeDataBase()->SetParamDouble ("D+", "lmass", 1.); 
+    makeDataBase()->SetParamDouble ("D+", "lmass", 1.);
     //--> lmass=0 leads to endless loop in PHadronDecayM1:: maxBWWeight
     makeDataBase()->SetParamDouble ("D+", "umass", 3.);
 
@@ -178,9 +178,9 @@ int PStaticData::MakeDirectoryEntry(const char *name, const char *n, const char 
 
     Int_t skey = -1;
 
-    if (makeDataBase()->GetParamInt(n) < 0) 
+    if (makeDataBase()->GetParamInt(n) < 0)
 	makeDataBase()->MakeParamInt(n, "number of links");
-    if (makeDataBase()->GetParamInt(l) < 0) 
+    if (makeDataBase()->GetParamInt(l) < 0)
 	makeDataBase()->MakeParamInt(l, "links");
 
     skey = makeDataBase()->GetEntry(name);
@@ -190,12 +190,12 @@ int PStaticData::MakeDirectoryEntry(const char *name, const char *n, const char 
     skey = makeDataBase()->GetEntry(ename);
     if (skey < 0) skey = makeDataBase()->AddEntry(ename);
     if (skey < 0) return -1; //failed
-    
+
     Int_t *dummy;
     if (!makeDataBase()->GetParamInt(skey,l,&dummy)) {
 	//fresh entry
 	skey = makeDataBase()->AddListEntry(name, n, l, ename);
-    }    
+    }
     return skey;
 }
 
@@ -205,7 +205,7 @@ Double_t *PStaticData::GetBatchValue(const char *name, Int_t make_val) {
     //Check if double is existing
     Double_t *val;
     Int_t batch_value_param = makeDataBase()->GetParamDouble("batch_value");
-    if (batch_value_param < 0) 
+    if (batch_value_param < 0)
 	batch_value_param = makeDataBase()->MakeParamDouble("batch_value", "Double storage for batch");
     if (!makeDataBase()->GetParamDouble(key_a, batch_value_param, &val)) {
 	if (make_val) {
@@ -247,7 +247,7 @@ const char *PStaticData::GetParticleName(const int &id) {
 int PStaticData::GetParticleIDByKey(int key) {
     // pid by key
     // -1 if unvalid
-    if (!makeDataBase()->GetParamInt (key, pid_param, &i_result)) 
+    if (!makeDataBase()->GetParamInt (key, pid_param, &i_result))
 	return -1;
     return *i_result;
 }
@@ -276,7 +276,7 @@ int PStaticData::IsParticle(const int &id, const char *name) {
     return 0;
 }
 
-int PStaticData::IsParticleValid(const int &id) { 
+int PStaticData::IsParticleValid(const int &id) {
     // check id range by id
     // Returns a "1" in any case if data base is filled with id
     // PFireball particles return 0;
@@ -285,12 +285,12 @@ int PStaticData::IsParticleValid(const int &id) {
     if ((key = makeDataBase()->GetEntryInt(pid_param, id)) >= 0) {
 	return id; //if in data base in any case say yes
     }
- 
+
     if ((id>500) && (id<1000)) return id;
 
     return 0;
 }
- 
+
 int PStaticData::IsParticleValid(const char *n) {
     // check id range by name
 
@@ -301,16 +301,16 @@ int PStaticData::IsParticleValid(const char *n) {
     return IsParticleValid(pid);
 }
 
-int PStaticData::AddAlias(const char *old_name, const char *new_name) { 
+int PStaticData::AddAlias(const char *old_name, const char *new_name) {
 //adds an alias to primary_key, ret value is alias key
     PDataBase *base = makeDataBase();
     Int_t pkey = -1;
-    
+
     if ((pkey = base->AddListEntry(old_name, "nalias", "lalias", new_name)) < 0) {
 	Warning("AddAlias", "Name %s not found", old_name);
 	return -1;
     }
-    
+
     return pkey;
 }
 
@@ -339,7 +339,7 @@ int PStaticData::GetAliasParent(int key) {
     }
     return -1;
 }
-    
+
 int PStaticData::GetSecondaryKey(int key, int defkey) {
     Int_t listkey = -1;
 
@@ -349,7 +349,7 @@ int PStaticData::GetSecondaryKey(int key, int defkey) {
 	//try to find parent
 	key = GetAliasParent(key);
 	if (key<0)
-	    return -1; //avoid messages 
+	    return -1; //avoid messages
     }
 
     while (makeDataBase()->MakeListIterator(key, nalias_param, lalias_param, &listkey)) {
@@ -367,7 +367,7 @@ int PStaticData::AddParticle(int pid, const char *name, double mass) {
     clearFreezeOut();
     PDataBase *base = makeDataBase();
     Int_t pkey = -1;
-    
+
     //check if pid already exists
     if (pid >= 0)
 	if (base->GetEntryInt("pid", pid) >=0 ) {
@@ -406,12 +406,12 @@ int PStaticData::AddParticle(int pid, const char *name, double mass) {
 	return -1;
     }
     dd = new Double_t(mass);
-    if (!base->SetParamDouble (pkey, "mass", dd)) { 
+    if (!base->SetParamDouble (pkey, "mass", dd)) {
 	delete dd;
 	return -1;
     }
     dd = new Double_t(mass);
-    if (!base->SetParamDouble (pkey, "ethreshold", dd)) { 
+    if (!base->SetParamDouble (pkey, "ethreshold", dd)) {
 	delete dd;
 	return -1;
     }
@@ -439,7 +439,7 @@ int PStaticData::AddParticle(int pid, const char *name, double mass) {
     ii = new int(0);
     if (!base->SetParamInt (pkey, "pythiakf", ii))
 	return -1;
-    ii = new int(0);  
+    ii = new int(0);
     if (!base->SetParamInt (pkey, "widx", ii))
 	return -1;
     ii = new int(0);
@@ -482,7 +482,7 @@ void PStaticData::PrintParticleByKey(int key) {
     while (makeDataBase()->MakeListIterator(key, "pnmodes", "link", &listkey)) {
 	PrintDecayByKey(listkey);
     }
-  
+
 };
 
 int PStaticData::GetParticleKF(const int id) {
@@ -499,7 +499,7 @@ int PStaticData::GetParticleIDbyKF(const int kf) {
     // return Id corresponding to Pythia6 kf code
     if (!kf) return 0;
     int *id, key;
-    
+
     if ((key = makeDataBase()->GetEntryInt(pkf_param, kf)) < 0) {
 	Warning("GetParticleIDbyKF", "invalid kf code %i", *id);
 	return 0;
@@ -667,7 +667,7 @@ int PStaticData::GetParticleParity(const int &id) {
 	return 0;
     }
     return *i_result;
-    
+
 }
 
 int PStaticData::GetParticleParity(const char *id) {
@@ -773,7 +773,7 @@ int PStaticData::GetTWidx(const int &id) {
 	Warning("GetTWidx", "Particle %i not found", id);
 	return 0;
     }
-    
+
     return *i_result;
 }
 
@@ -793,7 +793,7 @@ void PStaticData::SetTWidx(const int & id, const int & v) {
     // width flag from index
     // 0: static width only
     // 1: use dynamic width
-    
+
     if (! makeDataBase()->GetParamInt (pid_param, id , widx_param, &i_result)) {
 	Error("SetTWidx", "Particle %i not found", id);
     }
@@ -804,7 +804,7 @@ void PStaticData::SetPWidx(const int &id, const int &v) {
     // width flag from index
     // 0: static width only
     // 1: use dynamic width
-    
+
     if (!makeDataBase()->GetParamInt (didx_param, id , widx_param, &i_result)) {
 	Warning("SetPWidx", "Decay %i not found", id);
     }
@@ -896,7 +896,7 @@ void PStaticData::SetTotalNormalization(char *p, int flag) {
 	Warning("SetTotalNormalization", "Invalid particle %s", p);
 	return;
     }
-    
+
     while(makeDataBase()->MakeListIterator(key, "pnmodes", "link", &listkey)) {
 	if (!makeDataBase()->GetParamInt(listkey, brflag_param, &i_result)) {
 	    Int_t *ii = new Int_t(flag);
@@ -914,7 +914,7 @@ void PStaticData::SetDecayEmin(const int &id, const double v) {
     if (!makeDataBase()->GetParamDouble(didx_param, id , ethreshold_param, &d_result)) {
 	Warning("SetDecayEmin", "Decay %i not found", id);
     }
-    *d_result = v;   
+    *d_result = v;
 }
 
 Double_t PStaticData::GetParticleEmin(const int &id) {
@@ -922,14 +922,14 @@ Double_t PStaticData::GetParticleEmin(const int &id) {
 	Error("GetParticleEmin", "Particle %i not found", id);
 	return 0;
     }
-    return *d_result;   
+    return *d_result;
 }
 
 void PStaticData::SetParticleEmin(const int &id, const double v) {
     if (! makeDataBase()->GetParamDouble (pid_param, id, ethreshold_param, &d_result)) {
 	Warning("SetParticleEmin", "Particle %i not found", id);
     }
-    *d_result = v;   
+    *d_result = v;
 }
 
 Double_t PStaticData::GetParticleLMass(const int &id) {
@@ -937,7 +937,7 @@ Double_t PStaticData::GetParticleLMass(const int &id) {
 	Warning("GetParticleLMass", "Particle %i not found", id);
 	return 0;
     }
-    return *d_result;   
+    return *d_result;
 }
 
 void PStaticData::SetParticleLMass(const char *id, const double v) {
@@ -954,7 +954,7 @@ Double_t PStaticData::GetParticleUMass(const int & id) {
 	Warning("GetParticleUMass", "Particle %i not found", id);
 	return 0;
     }
-    return *d_result;   
+    return *d_result;
 }
 
 void PStaticData::SetParticleUMass(const char *id, const double v) {
@@ -971,14 +971,14 @@ int PStaticData::GetTDepth(const int &id) {
 	Warning("GetTDepth", "Particle %i not found", id);
 	return 0;
     }
-    return *i_result;   
+    return *i_result;
 }
 
 void PStaticData::SetTDepth(const int &id, const int & depth) {
     if (!makeDataBase()->GetParamInt (pid_param, id, tdepth_param, &i_result)) {
 	Warning("SetTDepth", "Particle %i not found", id);
     }
-    *i_result = depth;   
+    *i_result = depth;
 }
 
 int PStaticData::GetHDepth(const int & id) {
@@ -986,14 +986,14 @@ int PStaticData::GetHDepth(const int & id) {
 	Warning("GetHDepth", "Particle %i not found", id);
 	return 0;
     }
-    return *i_result;   
+    return *i_result;
 }
 
 void PStaticData::SetHDepth(const int & id, const int & depth) {
     if (!makeDataBase()->GetParamInt(pid_param, id, hdepth_param, &i_result)) {
 	Warning("SetHDepth", "Particle %i not found", id);
     }
-    *i_result=depth;   
+    *i_result=depth;
 }
 
 Double_t PStaticData::GetDecayBR(Int_t id) {
@@ -1029,7 +1029,7 @@ bool PStaticData::SetDecayBR(int didx, double br, int mode) {
     }
 
     *brorig = br;
-    
+
     return NormParticleBRbyKey(GetParticleKey(GetDecayParentByKey(key)));
 }
 
@@ -1048,14 +1048,14 @@ bool PStaticData::SetDecayBRByKey(int key, double br, int mode) {
     return NormParticleBRbyKey(GetParticleKey(GetDecayParentByKey(key)));
 }
 
-bool PStaticData::SetDecayBR(const char *parent, const char *daughters, 
+bool PStaticData::SetDecayBR(const char *parent, const char *daughters,
 			     double br, int mode) {
     // Resets the decay branching ratio of an existing decay
     // Handle this functon with care!
     // Do not use this function to change the weighting etc.
     // because the change of the decay b.r. will affect the
     // shape of the parent resonance
-    // 
+    //
     // If you have really physics arguments to change the b.r.
     // (e.g. update of PDG values)
     // you *must* use this function at the very beginning of your macro,
@@ -1078,11 +1078,11 @@ bool PStaticData::SetDecayBR(const char *parent, const char *daughters,
 	return kFALSE;
     }
 
-    //now check the daughters 
+    //now check the daughters
     //TODO: All this should go into a help function
     char *arr1[7];
     Int_t arr1_s = 7; //max 7 decay products
-    
+
     PUtils::Tokenize(daughters, ",", arr1, &arr1_s);
 
     Int_t pids[8];
@@ -1097,7 +1097,7 @@ bool PStaticData::SetDecayBR(const char *parent, const char *daughters,
 	Warning("SetDecayBR", "Decay %s -> %s not defined", parent,daughters);
 	return kFALSE;
     }
-    
+
     return SetDecayBRByKey(decay_key, br, mode);
 }
 
@@ -1115,30 +1115,30 @@ bool PStaticData::SetDecayBR(const char *parent, const char *daughters,
 //   }
 //}
 
-bool PStaticData::NormParticleBR(Int_t id) { 
+bool PStaticData::NormParticleBR(Int_t id) {
 // normalize branching ratios for particle id
     //TODO: check if this works
     Int_t key = makeDataBase()->GetEntryInt(pid_param, id);
     return NormParticleBRbyKey(key);
 }
 
-bool PStaticData::NormParticleBRbyKey(Int_t key) { 
+bool PStaticData::NormParticleBRbyKey(Int_t key) {
 // normalize branching ratios for particle id
 
     Int_t listkey = -1;
     double sum    = 0.;
     Double_t *br, *brorig, *width;
     Double_t twidth = GetParticleTotalWidthByKey(key);
-    
+
     if (GetParticleNChannelsByKey(key) == 0) return kFALSE;
 
     while (makeDataBase()->MakeListIterator(key, "pnmodes", "link", &listkey)) {
 	if (!makeDataBase()->GetParamDouble(listkey, "brorig", &brorig)) return kFALSE;
 	sum += *brorig;
     }
-    
+
     listkey = -1;
-    if (sum > 0.) 
+    if (sum > 0.)
 	while(makeDataBase()->MakeListIterator(key, "pnmodes", "link", &listkey)) {
 	    if (!makeDataBase()->GetParamDouble (listkey, "brorig", &brorig)) return kFALSE;
 	    if (!makeDataBase()->GetParamDouble (listkey, "br", &br)) return kFALSE;
@@ -1190,9 +1190,9 @@ int PStaticData::GetParticleNChannelsByKey(int key) {
 
 int PStaticData::IsDecayHadronic(Int_t didx) {
     Int_t tid[11];
-    tid[0] = 10; 
+    tid[0] = 10;
 
-    GetDecayMode(didx, tid); 
+    GetDecayMode(didx, tid);
     for (int i=1; i<tid[0]; i++) {
 	if (!IsParticleHadron(tid[1])) return 0;
     }
@@ -1204,32 +1204,32 @@ int PStaticData::AddDecay(int *ipid, int n) {
 
     TString *decay_string  = new TString("");
     TString *decay_string2 = new TString(makeStaticData()->GetParticleName(ipid[0]));
-    decay_string2->Append(" --> ");	
+    decay_string2->Append(" --> ");
     //first I have to check that my decay_string is big enough
     for (int i=1; i<=n; i++) {
-	if (ipid[i] > 1000) 
+	if (ipid[i] > 1000)
 	    decay_string2->Append("(");
 	decay_string->Append(makeStaticData()->GetParticleName(ipid[i]));
 	decay_string2->Append(makeStaticData()->GetParticleName(ipid[i]));
-	if (ipid[i] > 1000) 
+	if (ipid[i] > 1000)
 	    decay_string2->Append(")");
-	if (i != n) decay_string->Append(" , ");	
+	if (i != n) decay_string->Append(" , ");
 	if (i != n) decay_string2->Append(" + ");
-	
+
     }
-    if (makeStaticData()->AddDecay(-1, (const char*) decay_string2->Data(), 
-				   makeStaticData()->GetParticleName(ipid[0]), 
+    if (makeStaticData()->AddDecay(-1, (const char*) decay_string2->Data(),
+				   makeStaticData()->GetParticleName(ipid[0]),
 				   (const char*) decay_string->Data() , 1.0 )) {
-	
+
 	//Info("AddDecay","(%s) Decay of added: %s", PRINT_AUTO_ALLOC,decay_string->Data());
     } else {
 	Warning("AddDecay", "Add Decay failed");
     }
-    
+
     return makeStaticData()->GetDecayKey(ipid, n);
 }
 
-int PStaticData::AddDecay(int didx, const char *name, const char *parent, 
+int PStaticData::AddDecay(int didx, const char *name, const char *parent,
 			  const char *daughters , double br) {
     //make new decay with decay index "didx"
     //the didx should be a free number (or set to -1 for auto-alloc)
@@ -1240,7 +1240,7 @@ int PStaticData::AddDecay(int didx, const char *name, const char *parent,
     //all branching ratios are re-normalized
     clearFreezeOut();
     PDataBase *base = makeDataBase();
-  
+
     //get parent key
     Int_t parent_key = GetParticleKey(parent);
     if (parent_key < 0) {
@@ -1254,9 +1254,9 @@ int PStaticData::AddDecay(int didx, const char *name, const char *parent,
 	return -1;
     }
     if (didx < 0) {
-	if (pid < 1000) 
+	if (pid < 1000)
 	    didx = pid*32;
-	else 
+	else
 	    didx = pid;
 	while (makeDataBase()->GetEntryInt("didx",didx) >=0 ) {
 	    didx++;
@@ -1279,7 +1279,7 @@ int PStaticData::AddDecay(int didx, const char *name, const char *parent,
     //now add the daughters
     char *arr1[7];
     Int_t arr1_s = 7; //max 7 decay products
-    
+
     PUtils::Tokenize(daughters, ",", arr1, &arr1_s);
     //does decay already exist?
 
@@ -1301,7 +1301,7 @@ int PStaticData::AddDecay(int didx, const char *name, const char *parent,
 	Int_t *pkey = new int(makeStaticData()->GetParticleKey(partc));
 	if (*pkey < 0) {
 	    Error("AddDecay", "processing decay: do not find pid %s", partc);
-	} 
+	}
 	const char *ds;
 	if (pat == 0) ds = "d1";
 	if (pat == 1) ds = "d2";
@@ -1314,21 +1314,21 @@ int PStaticData::AddDecay(int didx, const char *name, const char *parent,
 	    Warning("AddDecay", "Too many particles");
 	    return -1;
 	}
-	
+
 	base->SetParamInt(dkey, ds, pkey);
     }
     //set default values
     Int_t *ii;
     makeDataBase()->GetParamInt(parent_key, "pid", &ii);
     base->SetParamInt(dkey, "ppid", ii); //set parent id
-    
+
     ii = new int(didx);
     base->SetParamInt(dkey, "didx", ii); //decay mode index
-    
+
     ii = new int(0);  //never destructed, but called only once!
     if (!base->SetParamInt(dkey, "widx", ii))
 	return -1;
-    
+
     Double_t *dd = new double(br);
     if (!base->SetParamDouble(dkey, "br", dd))
 	return -1;
@@ -1386,7 +1386,7 @@ int PStaticData::GetDecayNProductsByKey(const int &key) {
 }
 
 int PStaticData::GetDecayNProducts(const int &id) {
-// retrieve number of products by mode index 
+// retrieve number of products by mode index
     if (makeDataBase()->GetParamInt(didx_param, id, d7_param, &i_result))
 	return 7;
     if (makeDataBase()->GetParamInt(didx_param, id, d6_param, &i_result))
@@ -1405,7 +1405,7 @@ int PStaticData::GetDecayNProducts(const int &id) {
 }
 
 int PStaticData::GetDecayNProducts(const char *id){
-// number of products by name     
+// number of products by name
     if (makeDataBase()->GetParamInt((char*)id, "d7", &i_result))
 	return 7;
     if (makeDataBase()->GetParamInt((char*)id, "d6", &i_result))
@@ -1467,7 +1467,7 @@ int PStaticData::GetDecayIdx(int *pid, int n) {
 
     int id = pid[0], *nm;        // parent id, number of decay modes
     //Get count info
-  
+
     if (!makeDataBase()->GetParamInt(pid_param, id, count_param, &nm)) {
 	return -3;
     }
@@ -1478,18 +1478,18 @@ int PStaticData::GetDecayIdx(int *pid, int n) {
     Int_t listkey = -1;
     Int_t tid[11];
     while (makeDataBase()->MakeListIterator(key, "pnmodes", "link", &listkey)) {
-	tid[0] = 10; 
+	tid[0] = 10;
 	GetDecayModeByKey(listkey, tid);      // retrieve current mode info
 	if (tid[0] == n) {                    // number of products matches input
 	    PUtils::isort(tid+1, n);          // sort the current mode product pid array
 	    count = 0;                        // reset the match counter
 	    for (i=0; i<n; ++i) count += (tid[i+1]==nid[i]);
 	    if (count == n) {                 // input matched
-		return GetDecayIdxByKey(listkey);          
+		return GetDecayIdxByKey(listkey);
 	    }
 	}
     }
-  
+
     return -1;
 }
 
@@ -1510,22 +1510,22 @@ int PStaticData::GetDecayIdx(const char *parent, const char *daughters) {
     //now add the daughters
     char *arr1[MAX_DAUGHTERS];
     Int_t arr1_s = MAX_DAUGHTERS; //max decay products
-    
+
     PUtils::Tokenize(daughters, ",", arr1, &arr1_s);
     //does decay already exist?
 
     Int_t pids[MAX_DAUGHTERS+1];
     pids[0] = pid;
- 
+
     for (int pat=0; pat<arr1_s; pat++) {
 	pids[pat+1] = GetParticleID(arr1[pat]);
     }
 
     Int_t key = GetDecayKey(pids, arr1_s);
-    if (key >= 0) {	
+    if (key >= 0) {
 	return GetDecayIdxByKey(key);
     }
-    return -1;   
+    return -1;
 }
 
 int PStaticData::GetDecayKey(int *pid, int n) {
@@ -1540,7 +1540,7 @@ int PStaticData::GetDecayKey(int *pid, int n) {
 	if (!PStaticData::IsParticleValid(pid[i])) {
 	    Warning("GetDecayKey", "id %i not found", pid[i]);
 	    return -2;
-	} else if (i) { 
+	} else if (i) {
 	    nid[i-1] = pid[i];        // make own copy of product array
 	}
     }
@@ -1559,18 +1559,18 @@ int PStaticData::GetDecayKey(int *pid, int n) {
     Int_t listkey = -1;
     Int_t tid[11];
     while (makeDataBase()->MakeListIterator(key, "pnmodes", "link", &listkey)) {
-	tid[0] = 10; 
+	tid[0] = 10;
 	GetDecayModeByKey(listkey, tid);      // retrieve current mode info
 	if (tid[0] == n) {                    // number of products matches input
 	    PUtils::isort(tid+1, n);          // sort the current mode product pid array
 	    count = 0;                        // reset the match counter
 	    for (i=0; i<n; ++i) count += (tid[i+1]==nid[i]);
 	    if (count ==n ) {                 // input matched
-		return listkey;          
+		return listkey;
 	    }
 	}
     }
-  
+
     return -1;
 }
 
@@ -1578,7 +1578,7 @@ void PStaticData::GetDecayMode(int idx, int *id) {
     // Retrieves the decay mode info for a given channel n.
     // _______________________________________________________________________
     // ARGUMENTS: 1. decay-mode index (PPosition),
-    // 2. pointer to existing integer array (must have large 
+    // 2. pointer to existing integer array (must have large
     // enough dimension), 3. pointer to existing double (optional).
     // _______________________________________________________________________
     // RETURNS: int array with N, i_1, i_2,..., i_N, where N is
@@ -1588,28 +1588,28 @@ void PStaticData::GetDecayMode(int idx, int *id) {
     // N should contain the maximum number of the array-size of before
     // calling this function
     // if the maximum is exceeded, or any other error occurs, N is set to 0
-    Int_t *d1_key, *d2_key, *d3_key, *d4_key, *d5_key, 
+    Int_t *d1_key, *d2_key, *d3_key, *d4_key, *d5_key,
 	*d6_key, *d7_key, found = 0;
-    if (makeDataBase()->GetParamInt(didx_param, idx, d1_param, &d1_key)) 
+    if (makeDataBase()->GetParamInt(didx_param, idx, d1_param, &d1_key))
 	found = 1;
-    if (makeDataBase()->GetParamInt(didx_param, idx, d2_param, &d2_key)) 
+    if (makeDataBase()->GetParamInt(didx_param, idx, d2_param, &d2_key))
 	found = 2;
-    if (makeDataBase()->GetParamInt(didx_param, idx, d3_param, &d3_key)) 
+    if (makeDataBase()->GetParamInt(didx_param, idx, d3_param, &d3_key))
 	found = 3;
-    if (makeDataBase()->GetParamInt(didx_param, idx, d4_param, &d4_key)) 
+    if (makeDataBase()->GetParamInt(didx_param, idx, d4_param, &d4_key))
 	found = 4;
-    if (makeDataBase()->GetParamInt(didx_param, idx, d5_param, &d5_key)) 
+    if (makeDataBase()->GetParamInt(didx_param, idx, d5_param, &d5_key))
 	found = 5;
-    if (makeDataBase()->GetParamInt(didx_param, idx, d6_param, &d6_key)) 
+    if (makeDataBase()->GetParamInt(didx_param, idx, d6_param, &d6_key))
 	found = 6;
-    if (makeDataBase()->GetParamInt(didx_param, idx, d7_param, &d7_key)) 
+    if (makeDataBase()->GetParamInt(didx_param, idx, d7_param, &d7_key))
 	found = 7;
- 
+
     if (found > *id) {
 	Warning("GetDecayMode", "size too low");
 	*id = 0;
 	return;
-    } else 
+    } else
 	*id = found;
 
     Int_t *d1_p=NULL, *d2_p=NULL, *d3_p=NULL, *d4_p=NULL,
@@ -1617,32 +1617,32 @@ void PStaticData::GetDecayMode(int idx, int *id) {
 
     if ((found>0)&& !makeDataBase()->GetParamInt(*d1_key,pid_param,&d1_p)) {
 	Warning("GetDecayMode", "unable to unpack key1 %i", *d1_key);
-	*id = 0;	
+	*id = 0;
     }
     else if ((found>1)&& !makeDataBase()->GetParamInt(*d2_key,pid_param,&d2_p)) {
 	Warning("GetDecayMode", "unable to unpack key2 %i", *d2_key);
 	*id = 0;
-    } 
+    }
     else if ((found>2)&& !makeDataBase()->GetParamInt(*d3_key,pid_param,&d3_p)) {
 	Warning("GetDecayMode", "unable to unpack key3 %i", *d3_key);
 	*id = 0;
-    } 
+    }
     else if ((found>3)&& !makeDataBase()->GetParamInt(*d4_key,pid_param,&d4_p)) {
 	Warning("GetDecayMode", "unable to unpack key4 %i", *d4_key);
 	*id = 0;
-    } 
+    }
     else if ((found>4)&& !makeDataBase()->GetParamInt(*d5_key,pid_param,&d5_p)) {
 	Warning("GetDecayMode", "unable to unpack key5 %i", *d5_key);
 	*id = 0;
-    } 
+    }
     else if ((found>5)&& !makeDataBase()->GetParamInt(*d6_key,pid_param,&d6_p)) {
 	Warning("GetDecayMode", "unable to unpack key6 %i", *d6_key);
 	*id = 0;
-    } 
+    }
     else if ((found>6)&& !makeDataBase()->GetParamInt(*d7_key,pid_param,&d7_p)) {
 	Warning("GetDecayMode", "unable to unpack key7 %i", *d7_key);
 	*id = 0;
-    } 
+    }
     if (d1_p) id[1] = *d1_p;
     if (d2_p) id[2] = *d2_p;
     if (d3_p) id[3] = *d3_p;
@@ -1654,29 +1654,29 @@ void PStaticData::GetDecayMode(int idx, int *id) {
 
 
 void PStaticData::GetDecayModeByKey(int idx, int *id) {
-    //same as above, but by data base key    
+    //same as above, but by data base key
     Int_t *d1_key, *d2_key, *d3_key, *d4_key, *d5_key,
 	*d6_key, *d7_key, found=0;
-    if (makeDataBase()->GetParamInt(idx, d1_param, &d1_key)) 
+    if (makeDataBase()->GetParamInt(idx, d1_param, &d1_key))
 	found = 1;
-    if (makeDataBase()->GetParamInt(idx, d2_param, &d2_key)) 
+    if (makeDataBase()->GetParamInt(idx, d2_param, &d2_key))
 	found = 2;
-    if (makeDataBase()->GetParamInt(idx, d3_param, &d3_key)) 
+    if (makeDataBase()->GetParamInt(idx, d3_param, &d3_key))
 	found = 3;
-    if (makeDataBase()->GetParamInt(idx, d4_param, &d4_key)) 
+    if (makeDataBase()->GetParamInt(idx, d4_param, &d4_key))
 	found = 4;
-    if (makeDataBase()->GetParamInt(idx, d5_param, &d5_key)) 
+    if (makeDataBase()->GetParamInt(idx, d5_param, &d5_key))
 	found = 5;
-    if (makeDataBase()->GetParamInt(idx, d6_param, &d6_key)) 
+    if (makeDataBase()->GetParamInt(idx, d6_param, &d6_key))
 	found = 6;
-    if (makeDataBase()->GetParamInt(idx, d7_param, &d7_key)) 
+    if (makeDataBase()->GetParamInt(idx, d7_param, &d7_key))
 	found = 7;
 
     if (found > *id) {
 	Warning("GetDecayModeByKey", "size too low");
 	*id = 0;
 	return;
-    } else 
+    } else
 	*id = found;
 
     Int_t *d1_p=NULL, *d2_p=NULL, *d3_p=NULL, *d4_p=NULL,
@@ -1686,10 +1686,10 @@ void PStaticData::GetDecayModeByKey(int idx, int *id) {
 	Warning("GetDecayMode", "unable to unpack key1 %i", *d1_key);
 	*id = 0;
     }
-    else if (*id>1 && !makeDataBase()->GetParamInt(*d2_key,pid_param,&d2_p)) {	
+    else if (*id>1 && !makeDataBase()->GetParamInt(*d2_key,pid_param,&d2_p)) {
 	Warning("GetDecayMode", "unable to unpack key2 %i", *d2_key);
 	*id = 0;
-    } 
+    }
     else if (*id>2 && !makeDataBase()->GetParamInt(*d3_key,pid_param,&d3_p)) {
 	Warning("GetDecayMode", "unable to unpack key3 %i", *d3_key);
 	*id = 0;
@@ -1697,7 +1697,7 @@ void PStaticData::GetDecayModeByKey(int idx, int *id) {
     else if (*id>3 && !makeDataBase()->GetParamInt(*d4_key,pid_param,&d4_p)) {
 	Warning("GetDecayMode", "unable to unpack key4 %i", *d4_key);
 	*id = 0;
-    } 
+    }
     else if (*id>4 && !makeDataBase()->GetParamInt(*d5_key,pid_param,&d5_p)) {
 	Warning("GetDecayMode", "unable to unpack key5 %i", *d5_key);
 	*id = 0;
@@ -1705,7 +1705,7 @@ void PStaticData::GetDecayModeByKey(int idx, int *id) {
     else if (*id>5 && !makeDataBase()->GetParamInt(*d6_key,pid_param,&d6_p)) {
 	Warning("GetDecayMode", "unable to unpack key6 %i", *d6_key);
 	*id = 0;
-    } 
+    }
     else if (*id>6 && !makeDataBase()->GetParamInt(*d7_key,pid_param,&d7_p)) {
 	Warning("GetDecayMode", "unable to unpack key7 %i", *d7_key);
 	*id = 0;
@@ -1739,7 +1739,7 @@ double PStaticData::GetParticleTotalWidthByKey(const int &key) {
 
 void PStaticData::SetEnhanceChannelBR(const int id, const double factor) {
     if (!makeDataBase()->GetParamDouble(didx_param, id, enhance_br_param, &d_result)) {
-	makeDataBase()->SetParamDouble(makeDataBase()->GetEntryInt(didx_param, id), 
+	makeDataBase()->SetParamDouble(makeDataBase()->GetEntryInt(didx_param, id),
 				       "enhance_br", new Double_t(factor));
 	return;
     }
@@ -1765,8 +1765,8 @@ void PStaticData::DisableAllChannelBR(const char *parent) {
     Int_t listkey    = -1;
     Int_t link_param = makeDataBase()->GetParamInt("link");
     while (makeDataBase()->MakeListIterator
-	   (key, pnmodes_param, link_param, &listkey)) {	
-	makeDataBase()->GetParamInt 
+	   (key, pnmodes_param, link_param, &listkey)) {
+	makeDataBase()->GetParamInt
 	    (listkey, didx_param , &didx); //small workaround -> should work on keys
 	SetEnhanceChannelBR(*didx, 0.);
     }
@@ -1780,7 +1780,7 @@ Double_t PStaticData::GetEnhanceChannelBR(const int id) {
 }
 
 void listParticle(int id) {
-   
+
     if (id<0) {
         makeStaticData(); //this fill data base
 	makeDataBase()->ListEntries(-1, 1, "pid,*name");
@@ -1792,7 +1792,7 @@ void listParticle(int id) {
 void listModes(int id) {
    makeStaticData()->PrintParticle(id);
 }
- 
+
 
 
 ClassImp(PStaticData)

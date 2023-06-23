@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 27.5.2007
-// Revised: 
+// Revised:
 
 #ifndef _PHADRONDECAYM3_H_
 #define _PHADRONDECAYM3_H_
@@ -12,7 +12,7 @@
 #include "PKinematics.h"
 
 class PHadronDecayM3 : public PChannelModel  {
-  
+
  public:
     PHadronDecayM3();
     PHadronDecayM3(const Char_t *id, const Char_t *de, Int_t key);

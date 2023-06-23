@@ -14,7 +14,7 @@
 // has been simplified to make it more readable, and an interface
 // to the particle input (and maybe to the database in a later step)
 // has been foreseen
-//  
+//
 // As usual we have assignments, operators, functions and methods
 // Each operation can be seperated by a semicolon (;)
 //
@@ -23,7 +23,7 @@
 // This means that the double _x (which is automatically constructed)
 // is assigned to the mass of the particle [p,1]
 // Particle in brackets are the only allowed use without instantiantion
-// as they are (hopefully) filled by the input. The additional number 
+// as they are (hopefully) filled by the input. The additional number
 // can be used for ordering information
 //
 // + and - operation
@@ -35,7 +35,7 @@
 // CAVEAT: Do _not_ use object name which are
 // already assigned to particles in the data base, e.g.
 // pi0=[pi0] is not allowed, use _pi0=[pi0] instead
-// 
+//
 // Brackets: Objects can be nested:
 // _x = ([p,1] + [p,2])->M();
 // ...makes the same as the 2 lines above
@@ -74,17 +74,17 @@
 //
 // A very complex example: Look for the helicity distribution
 // of the e+e- pair in the eta Dalitz decay
-// _eta=[eta]; _ep=[e+]; _em=[e-]; 
-// _eta->Boost([p + p]); _em->Boost([p + p]); _ep->Boost([p + p]); 
-// _ep->Rot(_eta); _em->Rot(_eta); _eta->Rot(_eta) ; 
-// _ep->Boost(_eta); _em->Boost(_eta); dil=_ep+_em; 
-// _ep->Rot(dil); _em->Rot(dil); dil->Rot(dil); _ep->Boost(dil); _em->Boost(dil) ; 
+// _eta=[eta]; _ep=[e+]; _em=[e-];
+// _eta->Boost([p + p]); _em->Boost([p + p]); _ep->Boost([p + p]);
+// _ep->Rot(_eta); _em->Rot(_eta); _eta->Rot(_eta) ;
+// _ep->Boost(_eta); _em->Boost(_eta); dil=_ep+_em;
+// _ep->Rot(dil); _em->Rot(dil); dil->Rot(dil); _ep->Boost(dil); _em->Boost(dil) ;
 // s1= _ep->Theta(); _x = cos(s1)
 //
 //
 //                    Author: I. Froehlich
 //                    Written: 14.02.2008
-//                    Revised: 
+//                    Revised:
 //
 ////////////////////////////////////////////////////////
 
@@ -105,8 +105,8 @@
 #include <cmath>
 
 Int_t PBatch::stack_num_pos = 0;
-Int_t PBatch::stack_num_batch[MAX_STACK_GOSUB], 
-    PBatch::stack_num_bulk[MAX_STACK_GOSUB], 
+Int_t PBatch::stack_num_batch[MAX_STACK_GOSUB],
+    PBatch::stack_num_bulk[MAX_STACK_GOSUB],
     PBatch::stack_num_command[MAX_STACK_GOSUB];
 
 PBatch &fBatch() {
@@ -121,7 +121,7 @@ PBatch *makeGlobalBatch() {
 PBatch::PBatch() {
 
     makeStaticData();
-    
+
     command_pointer = last_command_pointer = 0;
     method_pointer  = 0;
 
@@ -140,38 +140,38 @@ PBatch::PBatch() {
     pid_param            = makeDataBase()->GetParamInt("batch_pid");
     Int_t batch_position_param = makeDataBase()->GetParamInt("batch_position");
 
-    if (batch_particle_param < 0) 
-	batch_particle_param = makeDataBase()->MakeParamTObj("batch_particle", 
+    if (batch_particle_param < 0)
+	batch_particle_param = makeDataBase()->MakeParamTObj("batch_particle",
 							     "PParticle storage for batch");
 
-    if (batch_value_param < 0) 
-	batch_value_param = makeDataBase()->MakeParamDouble("batch_value", 
+    if (batch_value_param < 0)
+	batch_value_param = makeDataBase()->MakeParamDouble("batch_value",
 							    "Value storage for batch");
 
-    if (batch_models_param < 0) 
+    if (batch_models_param < 0)
 	batch_models_param = makeDataBase()->MakeParamTObj("batch_models",
 							   "Storage for distribution objects");
 
-    if (pid_param < 0) 
+    if (pid_param < 0)
 	pid_param = makeDataBase()->MakeParamInt("batch_pid", "PID for batch");
 
-    if (batch_position_param < 0) 
+    if (batch_position_param < 0)
 	makeDataBase()->MakeParamInt("batch_position", "PID position for batch");
 
     batch_histogram_param = makeDataBase()->GetParamTObj("batch_histogram");
-    if (batch_histogram_param < 0) 
+    if (batch_histogram_param < 0)
 	batch_histogram_param = makeDataBase()->MakeParamTObj("batch_histogram", "Histogram storage for batch");
-    
+
 
     //This is used for the "goto"
-    num_command_param = makeDataBase()->GetParamInt("num_command");    
-    if (num_command_param < 0) 
+    num_command_param = makeDataBase()->GetParamInt("num_command");
+    if (num_command_param < 0)
 	num_command_param = makeDataBase()->MakeParamInt("num_command", "Number of command for a label");
-    num_batch_param = makeDataBase()->GetParamInt("num_batch");    
-    if (num_batch_param < 0) 
+    num_batch_param = makeDataBase()->GetParamInt("num_batch");
+    if (num_batch_param < 0)
 	num_batch_param = makeDataBase()->MakeParamInt("num_batch", "Number of batch object for a label");
-    num_bulk_param = makeDataBase()->GetParamInt("num_bulk");    
-    if (num_bulk_param < 0) 
+    num_bulk_param = makeDataBase()->GetParamInt("num_bulk");
+    if (num_bulk_param < 0)
 	num_bulk_param = makeDataBase()->MakeParamInt("num_bulk", "Number of bulk for a label");
     num_batch = num_bulk = -1;
 
@@ -179,19 +179,19 @@ PBatch::PBatch() {
     if (makeDataBase()->GetParamInt("branch_idx") < 0) {
 	makeDataBase()->MakeParamInt("branch_idx", "Index of the tree branch in PReaction");
     }
-    
+
     //Used for "formore"
     stream_default_pos_param = makeDataBase()->GetParamInt(STREAM_DEFAULT_POS);
-    if (stream_default_pos_param < 0)  
+    if (stream_default_pos_param < 0)
 	stream_default_pos_param = makeDataBase()->MakeParamInt(STREAM_DEFAULT_POS, "Default position");
     stream_max_pos_param = makeDataBase()->GetParamInt(STREAM_MAX_POS);
-    if (stream_max_pos_param < 0)  
+    if (stream_max_pos_param < 0)
 	stream_max_pos_param = makeDataBase()->MakeParamInt(STREAM_MAX_POS, "Max position in stream");
 
     batch_update_param = makeDataBase()->GetParamInt("batch_update");
     if (batch_update_param < 0)
-	makeDataBase()->MakeParamInt("batch_update", 
-				     "If set this is a variable which must trigger an update"); 
+	makeDataBase()->MakeParamInt("batch_update",
+				     "If set this is a variable which must trigger an update");
 
     for (int i=0; i<MAX_COMMAND_POINTER; i++) error_flag[i] = 0;
 
@@ -225,7 +225,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	Double_t *val2 = NULL;
 	Double_t *val3 = NULL;
 	Double_t *val4 = NULL;
-	
+
 	current_position = i;
 
 	//cout << "command:" << lst_command[i] << " num "<< i <<  endl;
@@ -238,7 +238,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    makeDataBase()->GetParamTObj(lst_key[1][i], batch_particle_param, &res);
 	    makeDataBase()->GetParamTObj(lst_key[2][i], batch_particle_param, &res2);
 	    makeDataBase()->GetParamTObj(lst_key_a[i],  batch_particle_param, &res3);
-	
+
 	    if (res && res2 && res3) {
 		PParticle *a1 = (PParticle *) res;
 		PParticle *a2 = (PParticle *) res2;
@@ -246,12 +246,12 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		*r = *a1;
 		r->AddTmp(*a2);
 		found = kTRUE;
-	    } 
-	
+	    }
+
 	    makeDataBase()->GetParamDouble(lst_key[1][i], batch_value_param, &val);
 	    makeDataBase()->GetParamDouble(lst_key[2][i], batch_value_param, &val2);
 	    makeDataBase()->GetParamDouble(lst_key_a[i],  batch_value_param, &val3);
-	
+
 	    if (val && val2 && val3) {
 		*val3 = *val2 + *val;
 		found = kTRUE;
@@ -265,49 +265,49 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    makeDataBase()->GetParamTObj(lst_key[1][i], batch_particle_param, &res);
 	    makeDataBase()->GetParamTObj(lst_key[2][i], batch_particle_param, &res2);
 	    makeDataBase()->GetParamTObj(lst_key_a[i],  batch_particle_param, &res3);
-	
+
 	    if (res && res2 && res3) {
 		PParticle *a1 = (PParticle *) res;
 		PParticle *a2 = (PParticle *) res2;
 		PParticle *r  = (PParticle *) res3;
 		*r = *a1 - *a2;
 		found = kTRUE;
-	    } 
-	
+	    }
+
 	    makeDataBase()->GetParamDouble(lst_key[1][i], batch_value_param, &val);
 	    makeDataBase()->GetParamDouble(lst_key[2][i], batch_value_param, &val2);
 	    makeDataBase()->GetParamDouble(lst_key_a[i],  batch_value_param, &val3);
-	
+
 	    if (val && val2 && val3) {
 		*val3 = *val - *val2;
 		found = kTRUE;
 	    }
 	    if (!found) return found;
-	} else if (lst_command[i] == COMMAND_MULT) { 
+	} else if (lst_command[i] == COMMAND_MULT) {
 	    //
 	    // Internal *=
 	    //
 	    Bool_t found = kFALSE;
 	    makeDataBase()->GetParamDouble(lst_key[1][i], batch_value_param, &val);
 	    makeDataBase()->GetParamDouble(lst_key[2][i], batch_value_param, &val2);
-	    makeDataBase()->GetParamDouble(lst_key_a[i],  batch_value_param, &val3);	
+	    makeDataBase()->GetParamDouble(lst_key_a[i],  batch_value_param, &val3);
 	    if (val && val2 && val3) {
 		*val3 = *val * *val2;
 		found = kTRUE;
-	    } 
+	    }
 	    if (!found) return found;
-	} else if (lst_command[i] == COMMAND_DIV) { 
+	} else if (lst_command[i] == COMMAND_DIV) {
 	    //
 	    // Internal *=
 	    //
 	    Bool_t found = kFALSE;
 	    makeDataBase()->GetParamDouble(lst_key[1][i], batch_value_param, &val);
 	    makeDataBase()->GetParamDouble(lst_key[2][i], batch_value_param, &val2);
-	    makeDataBase()->GetParamDouble(lst_key_a[i],  batch_value_param, &val3);	
+	    makeDataBase()->GetParamDouble(lst_key_a[i],  batch_value_param, &val3);
 	    if (val && val2 && val3) {
 		*val3 = *val / *val2;
 		found = kTRUE;
-	    } 
+	    }
 	    if (!found) return found;
 	} else if (lst_command[i] == COMMAND_EQUAL) {
 	    //
@@ -317,16 +317,16 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    makeDataBase()->GetParamDouble(lst_key[1][i], batch_value_param, &val);
 	    makeDataBase()->GetParamDouble(lst_key[2][i], batch_value_param, &val2);
 	    makeDataBase()->GetParamDouble(lst_key_a[i],  batch_value_param, &val3);
-	
+
 	    if (val && val2 && val3) {
-		if (fabs(*val - *val2) < 0.5) 
+		if (fabs(*val - *val2) < 0.5)
 		    *val3 = 1.;
-		else 
+		else
 		    *val3 = 0.;
 		found = kTRUE;
 	    }
 	    if (!found) return retval;
-	} else if (lst_command[i] == COMMAND_BOOST) { 
+	} else if (lst_command[i] == COMMAND_BOOST) {
 	    //
 	    //boost pparticles
 	    //
@@ -336,9 +336,9 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    makeDataBase()->GetParamTObj(lst_key[2][i], batch_particle_param, &res);
 	    if (!res) return retval;
 	    PParticle *a2  = (PParticle *) res;
-	
+
 	    a1->Boost(-a2->BoostVector()) ;
-	} else if (lst_command[i] == COMMAND_GETBEAM) { 
+	} else if (lst_command[i] == COMMAND_GETBEAM) {
 	    //
 	    //read the beam from composite
 	    //
@@ -357,7 +357,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		return retval;
 	    }
 	    *a2 = *a3;
-	} else if (lst_command[i] == COMMAND_GETTARGET) { 
+	} else if (lst_command[i] == COMMAND_GETTARGET) {
 	    //
 	    //read the target from composite
 	    //
@@ -373,7 +373,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		return retval;
 	    }
 	    *a2 = *a3;
-	} else if (lst_command[i] == COMMAND_ANGLE) { 
+	} else if (lst_command[i] == COMMAND_ANGLE) {
 	    //
 	    //angle between particle tracks
 	    //
@@ -383,16 +383,16 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    makeDataBase()->GetParamTObj (lst_key[2][i], batch_particle_param, &res);
 	    if (!res) return retval;
 	    PParticle *a2  = (PParticle *) res;
-	    
+
 	    Double_t angle = a1->Vect().Angle(a2->Vect());
-	    
+
 	    makeDataBase()->GetParamDouble(lst_key_a[i], batch_value_param, &val);
 	    if (!val) {
 		Warning("Angle()", "Result value not found");
 		return kFALSE;
 	    }
 	    *val = angle;
-	} else if (lst_command[i] == COMMAND_ROT) { 
+	} else if (lst_command[i] == COMMAND_ROT) {
 	    //
 	    //rotate
 	    //
@@ -406,7 +406,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    double tmp_theta = a2->Theta();
 
 	    a1->RotateZ(-tmp_phi);
-	    a1->RotateY(-tmp_theta);	 
+	    a1->RotateY(-tmp_theta);
 	} else if (lst_command[i] == COMMAND_IS) {
 	    //
 	    // '='
@@ -426,7 +426,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		    r->SetW(w);
 		}
 		found = kTRUE;
-	    } 
+	    }
 
 	    makeDataBase()->GetParamDouble(lst_key_a[i],  batch_value_param, &val2);
 	    makeDataBase()->GetParamDouble(lst_key[1][i], batch_value_param, &val);
@@ -435,7 +435,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		*val2 = *val;
 		found = kTRUE;
 	    }
-	    
+
 	    if (!found) return retval;
 	    Int_t *update;
 	    if (makeDataBase()->GetParamInt(lst_key_a[i], batch_update_param, &update)) {
@@ -471,7 +471,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    makeDataBase()->GetParamTObj(lst_key[1][i], batch_particle_param, &res);
 	    if (!res) return retval;
 	    PParticle *a1  = (PParticle *) res;
-	    
+
 	    makeDataBase()->GetParamDouble(lst_key_a[i], batch_value_param, &val);
 	    if (!val) return retval;
 	    *val = a1 -> M2();
@@ -499,7 +499,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    makeDataBase()->GetParamTObj(lst_key[1][i], batch_particle_param, &res);
 	    if (!res) return retval;
 	    PParticle *a1  = (PParticle *) res;
-	    
+
 	    makeDataBase()->GetParamDouble(lst_key_a[i], batch_value_param, &val);
 	    if (!val) return retval;
 	    *val = (a1 -> Theta());
@@ -551,7 +551,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 			return retval;
 		    }
 		    methods[lst_command_int[i]]->SetParam((Long_t)*argval);
-		} 
+		}
 	    }
 
 	    //Execute internal
@@ -567,7 +567,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		methods[lst_command_int[i]]->Execute(a1, ret);
 		//cout << "Int_t meth " << method_name[i] << " called, result " << ret << endl;
 		(*val) = (Double_t) ret;
-	    } else if (methods_flags[lst_command_int[i]] == METHOD_RETURN_PPARTICLE) { 
+	    } else if (methods_flags[lst_command_int[i]] == METHOD_RETURN_PPARTICLE) {
 		//PParticle* ret2;//, *ret;
 		makeDataBase()->GetParamTObj(lst_key_a[i], batch_particle_param, &res);
 		if (!res) return retval;
@@ -595,7 +595,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 			      makeDataBase()->GetName(lst_key_a[i]));
 		}
 		return retval;
-	    }	    
+	    }
 	    if (lst_key[3][i] == 0) { //PValue
 		makeDataBase()->GetParamTObj(lst_key[1][i], batch_particle_param, &res);
 		if (!res) return retval;
@@ -606,7 +606,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 			Error("Execute", "PValue %i not set", lst_key[2][i]);
 		    }
 		    return retval;
-		} 
+		}
 	    } else { //database entry
 		if (lst_key[3][i] < 0) {
 		    makeDataBase()->GetParamDouble(lst_key[1][i], (-lst_key[3][i]) - 1, &val2);
@@ -614,17 +614,17 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 			Error("Execute", "Connection to data base for double %i failed", (-lst_key[3][i]) - 1);
 			return retval;
 		    }
-		    *val = *val2;		    
+		    *val = *val2;
 		} else {
 		    Int_t *intval;
 		    makeDataBase()->GetParamInt(lst_key[1][i], lst_key[3][i] - 1, &intval);
 		    *val = (Double_t)*intval;
-		} 
+		}
 	    }
 	} else if (lst_command[i] == COMMAND_BRANCH) {
 	    //
 	    // Returns the branch index
-	    // 
+	    //
 	    //
 	    makeDataBase()->GetParamDouble (lst_key_a[i], batch_value_param, &val);
 	    if (!val) {
@@ -634,7 +634,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 			  makeDataBase()->GetName(lst_key_a[i]));
 		}
 		return retval;
-	    }	    
+	    }
 	    *val = lst_key[2][i];
 	} else if (lst_command[i] == COMMAND_PFORMULA) {
 	    //
@@ -675,7 +675,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		return retval;
 	    }
  	    Double_t myres = cos(*val);
-	    
+
  	    makeDataBase()->GetParamDouble(lst_key_a[i], batch_value_param, &val);
 
  	    if (!val) return retval;
@@ -702,7 +702,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    TH3 *my_fHisto3 = NULL;
 	    TGraph   *my_fGraph   = NULL;
 	    TGraph2D *my_fGraph2D = NULL;
-	    
+
 	    if (lst_key[1][i] == -1) {
 		//no external histo
 		my_fHisto1  = fHisto1;
@@ -757,7 +757,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 			int bin = my_fHisto1->FindBin(*val2);
 			myres = my_fHisto1->GetBinContent(bin);
 		    } else if (my_fGraph) {
-			myres = my_fGraph->Eval(*x); 
+			myres = my_fGraph->Eval(*x);
 		    } else {
 			if (!eval_err_dumped) {
 			    eval_err_dumped = 1;
@@ -787,7 +787,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		    makeDataBase()->GetParamDouble(lst_key[2][i], batch_value_param, &val2);
 		    makeDataBase()->GetParamDouble(lst_key[3][i], batch_value_param, &val3);
 		    makeDataBase()->GetParamDouble(lst_key[4][i], batch_value_param, &val4);
-		    
+
 		    if (!val2 || !val3 || !val4) {
 			return retval;
 		    }
@@ -816,7 +816,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    TH1 *my_fHisto1 = NULL;
 	    TH2 *my_fHisto2 = NULL;
 	    TH3 *my_fHisto3 = NULL;
-	    
+
 	    if (lst_key[1][i] == -1) {
 		//no external histo
 		my_fHisto1 = fHisto1;
@@ -884,7 +884,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		    makeDataBase()->GetParamDouble(lst_key[2][i], batch_value_param, &val2);
 		    makeDataBase()->GetParamDouble(lst_key[3][i], batch_value_param, &val3);
 		    makeDataBase()->GetParamDouble(lst_key[4][i], batch_value_param, &val4);
-		    
+
 		    if (!val2 || !val3 || !val4) {
 			return retval;
 		    }
@@ -911,7 +911,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    //
 	    Double_t myres=0.;
 	    TH2 * my_fHisto2 = NULL;
-	    
+
 	    if (lst_key[1][i] == -1) {
 		//no external histo
 		my_fHisto2  = fHisto2;
@@ -929,12 +929,12 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    if (my_fHisto2) {
 		int n_x = my_fHisto2->GetNbinsX();
 		int n_y = my_fHisto2->GetNbinsY();
-		
+
 		if (!slicesy) { //first time call
 		    slicesy = new TH1D*[n_y];
 		    for (int i=0; i<n_y; i++) {
-			slicesy[i] = new TH1D(Form("%s_y_%i",my_fHisto2->GetName(), i), "Projected", n_x, 
-					      my_fHisto2->GetXaxis()->GetXmin(), 
+			slicesy[i] = new TH1D(Form("%s_y_%i",my_fHisto2->GetName(), i), "Projected", n_x,
+					      my_fHisto2->GetXaxis()->GetXmin(),
 					      my_fHisto2->GetXaxis()->GetXmax());
 			slicesy[i]->SetDirectory(0);
 			for (int j=0; j<n_x; j++) {
@@ -964,7 +964,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    //
 	    Double_t myres  = 0.;
 	    TH2 *my_fHisto2 = NULL;
-	    
+
 	    if (lst_key[1][i] == -1) {
 		//no external histo
 		my_fHisto2 = fHisto2;
@@ -982,12 +982,12 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    if (my_fHisto2) {
 		int n_x = my_fHisto2->GetNbinsX();
 		int n_y = my_fHisto2->GetNbinsY();
-		
+
 		if (!slicesx) { //first time call
 		    slicesx = new TH1D*[n_x];
 		    for (int i=0; i<n_x; i++) {
-			slicesx[i] = new TH1D(Form("%s_x_%i",my_fHisto2->GetName(), i), "Projected", n_y, 
-					      my_fHisto2->GetYaxis()->GetXmin(), 
+			slicesx[i] = new TH1D(Form("%s_x_%i",my_fHisto2->GetName(), i), "Projected", n_y,
+					      my_fHisto2->GetYaxis()->GetXmin(),
 					      my_fHisto2->GetYaxis()->GetXmax());
 			slicesx[i]->SetDirectory(0);
 			for (int j=0; j<n_y; j++) {
@@ -1021,7 +1021,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		return retval;
 	    }
  	    Double_t myres = *val;
-	    
+
  	    makeDataBase()->GetParamDouble(lst_key_a[i], batch_value_param, &val);
 
  	    if (!val) return retval;
@@ -1040,11 +1040,11 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    if (!res || !val || !val2 || !val3 || !val4) {
 		return kTRUE;
 	    }
-	    
+
 	    ((PParticle *) res)->SetPxPyPzE((*val),(*val2),(*val3),
 					    sqrt((*val)*(*val)+(*val2)*(*val2)+
 						 (*val3)*(*val3)+(*val4)*(*val4)));
-	    
+
 	} else if (lst_command[i] == COMMAND_P3E) {
 	    //
 	    // Constructor for PParticles (with energy)
@@ -1058,15 +1058,15 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    if (!res || !val || !val2 || !val3 || !val4) {
 		return kTRUE;
 	    }
-	    
+
 	    ((PParticle *) res)->SetPxPyPzE((*val),(*val2),(*val3),(*val4));
-	    
+
 	} else if (lst_command[i] == COMMAND_GOTO) {
 	    //
 	    // Goto
 	    //
 	    Bool_t labelfound = kTRUE;
-	    if (!makeDataBase()->GetParamInt(lst_key[1][i], num_command_param, &locnum_command)) 
+	    if (!makeDataBase()->GetParamInt(lst_key[1][i], num_command_param, &locnum_command))
 		labelfound = kFALSE;
 	    makeDataBase()->GetParamInt(lst_key[1][i], num_batch_param, &locnum_batch);
 	    makeDataBase()->GetParamInt(lst_key[1][i], num_bulk_param,  &locnum_bulk);
@@ -1089,7 +1089,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    }
 
 	    Bool_t labelfound = kTRUE;
-	    if (!makeDataBase()->GetParamInt(lst_key[1][i], num_command_param, &locnum_command)) 
+	    if (!makeDataBase()->GetParamInt(lst_key[1][i], num_command_param, &locnum_command))
 		labelfound = kFALSE;
 	    makeDataBase()->GetParamInt(lst_key[1][i], num_batch_param, &locnum_batch);
 	    makeDataBase()->GetParamInt(lst_key[1][i], num_bulk_param,  &locnum_bulk);
@@ -1163,13 +1163,13 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		if ( (*stream_default) >= stream_max) { //Maximum reached, abort
 		    //reset value:
 		    (*stream_default) = 0;
-		    return kFOREACHEND; 
-		} 
+		    return kFOREACHEND;
+		}
 	    } else { //FOREACH
 		if ((*stream_default) > stream_max) { //Maximum reached, abort
  		    //reset value:
  		    (*stream_default) = 0;
- 		    return kFOREACHEND; 
+ 		    return kFOREACHEND;
  		} else {
  		    retval = kFOREACH;
  		}
@@ -1211,7 +1211,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 	    unsigned int puffer_pointer = 0, format_puffer_pointer = 0;
 
 	    if (!file)
-		printf("<PBatch> "); 
+		printf("<PBatch> ");
 	    Int_t seek_mode = 0;
 	    for (unsigned int j=0; j<=strlen(echo_string[i]); j++) {
 		char current = (*(echo_string[i]+j));
@@ -1219,7 +1219,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		    seek_mode = 1;
 		else {
 		    //if (seek_mode && (((*(echo_string[i]+j)) == ' ')  ||  (*(echo_string[i]+j)) == '\0') ) {
-		    if ((seek_mode==1) && (current!='%') && 
+		    if ((seek_mode==1) && (current!='%') &&
 			(current!='#') && (current!='_') && (!isalnum(current))) {
 			//end
 			seek_mode = 0;
@@ -1227,7 +1227,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 			Double_t *x = makeStaticData()->GetBatchValue(puffer, 0);
 			if (file) {
 			    if (x) {
-				if (format_puffer_pointer<2) 
+				if (format_puffer_pointer<2)
 				    fprintf(file, "%#g", *x);
 				else {
 				    format_puffer[format_puffer_pointer] = '\0';
@@ -1242,11 +1242,11 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 				    else if (type == 'c')
 					fprintf(file, format_puffer, (char)*x);
 				    else
-					fprintf(file, format_puffer, *x);			    
+					fprintf(file, format_puffer, *x);
 				}
 			    }
 			    else fprintf(file, "-");
-			} else { 
+			} else {
 			    if (x) {
 				if (format_puffer_pointer<2) printf("%#g", *x);
 				else {
@@ -1267,7 +1267,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 			    }
 			    else printf("[Error: %s not found]", puffer);
 			}
-			
+
 			puffer_pointer = 0;
 			format_puffer_pointer = 0;
 		    }
@@ -1288,7 +1288,7 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 		    }
 		    if (seek_mode == 2) {
 			format_puffer[format_puffer_pointer] = current;
-			
+
 			if (format_puffer_pointer < 1000) format_puffer_pointer++;
 			else {
 			    if (!file)
@@ -1296,14 +1296,14 @@ Int_t PBatch::Execute(Int_t command_pos, Int_t retval) {
 			    seek_mode = 1;
 			}
 		    }
-		    
+
 		    if (!seek_mode) {
 			if (file && (current != '\0')) fprintf(file,"%c",current);
 			else printf("%c",current);
 		    }
 		}
 	    }
-	    if (file) 
+	    if (file)
 		fprintf(file, "\n");
 	    else {
 		if (seek_mode == 2) printf("[Error: format string not closed]");
@@ -1366,12 +1366,12 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    if (tmp_file) file = tmp_file;
 	    PUtils::remove_spaces(&dummy);
 	    echo_string[command_pointer] = dummy;
-	} else 
+	} else
 	    echo_string[command_pointer] = new char('\0');
 	AddCommand(COMMAND_ECHO, -1, -1, -1);
 	return kTRUE;
-    }    
-    
+    }
+
     //readline
     if (!strncmp(command, "readline", 8)) {
 	if (strlen(command) > 8) {
@@ -1387,7 +1387,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    unsigned int puffer_pointer = 0, dummy2_pointer = 0, args_pointer = 0;
 	    char *dummy2 = new char[strlen(dummy)+20];
 	    readline_args[command_pointer] = new Double_t*[MAX_READLINE_ARGS];
-	    
+
 	    Int_t seek_mode = 0;
 	    for (unsigned int j=0; j<=strlen(dummy); j++) {
 		char current = (*(dummy+j));
@@ -1397,7 +1397,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		    dummy2[dummy2_pointer+1] = 'l';
 		    dummy2[dummy2_pointer+2] = 'e';
 		    //dummy2[dummy2_pointer+3] = ' ';
-		    dummy2_pointer += 3; 
+		    dummy2_pointer += 3;
 		    if (dummy2_pointer > (strlen(dummy)+20)) {
 			Fatal("AddCommand", "strlen for tmp string too short");
 		    }
@@ -1409,7 +1409,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 			Info("Readline", "Write to batch variable '%s'", puffer);
 			char *dummy3 = new char[strlen(puffer)+1];
 			strcpy(dummy3, puffer);
-			
+
 			Double_t *x = makeStaticData()->GetBatchValue(dummy3, 1);
 			if (x) {
 			    if (args_pointer < MAX_READLINE_ARGS) {
@@ -1419,9 +1419,9 @@ Bool_t PBatch::AddCommand(const char *_command) {
 			    } else {
 				Error("AddCommand", "Readline: %s too many variables (>MAX_READLINE_ARGS)", dummy);
 			    }
-			} else 
+			} else
 			    Error("AddCommand", "Readline: puffer %s not initialized", puffer);
-			    
+
 			puffer_pointer = 0;
 		    }
 		    if (seek_mode) {
@@ -1432,7 +1432,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 			    seek_mode = 0;
 			}
 		    }
-		    
+
 		    if (!seek_mode) {
 			dummy2[dummy2_pointer] = dummy[j];
 			dummy2_pointer++;
@@ -1452,7 +1452,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 
     //first, check for a label
     for (UInt_t i=1; i<strlen(command); i++) {
-	
+
 	Bool_t ret = kFALSE;
 	if (command[i] == ':') {
 	    if (((i == (strlen(command))) ||  (command[i+1] != ':'))
@@ -1493,10 +1493,10 @@ Bool_t PBatch::AddCommand(const char *_command) {
     for (UInt_t i=0; i<strlen(command); i++) {
 	if (command[i]=='(' || command[i]==')') numbrack++;
 	if (command[i]=='=' && !numbrack) {
-	    if (i>0 && i<(strlen(command)-1) 
-		&& command[i-1]!='<' && command[i-1]!='>' 
-		&& command[i-1]!='*' && command[i-1]!='/' 
-		&& command[i-1]!='-' && command[i-1]!='+' 
+	    if (i>0 && i<(strlen(command)-1)
+		&& command[i-1]!='<' && command[i-1]!='>'
+		&& command[i-1]!='*' && command[i-1]!='/'
+		&& command[i-1]!='-' && command[i-1]!='+'
 		&& command[i-1]!='=' && command[i+1]!='=') is_operator++;
 	}
     }
@@ -1520,7 +1520,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    strncpy(dummy, command+4, strlen(command)-4);
 	    dummy[strlen(command)-4] = '\0';
 	    key1 = GetKey(dummy, 1, 1);
-	    if (AddCommand(COMMAND_GOTO, key_a, key1, -1)) 
+	    if (AddCommand(COMMAND_GOTO, key_a, key1, -1))
 		return kTRUE;
 	    return kFALSE;
 	}
@@ -1531,7 +1531,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    strncpy(dummy, command+5, strlen(command)-5);
 	    dummy[strlen(command)-5] = '\0';
 	    key1 = GetKey(dummy, 1, 1);
-	    if (AddCommand(COMMAND_GOSUB, key_a, key1, -1)) 
+	    if (AddCommand(COMMAND_GOSUB, key_a, key1, -1))
 		return kTRUE;
 	    return kFALSE;
 	}
@@ -1615,7 +1615,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		key1 = GetKey(dummy, 1, 1);
 	    else
 		key1 = GetKey((char *)"dummy", 1, 1);
-	    if (AddCommand(COMMAND_FORMORE, key_a, key1, -1)) 
+	    if (AddCommand(COMMAND_FORMORE, key_a, key1, -1))
 		return kTRUE;
 	    return kFALSE;
 	}
@@ -1629,7 +1629,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		key1 = GetKey(dummy,1,1);
 	    else
 		key1 = GetKey((char *)"dummy",1,1);
-	    if (AddCommand(COMMAND_FOREACH,key_a,key1,-1)) 
+	    if (AddCommand(COMMAND_FOREACH,key_a,key1,-1))
 		return kTRUE;
 	    return kFALSE;
 	}
@@ -1646,7 +1646,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		Warning("AddCommand", "[%s]: the object you want to push is not a particle", command);
 		return kFALSE;
 	    }
-	    if (AddCommand(COMMAND_PUSH, key_a, key1, -1)) 
+	    if (AddCommand(COMMAND_PUSH, key_a, key1, -1))
 		return kTRUE;
 	    return kFALSE;
 	}
@@ -1668,20 +1668,20 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    PUtils::Tokenize(command+5, ",", prodx, &prodx_s);
 	    if (prodx_s > 3) {
 		Warning("AddCommand", "Maximum 3 arguments for Eval()");
-	    } 
+	    }
 	    *(prodx[prodx_s-1]+strlen(prodx[prodx_s-1])-1) = '\0'; //remove trailing )
-	    
+
 	    int key3=-1, key4=-1;
-	    if (prodx_s > 0) 
+	    if (prodx_s > 0)
 		key2 = GetKey(prodx[0], 1, -1);
-	    if (prodx_s > 1) 
+	    if (prodx_s > 1)
 		key3 = GetKey(prodx[1], 1, -1);
-	    if (prodx_s > 2) 
+	    if (prodx_s > 2)
 		key4 = GetKey(prodx[2], 1, -1);
-	    
+
 	    key_a = makeStaticData()->
 		MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, command3);
-	    
+
 	    if (AddCommand(COMMAND_EVAL, key_a, -1, key2, key3, key4)) {
 		Double_t *delme =  new Double_t(0.);
 		makeDataBase()->SetParamDouble(key_a, "batch_value", delme);
@@ -1689,7 +1689,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		return kTRUE;
 	    }
 	    return kFALSE;
-	} 
+	}
 
 	if (!strncmp(command,"GetRandom()",11) || !strncmp(command,"getrandom()",11)) {
 	    key_a = makeStaticData()->
@@ -1705,24 +1705,24 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    //Exists also as method!!!
 	    char *prodx[10];
 	    Int_t prodx_s = 10; //max 10 products (but problems catched below)
-	    
+
 	    PUtils::Tokenize(command+10, ",", prodx, &prodx_s);
 	    if (prodx_s > 3) {
 		Warning("AddCommand", "Maximum 3 arguments for GetRandom()");
-	    } 
+	    }
 	    *(prodx[prodx_s-1]+strlen(prodx[prodx_s-1])-1) = '\0'; //remove trailing )
-	    
+
 	    int key3=-1, key4=-1;
-	    if (prodx_s > 0) 
+	    if (prodx_s > 0)
 		key2 = GetKey(prodx[0], 1, -1);
-	    if (prodx_s > 1) 
+	    if (prodx_s > 1)
 		key3 = GetKey(prodx[1], 1, -1);
-	    if (prodx_s > 2) 
+	    if (prodx_s > 2)
 		key4 = GetKey(prodx[2], 1, -1);
-	    	    
+
 	    key_a = makeStaticData()->
 		MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, command3);
-	    
+
 	    if (AddCommand(COMMAND_GETRANDOM, key_a, -1, key2, key3, key4)) {
 		Double_t *delme =  new Double_t(0.);
 		makeDataBase()->SetParamDouble(key_a, "batch_value", delme);
@@ -1730,7 +1730,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		return kTRUE;
 	    }
 	    return kFALSE;
-	} 
+	}
 
 	if (!strncmp(command,"GetRandomX",10) || !strncmp(command,"getrandomx",10)) {
 	    key_a = makeStaticData()->
@@ -1743,7 +1743,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		return kTRUE;
 	    }
 	    return kFALSE;
-	} 
+	}
 
 	if (!strncmp(command,"GetRandomY",10) || !strncmp(command,"getrandomy",10)) {
 	    key_a = makeStaticData()->
@@ -1756,14 +1756,14 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		return kTRUE;
 	    }
 	    return kFALSE;
-	} 
+	}
 
 	if (!strncmp(command,"cos(",4)) {
 	    key_a = makeStaticData()->
 		MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, command3);
 	    key1 = GetKey(command+3, 1, -1);
 	    if (AddCommand(COMMAND_COS, key_a, key1, -1)) {
-		
+
 		//final thing is to create the result
 		Double_t *delme =  new Double_t(0.);
 		makeDataBase()->SetParamDouble(key_a, "batch_value", delme);
@@ -1785,13 +1785,13 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    }
 	    return kFALSE;
 	}
-	
+
 
 	if (!strncmp(command,"if(",3) || !strncmp(command,"if ",3) || !strncmp(command,"ifx",3)) {
 
 	    key_a = makeStaticData()->
 		MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, command3);
-	   
+
 	    //check if the next char after () is a ';':
 	    int bracket_pos=-1, bracket_pos2=-1, bracket_num=0, found_trailer=0;
 	    for (unsigned int i=2; i<strlen(command); i++) {
@@ -1879,7 +1879,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		    val = new Double_t(0.);
 		    makeDataBase()->SetParamDouble(key4, "batch_value", val);
 		}
-		
+
 		return kTRUE;
 	    }
 	    return kFALSE;
@@ -1948,7 +1948,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    PUtils::Tokenize(command, "*=", prod, &prod_s);
 	    key1 = GetKey(prod[0], 1, -1);
 	    key2 = GetKey(prod[1], 1, -1);
-	    if (AddCommand(COMMAND_MULT, key1, key1, key2)) 
+	    if (AddCommand(COMMAND_MULT, key1, key1, key2))
 		return kTRUE;
 	    return kFALSE;
 	}
@@ -1956,7 +1956,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    PUtils::Tokenize(command, "/=", prod, &prod_s);
 	    key1 = GetKey(prod[0], 1, -1);
 	    key2 = GetKey(prod[1], 1, -1);
-	    if (AddCommand(COMMAND_DIV, key1, key1, key2)) 
+	    if (AddCommand(COMMAND_DIV, key1, key1, key2))
 		return kTRUE;
 	    return kFALSE;
 	}
@@ -1964,7 +1964,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    PUtils::Tokenize(command, "+=", prod, &prod_s);
 	    key1 = GetKey(prod[0], 1, -1);
 	    key2 = GetKey(prod[1], 1, -1);
-	    if (AddCommand(COMMAND_PLUS, key1, key1, key2)) 
+	    if (AddCommand(COMMAND_PLUS, key1, key1, key2))
 		return kTRUE;
 	    return kFALSE;
 	}
@@ -1972,7 +1972,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    PUtils::Tokenize(command, "-=", prod, &prod_s);
 	    key1 = GetKey(prod[0], 1, -1);
 	    key2 = GetKey(prod[1], 1, -1);
-	    if (AddCommand(COMMAND_MINUS, key1, key1, key2)) 
+	    if (AddCommand(COMMAND_MINUS, key1, key1, key2))
 		return kTRUE;
 	    return kFALSE;
 	}
@@ -2008,9 +2008,9 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	brack_counter = 0;
 	if (dot_version > 0) {
 	    for (int i = method_position-1; i>=0; i--) {
-		if (command[i]=='(' || command[i]=='[' || command[i]=='{') 
+		if (command[i]=='(' || command[i]=='[' || command[i]=='{')
 		    brack_counter--;
-		if (command[i]==')' || command[i]==']' || command[i]=='}') 
+		if (command[i]==')' || command[i]==']' || command[i]=='}')
 		    brack_counter++;
 		if (brack_counter==0 && ((command[i]==' ') || (command[i]=='+') || (command[i]=='-')))
 		    dot_version = 0; //cases like "a + b.x"
@@ -2030,7 +2030,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    prodx[0] = new char[method_position+1];
 	    strncpy(prodx[0], command, method_position);
 	    prodx[0][method_position] = '\0';
-	    
+
  	    key_a = makeStaticData()->
  		MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, command);
 
@@ -2042,38 +2042,38 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		prodx[1] = new char[strlen(command)-method_position-1];
 		strncpy(prodx[1], command+method_position+2, strlen(command)-method_position-2);
 		prodx[1][strlen(command)-method_position-2] = '\0';
-		
-	    } 
+
+	    }
 
 	    if (!strcmp(prodx[1], "M2()")) {
 		key1 = GetKey(prodx[0], 1, -1);
 		if (key1 < 0) return kFALSE;
-		if (AddCommand(COMMAND_MASS2, key_a, key1, -1)) 
+		if (AddCommand(COMMAND_MASS2, key_a, key1, -1))
 		    found = kTRUE;
 	    }
 	    if (!strcmp(prodx[1], "M()")) {
 		key1 = GetKey(prodx[0], 1, -1);
-		if (AddCommand(COMMAND_MASS, key_a, key1, -1)) 
+		if (AddCommand(COMMAND_MASS, key_a, key1, -1))
 		    found = kTRUE;
 	    }
 	    if (!strcmp(prodx[1], "Theta()")) {
 		key1 = GetKey(prodx[0], 1, -1);
-		if (AddCommand(COMMAND_THETA, key_a, key1, -1)) 
+		if (AddCommand(COMMAND_THETA, key_a, key1, -1))
 		    found = kTRUE;
 	    }
 	    if (!strcmp(prodx[1], "Print()")) {
 		key1 = GetKey(prodx[0], 1, -1);
-		if (AddCommand(COMMAND_PRINT, key_a, key1, -1)) 
+		if (AddCommand(COMMAND_PRINT, key_a, key1, -1))
 		    found = kTRUE;
 	    }
 // 	    if (!strcmp(prodx[1],"Parent()")) {
 // 		key1 = GetKey(prodx[0],1,0);
-// 		if (AddCommand(COMMAND_PARENT,key_a,key1,-1)) 
+// 		if (AddCommand(COMMAND_PARENT,key_a,key1,-1))
 // 		    found=kTRUE;
 // 	    }
 // 	    if (!strcmp(prodx[1],"ID()")) {
 // 		key1 = GetKey(prodx[0],1,0);
-// 		if (AddCommand(COMMAND_ID,key_a,key1,-1)) 
+// 		if (AddCommand(COMMAND_ID,key_a,key1,-1))
 // 		    found=kTRUE;
 // 	    }
 
@@ -2081,24 +2081,24 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    if (!strncmp(prodx[1], "Boost(", 6)) {
 		key1 = GetKey(prodx[0],   1, -1);
 		key2 = GetKey(prodx[1]+5, 1, -1);
-		if (AddCommand(COMMAND_BOOST, key_a, key1, key2)) 
+		if (AddCommand(COMMAND_BOOST, key_a, key1, key2))
 		    found = kTRUE;
 	    }
 	    if (!strncmp(prodx[1], "Angle(", 6)) {
 		key1 = GetKey(prodx[0],   1, -1);
 		key2 = GetKey(prodx[1]+5, 1, -1);
-		if (AddCommand(COMMAND_ANGLE, key_a, key1, key2)) 
+		if (AddCommand(COMMAND_ANGLE, key_a, key1, key2))
 		    found = kTRUE;
 	    }
 	    if (!strncmp(prodx[1], "Rot(", 4)) {
 		key1 = GetKey(prodx[0],   1, -1);
 		key2 = GetKey(prodx[1]+3, 1, -1);
-		if (AddCommand(COMMAND_ROT, key_a, key1, key2)) 
+		if (AddCommand(COMMAND_ROT, key_a, key1, key2))
 		    found = kTRUE;
 	    }
 	    if (!strncmp(prodx[1], "GetBeam(", 8)) {
 		key1 = GetKey(prodx[0], 1, -1);
-		if (AddCommand(COMMAND_GETBEAM, key_a, key1, -1)) 
+		if (AddCommand(COMMAND_GETBEAM, key_a, key1, -1))
 		    found = kTRUE;
 		TObject *delme = NULL;
 		makeDataBase()->GetParamTObj(key_a, batch_particle_param, &delme);
@@ -2109,7 +2109,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    }
 	    if (!strncmp(prodx[1], "GetTarget(", 10)) {
 		key1 = GetKey(prodx[0], 1, -1);
-		if (AddCommand(COMMAND_GETTARGET, key_a, key1, -1)) 
+		if (AddCommand(COMMAND_GETTARGET, key_a, key1, -1))
 		    found = kTRUE;
 		TObject *delme = NULL;
 		makeDataBase()->GetParamTObj(key_a, batch_particle_param, &delme);
@@ -2121,7 +2121,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    if (!strncmp(prodx[1],"Push(",5) || !strncmp(prodx[1],"push(",5)) {
 		key1 = GetKey(prodx[0],   1, -1);
 		key2 = GetKey(prodx[1]+4, 1, -1);
-		if (AddCommand(COMMAND_PUSH, key_a, key1, key2)) 
+		if (AddCommand(COMMAND_PUSH, key_a, key1, key2))
 		    found = kTRUE;
 	    }
 	    if (!strncmp(prodx[1],"Eval(",5) || !strncmp(prodx[1],"eval(",5)) {
@@ -2132,16 +2132,16 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		PUtils::Tokenize(prodx[1]+5, ",", prodxx, &prodxx_s);
 		if (prodxx_s > 3) {
 		    Warning("AddCommand", "[%s] Too many arguments for ->Eval()", command);
-		} 
+		}
 
 		*(prodxx[prodxx_s-1]+strlen(prodxx[prodxx_s-1])-1) = '\0'; //remove trailing )
-		
+
 		int key3=-1, key4=-1;
-		if (prodxx_s > 0) 
+		if (prodxx_s > 0)
 		    key2 = GetKey(prodxx[0], 1, -1);
-		if (prodxx_s > 1) 
+		if (prodxx_s > 1)
 		    key3 = GetKey(prodxx[1], 1, -1);
-		if (prodxx_s > 2) 
+		if (prodxx_s > 2)
 		    key4 = GetKey(prodxx[2], 1, -1);
 		//check if histogram is there...
 		TObject *ret;
@@ -2178,8 +2178,8 @@ Bool_t PBatch::AddCommand(const char *_command) {
 			makeDataBase()->GetParamDouble(prodx[1]);
 		    if (database_id == 0)
 			Error("AddCommand", "[%s] The value %s is unknown", command, prodx[1]);
-		} 
-		if ((val_id>=0) || database_id){		    
+		}
+		if ((val_id>=0) || database_id){
 		    if (strcmp(prodx[0],"*") == 0) { //dummy *
 			key1 = GetKey((char *)"dummy", 1, 0);
 		    } else {
@@ -2188,7 +2188,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		    if (key1 >= 0) {
 			AddCommand(COMMAND_PVALUE, key_a, key1, val_id, database_id);
 			found = kTRUE;
-		    } 
+		    }
 		}
 	    }
 
@@ -2199,7 +2199,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		    key1 = makeDataBase()->GetEntry(prodx[0]);
 		    if (key1 >= 0) {
 			Int_t handle = GetMethodHandle(prodx[1], 2);
-			if (handle>=0) {	
+			if (handle>=0) {
 			    //cout << "key1:" << key1 << " arg1:" << arg1 << " handle:" << handle << endl;
 			    if (AddCommand(COMMAND_INTERNAL, key_a, key1, arg1, arg2, arg3, arg4))  {
 				found = kTRUE;
@@ -2215,7 +2215,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		    }
 		} else { //for pparticle:
 		    Int_t handle = GetMethodHandle(prodx[1]);
-		    if (handle >= 0) {		
+		    if (handle >= 0) {
 			key1 = GetKey(prodx[0], 1, -1);
 			if (AddCommand(COMMAND_INTERNAL, key_a, key1, arg1, arg2, arg3, arg4))  {
 			    found = kTRUE;
@@ -2231,7 +2231,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		found = EvalPFormula(command);
 		if (found) return kTRUE;
 	    }
-	    
+
 	    if (!found) {
 		Error("AddCommand", "[%s] The method ->%s is unknown", command, prodx[1]);
 		return kFALSE;
@@ -2239,7 +2239,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		//final thing is to create the result
 		Double_t *delme =  new Double_t(0.);
 		makeDataBase()->SetParamDouble(key_a, "batch_value", delme);
-		
+
 		return kTRUE;
 	    }
 	} else {
@@ -2273,9 +2273,9 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	key_a = GetKey(prod[0], 2, 2);
 	copy_ctor = 1;
     }
-    
+
     found = kFALSE;
-    
+
     if (!is_operator) {
 	//look for the arguments
 	if (CheckAndSplit(prod[1], '~', &key1, &key2)) {
@@ -2305,7 +2305,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	Bool_t makenew = kFALSE;
 
 	//is lvalue one of the "switching" functions?
-	for (UInt_t i=0; i<strlen(prod[0]); i++) 
+	for (UInt_t i=0; i<strlen(prod[0]); i++)
 	    if (*(prod[0]+i) == ')' || *(prod[0]+i) == '(') {
 		makenew = kTRUE;
 	    }
@@ -2316,7 +2316,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	if (found) return kTRUE;
 	//....or the wrapper to PUtils
 	Int_t handle = GetMethodHandle(command, 1);
-	if (handle >= 0) {		
+	if (handle >= 0) {
 	    //cout << "found PUtils with " << command3<< endl;
 	    key1 = makeStaticData()->
 		MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, command3);
@@ -2333,7 +2333,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
     }
 
     if (found) {
-	
+
 	//Now look to the arguments, in order to know
 	//if the result object is a PParticle or a double
 
@@ -2347,7 +2347,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 	    //loop over 2 args
 	    Int_t key = key1;
 	    if (pos == 1) key = key2;
-	    
+
 	    if (key > -1) {
 		Double_t *delme;
 		if (makeDataBase()->GetParamDouble(key, "batch_value", &delme))
@@ -2358,14 +2358,14 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		if (!is_value_result_type && !is_obj_result_type) {
 		    //have to check if objects are there and what kind they are
 		    //4momentum?
-		    
+
 		    Int_t type = CheckObjectType(key);
 		    if (type < 0) {
 			Error("AddCommand", "[%s] Object not identified: %s", command,
 			      makeDataBase()->GetName(key));
 			return kFALSE;
 		    }
-		    
+
 		    if (type == IS_OBJECT) is_obj_result_type++;
 		    else is_value_result_type++;
 		}
@@ -2391,7 +2391,7 @@ Bool_t PBatch::AddCommand(const char *_command) {
 		delme = new Double_t (0.);
 		makeDataBase()->SetParamDouble (key_a, "batch_value", delme);
 		//some warning for the access to PFormula
-		if (is_operator && (strcmp(prod[0],"t") == 0 || strcmp(prod[0],"x") == 0 
+		if (is_operator && (strcmp(prod[0],"t") == 0 || strcmp(prod[0],"x") == 0
 				    || strcmp(prod[0],"y") == 0 || strcmp(prod[0],"z") == 0)) {
 		    Warning("AddCommand",
 			    "[%s] The '%s' is a reserved keyword in TFormula. You might run into problems.",
@@ -2442,7 +2442,7 @@ Int_t PBatch::EvalPFormula(char *command) {
     AddSpacePlaceholder(command);
 
     //cout << "PFormula called:" << command << endl;
-    PFormula *tmp = new PFormula(command,command);    
+    PFormula *tmp = new PFormula(command,command);
     Int_t worked_out = 1, num_params = 0;
 
     const char *mod_command = command;
@@ -2452,7 +2452,7 @@ Int_t PBatch::EvalPFormula(char *command) {
     for (int i=0; i<MAX_COMMAND_OPTIONS; i++) lst_key_tmp[i] = -1;
 
     while (tmp->error_code && num_params<(MAX_COMMAND_OPTIONS-1)) {
-	
+
 	//try to get the ugly guy
 	//copy the error string first
 	char *internal_command = new char[strlen(tmp->error_string.Data())+1];
@@ -2467,7 +2467,7 @@ Int_t PBatch::EvalPFormula(char *command) {
 	    return 0;
 	}
 
-	//	mod_command = ...aus PFormula, after replacing	
+	//	mod_command = ...aus PFormula, after replacing
 	TString *op = new TString(tmp->chaine);
 	//cout << "Chaine from TFormula: "<< op->Data() << endl;
 	char opt[5];
@@ -2482,7 +2482,7 @@ Int_t PBatch::EvalPFormula(char *command) {
 	Int_t key = GetKey(internal_command, 1, -1);
 	if (key >= 0) lst_key_tmp[num_params+1] = key;
 	lst_options_counter_tmp++;
-	tmp = new PFormula(mod_command, mod_command);   
+	tmp = new PFormula(mod_command, mod_command);
 	num_params++;
     }
 
@@ -2493,7 +2493,7 @@ Int_t PBatch::EvalPFormula(char *command) {
 	lst_options_counter[command_pointer] = lst_options_counter_tmp;
 	for (int i=0; i<MAX_COMMAND_OPTIONS; i++)
 	    lst_key[i][command_pointer] = lst_key_tmp[i];
-	RemoveSpacePlaceholder(command);	
+	RemoveSpacePlaceholder(command);
 	Int_t key_a = makeStaticData()->
 	    MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, command);
 	Double_t *delme =  new Double_t(0.);
@@ -2503,7 +2503,7 @@ Int_t PBatch::EvalPFormula(char *command) {
 	lst_command[command_pointer] = COMMAND_PFORMULA;
 	command_pointer++;
     } else RemoveSpacePlaceholder(command);
-    
+
     return worked_out;
 }
 
@@ -2528,22 +2528,22 @@ void PBatch::ReplaceAll(TString *op, const char *oldstring, const char *newstrin
 		    if (PUtils::ValidVariableName(mystring+i-1, strlen(oldstring)+1))
 			varname = kTRUE;
 		}
-		
+
 		if (mystring[i+strlen(oldstring)]) { //not the last
 		    if (PUtils::ValidVariableName(mystring+i, strlen(oldstring)+1))
 			varname = kTRUE;
 		}
-		
+
 		// 	    if (strncmp(oldstring,mystring+i,strlen(oldstring))==0) {
 		// 		//match
 		// 		//cout << "match: " << mystring << ":" << oldstring <<  ":" << newstring << endl;
 		// 		char nextchar = mystring[i+strlen(oldstring)];
-		
-		// 		if ((nextchar == '\0') || 
-		// 		    (!isalpha(nextchar) && 
+
+		// 		if ((nextchar == '\0') ||
+		// 		    (!isalpha(nextchar) &&
 		// 		     (nextchar != '.') &&
 		// 		     (nextchar != '-') &&
-		// 		     (nextchar != '_')) || 
+		// 		     (nextchar != '_')) ||
 		// 		    ((nextchar == '-') && (mystring[i+strlen(oldstring)+1] != '>'))
 		// 		    ) {
 		if (!varname) {
@@ -2580,34 +2580,34 @@ Int_t PBatch::GetMethodHandle(char *name, Int_t flag) {
 	while ((meth = (TMethod *) iter->Next())) {
 
 	    UInt_t realname_len = 0;
-	    for (;realname_len<strlen(name); realname_len++) 
+	    for (;realname_len<strlen(name); realname_len++)
 		if (name[realname_len] == '(') break;
-	    
-	    if ((strncmp(meth->GetName(),name,realname_len) == 0) && 
+
+	    if ((strncmp(meth->GetName(),name,realname_len) == 0) &&
 		(strlen(meth->GetName()) == realname_len)) {
 		//found name
 		//cout << meth->GetReturnTypeName() << endl;
-		if ((strcmp(meth->GetReturnTypeName(), "Double_t")   ==0 ) || 
-		    (strcmp(meth->GetReturnTypeName(), "Int_t")      ==0 ) || 
-		    (strcmp(meth->GetReturnTypeName(), "PParticle*") ==0 ) || 
+		if ((strcmp(meth->GetReturnTypeName(), "Double_t")   ==0 ) ||
+		    (strcmp(meth->GetReturnTypeName(), "Int_t")      ==0 ) ||
+		    (strcmp(meth->GetReturnTypeName(), "PParticle*") ==0 ) ||
 		    (strcmp(meth->GetReturnTypeName(), "void")       ==0 )) {
-		    
-		    //Set handle and prepare the pointers		 
+
+		    //Set handle and prepare the pointers
 		    //is MethodCall existing?
 
 		    for (int i=0; i<method_pointer; i++) {
 			if (strcmp(method_name[i],meth->GetName()) == 0) {
-			    //found old entry			 
+			    //found old entry
 			    CrackMethodArgs(name+realname_len+1);
 			    return i;
 			}
 		    }
-		    
+
 		    if (method_pointer == MAX_COMMAND_TMETHODS) {
 			Error("GetMethodHandle", "MAX_COMMAND_TMETHODS reached");
 			return -1;
 		    }
-		    
+
 		    arg1 = arg2 = arg3 = arg4 = -1;
 		    Int_t numargs = 0;
 		    TString argstring("");
@@ -2621,7 +2621,7 @@ Int_t PBatch::GetMethodHandle(char *name, Int_t flag) {
 			TList      *arg_list = meth->GetListOfMethodArgs();
 			TIterator  *arg_iter = arg_list->MakeIterator();
 			TMethodArg *arg_meth;
-			
+
 			int j = 0;
 			while ((arg_meth=(TMethodArg *) arg_iter->Next())) {
 			    //set up the argument list
@@ -2648,28 +2648,28 @@ Int_t PBatch::GetMethodHandle(char *name, Int_t flag) {
 			    }
 			    j++;
 			}
-			
-			numargs = CrackMethodArgs(name+realname_len+1);						
+
+			numargs = CrackMethodArgs(name+realname_len+1);
 		    }
 
 		    methods[method_pointer] = new TMethodCall();
-		    
+
 		    //cout << numargs << ":" << meth->GetNargs() << endl;
 
 		    if (numargs == meth->GetNargs()) {
-			
+
 			if (strcmp(meth->GetReturnTypeName(), "Double_t") ==0 )
 			    methods_flags[method_pointer] = METHOD_RETURN_DOUBLE;
 			else if (strcmp(meth->GetReturnTypeName(), "Int_t") ==0 )
 			    methods_flags[method_pointer] = METHOD_RETURN_INT;
 			else if (strcmp(meth->GetReturnTypeName(), "PParticle*") ==0 )
 			    methods_flags[method_pointer] = METHOD_RETURN_PPARTICLE;
-			else 
+			else
 			    methods_flags[method_pointer] = METHOD_RETURN_VOID;
-			
+
 			char *new_name = new char[strlen(argstring.Data())+1];
 			strcpy(new_name, argstring.Data());
-			
+
 			if (flag == 0)
 			    methods[method_pointer]->InitWithPrototype(gROOT->GetClass("PParticle"),
 								       meth->GetName(), new_name);
@@ -2684,13 +2684,13 @@ Int_t PBatch::GetMethodHandle(char *name, Int_t flag) {
 			method_name[method_pointer] = new_name;
 			method_pointer++;
 			return method_pointer-1;
-		    } else { 
+		    } else {
 			error = 3;
 		    }
-		  
+
 		}  else {
 		    if (!error) {
-			error = 1; 
+			error = 1;
 		    } else if (error == 2){
 			//unsupported return type
 			Error("GetMethodHandle", "Method %s has a return type %s, not yet supported",
@@ -2725,11 +2725,11 @@ Int_t PBatch::CrackMethodArgs(char *name) {
 
     char *prodx[4];
     Int_t prodx_s = 4; //max 4 args
-    
+
     PUtils::Tokenize(name, ",", prodx, &prodx_s);
     *(prodx[prodx_s-1]+strlen(prodx[prodx_s-1])-1) = '\0'; //remove trailing )
 
-    if (!prodx_s) return 0;    
+    if (!prodx_s) return 0;
 
     numbrack = 0;
     for (UInt_t i=0; i<strlen(name); i++) {
@@ -2737,7 +2737,7 @@ Int_t PBatch::CrackMethodArgs(char *name) {
 	if ((name[i]==')') || (name[i]==']')) numbrack--;
 	if ((name[i]=='"') && (numbrack>0)) name[i]=',';
     }
-    
+
     arg1 = GetKey(prodx[0], 1, -1);
     if (arg1 < 0) return 0;
     if (prodx_s > 1) arg2 = GetKey(prodx[1], 1, -1);
@@ -2781,7 +2781,7 @@ Bool_t PBatch::AddCommand(char command, int key_a, int key1, int key2, int key3,
 
 Bool_t PBatch::GetArguments(const char *a, char *name, char **function, char **arg1, char **arg2) {
     //looks for syntax like f(a,b);
-    
+
     char *prod[2];
     Int_t prod_s = 2; //max 2 products
 
@@ -2789,7 +2789,7 @@ Bool_t PBatch::GetArguments(const char *a, char *name, char **function, char **a
 
     if (prod[1] == NULL) {
 	*function = NULL;
-	prod[1] = prod[0];	
+	prod[1] = prod[0];
     }
 
     *(prod[1]+strlen(prod[1])-1) = '\0';
@@ -2800,7 +2800,7 @@ Bool_t PBatch::GetArguments(const char *a, char *name, char **function, char **a
     for (UInt_t i=0; i<strlen(prod[1]); i++) {
 	if (*(prod[1]+i) == ',') komma++;
     }
-    
+
     if (komma > 1) {
 	Error("AddCommand", "[%s] Too many kommas", prod[1]);
 	return kFALSE;
@@ -2809,7 +2809,7 @@ Bool_t PBatch::GetArguments(const char *a, char *name, char **function, char **a
     if (komma) {
 	char *prodx[2];
 	Int_t prodx_s = 2; //max 2 products
-	
+
 	PUtils::Tokenize(prod[1], ",", prodx, &prodx_s);
 	*arg1 = prodx[0];
 	*arg2 = prodx[1];
@@ -2822,8 +2822,8 @@ Bool_t PBatch::GetArguments(const char *a, char *name, char **function, char **a
 }
 
 Int_t PBatch::GetDelimPosition(char *arg, char delim, Int_t *yes) {
-    
-    Int_t brackets = 0, 
+
+    Int_t brackets = 0,
 	split_pos = -1,
 	found_something = 0;
     for (UInt_t i=0; i<strlen(arg); i++) {
@@ -2843,9 +2843,9 @@ Int_t PBatch::GetDelimPosition(char *arg, char delim, Int_t *yes) {
 
 Bool_t PBatch::CheckAndSplit(char *arg, char delim, int *key1, int *key2) {
 
-    int yes = 0, 
+    int yes = 0,
 	split_pos = -1;
-    
+
     char *arg2 = new char[strlen(arg)+1];
     strcpy(arg2, arg);
     arg = arg2;
@@ -2859,20 +2859,20 @@ Bool_t PBatch::CheckAndSplit(char *arg, char delim, int *key1, int *key2) {
     //look if the "-" is a fake minus, e.g. "a < -0.5"
     for (int i=split_pos-1; i>=0; i--) {
 	if (arg[i] != ' ') {
-	    if (arg[i] == '<' || arg[i] == '>' || arg[i] == '=' 
+	    if (arg[i] == '<' || arg[i] == '>' || arg[i] == '='
 		|| arg[i] == ':'|| arg[i] == ',') {
-		return kFALSE; 
+		return kFALSE;
 	    }
-	    i = -1;	    
+	    i = -1;
 	}
     }
 
     if (!yes) {
-	return kFALSE; 
+	return kFALSE;
     }
 
     char *prod[2];
-    
+
     prod[0] = new char[split_pos+1];
     prod[1] = new char[strlen(arg)-split_pos+1];
     strncpy(prod[0], arg, split_pos);
@@ -2896,13 +2896,13 @@ Int_t PBatch::GetKey(char *name, int fl, int makeflag) {
     //              (but see also SetVarList)
     //makeflag=2  : Same as above, but it must be a valid variable name
     //makeflag=-1 : put into DB only if we have a composite object
-    //              This is the case if we find () or + or - 
+    //              This is the case if we find () or + or -
     //              e.g. obj->...
     //              make AddCommand
     //fl=2        : Take SetVarList into account
 
     //cout << "getKey" << name << ":" << makeflag <<  endl;
-  
+
     //do we contain ()?
     //int br = 0;
     //int found_br = 0;
@@ -2915,14 +2915,14 @@ Int_t PBatch::GetKey(char *name, int fl, int makeflag) {
     }
     PUtils::remove_spaces(&name);
 
-    Int_t key = -1; 
+    Int_t key = -1;
 
     if (strlen(name) == 0) return -1;
 
     //first check for file-input
     if (name[0] == '[' && name[strlen(name)-1]==']' && strlen(name)>2) {
 	//found [] at the very begin & end
-		
+
 	//further look to the content
 	//if we find any additional brackets, it is a composite object!
 	Int_t num_brackets = 0;
@@ -2934,35 +2934,35 @@ Int_t PBatch::GetKey(char *name, int fl, int makeflag) {
 
 	    key = makeStaticData()->
 		MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, name);
-	    
+
 	    char *function, *arg1, *arg2;
 	    GetArguments("[", /* "]", */ name, &function, &arg1, &arg2);
-	   	    
-	    if (!arg1) { 
+
+	    if (!arg1) {
 		Error("AddCommand", "[%s] Argument not found", name);
 		return kFALSE;
 	    }
-	   
+
 	    Int_t pid = 0; //DUMMY
 
 	    if (strcmp(arg1, "*")) {
 		//no Joker
 		pid = makeStaticData()->GetParticleID(arg1);
-		if (pid==0)  { 
+		if (pid==0)  {
 		    Error("AddCommand", "[%s] Unknown particle %s", name, arg1);
 		    return kFALSE;
 		}
 	    }
-	    
+
 	    Int_t *ii = new int(pid);  //never destructed, but called only once!
-	   	
+
 	    if (!makeDataBase()->SetParamInt (key, "batch_pid", ii)) {
 		delete ii;
 		return kFALSE;
 	    }
-	    
+
 	    Int_t number = -999;
-	    
+
 	    if (arg2) { //try to get number
 		Int_t *delme = new Int_t(number);
 		Int_t numkey = -999;
@@ -2976,22 +2976,22 @@ Int_t PBatch::GetKey(char *name, int fl, int makeflag) {
 				numkey = -1;
 			    } else {
 				Int_t *result = new Int_t(1);
-				makeDataBase()->SetParamInt(numkey, "batch_update", result);   
+				makeDataBase()->SetParamInt(numkey, "batch_update", result);
 			    }
 			}
-		    } 
+		    }
 		    if (numkey < 0) {
 			Error("AddCommand", "[%s] Unknown variable '%s'", name, arg2);
-		    } 
+		    }
 		    *delme = -1000 - numkey; //-999 means not found!
 		} else if (PUtils::IsInt(arg2)) {
 		    sscanf(arg2, "%i", &number);
 		    *delme = number;
-		    if (strcmp(arg2,"+") == 0) { 
+		    if (strcmp(arg2,"+") == 0) {
 			*delme = -111;
 			status = 1;
 		    }
-		} else 
+		} else
 		    Error("AddCommand", "[%s] Unknown value '%s'", name, arg2);
 		makeDataBase()->SetParamInt(key, "batch_position", delme);
 	    }
@@ -3009,9 +3009,9 @@ Int_t PBatch::GetKey(char *name, int fl, int makeflag) {
 	makeflag = 0;
 	Error("GetKey", "[%s] is not a valid variable name", name);
     }
-    if (makeflag == 2) 
+    if (makeflag == 2)
 	makeflag = 1;
-    if (makeflag == -1) 
+    if (makeflag == -1)
 	AddCommand(name);
 
     if (makeflag) {
@@ -3020,13 +3020,13 @@ Int_t PBatch::GetKey(char *name, int fl, int makeflag) {
 		MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, name);
 	} else {
 	    for (unsigned int j=0; j<((strlen(varlist) - strlen(name))); j++) {
-		if ((strncmp(varlist+j,name,strlen(name)) == 0) && 
+		if ((strncmp(varlist+j,name,strlen(name)) == 0) &&
 		    varlist[j+strlen(name)] == ';') {
 		    key = makeStaticData()->
 			MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, name);
 		}
 	    }
-	    if (key < 0) 
+	    if (key < 0)
 		Error("AddCommand",
 		      "[%s] is not an allowed object name, the list in this context is [%s] ",
 		      name, varlist);
@@ -3037,7 +3037,7 @@ Int_t PBatch::GetKey(char *name, int fl, int makeflag) {
     if (key < 0) {
 	Error("AddCommand", "[%s] Unknown object", name);
     }
-    
+
     return key;
 }
 
@@ -3049,84 +3049,84 @@ void PBatch::Print(const Option_t *) const {
 
 // 	if (lst_command[i] == COMMAND_PFORMULA) {
 
-// 	    cout << makeDataBase()->GetName(lst_key_a[i]) 
+// 	    cout << makeDataBase()->GetName(lst_key_a[i])
 // 		 << " <" << lst_command[i] << "> ";
 // 	    for (int j=0;j<lst_options_counter[i];j++) {
 // 		cout << makeDataBase()->GetName(lst_key[j+1][i])  << " ";
 // 	    }
 // 	    cout << endl;
-// 	} else 
+// 	} else
 	{
-	    
-	    if (lst_command[i] == COMMAND_PFORMULA) 
+
+	    if (lst_command[i] == COMMAND_PFORMULA)
 		cout << "[PFormula]  :";
-	    if (lst_command[i] == COMMAND_MASS) 
+	    if (lst_command[i] == COMMAND_MASS)
 		cout << "->M()       :";
-	    if (lst_command[i] == COMMAND_MASS2) 
+	    if (lst_command[i] == COMMAND_MASS2)
 		cout << "->M2()      :";
-	    if (lst_command[i] == COMMAND_IF) 
+	    if (lst_command[i] == COMMAND_IF)
 		cout << "if          :";
-	    if (lst_command[i] == COMMAND_PLUS) 
+	    if (lst_command[i] == COMMAND_PLUS)
 		cout << "+           :";
-	    if (lst_command[i] == COMMAND_MINUS) 
+	    if (lst_command[i] == COMMAND_MINUS)
 		cout << "-           :";
-	    if (lst_command[i] == COMMAND_EQUAL) 
+	    if (lst_command[i] == COMMAND_EQUAL)
 		cout << "~           :";
-	    if (lst_command[i] == COMMAND_IS) 
+	    if (lst_command[i] == COMMAND_IS)
 		cout << "=           :";
-	    if (lst_command[i] == COMMAND_COS) 
+	    if (lst_command[i] == COMMAND_COS)
 		cout << "cos()       :";
-	    if (lst_command[i] == COMMAND_BOOST) 
+	    if (lst_command[i] == COMMAND_BOOST)
 		cout << "->Boost()   :";
-	    if (lst_command[i] == COMMAND_GETBEAM) 
+	    if (lst_command[i] == COMMAND_GETBEAM)
 		cout << "->GetBeam() :";
-	    if (lst_command[i] == COMMAND_GETTARGET) 
+	    if (lst_command[i] == COMMAND_GETTARGET)
 		cout << "->GetTarget():";
-	    if (lst_command[i] == COMMAND_FABS) 
+	    if (lst_command[i] == COMMAND_FABS)
 		cout << "fabs()      :";
-	    if (lst_command[i] == COMMAND_PRINT) 
+	    if (lst_command[i] == COMMAND_PRINT)
 		cout << "->Print()   :";
-	    if (lst_command[i] == COMMAND_ROT) 
+	    if (lst_command[i] == COMMAND_ROT)
 		cout << "->Rot()     :";
-	    if (lst_command[i] == COMMAND_THETA) 
+	    if (lst_command[i] == COMMAND_THETA)
 		cout << "->Theta()   :";
-	    if (lst_command[i] == COMMAND_INTERNAL) 
+	    if (lst_command[i] == COMMAND_INTERNAL)
 		cout << "[internal]  :";
-	    if (lst_command[i] == COMMAND_EVAL) 
+	    if (lst_command[i] == COMMAND_EVAL)
 		cout << "Eval()      :";
-	    if (lst_command[i] == COMMAND_GETRANDOM) 
+	    if (lst_command[i] == COMMAND_GETRANDOM)
 		cout << "GetRandom() :";
-	    if (lst_command[i] == COMMAND_ANGLE) 
+	    if (lst_command[i] == COMMAND_ANGLE)
 		cout << "->Angle()   :";
-	    if (lst_command[i] == COMMAND_P3M) 
+	    if (lst_command[i] == COMMAND_P3M)
 		cout << "P3M()       :";
-	    if (lst_command[i] == COMMAND_P3E) 
+	    if (lst_command[i] == COMMAND_P3E)
 		cout << "P3E()       :";
-	    if (lst_command[i] == COMMAND_PVALUE) 
+	    if (lst_command[i] == COMMAND_PVALUE)
 		cout << ".val        :";
-	    if (lst_command[i] == COMMAND_LABEL) 
+	    if (lst_command[i] == COMMAND_LABEL)
 		cout << "label:      :";
-	    if (lst_command[i] == COMMAND_GOTO) 
+	    if (lst_command[i] == COMMAND_GOTO)
 		cout << "goto        :";
-	    if (lst_command[i] == COMMAND_GOSUB) 
+	    if (lst_command[i] == COMMAND_GOSUB)
 		cout << "gosub       :";
-	    if (lst_command[i] == COMMAND_RETURN) 
+	    if (lst_command[i] == COMMAND_RETURN)
 		cout << "return      :";
-	    if (lst_command[i] == COMMAND_EXIT) 
+	    if (lst_command[i] == COMMAND_EXIT)
 		cout << "exit        :";
-	    if (lst_command[i] == COMMAND_FORMORE) 
+	    if (lst_command[i] == COMMAND_FORMORE)
 		cout << "formore     :";
-	    if (lst_command[i] == COMMAND_FOREACH) 
+	    if (lst_command[i] == COMMAND_FOREACH)
 		cout << "foreach     :";
-	    if (lst_command[i] == COMMAND_ECHO) 
+	    if (lst_command[i] == COMMAND_ECHO)
 		cout << "echo        :";
-	    if (lst_command[i] == COMMAND_READLINE) 
+	    if (lst_command[i] == COMMAND_READLINE)
 		cout << "readline    :";
-	    if (lst_command[i] == COMMAND_PUSH) 
+	    if (lst_command[i] == COMMAND_PUSH)
 		cout << "push        :";
-	    if (lst_command[i] == COMMAND_BRANCH) 
+	    if (lst_command[i] == COMMAND_BRANCH)
 		cout << "branch      :";
-	    if (lst_command[i] == COMMAND_ELSE) 
+	    if (lst_command[i] == COMMAND_ELSE)
 		cout << "else        :";
 
 	    if (lst_key_a[i] > -1) {
@@ -3134,26 +3134,26 @@ void PBatch::Print(const Option_t *) const {
 	    }
 
 	    if (lst_key[1][i] > -1) {
- 		cout << " <=== {" << lst_key[1][i] 
-		     << "=" << makeDataBase()->GetName(lst_key[1][i]) 
+ 		cout << " <=== {" << lst_key[1][i]
+		     << "=" << makeDataBase()->GetName(lst_key[1][i])
 		     << "}";
 	    }
 
 	    if (lst_key[2][i] > -1) {
- 		cout << ",{" << lst_key[2][i] 
-		     << "=" << makeDataBase()->GetName(lst_key[2][i]) 
+ 		cout << ",{" << lst_key[2][i]
+		     << "=" << makeDataBase()->GetName(lst_key[2][i])
 		     << "}";
 	    }
 
 	    if (lst_key[3][i] > -1) {
- 		cout << ",{" << lst_key[3][i] 
-		     << "=" << makeDataBase()->GetName(lst_key[3][i]) 
+ 		cout << ",{" << lst_key[3][i]
+		     << "=" << makeDataBase()->GetName(lst_key[3][i])
 		     << "}";
 	    }
 
 	    if (lst_key[4][i] > -1) {
- 		cout << ",{" << lst_key[4][i] 
-		     << "=" << makeDataBase()->GetName(lst_key[4][i]) 
+ 		cout << ",{" << lst_key[4][i]
+		     << "=" << makeDataBase()->GetName(lst_key[4][i])
 		     << "}";
 	    }
 

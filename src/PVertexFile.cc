@@ -3,7 +3,7 @@
 //  Written: 11/28/2007
 //  Revised:
 //
-//  vertex information in a file. 
+//  vertex information in a file.
 //  format : ntuple name "vertex" leafs "vX:vY:vZ".
 //      or : ntuple name "vertex" leafs "vX:vY:vZ:seqNr".
 //  Can be used e.g. for embedded particles. The
@@ -18,7 +18,7 @@
 PVertexFile::PVertexFile() {
     nEvent       = 0;
     input        = NULL;
-    vertex_tuple = NULL; 
+    vertex_tuple = NULL;
 
     vertex_x = makeStaticData()->GetBatchValue("_event_vertex_x");
     vertex_y = makeStaticData()->GetBatchValue("_event_vertex_y");
@@ -99,4 +99,4 @@ Bool_t PVertexFile::Modify(PParticle **, int *, int *, int) {
     return kTRUE;
 };
 
-ClassImp(PVertexFile) 
+ClassImp(PVertexFile)

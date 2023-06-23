@@ -1,6 +1,6 @@
 // Author:
 // Written: 12/01/2014
-// Modified: 
+// Modified:
 // PGammaConversion Class Header
 
 #ifndef _PGAMMACONVERSION_H_
@@ -53,12 +53,12 @@ class PGammaConversion: public PBulkInterface {
     TH2F *getHist(Double_t zVertexEvt, Double_t thetadeg);
     //------------------------------------
 
- 
+
  protected:
-    
-    
+
+
  public:
-    
+
     PGammaConversion();
     PGammaConversion(Float_t Z, Float_t p,Int_t run);
     ~PGammaConversion();
@@ -71,12 +71,12 @@ class PGammaConversion: public PBulkInterface {
     void    SetVertex(Double_t x, Double_t y, Double_t z) {
 	x1 = x; y1 = y; z1 = z;
     };
-    
+
     Bool_t Modify(PParticle **stack, int *decay_done, int *num, int stacksize);  //bulk interface
 
     ClassDef(PGammaConversion, 0) // Fast post processing gamma conversion in material
 };
-#endif 
+#endif
 
 
 

@@ -2,11 +2,11 @@
 //  Small linear mesh to substitute the array from PData
 //  The mesh is inherited from TF1, and allow to use
 //  mesh->Draw()
-//  
+//
 //
 //                    Author: I. Froehlich
 //                    Written: 7.05.2007
-//                    Revised: 
+//                    Revised:
 //
 ////////////////////////////////////////////////////////
 
@@ -20,7 +20,7 @@
 using namespace std;
 
 PMesh::PMesh(Int_t psize, const Char_t *name) : TF1(name, "0", 0, 1) {
-    // Copied from TF1 constructor... 
+    // Copied from TF1 constructor...
     SetName(name);
     fNpar      = 0;
 
@@ -35,7 +35,7 @@ PMesh::PMesh(Int_t psize, const Char_t *name) : TF1(name, "0", 0, 1) {
 #endif
     //    fFunction  = 0;
     fNdim = 1;
-    
+
     if (psize <= 0) {
 	Warning("PMesh", "Size %i not allowed", psize);
 	td = NULL;
@@ -53,7 +53,7 @@ PMesh::~PMesh() {
 Double_t PMesh::EvalPar(const Double_t *x, const Double_t *) {
     return Eval(x[0]);
 }
- 
+
 Double_t PMesh::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     return GetLinearIP(x);
 }
@@ -80,9 +80,9 @@ void PMesh::Print(const Option_t*) const {
 Double_t PMesh::GetLinearIP(Double_t m) const {
     if ((m > min) && (m < max)) {
 
-	Double_t dm = (max-min)/(size-1.); 
+	Double_t dm = (max-min)/(size-1.);
 	int bin     = int((m-min)/dm);
-	
+
 	double mlow = min + bin*dm,
 	    mup  = mlow + dm,
 	    wlow = td[bin],

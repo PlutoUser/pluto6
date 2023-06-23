@@ -1,6 +1,6 @@
-// Author: I. Froehlich 
+// Author: I. Froehlich
 // Written: 5.6.2007
-// Revised: 
+// Revised:
 
 #ifndef _PMASSAMPLING_H_
 #define _PMASSAMPLING_H_
@@ -13,13 +13,13 @@
 
 
 class PMassSampling : public PHadronModel  {
-  
+
  public:
     PMassSampling();
     PMassSampling(const Char_t *id, const Char_t *de, Int_t key);
     PDistribution* Clone(const char *delme=NULL) const;
 
-    using PDistribution::GetWeight;   
+    using PDistribution::GetWeight;
     Double_t GetWeight(Double_t *mass, Int_t *didx=NULL);
 
     using PDistribution::SampleMass;
@@ -28,7 +28,7 @@ class PMassSampling : public PHadronModel  {
     void     SetSamplingFunction(TF1 * f) {shape1=f;};
 
  private:
-  
+
     TF1 *shape1;  //mass sampling shape as a function of resonance mass (=x)
 
     ClassDef(PMassSampling, 0)  // General purpose mass sampling model

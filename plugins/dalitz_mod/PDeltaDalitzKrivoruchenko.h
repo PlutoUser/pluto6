@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 18.9.2008
-// Revised: 
+// Revised:
 
 #ifndef _PDELTADALITZKRIVORUCHENKO_H_
 #define _PDELTADALITZKRIVORUCHENKO_H_
@@ -8,7 +8,7 @@
 #include "PDalitzDecay.h"
 
 class PDeltaDalitzKrivoruchenko : public PDalitzDecay  {
-  
+
  public:
 
     Bool_t FreezeOut(void);
@@ -17,7 +17,7 @@ class PDeltaDalitzKrivoruchenko : public PDalitzDecay  {
     PDistribution *Clone(const char *delme=NULL) const;
     double dGdM(const int& id, const double& m, const double& ecm);
 
-    
+
     ClassDef(PDeltaDalitzKrivoruchenko, 0)  //Another Delta Dalitz description
 };
 

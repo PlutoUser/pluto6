@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 27.5.2007
-// Revised: 
+// Revised:
 
 #ifndef _PHADRONDECAYM1_H_
 #define _PHADRONDECAYM1_H_
@@ -12,7 +12,7 @@
 #include "PKinematics.h"
 
 class PHadronDecayM1 : public PHadronDecay  {
-   
+
  public:
 
     PHadronDecayM1();
@@ -52,11 +52,11 @@ class PHadronDecayM1 : public PHadronDecay  {
     Double_t stable_mass;
     bool sampleM1(const double &ecm);
     Double_t scale;
-    double BWWeight(const int &i1, const double &m, 
-		    const double &m1, const double &m2, int didx_local1=-1, 
+    double BWWeight(const int &i1, const double &m,
+		    const double &m1, const double &m2, int didx_local1=-1,
 		    int i2=0, int didx_local2=-1);
     double maxBWWeight(const int &i1, const double &m, const double &lower,
-		       const double &upper, double &max1, const double &m2, int didx_local1=-1, 
+		       const double &upper, double &max1, const double &m2, int didx_local1=-1,
 		       int i2=0, int didx_local2=-1);
 
     PParticle *parent, *daughter1, *daughter2;

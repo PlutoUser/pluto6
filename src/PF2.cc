@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////
-//  
+//
 // Adapted TF2
 //
 ////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@ using namespace std;
 
 PF2::PF2() :
     TF2() {
-    projector = NULL;    
+    projector = NULL;
     epsilon   = 0.000001; //ROOT std.
 };
 
@@ -39,14 +39,14 @@ PF2::PF2(const char *name, void *fcn, Double_t xmin, Double_t xmax, Double_t ymi
 };
 #endif
 
-PF2::PF2(const char *name, Double_t (*fcn)(Double_t *, Double_t *), 
+PF2::PF2(const char *name, Double_t (*fcn)(Double_t *, Double_t *),
 	 Double_t xmin, Double_t xmax, Double_t ymin, Double_t ymax, Int_t npar) :
     TF2(name,fcn,xmin,xmax,ymin,ymax,npar) {
     projector = NULL;
     epsilon   = 0.000001; //ROOT std.
 };
 
-PF2::PF2(const char *name, Double_t (*fcn)(const Double_t *, const Double_t *), 
+PF2::PF2(const char *name, Double_t (*fcn)(const Double_t *, const Double_t *),
 	 Double_t xmin, Double_t xmax, Double_t ymin, Double_t ymax, Int_t npar) :
     TF2(name,fcn,xmin,xmax,ymin,ymax,npar) {
     projector = NULL;
@@ -57,7 +57,7 @@ PF2::PF2(const char *name, ROOT::Math::ParamFunctor f, Double_t xmin, Double_t x
     TF2(name, f, xmin, xmax, ymin, ymax, npar) {
     projector = NULL;
     epsilon   = 0.000001; //ROOT std.
-};  
+};
 
 PF2::PF2(const PF2 &f2) :
     TF2(f2) {
@@ -72,9 +72,9 @@ PF2::PF2(const char *name, Double_t xmin, Double_t xmax, Double_t ymin, Double_t
     SetTitle(name);
     projector = new PProjector();
     epsilon   = 0.000001; //ROOT std.
-    vf = makeStaticData()->GetBatchValue("_f"); 
-    vx = makeStaticData()->GetBatchValue("_x"); 
-    vy = makeStaticData()->GetBatchValue("_y"); 
+    vf = makeStaticData()->GetBatchValue("_f");
+    vx = makeStaticData()->GetBatchValue("_x");
+    vy = makeStaticData()->GetBatchValue("_y");
 }
 
 Bool_t PF2::Add(const char *command) {
@@ -145,10 +145,10 @@ void PF2::GetRandom2(Double_t &xrandom, Double_t &yrandom) {
     Double_t dx = (fXmax-fXmin)/fNpx;
     Double_t dy = (fYmax-fYmin)/fNpy;
     Int_t ncells = fNpx*fNpy;
-    if (fIntegral.empty()) {	
-	MakeIntegral();	
+    if (fIntegral.empty()) {
+	MakeIntegral();
     }
-    
+
     // return random numbers
     Double_t r, ddx, ddy, dxint;
     r     = PUtils::sampleFlat();
@@ -170,12 +170,12 @@ Bool_t PF2::MakeIntegral(void) {
     Double_t dx = (fXmax-fXmin)/fNpx;
     Double_t dy = (fYmax-fYmin)/fNpy;
     Int_t ncells = fNpx*fNpy;
-    
+
     if (fIntegral.empty()) {
-	int print_twentypercent = ncells/5, print_cpc = 1, 
+	int print_twentypercent = ncells/5, print_cpc = 1,
 	    print_ipc = print_cpc*print_twentypercent;
 	if (ncells>INTEGRAL_PRINT_THRESHOLD) Info("MakeIntegral","Generating array, this can take a while....");
-	
+
 	fIntegral.resize(ncells+1);
 	fIntegral[0] = 0;
 	Double_t integ;
@@ -206,12 +206,12 @@ Bool_t PF2::MakeIntegral(void) {
 	    fIntegral[i] /= fIntegral[ncells];
 	}
 	if (ncells>INTEGRAL_PRINT_THRESHOLD) Info("MakeIntegral","...done (%i bins)",ncells);
-    }	
+    }
     return kTRUE;
 }
 
 
-#if 0 
+#if 0
 //ROOT5
 Bool_t PF2::MakeIntegral(void) {
     //Copied from ROOT
@@ -220,9 +220,9 @@ Bool_t PF2::MakeIntegral(void) {
     Double_t dx   = (fXmax-fXmin)/fNpx;
     Double_t dy   = (fYmax-fYmin)/fNpy;
     Int_t ncells = fNpx*fNpy;
- 
+
     if (fIntegral == 0) {
-	int print_twentypercent = ncells/5, print_cpc = 1, 
+	int print_twentypercent = ncells/5, print_cpc = 1,
 	    print_ipc = print_cpc*print_twentypercent;
 	if (ncells>INTEGRAL_PRINT_THRESHOLD) Info("MakeIntegral","Generating array, this can take a while....");
 
@@ -256,7 +256,7 @@ Bool_t PF2::MakeIntegral(void) {
 	    fIntegral[i] /= fIntegral[ncells];
 	}
 	if (ncells>INTEGRAL_PRINT_THRESHOLD) Info("MakeIntegral","...done (%i bins)",ncells);
-    }	
+    }
     return kTRUE;
 };
 #endif

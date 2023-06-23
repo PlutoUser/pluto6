@@ -1,6 +1,6 @@
 // Author: Ingo Froehlich
 // Written: 14/05/2007
-// Modified: 
+// Modified:
 // PDebugFileOutput Class Header
 
 #ifndef _PFILEDEBUGOUTPUT_H_
@@ -14,7 +14,7 @@ class PDebugFileOutput: public PFileOutput {
 
  protected:
     FILE *fp;
-    
+
  public:
     PDebugFileOutput();
     ~PDebugFileOutput();
@@ -24,13 +24,13 @@ class PDebugFileOutput: public PFileOutput {
     bool CloseFile(void);                //
     bool WriteEvent(void);               //next event
     bool WriteParticle(PParticle *par);  //write one particle
-    
+
 
 ClassDef(PDebugFileOutput, 0) // Pluto debug file output
 
 };
 
-#endif 
+#endif
 
 
 

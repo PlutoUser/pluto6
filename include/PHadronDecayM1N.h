@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 22.01.2010
-// Revised: 
+// Revised:
 
 #ifndef _PHADRONDECAYM1N_H_
 #define _PHADRONDECAYM1N_H_
@@ -18,7 +18,7 @@
 #define M1N_PARENT_GRID   0.1
 
 class PHadronDecayM1N : public PChannelModel  {
-  
+
  public:
     PHadronDecayM1N();
     PHadronDecayM1N(const Char_t *id, const Char_t *de, Int_t key);
@@ -41,7 +41,7 @@ class PHadronDecayM1N : public PChannelModel  {
  protected:
 
     //int didx1,didx2,didx3;
-    PParticle * parent, *daughters[M1N_MAX_DAUGHTERS], *unstable_particle; 
+    PParticle * parent, *daughters[M1N_MAX_DAUGHTERS], *unstable_particle;
     Int_t daughter_pos, unstable_daughter;
     PChannelModel *unstable_model;
 
@@ -50,7 +50,7 @@ class PHadronDecayM1N : public PChannelModel  {
 	daughter_didx[M1N_MAX_DAUGHTERS],
 	unstable_id, parent_id, unstable_didx;
     Double_t unstable_width, daughter_masses[M1N_MAX_DAUGHTERS], parent_mass, old_parent_mass;
-    
+
     PMesh *mesh;
     TGenPhaseSpace *event;
 

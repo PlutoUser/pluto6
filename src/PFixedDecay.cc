@@ -21,10 +21,10 @@ PFixedDecay::PFixedDecay(const Char_t *id, const Char_t *de, Int_t key) :
 
     if (is_channel<0)
 	Warning("PFixedDecay", "The model (%s) should be bound to CHANNELS only", de);
-  
+
     //Get particles
     Int_t tid[11];
-    tid[0] = 10; 
+    tid[0] = 10;
     makeStaticData()->GetDecayModeByKey(primary_key, tid); // retrieve current mode info
 
     //Parent ALWAYS important (also for the inherited classes)
@@ -52,13 +52,13 @@ PDistribution *PFixedDecay::Clone(const char*) const {
 
 Bool_t PFixedDecay::Init(void) {
     //Init function called once for each PChannel
-    
+
     parent = GetParticle("parent");
     if (!parent) {
 	Warning("Init", "Parent not found");
 	return kFALSE;
     }
- 
+
     for (int i=0; i<n_daughters; i++) {
 	daughter[i]=GetParticle(makeStaticData()->GetParticleName(d_id[i]));
 	if (!daughter[i]) {
@@ -66,12 +66,12 @@ Bool_t PFixedDecay::Init(void) {
 	    return kFALSE;
 	}
     }
-    
+
     return kTRUE;
 }
 
 int PFixedDecay::GetDepth(int) {
-    
+
     double mymin = 0.;
     for (int i=1; i<=n_daughters; i++) {
 	mymin+=dmass[i-1];
@@ -108,11 +108,11 @@ Bool_t PFixedDecay::GetWidth(Double_t mass, Double_t *width, Int_t) {
     //and the p.s. for the decay unstable -> stable stable
     //decays > 2 body are not supported yet
 
-    if ((n_daughters>2) || (makeStaticData()->GetParticleTotalWidth(parent_id) <  
+    if ((n_daughters>2) || (makeStaticData()->GetParticleTotalWidth(parent_id) <
 			    (*unstable_width )) ) {
 	*width = makeStaticData()->GetDecayPartialWidth(is_channel);
 	return kTRUE;
-    } 
+    }
 
     double pCms      = PKinematics::pcms(mass, dmass[0], dmass[1]);
     double pole_pCms = PKinematics::pcms(parent_mass, dmass[0], dmass[1]);

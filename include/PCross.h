@@ -1,7 +1,7 @@
 // Author: K.Tyminska
 // Written: 20/11/2001
 // Revised: 08/07/2004  R.H.
-// 
+//
 
 #ifndef _PCROSS_H_
 #define _PCROSS_H_
@@ -17,11 +17,11 @@ class PCross : public TObject {
  public:
     PCross();
     ~PCross(){;}
-    
+
     static void print(int, Double_t bmin=0., Double_t bmax=100.);
     static void print(char *,Double_t bmin=0., Double_t bmax=100.);
-    static void setSystem(int, int, int, int, Double_t Energy = 1., Bool_t flag=0); 
-    static void plot(int, Double_t, Double_t, Double_t bmin=0., 
+    static void setSystem(int, int, int, int, Double_t Energy = 1., Bool_t flag=0);
+    static void plot(int, Double_t, Double_t, Double_t bmin=0.,
 		     Double_t bmax=100., const char * Opt = "L", Int_t col=1);
     static void plot(char *, Double_t, Double_t, Double_t bmin=0.,
 		     Double_t bmax=100., const char * Opt = "L", Int_t col=1);
@@ -40,10 +40,10 @@ class PCross : public TObject {
     static Bool_t doMult;
 
     static Double_t Npart(int, int, Double_t);
-    static Double_t ratiosignew(Double_t, Double_t); // T in MeV, mm = MeV 
+    static Double_t ratiosignew(Double_t, Double_t); // T in MeV, mm = MeV
     static Double_t calc(Double_t* , Double_t*);
     static Bool_t check(Int_t part);
- 
+
     ClassDef(PCross,0) // meson production cross sections in HIC
 
 };

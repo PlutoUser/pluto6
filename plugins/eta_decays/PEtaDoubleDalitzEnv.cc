@@ -5,7 +5,7 @@
 //
 //                             Author:  I. Froehlich
 //                             Written: 30.3.2010
-//                           
+//
 //////////////////////////////////////////////////////////////////////
 
 #include "PEtaDoubleDalitzEnv.h"
@@ -23,7 +23,7 @@ PEtaDoubleDalitzEnv::PEtaDoubleDalitzEnv(const Char_t *id, const Char_t *de, Int
 
 
 Bool_t PEtaDoubleDalitzEnv::Init(void) {
-  
+
     parent = GetParticle("parent");
     if (!parent) {
 	Warning("Init", "Parent not found");
@@ -32,17 +32,17 @@ Bool_t PEtaDoubleDalitzEnv::Init(void) {
 
     dil1 = GetParticle("dilepton");
     dil2 = GetParticle("dilepton");
-  
+
     if (!dil1 || !dil2) {
 	Warning("Init", "Dileptons not found");
 	return kFALSE;
     }
 
-    ep1  = GetParticle("e+");  
+    ep1  = GetParticle("e+");
     ep2  = GetParticle("e+");
-    em1  = GetParticle("e-");  
+    em1  = GetParticle("e-");
     em2  = GetParticle("e-");
-  
+
     return kTRUE;
 }
 
@@ -62,9 +62,9 @@ Bool_t PEtaDoubleDalitzEnv::EndOfChain(void) {
     PParticle em1_tmp(em1);
     PParticle em2_tmp(em2);
 
-    ep1_tmp.Boost(-parent->BoostVector());  
+    ep1_tmp.Boost(-parent->BoostVector());
     ep2_tmp.Boost(-parent->BoostVector());
-    em1_tmp.Boost(-parent->BoostVector());  
+    em1_tmp.Boost(-parent->BoostVector());
     em2_tmp.Boost(-parent->BoostVector());
 
     PParticle dil1_tmp(ep1_tmp);
@@ -106,7 +106,7 @@ Bool_t PEtaDoubleDalitzEnv::EndOfChain(void) {
     Double_t beta2_2 = 1 - 4* ep2->M2() / dil2_tmp.M2();
 
     Double_t amplitude =
-	0.5*((1 + (1 - beta1_2*sin1_2) *  (1 - beta2_2*sin2_2)) 
+	0.5*((1 + (1 - beta1_2*sin1_2) *  (1 - beta2_2*sin2_2))
 	     * sin(phi)* sin(phi) +
 	     (2 - beta1_2*sin1_2 - beta2_2*sin2_2) * cos(phi)* cos(phi));
 

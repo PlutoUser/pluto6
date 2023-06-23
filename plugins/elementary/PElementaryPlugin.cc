@@ -2,14 +2,14 @@
 //  A plugin to activate the NN composite particles
 //  and decays needed for other plugins,
 //  and total cross sections for specific reactions
-//  
-//  Total cross sections for NN->Delta N are added from Teis et al. 
+//
+//  Total cross sections for NN->Delta N are added from Teis et al.
 //  (Ref 10)
 //
 //  For the eta cross sections, the following references have been used:
 //
 //  [L1] P. Moskal et al.,
-//       "Near threshold production of the eta meson via the quasi-free 
+//       "Near threshold production of the eta meson via the quasi-free
 //       pn --> pn eta reaction"
 //       PRC 79 (2009) 015208, arXiv:0807.0722 [hep-ex]
 //  [L2] H. Calen et al.,
@@ -22,7 +22,7 @@
 //
 //                             Author:  I. Froehlich
 //                             Written: 21.8.2008
-//                           
+//
 //////////////////////////////////////////////////////////////////////
 
 
@@ -103,7 +103,7 @@ Bool_t PElementaryPlugin::Activate(void) {
     //************** Composite decays ******************//
     //*                                                *//
     //* Do not change the order here, otherwise
-    //* the decays_idx will be re-sorted                
+    //* the decays_idx will be re-sorted
     //**************************************************//
 
     Int_t ipid[5];
@@ -114,35 +114,35 @@ Bool_t PElementaryPlugin::Activate(void) {
     //Delta(1232) production
 
     if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
-	makeStaticData()->AddDecay(-1, "p + p -> p + D+", 
+	makeStaticData()->AddDecay(-1, "p + p -> p + D+",
 				   "p + p", "p,D+", 1.0 );
     ipid[1] = makeStaticData()->GetParticleID("n");
     ipid[2] = makeStaticData()->GetParticleID("D++");
     if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
-	makeStaticData()->AddDecay(-1, "p + p -> n + D++", 
+	makeStaticData()->AddDecay(-1, "p + p -> n + D++",
 				   "p + p", "n,D++", 1.0 );
-        
+
     ipid[0] = makeStaticData()->GetParticleID("p + n");
     ipid[1] = makeStaticData()->GetParticleID("n");
     ipid[2] = makeStaticData()->GetParticleID("D+");
     if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
-	makeStaticData()->AddDecay(-1, "p + n -> n + D+", 
+	makeStaticData()->AddDecay(-1, "p + n -> n + D+",
 				   "p + n", "n,D+", 1.0 );
     ipid[1] = makeStaticData()->GetParticleID("p");
     ipid[2] = makeStaticData()->GetParticleID("D0");
     if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
-	makeStaticData()->AddDecay(-1, "p + n -> p + D0", 
+	makeStaticData()->AddDecay(-1, "p + n -> p + D0",
 				   "p + n", "p,D0", 1.0 );
     ipid[0] = makeStaticData()->GetParticleID("n + p");
     ipid[1] = makeStaticData()->GetParticleID("n");
     ipid[2] = makeStaticData()->GetParticleID("D+");
     if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
-	makeStaticData()->AddDecay(-1, "n + p -> n + D+", 
+	makeStaticData()->AddDecay(-1, "n + p -> n + D+",
 				   "n + p", "n,D+", 1.0 );
     ipid[1] = makeStaticData()->GetParticleID("p");
     ipid[2] = makeStaticData()->GetParticleID("D0");
     if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
-	makeStaticData()->AddDecay(-1, "n + p -> p + D0", 
+	makeStaticData()->AddDecay(-1, "n + p -> p + D0",
 				   "n + p", "p,D0", 1.0 );
     //This causes the BR the be equally distributed. This is a caveat
     //since the exp_w_mean will be folded in the PChannel.
@@ -154,16 +154,16 @@ Bool_t PElementaryPlugin::Activate(void) {
     ipid[2] = makeStaticData()->GetParticleID("p");
     ipid[3] = makeStaticData()->GetParticleID("eta");
     if (makeStaticData()->GetDecayKey(ipid, 3) < 0)
-	makeStaticData()->AddDecay(-1, "p + p -> p + p + eta", 
+	makeStaticData()->AddDecay(-1, "p + p -> p + p + eta",
 				   "p + p", "p,p,eta", 1.0 );
     ipid[0] = makeStaticData()->GetParticleID("n + p");
     ipid[1] = makeStaticData()->GetParticleID("n");
     if (makeStaticData()->GetDecayKey(ipid, 3) < 0)
-	makeStaticData()->AddDecay(-1, "n + p -> n + p + eta", 
+	makeStaticData()->AddDecay(-1, "n + p -> n + p + eta",
 				   "n + p", "n,p,eta", 1.0 );
     ipid[0] = makeStaticData()->GetParticleID("p + n");
     if (makeStaticData()->GetDecayKey(ipid, 3) < 0)
-	makeStaticData()->AddDecay(-1, "p + n -> n + p + eta", 
+	makeStaticData()->AddDecay(-1, "p + n -> n + p + eta",
 				   "p + n", "n,p,eta", 1.0 );
 
     //pn -> d eta
@@ -172,12 +172,12 @@ Bool_t PElementaryPlugin::Activate(void) {
     ipid[2] = makeStaticData()->GetParticleID("eta");
 
     if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
-	makeStaticData()->AddDecay(-1, "p + n -> d + eta", 
+	makeStaticData()->AddDecay(-1, "p + n -> d + eta",
 				   "p + n", "d,eta", 1.0 );
 
     ipid[0] = makeStaticData()->GetParticleID("n + p");
     if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
-	makeStaticData()->AddDecay(-1, "n + p -> d + eta", 
+	makeStaticData()->AddDecay(-1, "n + p -> d + eta",
 				   "n + p", "d,eta", 1.0 );
 
 // x=4.98953, y=0.156364
@@ -253,7 +253,7 @@ Bool_t PElementaryPlugin::Activate(void) {
 
     TGraph *delta_gra = new TGraph(20, x, y);
 
-    PTCrossWeight *delta_cross = 
+    PTCrossWeight *delta_cross =
 	new PTCrossWeight("p + p_to_D+_p/tcross",
 			  "D+ cross section in the p+p reaction", -1);
     delta_cross->Add("p,grandparent,beam");
@@ -261,12 +261,12 @@ Bool_t PElementaryPlugin::Activate(void) {
     delta_cross->Add("q,parent");
     delta_cross->Add("p,daughter");
     delta_cross->Add("D+,daughter");
-    delta_cross->SetCrossSection(delta_gra, kTRUE); 
+    delta_cross->SetCrossSection(delta_gra, kTRUE);
     delta_cross->SetScaling((3./2.) / 1000.); //Isospin coefficient
     //factor 1000 to convert in [b]
     pdmutil->Add(delta_cross);
 
-    delta_cross = 
+    delta_cross =
 	new PTCrossWeight("p + p_to_D++_n/tcross",
 			  "D++ cross section in the p+p reaction", -1);
     delta_cross->Add("p,grandparent,beam");
@@ -274,11 +274,11 @@ Bool_t PElementaryPlugin::Activate(void) {
     delta_cross->Add("q,parent");
     delta_cross->Add("n,daughter");
     delta_cross->Add("D++,daughter");
-    delta_cross->SetCrossSection(delta_gra,kTRUE); 
+    delta_cross->SetCrossSection(delta_gra,kTRUE);
     delta_cross->SetScaling((3./2.) * 3./1000.); //Isospin coefficient
     pdmutil->Add(delta_cross);
 
-    delta_cross = 
+    delta_cross =
 	new PTCrossWeight("p + n_to_D0_p/tcross",
 			  "D0 cross section in the p+n reaction", -1);
     delta_cross->Add("p,grandparent,beam");
@@ -286,19 +286,19 @@ Bool_t PElementaryPlugin::Activate(void) {
     delta_cross->Add("q,parent");
     delta_cross->Add("p,daughter");
     delta_cross->Add("D0,daughter");
-    delta_cross->SetCrossSection(delta_gra,kTRUE); 
-    delta_cross->SetScaling((3./2.) / 1000.); //Isospin coefficient
-    pdmutil->Add(delta_cross);
-    
-    delta_cross = 
-	new PTCrossWeight("n + p_to_D0_p/tcross",
-			  "D0 cross section in the p+n reaction [clone]", -1);
-    delta_cross->Add("dummy,parent");
-    delta_cross->SetCrossSection(delta_gra,kTRUE); 
+    delta_cross->SetCrossSection(delta_gra,kTRUE);
     delta_cross->SetScaling((3./2.) / 1000.); //Isospin coefficient
     pdmutil->Add(delta_cross);
 
-    delta_cross = 
+    delta_cross =
+	new PTCrossWeight("n + p_to_D0_p/tcross",
+			  "D0 cross section in the p+n reaction [clone]", -1);
+    delta_cross->Add("dummy,parent");
+    delta_cross->SetCrossSection(delta_gra,kTRUE);
+    delta_cross->SetScaling((3./2.) / 1000.); //Isospin coefficient
+    pdmutil->Add(delta_cross);
+
+    delta_cross =
 	new PTCrossWeight("p + n_to_D+_n/tcross",
 			  "D+ cross section in the p+n reaction", -1);
     delta_cross->Add("p,grandparent,beam");
@@ -306,15 +306,15 @@ Bool_t PElementaryPlugin::Activate(void) {
     delta_cross->Add("q,parent");
     delta_cross->Add("n,daughter");
     delta_cross->Add("D+,daughter");
-    delta_cross->SetCrossSection(delta_gra,kTRUE); 
+    delta_cross->SetCrossSection(delta_gra,kTRUE);
     delta_cross->SetScaling((3./2.) / 1000.); //Isospin coefficient
     pdmutil->Add(delta_cross);
-    
-    delta_cross = 
+
+    delta_cross =
 	new PTCrossWeight("n + p_to_D+_n/tcross",
 			  "D+ cross section in the p+n reaction [clone]", -1);
     delta_cross->Add("dummy,parent");
-    delta_cross->SetCrossSection(delta_gra,kTRUE); 
+    delta_cross->SetCrossSection(delta_gra,kTRUE);
     delta_cross->SetScaling((3./2.) / 1000.); //Isospin coefficient
     pdmutil->Add(delta_cross);
 
@@ -333,7 +333,7 @@ Bool_t PElementaryPlugin::Activate(void) {
     // x=91.3589, y=29.2215
     // x=103.202, y=43.7908
     // x=117.371, y=62.1022
-    
+
     Double_t x_pp_eta[13] = {
 	0, 1.0574, 2.32627, 4.86402, 9.09359, 19.0331,
 //	28.5496,
@@ -355,10 +355,10 @@ Bool_t PElementaryPlugin::Activate(void) {
 	x_pp_eta[i] *= 0.001; //in GeV
 	x_pp_eta[i] += thr;
     }
-	    
+
     TGraph *pp_eta_gra = new TGraph(13, x_pp_eta, y_pp_eta);
 
-    PTCrossWeight *pp_eta_cross = 
+    PTCrossWeight *pp_eta_cross =
 	new PTCrossWeight("p + p_to_p_p_eta/tcross",
 			  "Eta cross section in the p+p reaction (<120 MeV)", -1);
     pp_eta_cross->Add("p,grandparent,beam");
@@ -367,7 +367,7 @@ Bool_t PElementaryPlugin::Activate(void) {
     pp_eta_cross->Add("p,daughter");
     pp_eta_cross->Add("p,daughter");
     pp_eta_cross->Add("eta,daughter");
-    pp_eta_cross->SetCrossSection(pp_eta_gra, kFALSE); 
+    pp_eta_cross->SetCrossSection(pp_eta_gra, kFALSE);
     pp_eta_cross->SetScaling(.000001); //convert from [ub] to [b]
 //    pp_eta_cross->SetExcessEnergy(kTRUE,kTRUE);  //Q in MeV
     pdmutil->Add(pp_eta_cross);
@@ -392,10 +392,10 @@ Bool_t PElementaryPlugin::Activate(void) {
     Double_t x_pn_eta[14] = {
 	0., 2.74923, 7.40176, 12.6887,25.8004, 35.7399, 45.468, 55.4075,
 	63.4437, 73.8061, 81.6308, 90.09, 98.5492, 108.489};
-    Double_t y_pn_eta[14] = { 
+    Double_t y_pn_eta[14] = {
 	0., 1.02883, 3.79588, 9.51891, 20.2298, 35.1202, 51.6716, 68.0823,
 	91.3697, 124.898, 139.466, 164.565, 220.854, 229.127};
-    
+
     thr = makeStaticData()->GetParticleMass("p")+
 	makeStaticData()->GetParticleMass("n")+
 	makeStaticData()->GetParticleMass("eta");
@@ -408,8 +408,8 @@ Bool_t PElementaryPlugin::Activate(void) {
 
 
     TGraph *pn_eta_gra = new TGraph(14, x_pn_eta, y_pn_eta);
-    
-    PTCrossWeight *pn_eta_cross = 
+
+    PTCrossWeight *pn_eta_cross =
 	new PTCrossWeight("p + n_to_p_n_eta/tcross",
 			  "Eta cross section in the p+n reaction (<120 MeV)", -1);
     pn_eta_cross->Add("p,grandparent,beam");
@@ -418,16 +418,16 @@ Bool_t PElementaryPlugin::Activate(void) {
     pn_eta_cross->Add("p,daughter");
     pn_eta_cross->Add("n,daughter");
     pn_eta_cross->Add("eta,daughter");
-    pn_eta_cross->SetCrossSection(pn_eta_gra, kFALSE); 
+    pn_eta_cross->SetCrossSection(pn_eta_gra, kFALSE);
     pn_eta_cross->SetScaling(.000001); //convert from [ub] to [b]
 //    pn_eta_cross->SetExcessEnergy(kTRUE,kTRUE);  //Q in MeV
     pdmutil->Add(pn_eta_cross);
 
-    pn_eta_cross = 
+    pn_eta_cross =
 	new PTCrossWeight("n + p_to_p_n_eta/tcross",
 			  "Eta cross section in the p+n reaction (<120 MeV) [clone]", -1);
     pn_eta_cross->Add("dummy,parent");
-    pn_eta_cross->SetCrossSection(pn_eta_gra, kFALSE); 
+    pn_eta_cross->SetCrossSection(pn_eta_gra, kFALSE);
     pn_eta_cross->SetScaling(.000001); //convert from [ub] to [b]
 //    pn_eta_cross->SetExcessEnergy(kTRUE,kTRUE);  //Q in MeV
     //BUGBUG: I want to have an automatic clone here....
@@ -448,11 +448,11 @@ Bool_t PElementaryPlugin::Activate(void) {
     // x=0.09445, y=88.9097
     // x=0.10268, y=92.0373
     // x=0.113262, y=96.9363
-    
+
     Double_t x_d_eta[14] = {0, 0.000195955, 0.00803413, 0.0158723, 0.0248862, 0.0350758,
 			    0.0466371, 0.0548672, 0.0654487, 0.0744626, 0.0846523,
 			    0.09445, 0.10268, 0.113262}; //in Q [MeV]
-    
+
     Double_t y_d_eta[14] = {0, 21.1751, 28.9042, 39.4545, 57.7113, 61.8431, 85.8883,
 			    98.6266, 98.6266, 92.0373, 88.9097, 88.9097, 92.0373, 96.9363}; //in [ub]
     thr=makeStaticData()->GetParticleMass("d")+
@@ -463,7 +463,7 @@ Bool_t PElementaryPlugin::Activate(void) {
     }
 
     TGraph *d_eta_gra = new TGraph(14, x_d_eta, y_d_eta);
-    PTCrossWeight *d_eta_cross = 
+    PTCrossWeight *d_eta_cross =
 	new PTCrossWeight("p + n_to_d_eta/tcross",
 			  "Eta cross section in the p+n->d eta reaction (<120 MeV)", -1);
     d_eta_cross->Add("p,grandparent,beam");
@@ -471,15 +471,15 @@ Bool_t PElementaryPlugin::Activate(void) {
     d_eta_cross->Add("q,parent");
     d_eta_cross->Add("d,daughter");
     d_eta_cross->Add("eta,daughter");
-    d_eta_cross->SetCrossSection(d_eta_gra, kFALSE); 
+    d_eta_cross->SetCrossSection(d_eta_gra, kFALSE);
     d_eta_cross->SetScaling(.000001); //convert from [ub] to [b]
     pdmutil->Add(d_eta_cross);
 
-    d_eta_cross = 
+    d_eta_cross =
 	new PTCrossWeight("n + p_to_d_eta/tcross",
 			  "Eta cross section in the p+n->d eta reaction (<120 MeV) [clone]", -1);
     d_eta_cross->Add("dummy,parent");
-    d_eta_cross->SetCrossSection(d_eta_gra, kFALSE); 
+    d_eta_cross->SetCrossSection(d_eta_gra, kFALSE);
     d_eta_cross->SetScaling(.000001); //convert from [ub] to [b]
 
     pdmutil->Add(d_eta_cross);
