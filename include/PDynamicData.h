@@ -1,6 +1,6 @@
 // Author: IF
 // Written: 25.05.2007
-// Revised: 
+// Revised:
 // PDynamicData Class Header
 
 #ifndef _PDYNAMICDATA_H_
@@ -24,14 +24,14 @@ PDynamicData *makeDynamicData();
 PDynamicData &fDynamicData();
 
 class PDynamicData : public TObject {
-      
+
  public:
 
     PDynamicData();
 
     //**** Decays
     Double_t GetDecayPartialWidth(Double_t mass,Int_t didx);
-   
+
     PChannelModel *GetDecayModel(Int_t didx);
     PChannelModel *GetDecayModelByKey(Int_t key);
     PChannelModel *GetDecayModelByKey(Int_t key, Int_t defkey);
@@ -40,33 +40,33 @@ class PDynamicData : public TObject {
     Double_t GetDecaySCFactor(Int_t didx);
     void SetDecaySCFactor(Int_t didx, Double_t factor);
     bool CheckSCAbort(Int_t didx);  //to stop endless loops
-    double GetDecayBR(int , double); 
-    // branching ratio by mode index & mass (GeV/c^2) 
-    
-    void ListDecayBR(const Char_t *pid, double mass) { 
-	ListDecayBR(makeStaticData()->IsParticleValid(pid), mass); 
-    } 
-    void ListDecayBR(int pid, double mass); 
-    // list branching ratios by particle id & mass (GeV/c^2) 
-  
+    double GetDecayBR(int , double);
+    // branching ratio by mode index & mass (GeV/c^2)
+
+    void ListDecayBR(const Char_t *pid, double mass) {
+	ListDecayBR(makeStaticData()->IsParticleValid(pid), mass);
+    }
+    void ListDecayBR(int pid, double mass);
+    // list branching ratios by particle id & mass (GeV/c^2)
+
     int PickDecayChannel(const int &, const double &);
     // decay index for particle pid of given mass (GeV/c**2),
     // randomly selected consistent with the branching ratios
 
     int PickDecayChannel(const char *id, const double &m) {
 	// as above, by particle name
-	return PickDecayChannel(makeStaticData()->IsParticleValid(id), m); 
+	return PickDecayChannel(makeStaticData()->IsParticleValid(id), m);
     }
 
     int PickDecayChannel(const int &, const double &, int *);
-    // number and pids of decay products for the decay of particle 
-    // pid of given mass(GeV/c**2), via a randomly selected mode 
-    
+    // number and pids of decay products for the decay of particle
+    // pid of given mass(GeV/c**2), via a randomly selected mode
+
     int PickDecayChannel(const char *id, const double &m, int *array) {
 	// as above, by particle name
 	return PickDecayChannel(makeStaticData()->IsParticleValid(id), m, array);
     }
-    
+
     //**** Particles
     PChannelModel *GetParticleModel(Int_t pid);
     PChannelModel *GetParticleSecondaryModel(const char *name, const char *modelname);
@@ -83,17 +83,17 @@ class PDynamicData : public TObject {
     void SetParticleScalingFactor(Int_t didx, Double_t factor);
 
     int GetParticleDepth(const int &id, int flag=0);
-    
-    int GetParticleDepth(const char *id, int i=0) { 
+
+    int GetParticleDepth(const char *id, int i=0) {
 	return GetParticleDepth(makeStaticData()->IsParticleValid(id), i);
     }
-      
+
     double GetParticleLife(const int &id, double m=0, int idx=-1);
     // mean life
-    // Arguments: 1. id=particle id 
+    // Arguments: 1. id=particle id
     //            2. m=mass (GeV/c**2)
     //            3. idx=decay-mode index
-    
+
     double GetParticleLife(const char *id, double m=0, int idx=-1) {
 	// as above, by particle name
 	return GetParticleLife(makeStaticData()->IsParticleValid(id), m, idx);

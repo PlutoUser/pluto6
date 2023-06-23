@@ -23,7 +23,7 @@ ClassImp(PDistribution)
 PDistribution::PDistribution() {
     identifier   = new char[1];
     description  = new char[1];
-    version_flag = VERSION_SAMPLING; 
+    version_flag = VERSION_SAMPLING;
     no_daughters = 0;
     enable       = 1;
     primary_key  = -1;
@@ -57,8 +57,8 @@ PDistribution::PDistribution(const Char_t *id, const Char_t *de):
     exp_w_mean = 1.;
     dynamic_range = 1.;
     opt_string = NULL;
-    
-    version_flag = VERSION_SAMPLING; 
+
+    version_flag = VERSION_SAMPLING;
     relative_warning = 1;
 
     enable = 1;
@@ -79,13 +79,13 @@ PDistribution::PDistribution(const Char_t *id, const Char_t *de):
 	private_flag_int[i] = NULL;
     }
 
-    // Copied from TF1 constructor... 
+    // Copied from TF1 constructor...
     SetName(id);
     fNpar = 0;
 
     fXmin      = 0.;
     fXmax      = 0.;
-    
+
     fNpx       = 1;
 #if ROOT_VERSION_CODE < ROOT_VERSION(6,12,0)
     fType      = 0;
@@ -112,16 +112,16 @@ PDistribution *PDistribution::Clone(const char *) const {
 Bool_t PDistribution::FreezeOut(void) {
     //called once after the link to the data base has been done
     //LinkDB()
-    
-    return kTRUE;    
+
+    return kTRUE;
 };
 
 Bool_t PDistribution::Init(void) {
-    //reading the private flags e.g. 
+    //reading the private flags e.g.
     //called directly after attaching the distribution to the channel
     //particle pointers complete at this point
-    
-    return kTRUE;    
+
+    return kTRUE;
 };
 
 Bool_t PDistribution::IsNotRejected(void) {
@@ -129,13 +129,13 @@ Bool_t PDistribution::IsNotRejected(void) {
     //Each inherited class must decide on its own, what should be done here
     //Can be used to cut-out distributions from phase space
 
-    return kTRUE;   
+    return kTRUE;
 };
 
 Bool_t PDistribution::Prepare(void) {
     //make the preparation is front of genbod here
     //e.g. rotations
-    return kTRUE;   
+    return kTRUE;
 };
 
 Bool_t PDistribution::SampleMass(void) {
@@ -159,12 +159,12 @@ Bool_t PDistribution::SampleAngle(void) {
 Bool_t PDistribution::Finalize(void) {
     //rotate back, if needed
     //return kFALSE if EndOfChain should be called
-    return kTRUE;   
+    return kTRUE;
 };
 
 
 Bool_t PDistribution::EndOfChain(void) {
-  return kTRUE; 
+  return kTRUE;
 };
 
 Bool_t PDistribution::CheckAbort(void) {
@@ -225,7 +225,7 @@ Int_t PDistribution::Set(const Char_t *opt) {
 	return -1;
     }
     if (parse_s == 2) return Set(parse[0], parse[1]);
-  
+
     return -1;
 }
 
@@ -235,11 +235,11 @@ Int_t PDistribution::Add(const Char_t *name, int flag, const Char_t *pflag) {
 	return -1;
     }
 
-    if (GetVersionFlag(VERSION_IS_PRIMARY) 
-	&& !(flag==PARTICLE_LIST_DAUGHTER) 
-	&& !(flag==PARTICLE_LIST_PARENT) 
+    if (GetVersionFlag(VERSION_IS_PRIMARY)
+	&& !(flag==PARTICLE_LIST_DAUGHTER)
+	&& !(flag==PARTICLE_LIST_PARENT)
 	&& relative_warning ) {
-	Warning("Add", 
+	Warning("Add",
 		"The primary model (%s) must not have other relatives then parent or daughter",
 		identifier);
     }
@@ -277,7 +277,7 @@ Int_t PDistribution::Set(const Char_t *name, const Char_t *pflag) {
     return -1;
 };
 
-Int_t PDistribution::Add(const Char_t *name,  const Char_t *flag1, 
+Int_t PDistribution::Add(const Char_t *name,  const Char_t *flag1,
 			 const Char_t *flag2, const Char_t *flag3) {
 
     Int_t tmp = GetFlag(flag1);
@@ -287,11 +287,11 @@ Int_t PDistribution::Add(const Char_t *name,  const Char_t *flag1,
     }
 
     tmp |= (GetFlag(flag2) | GetFlag(flag3));
-    
+
     const Char_t *pflag = NULL;
-    if ((GetFlag(flag2) == 0) && (flag2  != NULL)) 
+    if ((GetFlag(flag2) == 0) && (flag2  != NULL))
 	pflag = flag2;
-    if ((GetFlag(flag3) == 0) && (flag3  != NULL)) 
+    if ((GetFlag(flag3) == 0) && (flag3  != NULL))
 	pflag = flag3;
     if (!flag2 || GetFlag(flag2)) {  //catch the "parent,sibling" case
 	TString *delme = new TString(flag1);
@@ -308,14 +308,14 @@ Int_t PDistribution::GetFlag(const Char_t *flag) {
     if (strcmp(flag, "DAUGHTER") == 0)         return PARTICLE_LIST_DAUGHTER;
     if (strcmp(flag, "parent") == 0)           return PARTICLE_LIST_PARENT;
     if (strcmp(flag, "GRANDDAUGHTER") == 0)    return PARTICLE_LIST_GRANDDAUGHTER;
-    if (strcmp(flag, "granddaughter") == 0)    return PARTICLE_LIST_GRANDDAUGHTER;    
+    if (strcmp(flag, "granddaughter") == 0)    return PARTICLE_LIST_GRANDDAUGHTER;
     if (strcmp(flag, "PARENT") == 0)           return PARTICLE_LIST_PARENT;
     if (strcmp(flag, "grandparent") == 0)      return PARTICLE_LIST_GRANDPARENT;
     if (strcmp(flag, "GRANDPARENT") == 0)      return PARTICLE_LIST_GRANDPARENT;
     if (strcmp(flag, "grandgrandparent") == 0) return PARTICLE_LIST_GRANDGRANDPARENT ;
     if (strcmp(flag, "GRANDGRANDPARENT") == 0) return PARTICLE_LIST_GRANDGRANDPARENT ;
-    if (strcmp(flag, "sibling") == 0)          return PARTICLE_LIST_SIBLING;   
-    if (strcmp(flag, "SIBLING") == 0)          return PARTICLE_LIST_SIBLING;   
+    if (strcmp(flag, "sibling") == 0)          return PARTICLE_LIST_SIBLING;
+    if (strcmp(flag, "SIBLING") == 0)          return PARTICLE_LIST_SIBLING;
     return 0;
 };
 
@@ -342,22 +342,22 @@ Int_t PDistribution::SetParticle(PParticle *part, int mypid, int flag) {
 	cout << "PDistribution::SetParticle: check particle, mypid: " << mypid << ", flag: " << flag << endl;
 	part->Print();
     }
-    
+
     if (no_daughters && (flag == PARTICLE_LIST_DAUGHTER)) {
 	if (!strcmp(GetName(), "_testmodel")) cout << "No daughters" << endl;
 	return 0; //Do not check daughters if not required
     }
 
      for (int i=0; i<position; i++) {
-	if (((pid[i] == mypid ) && (particle_flag[i] == flag) && (particle[i] == NULL))	    
-	    || ((pid[i] == DISTRIBUTION_SOMETHING_PID)  
+	if (((pid[i] == mypid ) && (particle_flag[i] == flag) && (particle[i] == NULL))
+	    || ((pid[i] == DISTRIBUTION_SOMETHING_PID)
 		&& (particle[i] == NULL) && (particle_flag[i] == flag))
 	    || ((pid[i] == DISTRIBUTION_NUCLEON_PID) &&
-		(makeStaticData()->GetParticleID("n") == mypid 
-		 || makeStaticData()->GetParticleID("p") == mypid ) && 
+		(makeStaticData()->GetParticleID("n") == mypid
+		 || makeStaticData()->GetParticleID("p") == mypid ) &&
 		(particle[i] == NULL) && (particle_flag[i] == flag))
 	    ||
-	    ((flag == PARTICLE_LIST_DAUGHTER) && (mypid>1000) && (pid[i]==DISTRIBUTION_QUASI_PID) 
+	    ((flag == PARTICLE_LIST_DAUGHTER) && (mypid>1000) && (pid[i]==DISTRIBUTION_QUASI_PID)
 	     && (particle[i] == NULL))) {
 	    particle[i] = part;
 
@@ -370,11 +370,11 @@ Int_t PDistribution::SetParticle(PParticle *part, int mypid, int flag) {
 		PParticle *beam   = part->GetScattering(0);
 		PParticle *target = part->GetScattering(1);
 		if (!beam || !target) {
-		    if (!strcmp(GetName(), "_testmodel")) 
+		    if (!strcmp(GetName(), "_testmodel"))
 			cout << "No beam, no target" << endl;
 		    return -1; //have not found anything
 		}
-		int xpid1 = beam->ID(), 
+		int xpid1 = beam->ID(),
 		    xpid2 = target->ID();
 
 		for (int j=0; j<position; j++) {
@@ -443,20 +443,20 @@ PParticle *PDistribution::GetParticle(const Char_t *pflag) {
 		    private_flag_int[i] = private_flag[i]; //save flag for later use
 		    current_flag = particle_flag[i];
 		    private_flag[i] = NULL; //remove used flag
-		    
+
 		    return particle[i];
 		}
 	    } else {
 		opt_string = private_flag[i];
 		return particle[i];
-	    }	    
-	}   
+	    }
+	}
     }
     return NULL;
 };
 
 void PDistribution::BasePrint(void) const {
-    cout << "[" << identifier; 
+    cout << "[" << identifier;
     if (GetVersionFlag() & VERSION_INVERT_WEIGHTING)
 	cout << ",IW";
     if (GetVersionFlag() & VERSION_SAMPLING)
@@ -468,7 +468,7 @@ void PDistribution::BasePrint(void) const {
 	    cout << " is a Daughter";
 	else if (particle_flag[i] == PARTICLE_LIST_PARENT)
 	    cout << " is a Parent";
-	if (private_flag[i]) 
+	if (private_flag[i])
 	    cout << " [" << private_flag[i] << "]" << endl;
 	else cout << endl;
 	if (particle[i]) { //particle object are already defined
@@ -477,7 +477,7 @@ void PDistribution::BasePrint(void) const {
     }
 }
 
-void PDistribution::Print(const Option_t *) const {  
+void PDistribution::Print(const Option_t *) const {
     //Debug info
     BasePrint();
 }
@@ -510,13 +510,13 @@ Bool_t PDistribution::Exec(const char *command) {
     };
 
     char *array[200];
-    Int_t array_s = 200; 
+    Int_t array_s = 200;
     PUtils::Tokenize(command, ";", array, &array_s);
 
-    
+
     for (int i=0; i<array_s; i++) {
 	char *array2[200];
-	Int_t array2_s = 200; 
+	Int_t array2_s = 200;
 	PUtils::Tokenize(array[i], "=", array2, &array2_s);
 
 	if (array2_s > 2) {

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////
-// 
+//
 // Dalitz decay following Ref. 12,15
-// 
+//
 //                                  Author:  I. Froehlich
 /////////////////////////////////////////////////////////////////////
 
@@ -37,21 +37,21 @@ PDalitzDecay::PDalitzDecay(const Char_t *id, const Char_t *de, Int_t key) :
     //--> from PData
 
     Int_t tid[11];
-    tid[0] = 10; 
+    tid[0] = 10;
     makeStaticData()->GetDecayModeByKey(primary_key, tid); // retrieve current mode info
     parent_id = makeStaticData()->GetDecayParentByKey(primary_key);
 
-    if (tid[0] != 2) 
+    if (tid[0] != 2)
 	Warning("PDalitzDecay", "Only 2 body decay");
 
     //ee or mumu?
     if (makeStaticData()->IsParticle(tid[1], "dilepton") ||
-	makeStaticData()->IsParticle(tid[2], "dilepton")) 
+	makeStaticData()->IsParticle(tid[2], "dilepton"))
 	sw=0;
     else if (makeStaticData()->IsParticle(tid[1], "dimuon") ||
-	     makeStaticData()->IsParticle(tid[2], "dimuon")) 
+	     makeStaticData()->IsParticle(tid[2], "dimuon"))
 	sw=1;
-    else 
+    else
 	Warning("PDalitzDecay", "%s: No dilepton/dimuon", de);
 
     if (makeStaticData()->IsParticle(tid[1], "dilepton") ||
@@ -68,33 +68,33 @@ PDalitzDecay::PDalitzDecay(const Char_t *id, const Char_t *de, Int_t key) :
     }
 
     if (sw==0) { // e+e-
-	mass_e  = makeStaticData()->GetParticleMass("e-"); 
+	mass_e  = makeStaticData()->GetParticleMass("e-");
 	mass_ee = 2.*mass_e;
-    } 
+    }
     else { // mu+mu-
-	mass_e  = makeStaticData()->GetParticleMass("mu-"); 
+	mass_e  = makeStaticData()->GetParticleMass("mu-");
 	mass_ee = 2.*mass_e;
     } //--> from PData
-    
+
     mass_x = 0.;
 
     if (makeStaticData()->IsParticle(parent_id, "pi0") ||
 	makeStaticData()->IsParticle(parent_id, "eta") ||
 	makeStaticData()->IsParticle(parent_id, "eta'") ||
-	makeStaticData()->IsParticle(parent_id, "J/Psi")) 
+	makeStaticData()->IsParticle(parent_id, "J/Psi"))
 	flag = 1;
     else if (makeStaticData()->IsParticle(parent_id, "w")) {
 	flag   = 2;
 	mass_x = mass_pi0;
-    } else if (makeStaticData()->IsParticle(parent_id, "D0") || 
+    } else if (makeStaticData()->IsParticle(parent_id, "D0") ||
 	     makeStaticData()->IsParticle(parent_id, "NS110")) {
 	flag   = 3;
 	mass_x = mass_n;
-    } else if (makeStaticData()->IsParticle(parent_id, "D+") || 
+    } else if (makeStaticData()->IsParticle(parent_id, "D+") ||
 	     makeStaticData()->IsParticle(parent_id, "NS11+")) {
 	flag   = 3;
 	mass_x = mass_p;
-    } else if (makeStaticData()->IsParticle(parent_id, "pn")) { 
+    } else if (makeStaticData()->IsParticle(parent_id, "pn")) {
 	flag   = 3;
 	mass_x = mass_p+mass_n;
     } else if (makeStaticData()->IsParticle(parent_id,"phi")) {
@@ -106,24 +106,24 @@ PDalitzDecay::PDalitzDecay(const Char_t *id, const Char_t *de, Int_t key) :
 
     //-->used for FDalitz
     pi0        = makeStaticData()->GetParticleID("pi0");
-    eta        = makeStaticData()->GetParticleID("eta"); 
+    eta        = makeStaticData()->GetParticleID("eta");
     eta_prime  = makeStaticData()->GetParticleID("eta'");
-    w          = makeStaticData()->GetParticleID("w"); 
-    Delta_0    = makeStaticData()->GetParticleID("D0"); 
-    Delta_plus = makeStaticData()->GetParticleID("D+"); 
+    w          = makeStaticData()->GetParticleID("w");
+    Delta_0    = makeStaticData()->GetParticleID("D0");
+    Delta_plus = makeStaticData()->GetParticleID("D+");
     phi        = makeStaticData()->GetParticleID("phi");
-    S11_0      = makeStaticData()->GetParticleID("NS110"); 
+    S11_0      = makeStaticData()->GetParticleID("NS110");
     S11_plus   = makeStaticData()->GetParticleID("NS11+");
 
     useQED = 0;
     flatMD = 0;
 
-    if (sw == 0) 
+    if (sw == 0)
 	ml = makeStaticData()->GetParticleMass("dilepton");    // dilepton mass threshold
-    else 
+    else
 	ml = makeStaticData()->GetParticleMass("dimuon");
 
-    mass_parent = makeStaticData()->GetParticleMass(parent_id); 
+    mass_parent = makeStaticData()->GetParticleMass(parent_id);
     draw_parent_mass = -1.; //only for draw option
 
     rejection_flag = (makeStaticData()->IsParticle(parent_id,"eta'")) ? 1 :   // eta'
@@ -141,7 +141,7 @@ PDistribution* PDalitzDecay::Clone(const char *) const {
 
 Bool_t PDalitzDecay::Init(void) {
     //Init function called once for each PChannel
-    
+
     //looking for parent. This is mandatory
     parent = GetParticle("parent");
     if (!parent) {
@@ -160,7 +160,7 @@ Bool_t PDalitzDecay::Init(void) {
 	other    = daughter1;
  	dilepton = daughter2;
     }
-    
+
     return kTRUE;
 };
 
@@ -185,13 +185,13 @@ Bool_t PDalitzDecay::SampleMass(void) {
     SampleMass(&masses[0]); //Call Coupled-Channel wrapper
 
     other->SetM(masses[others_position]);
-    
+
     dilepton->SetM(masses[dilepton_position]);
     return kTRUE;
 };
 
 Bool_t PDalitzDecay::SampleMass(Double_t *mass, Int_t *) {
-    sampleMD(mass[0], parent_id, 
+    sampleMD(mass[0], parent_id,
 	     mass[dilepton_position], mass[others_position]);
     return kTRUE;
 };
@@ -212,7 +212,7 @@ Double_t PDalitzDecay::GetWeight(void) {
 	Int_t maxmesh=200;
 	Double_t mmin=PData::LMass(parent->ID());   // mass threshold
 	Double_t mmax=PData::UMass(parent->ID());   // mass ceiling
-	
+
 	Double_t dm=(mmax-mmin)/(maxmesh-1.); // mass increment for the mesh
 	integral = new PMesh(maxmesh,"mesh2");
 	integral->SetMin(mmin);
@@ -221,7 +221,7 @@ Double_t PDalitzDecay::GetWeight(void) {
 	    Double_t local_int=0;
 	    Double_t mm=mmin+j*dm;            // update mass on the mesh
 	    for (int i=0;i<1000;i++) {
-		sampleMD(mm, parent_id, 
+		sampleMD(mm, parent_id,
 			 masses[dilepton_position], masses[others_position]);
 		local_int+=dGdM(parent_id,masses[dilepton_position],mm);
 
@@ -238,9 +238,9 @@ Double_t PDalitzDecay::GetWeight(void) {
     // return GetWeight(&masses[0]);
 
     //Pluto weight should be in units of probability
-     return (GetWeight(&masses[0]) / 
+     return (GetWeight(&masses[0]) /
 	     makeDynamicData()->GetParticleTotalWidth(parent->M(),parent_id));
-     // return GetWeight(&masses[0]) / 
+     // return GetWeight(&masses[0]) /
      //	makeStaticData()->GetParticleTotalWidth(parent_id);
 };
 
@@ -252,7 +252,7 @@ Double_t PDalitzDecay::GetWeight(Double_t *mass, Int_t *) {
 };
 
 Bool_t PDalitzDecay::GetWidth(Double_t mass, Double_t *width, Int_t) {
-    if (makeStaticData()->GetPWidx(is_channel) == -1) 
+    if (makeStaticData()->GetPWidx(is_channel) == -1)
 	return 0.; // Disabled --> BUGBUG why not static?
 
     if (!makeStaticData()->GetPWidx(is_channel) || width_init == 0) { // Enter below only on the first call
@@ -262,8 +262,8 @@ Bool_t PDalitzDecay::GetWidth(Double_t mass, Double_t *width, Int_t) {
 
 	mmin=makeStaticData()->GetDecayEmin(is_channel);  // mass threshold for the decay
 	Double_t w0 = 1.;      // starting weight
-	
-	if (PData::IsMDalitz(is_channel)) 
+
+	if (PData::IsMDalitz(is_channel))
 	    w0 = photon_br;// if meson Dalitz decay...
 	// ...then scale by BR of the corresponding real-photon decay (from PBR[] table)
 	mmax = PData::UMass(parent_id);                // mass ceiling
@@ -277,7 +277,7 @@ Bool_t PDalitzDecay::GetWidth(Double_t mass, Double_t *width, Int_t) {
 	Info("GetWidth", "Creating mesh in %s (%f,%f)", makeStaticData()-> GetDecayName(is_channel),
 	     mass_threshold, mass_ceiling);
 #endif
-    
+
 	mesh = new PMesh(maxmesh-2, "mesh");
 	for (int i=0; i<maxmesh-2; ++i) {
 	    Double_t mm = mmin+i*dm;   // current invariant mass of the parent resonance
@@ -313,14 +313,14 @@ Bool_t PDalitzDecay::GetWidth(Double_t mass, Double_t *width, Int_t) {
 Double_t PDalitzDecay::EvalPar(const Double_t *x, const Double_t *) {
     return Eval(x[0]);
 };
- 
+
 Double_t PDalitzDecay::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     //Draw the Dalitz FF as a function of the dilepton mass
     Double_t res;
     Double_t mass[3];
 
-    mass[0] = makeStaticData()->GetParticleMass(parent_id); 
-    if (draw_parent_mass > 0) 
+    mass[0] = makeStaticData()->GetParticleMass(parent_id);
+    if (draw_parent_mass > 0)
 	mass[0] = draw_parent_mass;
     mass[dilepton_position] = x;
     mass[others_position]   = mass_x;
@@ -352,12 +352,12 @@ double PDalitzDecay::dGdM(const int &id, const double &m, const double &ecm) {
 
 
     if (m<mass_ee || m>ecm-mass_x) return 0.;
-    
-    double f1 = mass_e/m, 
-	f2 = f1*f1, 
+
+    double f1 = mass_e/m,
+	f2 = f1*f1,
 	a = 1.-4.*f2,
-	b = 1.+2.*f2, 
-	y = sqrt(a)*b/m, c, 
+	b = 1.+2.*f2,
+	y = sqrt(a)*b/m, c,
 	z = -1;
 
     switch (flag) {
@@ -365,7 +365,7 @@ double PDalitzDecay::dGdM(const int &id, const double &m, const double &ecm) {
 	c = m/ecm;
 	z = 1.-c*c;
 	z *= p1*z*z;          // Ref 12 Eq. 3.36
-		
+
 	break;
     case 2:                 // vector meson (w)
 	c = ecm*ecm;
@@ -400,9 +400,9 @@ double PDalitzDecay:: FDalitz(const int &id, const double &m, double ecm) {
     if (id==Delta_0 || id==S11_0 || id==Delta_plus || id==S11_plus) {
 	// For Delta, N* we need the matrix element in addition
 	Double_t mn = 0.;
-	if (id==Delta_0 || id==S11_0) 
+	if (id==Delta_0 || id==S11_0)
 	    mn = mass_n;
-	else if (id==Delta_plus || id==S11_plus) 
+	else if (id==Delta_plus || id==S11_plus)
 	    mn = mass_p;
 	double mm = ecm+mn;
 	double ff = 2.7;
@@ -414,12 +414,12 @@ double PDalitzDecay:: FDalitz(const int &id, const double &m, double ecm) {
 //	sum = (mn-m-md)*(mn+m-md)*         // Eq. 3.54 of Ref 4
 //	    sum = (1./9.)*((md-mn)*(md-mn)-m2)*   //from PRC 58, 447
 	    sum = ((md-mn)*(md-mn)-m2)*
-	    (7.*md4 + 14.*md2*m2 + 3.*m4 + 8.*md3*mn + 2.*md2*mn2 + 
+	    (7.*md4 + 14.*md2*m2 + 3.*m4 + 8.*md3*mn + 2.*md2*mn2 +
 	     6.*m2*mn2 + 3.*mn4);
 	return sum*f*f;
     }
 
-    if (useQED) return 1.;   // QED form factor 
+    if (useQED) return 1.;   // QED form factor
     //Self-defined form factor
     if (formfactor_model) {
 	double ff = formfactor_model->GetWeight((Double_t*)&m);
@@ -432,29 +432,29 @@ double PDalitzDecay:: FDalitz(const int &id, const double &m, double ecm) {
     } else if (id == eta) {
 	f = 1.-m2/0.5184;
 	return 1./(f*f);
-    } else if (id == eta_prime) 
+    } else if (id == eta_prime)
 	return 0.33939776/( (0.5776-m2)*(0.5776-m2) + 0.005776);
     else if (id == w)
 	return 0.17918225/( (0.4225-m2)*(0.4225-m2) + 0.000676);
     else if (id == phi) {
 	f = 1.-m2/(0.77*0.77);
-	return 1./(f*f); 
-    } else if (id == makeStaticData()->GetParticleID("J/Psi")) 
-	return 1.; 
-    
+	return 1./(f*f);
+    } else if (id == makeStaticData()->GetParticleID("J/Psi"))
+	return 1.;
+
     return 0.;
 }
 
 
-void PDalitzDecay::sampleMD(const double &ecm, const int &id, 
+void PDalitzDecay::sampleMD(const double &ecm, const int &id,
 			    double &m, const double &m1) {
-    // Mass sampling algorithm in case of Dalitz decay to a dilepton 
+    // Mass sampling algorithm in case of Dalitz decay to a dilepton
     // and the a second particle whose mass is taken to be fixed.
-    // Arguments: parent cm energy, parent id, dilepton mass 
+    // Arguments: parent cm energy, parent id, dilepton mass
     //            (to be returned), other product mass (fixed)
     //
     // sampling does not work for eta->gmumu  ===> adjust the bounding function
-    // or find better method! 
+    // or find better method!
 
 
     if (flatMD) {    // for test purposes sample a flat mass distribution
@@ -490,7 +490,7 @@ void PDalitzDecay::sampleMD(const double &ecm, const int &id,
     double p2 = -1, mi, a, y, bw = -1, a1 = -1, a2, f;
 
 
-    if (rejection_flag == 0 && sw == 1) 
+    if (rejection_flag == 0 && sw == 1)
 	p1 = dGdM(id,ml+0.1,ecm);  // for mumu decay add a bit to get peak
 
     if (rejection_flag == 1) b /= ecm;             // adjust parameter for eta'
@@ -506,13 +506,13 @@ void PDalitzDecay::sampleMD(const double &ecm, const int &id,
 	area = log(mx/ml);
 	if (rejection_flag == 1) area *= 2.;         // adjust if eta'
     }
-  
+
     //__________________________________________________________________
     // The rejection method is used for mass sampling:
     // The test function must be integrable, invertible, and bounding the actual
     // distribution function from above over the range of the variable (mass);
     // see e.g. Ref 6.
-  
+
     do {                               // enter the rejection-method loop
 
 	a = area * PUtils::sampleFlat(); // sample a test area 0 < a(m) < total area
@@ -532,9 +532,9 @@ void PDalitzDecay::sampleMD(const double &ecm, const int &id,
 	}
 
 	y = dGdM(id, m, ecm);          // y(m) is the actual distribution function
-    
+
     } while (f*PUtils::sampleFlat() > y);// compare with f(m) and accept or reject
-  
+
 
     rejection_flag = stored_rejection_flag;
     if (f < y) m = ml; //method fails, return minimum mass
@@ -544,26 +544,26 @@ double PDalitzDecay:: PhotonBR(const int &id) {
   // Looks up (from PBR[]) the static BR for a meson with a Dalitz decay
   // channel X + dilepton to the corresponding X + (real photon) channel.
   // (Look at the comments in dG/dM to see why this is needed.)
-    
+
     int i, np, i1, i2;
-    
+
     int x = 0;   // this is the 2nd product (non dilepton) id
     if (makeStaticData()->IsParticle(id,"pi0")||
 	makeStaticData()->IsParticle(id,"eta")||
-	makeStaticData()->IsParticle(id,"eta'")) 
+	makeStaticData()->IsParticle(id,"eta'"))
 	x = makeStaticData()->GetParticleID("g");
-    else if (makeStaticData()->IsParticle(id,"D0") || 
-	     makeStaticData()->IsParticle(id,"Lambda") || 
-	     makeStaticData()->IsParticle(id,"NS110") || 
-	     makeStaticData()->IsParticle(id,"ND130")) 
+    else if (makeStaticData()->IsParticle(id,"D0") ||
+	     makeStaticData()->IsParticle(id,"Lambda") ||
+	     makeStaticData()->IsParticle(id,"NS110") ||
+	     makeStaticData()->IsParticle(id,"ND130"))
 	x = makeStaticData()->GetParticleID("n");
     else if (makeStaticData()->IsParticle(id,"D+")   ||
 	     makeStaticData()->IsParticle(id,"NP11+") ||
 	     makeStaticData()->IsParticle(id,"ND13+") ||
-	     makeStaticData()->IsParticle(id,"NS11+")) 
+	     makeStaticData()->IsParticle(id,"NS11+"))
 	x = makeStaticData()->GetParticleID("p");
     else if (makeStaticData()->IsParticle(id,"w")||
-	     makeStaticData()->IsParticle(id,"phi")) 
+	     makeStaticData()->IsParticle(id,"phi"))
 	x = makeStaticData()->GetParticleID("pi0");
     Int_t tid[11];
 
@@ -571,12 +571,12 @@ double PDalitzDecay:: PhotonBR(const int &id) {
     Int_t listkey = -1;
     int key = makeDataBase()->GetEntryInt("pid", id);
     while (makeDataBase()->MakeListIterator
-	   (key, "pnmodes", "link", &listkey)) {	
+	   (key, "pnmodes", "link", &listkey)) {
 	makeDataBase()->GetParamInt(listkey, "didx", &didx); //small workaround -> should work on keys
 	tid[0] = 10;
 	makeStaticData()->GetDecayModeByKey(listkey, tid); // retrieve current mode info
 	int pos = makeStaticData()->GetDecayIdxByKey(listkey);
-	
+
 	for (i=0; i<tid[0]; ++i) {            // loop over the decay modes
 	    np = tid[0];                    // number of products in current mode
 	    if (np == 2) {                   // check 2-product decays only
@@ -589,15 +589,15 @@ double PDalitzDecay:: PhotonBR(const int &id) {
 	    };
 	}
     }
-    
+
     return 0.;                       // no such mode
 };
 
-void PDalitzDecay::Print(const Option_t *) const {  
+void PDalitzDecay::Print(const Option_t *) const {
     //Debug info
     BasePrint();
-    if (useQED) 
+    if (useQED)
 	cout << "Uses QED form factor" << endl;
-    else 
+    else
 	cout << "Uses VMD form factor" << endl;
 }

@@ -10,7 +10,7 @@
 //                             Bug fixes: 13/10/2004 R.H.
 //                             mu+mu-: 02/02/2005 R.H.
 //                             N1535: 25/01/2007 R.H.
-//                             Moved the physics to stand-alone classes 
+//                             Moved the physics to stand-alone classes
 //                                    (IF, 23.7.2007)
 //
 //  N.b. that the variables will be moved to the data base soon
@@ -38,7 +38,7 @@ int PData::LPW(const int &id, const int &i1, const int &i2) {
 	j2 = makeStaticData()->GetParticleSpin(i2),    // 2nd particle 2 x spin
 	j12max = j1+j2,           // angular momentum limits
 	j12min = abs(j1-j2),      // for selection rule
-	l = TMath::Min(abs(jres-j12max),abs(jres-j12min))/2,  
+	l = TMath::Min(abs(jres-j12max),abs(jres-j12min))/2,
 	// lowest ang. mom. transfer
 	c = (l%2 != abs(makeStaticData()->GetParticleParity(id)
 			-makeStaticData()->GetParticleParity(i1)*
@@ -56,21 +56,21 @@ int PData::IsMDalitz(const int &idx) {
 //    if (did) return (did!=-1) ? did : 0; // -1 means "no"
 //    DalitzID[idx]=-1;
 
-    if (!makeStaticData()->IsParticleMeson(makeStaticData()->GetDecayParent(idx))) 
+    if (!makeStaticData()->IsParticleMeson(makeStaticData()->GetDecayParent(idx)))
 	return 0;
     int i, ic[10];
-    ic[0] = 10; 
+    ic[0] = 10;
     makeStaticData()->GetDecayMode(idx, ic);  // retrieve info for current decay mode
     if (!*ic || *ic>2) return 0; // 0 or >2 products; cannot be Dalitz decay
-    for (i=1; i<=2; ++i) 
-	if (makeStaticData()->IsParticle(ic[i], "dilepton") || 
+    for (i=1; i<=2; ++i)
+	if (makeStaticData()->IsParticle(ic[i], "dilepton") ||
 	    makeStaticData()->IsParticle(ic[i], "dimuon")) {
 	//DalitzID[idx]=1;
 	return 1;
     }
     return 0;
 }
-  
+
 
 #include "TApplication.h"
 #include "../Version.h"
@@ -94,7 +94,7 @@ PSplash::PSplash() {
 	    cout << "  * www-hades.gsi.de/computing/pluto/html/PlutoIndex.html  " << endl;
 	    cout << "  * Version: " << version_string << endl;
 	    cout << "  * Compiled on " << date_string << endl;
-	    cout << "  *********************************************************" << endl;	   	    
+	    cout << "  *********************************************************" << endl;
 	}
 }
 
@@ -103,4 +103,4 @@ ClassImp(PData)
 
 
 
-    
+

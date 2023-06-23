@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////
-// 
+//
 // Decay eta -> pi+ pi- dilepton
 // PiPi correlation including the angles after the dilepton sampling
 //
@@ -10,7 +10,7 @@
 // References:
 // [L1] Thimo Petri and Andreas Wirzba
 //      Internal Report, Juelich
-// 
+//
 //                                  Author:  I. Froehlich
 /////////////////////////////////////////////////////////////////////
 
@@ -35,8 +35,8 @@ PEtaPiPiDilepton::PEtaPiPiDilepton(const Char_t *id, const Char_t *de, Int_t key
 	Warning("PEtaPiPiDilepton", "This model should be bound to CHANNELS only");
 
     m_pi     = makeStaticData()->GetParticleMass("pi+");
-    mass_e   = makeStaticData()->GetParticleMass("e-"); 
-    mass_eta = makeStaticData()->GetParticleMass("eta"); 
+    mass_e   = makeStaticData()->GetParticleMass("e-");
+    mass_eta = makeStaticData()->GetParticleMass("eta");
     mass_ee  = 2.*mass_e;
     weight_max = 0.00000001;
 };
@@ -47,7 +47,7 @@ PDistribution *PEtaPiPiDilepton::Clone(const char *) const {
 
 Bool_t PEtaPiPiDilepton::Init(void) {
     //Init function called once for each PChannel
-    
+
     //looking for parent. This is mandatory
     parent = GetParticle("parent");
     if (!parent) {
@@ -112,7 +112,7 @@ Double_t PEtaPiPiDilepton::GetWeight(void) {
 			    + (*(TLorentzVector*) pim));
     TLorentzVector dil   = ((*(TLorentzVector*) ep)
 			    + (*(TLorentzVector*) em));
-    
+
 
     PParticle p_star(pip);
     //rotate such that twopi points to z-axis:
@@ -126,7 +126,7 @@ Double_t PEtaPiPiDilepton::GetWeight(void) {
 
     Double_t theta_pi = TMath::Pi() - p_star.Theta();
 
-    Double_t s_pipi = twopi.M(); 
+    Double_t s_pipi = twopi.M();
 
     PParticle ep_tmp(pip);
     Phi   = dil.Phi();
@@ -145,19 +145,19 @@ Double_t PEtaPiPiDilepton::GetWeight(void) {
 Bool_t PEtaPiPiDilepton::IsNotRejected(void) {
     //Use rejection mode...
 
-    if (GetVersionFlag(VERSION_WEIGHTING)) return kTRUE; 
+    if (GetVersionFlag(VERSION_WEIGHTING)) return kTRUE;
     //...but not if weighting enabled.
 
     Double_t weight = GetWeight();
-    
+
     if (weight>weight_max) {
 	Warning("IsNotRejected", "Weight (%lf) > max (%lf)", weight, weight_max);
 	weight_max = weight*1.1;
     }
 
-    if ((weight/weight_max)>PUtils::sampleFlat()) 
+    if ((weight/weight_max)>PUtils::sampleFlat())
 	return kTRUE; // sample now distribution
-    
+
     return kFALSE;
 }
 

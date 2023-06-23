@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////
 //
 // Decay Model of Hadron -> 3 unstable hadrons
-// 
+//
 //
 //                                  Author:  I. Froehlich
 /////////////////////////////////////////////////////////////////////
@@ -24,17 +24,17 @@ PHadronDecayM3::PHadronDecayM3(const Char_t *id, const Char_t *de, Int_t key) :
     PChannelModel(id, de, key) {
     if (is_channel < 0)
 	Warning("PHadronDecayM3", "The model (%s) should be bound to CHANNELS only", de);
-  
+
     //Get particles
     Int_t tid[11];
-    tid[0] = 10; 
+    tid[0] = 10;
     makeStaticData()->GetDecayModeByKey(primary_key, tid); // retrieve current mode info
 
     //Parent ALWAYS important (also for the inherited classes)
     parent_id   = makeStaticData()->GetDecayParentByKey(primary_key);
     parent_mass = makeStaticData()->GetParticleMass(parent_id);
 
-    if (tid[0] != 3) 
+    if (tid[0] != 3)
 	Warning("PHadronDecayM3", "(%s):  Only 3 body decay", de);
 
     mass1 = makeStaticData()->GetParticleMass(tid[1]);
@@ -72,18 +72,18 @@ Bool_t PHadronDecayM3::Init(void) {
 
 Bool_t PHadronDecayM3::Prepare(void) {
     //Things which might change during the eventloop
-    
+
     didx1 = daughter1->GetDecayModeIndex(1);
     didx2 = daughter2->GetDecayModeIndex(1);
     didx3 = daughter3->GetDecayModeIndex(1);
 
     return kTRUE;
 }
- 
+
 Double_t PHadronDecayM3::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     Double_t res;
     Double_t mass[4];
-    mass[0] = x; 
+    mass[0] = x;
     mass[1] = mass1;
     mass[2] = mass2;
     mass[3] = mass3;
@@ -115,12 +115,12 @@ int PHadronDecayM3::GetDepth(int i) {
 
     makeStaticData()->SetDecayEmin(is_channel, mass1+mass2+mass3);
 
-    return TMath::Max(a1+1, TMath::Max(a2+1,a3+1)); 
+    return TMath::Max(a1+1, TMath::Max(a2+1,a3+1));
 }
 
 void PHadronDecayM3::SubPrint(Int_t) const {
     //Print sub-models
-    
+
     if (model1) {
 	cout << " ";
 	cout << model1->GetDescription();
@@ -189,7 +189,7 @@ Bool_t PHadronDecayM3::SampleMass(Double_t *mass, Int_t *didx) {
 	old_max=model3->GetMax();
 	model3->SetMax(mass[0] - mass[1] - mass[2] );
 	model3->ClearIntegral();
-    } 
+    }
 #endif
 
  repeat1:
@@ -227,16 +227,16 @@ Bool_t PHadronDecayM3::SampleMass(Double_t *mass, Int_t *didx) {
 	if (unstable) unstable->SetMax(old_max);
 	return kFALSE;
     }
- 
+
     if (unstable) unstable->SetMax(old_max);
     return kTRUE;
 };
 
 Bool_t PHadronDecayM3::GetWidth(Double_t mass, Double_t *width, Int_t) {
-    
+
     double q_value      = mass-(mass1+mass2+mass3);
     double q_value_pole = parent_mass-(mass1+mass2+mass3);
-    
+
     *width = (q_value/q_value_pole)*(q_value/q_value_pole);
 
     //*width=makeStaticData()->GetDecayPartialWidth(is_channel);
@@ -266,7 +266,7 @@ Double_t PHadronDecayM3::GetWeight(void) {
     m23max2 = pow(mass[0]-PData::LMass(id1), 2);
     double phaseSpaceMax = (m12max2-m12min2)*(m23max2-m23min2);
 
-    return GetWeight(mass,didx)*(phaseSpace/phaseSpaceMax); 
+    return GetWeight(mass,didx)*(phaseSpace/phaseSpaceMax);
 }
 
 Double_t PHadronDecayM3::GetWeight(Double_t *mass, Int_t *didx) {

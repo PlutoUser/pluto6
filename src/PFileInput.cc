@@ -20,21 +20,21 @@
 ClassImp(PFileInput)
 
 PFileInput::PFileInput(Char_t *mode, Char_t *filename) : PParticle("File") {
-// 
-// presently mode can be "HGeant" 
 //
-    if (strcmp(mode,"HGeant")==0) 
-	imode = 1;  // HGeant event input format 
-    else if (strcmp(mode,"UrQMD")==0) 
+// presently mode can be "HGeant"
+//
+    if (strcmp(mode,"HGeant")==0)
+	imode = 1;  // HGeant event input format
+    else if (strcmp(mode,"UrQMD")==0)
 	imode = 2;  // UrQMD format (not impl.)
-    else if (strcmp(mode,"HSM")==0) 
+    else if (strcmp(mode,"HSM")==0)
 	imode = 3;  // HSM format (not impl.)
-    else 
+    else
 	imode = 0;
     name = mode;
     part = NULL;
     fp   = fopen(filename,"r");   // open event file
-    
+
     if (imode==0 || fp==NULL)
 	Error("PFileInput", "Error in PFileInput constructor");
     SetPxPyPzE(0., 0., 0., 1.);
@@ -69,7 +69,7 @@ Int_t PFileInput::readEventHeader(Float_t &b) {  // read event header
    return -1;
 }
 
-Int_t PFileInput::readParticle(Double_t &px, Double_t &py, Double_t &pz, Double_t &E,  
+Int_t PFileInput::readParticle(Double_t &px, Double_t &py, Double_t &pz, Double_t &E,
 			       Double_t &vx, Double_t &vy, Double_t& vz, Double_t &vt,
 			       Int_t &Id, Int_t &srcId, Int_t &parId, Int_t &parInd, Double_t &weight) {
     Int_t ret = -1;
@@ -77,27 +77,27 @@ Int_t PFileInput::readParticle(Double_t &px, Double_t &py, Double_t &pz, Double_
     case 1:
 	vx = vy = vz = vt = 0.;
 	// flag decides how much info is read per particle
-	if (flag == 0) 
+	if (flag == 0)
 	    ret = fscanf(fp,"%le %le %le %le %i", &E, &px, &py, &pz, &Id);
-	else if (flag == 1) 
+	else if (flag == 1)
 	    ret = fscanf(fp,"%le %le %le %le %i %le",
 			 &E, &px, &py, &pz, &Id, &weight); // + weight
-	else if (flag == 2) 
+	else if (flag == 2)
 	    ret = fscanf(fp,"%le %le %le %le %i %i %i %le",
 			 &E, &px, &py, &pz, &Id, &srcId, &parId, &weight); // + ids
-	else if (flag == -2) 
+	else if (flag == -2)
 	    ret = fscanf(fp,"%le %le %le %le %i %i %i %i %le",
 			 &E, &px, &py, &pz, &Id, &srcId, &parId, &parInd, &weight); // + ids
-	else if (flag == 3) 
+	else if (flag == 3)
 	    ret = fscanf(fp,"%le %le %le %le %le %le %le %i %i %i %le",
 			 &E, &px, &py, &pz, &vx, &vy, &vz, &Id, &srcId, &parId, &weight); // + vertex
-	else if (flag == -3) 
+	else if (flag == -3)
 	    ret = fscanf(fp,"%le %le %le %le %le %le %le %i %i %i %i %le",
 			 &E, &px, &py, &pz, &vx, &vy, &vz, &Id, &srcId, &parId, &parInd, &weight); // + vertex
-	else if (flag == 4) 
+	else if (flag == 4)
 	    ret = fscanf(fp,"%le %le %le %le %le %le %le %le %i %i %i %le",
 			 &E, &px, &py, &pz, &vx, &vy, &vz, &vt, &Id, &srcId, &parId, &weight); // + time
-	else if (flag == -4) 
+	else if (flag == -4)
 	    ret = fscanf(fp,"%le %le %le %le %le %le %le %le %i %i %i %i %le",
 			 &E, &px, &py, &pz, &vx, &vy, &vz, &vt, &Id, &srcId, &parId, &parInd, &weight); // + time
 	break;
@@ -107,9 +107,9 @@ Int_t PFileInput::readParticle(Double_t &px, Double_t &py, Double_t &pz, Double_
 	break;
     default: ;
     }
-    if (E < 0.0) 
+    if (E < 0.0)
 	E = -E;
-    if (ret == EOF) 
+    if (ret == EOF)
 	ret = -1;
     return ret;
 }
@@ -125,11 +125,11 @@ PChannel *PFileInput::makeChannel(Int_t nMax, Float_t Ebeam) {
     // set up a reaction channel for this interface
     //
     if (Ebeam > 0.) setToMidrapidity(Ebeam);
-    
+
     part = new PParticle*[nMax+1];
     part[0] = this;
     for (Int_t i=1; i<=nMax; i++) {
-	part[i] = new PParticle((char*)makeStaticData()->GetParticleName(7)); 
+	part[i] = new PParticle((char*)makeStaticData()->GetParticleName(7));
     }
     PChannel *chan = new PChannel(part, nMax, 1);
     return chan;

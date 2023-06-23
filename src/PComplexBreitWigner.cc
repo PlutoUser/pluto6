@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 //
-// Resonance mass sampling from a 
+// Resonance mass sampling from a
 // complex breit-wigner propagator
 // for each daughter decay channel, a list of
 // interference channel can be set up
@@ -46,9 +46,9 @@ PDistribution* PComplexBreitWigner::Clone(const char *) const {
 
 Bool_t PComplexBreitWigner::SampleMass(Double_t *mass, Int_t *didx) {
     // Resonance mass sampling from a relativistic
-    // Breit-Wigner 
+    // Breit-Wigner
 
-    if (didx) 
+    if (didx)
 	didx_option = didx[0];
     else
 	didx_option = -1;
@@ -63,20 +63,20 @@ Double_t PComplexBreitWigner::GetWeight(Double_t *mass, Int_t *didx) {
 
 void PComplexBreitWigner::ReadModes(void) {
     if (readModesDone) return;
-    
+
     //on the first call, loop over decay modes
     Int_t listkey = -1;
 
     num_decaychannels = 0;
     while (makeDataBase()->MakeListIterator(primary_key, "pnmodes", "link", &listkey)) {
-	
+
 	int_index[num_decaychannels] = makeStaticData()->GetDecayIdxByKey(listkey);
 	num_terms[num_decaychannels] = 0;
 	//By default loacl amplitude is (1,0)
 	//Do not forget term "0" is always the local term
 	int_phase[num_decaychannels][0] = 0;
 	int_ampl[num_decaychannels][0]  = 1;
-	
+
 	num_decaychannels++;
 
 	if (num_decaychannels == COMPLEX_MAX_DECAYCHANNELS) {
@@ -93,8 +93,8 @@ void PComplexBreitWigner::AddAmplitude(int idx, double ampl, double phase) {
     //loop over modes and try to find the idx
 
     int found_idx = -1;
-    for (int i=0; i<num_decaychannels; i++) 
-	if (int_index[i] == idx) 
+    for (int i=0; i<num_decaychannels; i++)
+	if (int_index[i] == idx)
 	    found_idx = i;
     if (found_idx < 0) {
 	Warning("AddAmplitude:", "idx %i is not a valid decay index for particle %i", idx, is_pid);
@@ -116,8 +116,8 @@ void PComplexBreitWigner::AddInterference(int idx, int key, int didx, double amp
     //loop over modes and try to find the idx
 
     int found_idx = -1;
-    for (int i=0; i<num_decaychannels; i++) 
-	if (int_index[i] == idx) 
+    for (int i=0; i<num_decaychannels; i++)
+	if (int_index[i] == idx)
 	    found_idx = i;
     if (found_idx < 0) {
 	Warning("AddInterference", "idx %i is not a valid decay index for particle %i", idx, is_pid);
@@ -143,10 +143,10 @@ Double_t PComplexBreitWigner::EvalPar(const Double_t *x, const Double_t *params)
 	didx_option = (int)params[1];
 
 	if (updateAmplitude) {
-	    int found_idx = -1;	    
+	    int found_idx = -1;
 	    //now look for didx
-	    for (int i=0; i<num_decaychannels; i++) 
-		if (int_index[i] == didx_option) 
+	    for (int i=0; i<num_decaychannels; i++)
+		if (int_index[i] == didx_option)
 		    found_idx = i;
 	    if (found_idx >= 0) {
 		int_phase[found_idx][1] = params[3];
@@ -155,7 +155,7 @@ Double_t PComplexBreitWigner::EvalPar(const Double_t *x, const Double_t *params)
     }
     return Eval(x[0]);
 };
- 
+
 Double_t PComplexBreitWigner::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     Double_t res;
     Double_t my_x[11];
@@ -195,7 +195,7 @@ void PComplexBreitWigner::ReadModels(void) {
 	    if (makeDataBase()->GetParamTObj (int_key[i][j], "model", &t_result))
 		p[i][j] = (PChannelModel*)t_result;
 	    else {
-		p[i][j] = NULL;	
+		p[i][j] = NULL;
 		Warning("ReadModels", "No term model found: this will not work");
 	    }
 	    p[i][j] = (PChannelModel*)t_result;
@@ -205,10 +205,10 @@ void PComplexBreitWigner::ReadModels(void) {
 };
 
 TComplex PComplexBreitWigner::GetAmplitudeLocal(Double_t *mass, Int_t num) {
-    
+
     int didx_local = int_index[num];
     double m = mass[0],
-	m2 = m*m, 	
+	m2 = m*m,
 	mm = mr*mr-m2;
 
     global_weight_scaling = makeDynamicData()->GetParticleScalingFactor(is_pid);
@@ -216,25 +216,25 @@ TComplex PComplexBreitWigner::GetAmplitudeLocal(Double_t *mass, Int_t num) {
     double wmt = 1.;
 
     if (!GetWidth(m, &width)) return -1;
- 
+
 
     double partial_width;
     if (didx_local >= 0) {
 	if (!GetWidth(m, &partial_width, didx_local)) return -1;
 	//if (partial_width > width*1.1) {
 	//}
-    } else 
+    } else
 	partial_width = width;
 
     TComplex denom(mm, m*width);
-    
+
     TComplex numerator(m*sqrt(partial_width*global_weight_scaling*wmt), 0);
-    
+
     numerator /= denom;
     TComplex ampl(int_ampl[num][0], int_phase[num][0], kTRUE); //local amplitude
     numerator *= ampl;
-    
-    
+
+
     //Now loop over possible interference terms
 
     TComplex interference(0, 0);
@@ -278,9 +278,9 @@ void PComplexBreitWigner::Print(const Option_t *) const {
     //loop over decay modes
     for (int i=0; i<num_decaychannels; i++) {
 	//Now loop over possible interference terms
-	cout << "Num:" << i << " Didx: " << int_index[i] << endl; 
+	cout << "Num:" << i << " Didx: " << int_index[i] << endl;
 	for (int j=1; j<=num_terms[i]; j++) {
-	    cout << " Term: " << j << endl; 
+	    cout << " Term: " << j << endl;
 	}
     }
 }

@@ -1,7 +1,7 @@
 // Author: I. Froehlich
 // Written: 16.9.2009
-// Revised: 
-// 
+// Revised:
+//
 
 
 #ifndef _PETADECAYSPLUGIN_H_
@@ -30,7 +30,7 @@
 using namespace std;
 
 class PEtaDecaysPlugin : public PDistributionCollection {
-    
+
  public:
 
     //constructor
@@ -39,7 +39,7 @@ class PEtaDecaysPlugin : public PDistributionCollection {
     //destructor
     ~PEtaDecaysPlugin();
 
-    Bool_t ExecCommand(const char *command, Double_t value); 
+    Bool_t ExecCommand(const char *command, Double_t value);
 
     Bool_t Activate(void);
 

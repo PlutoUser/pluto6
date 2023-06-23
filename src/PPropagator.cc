@@ -11,7 +11,7 @@
 #include "PPropagator.h"
 
 
-PPropagator::PPropagator(const Char_t *id, const Char_t *de, Int_t key) : 
+PPropagator::PPropagator(const Char_t *id, const Char_t *de, Int_t key) :
     PChannelModel(id, de, key) {
     //Constructor
     pid = is_pid;
@@ -24,28 +24,28 @@ PDistribution* PPropagator::Clone(const char*) const {
 };
 
 TComplex  PPropagator::GetAmplitude(Double_t *mass, Int_t *) {
-    
+
     Double_t x = mass[0];
-    
-    Double_t M = makeStaticData()->GetParticleMass(pid); 
-    Double_t Gamma = makeDynamicData()->GetParticleTotalWidth(mass[0], pid); 
+
+    Double_t M = makeStaticData()->GetParticleMass(pid);
+    Double_t Gamma = makeDynamicData()->GetParticleTotalWidth(mass[0], pid);
 
 //     if (pid == 52)
-// 	Gamma = makeStaticData()->GetParticleTotalWidth(pid); 
+// 	Gamma = makeStaticData()->GetParticleTotalWidth(pid);
 //     else  {
 
 // 	Gamma =  makeStaticData()->GetParticleTotalWidth(pid)
 // 	    * (M/x) * sqrt(pow((x*x - 4*0.134*0.134) / (M*M-4*0.134*0.134)  ,3));
 //     }
-	
+
 
     Double_t Re = x*x - M*M;
     Double_t Im = Gamma * M;
-    TComplex Denom(Re, Im); 
+    TComplex Denom(Re, Im);
     TComplex Nom(1.,0);
-    TComplex S = Nom/Denom; 
-    
-    return S;    
+    TComplex S = Nom/Denom;
+
+    return S;
 };
 
 ClassImp(PPropagator)

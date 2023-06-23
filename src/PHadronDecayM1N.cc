@@ -26,10 +26,10 @@ PHadronDecayM1N::PHadronDecayM1N(const Char_t *id, const Char_t *de, Int_t key) 
     PChannelModel(id, de, key) {
     if (is_channel < 0)
 	Warning("PHadronDecayM1N", "The model (%s) should be bound to CHANNELS only",de);
-  
+
     //Get particles
     Int_t tid[11];
-    tid[0] = 10; 
+    tid[0] = 10;
     makeStaticData()->GetDecayModeByKey(primary_key, tid); // retrieve current mode info
 
     //Parent ALWAYS important (also for the inherited classes)
@@ -56,9 +56,9 @@ PHadronDecayM1N::PHadronDecayM1N(const Char_t *id, const Char_t *de, Int_t key) 
     }
     mesh  = NULL;
     event = new TGenPhaseSpace();
-    
+
     maxmesh = 300;
-    //We scan the complete phase space 
+    //We scan the complete phase space
     old_parent_mass = 0;
 
     mesh = new PMesh(maxmesh-2,"mesh");
@@ -69,19 +69,19 @@ PDistribution *PHadronDecayM1N::Clone(const char *) const {
 };
 
 void PHadronDecayM1N::UpdateMesh(void) {
-    
+
     Double_t mmin = PData::LMass(unstable_id);
     Double_t mmax = PData::UMass(unstable_id);
     Double_t dm   = (mmax-mmin)/(maxmesh-3.);          // mass increment
     for (int i=0; i<maxmesh-2; ++i) {
 	Double_t mm = mmin+i*dm;                     // current invariant mass
-	
+
 	daughter_masses[unstable_pos] = mm;
 	event->SetDecay(*(TLorentzVector*)parent,daughter_pos, daughter_masses);
 	Double_t phase_space  = 1./event->GetWtMax();
 	Double_t model_weight = unstable_model->GetWeight(mm,&unstable_didx);
-	
-	mesh->SetNode(i, phase_space*model_weight); 
+
+	mesh->SetNode(i, phase_space*model_weight);
     }
     mesh->SetMin(mmin);                 // store mass threshold
     mesh->SetMax(mmax);                 // store mass ceiling
@@ -108,7 +108,7 @@ Bool_t PHadronDecayM1N::Init(void) {
     }
 
     daughter_pos = 0; //clear stuff because the Attach function makes a clone
-    
+
     //Now get all daughters
     for (int i=0; i<M1N_MAX_DAUGHTERS; i++) {
 	daughters[i] = GetParticle("daughter");
@@ -130,11 +130,11 @@ Bool_t PHadronDecayM1N::Init(void) {
 
 Bool_t PHadronDecayM1N::Prepare(void) {
     //Things which might change during the eventloop
-    
+
     unstable_didx = unstable_particle->GetDecayModeIndex(1);
     return kTRUE;
 }
- 
+
 int PHadronDecayM1N::GetDepth(int i) {
     //check if we have models
     //This also initializes the sub-models
@@ -144,12 +144,12 @@ int PHadronDecayM1N::GetDepth(int i) {
     if (unstable_model) a1 = unstable_model->GetDepth(i);
 
     //makeStaticData()->SetDecayEmin(is_channel, all_masses);
-    return a1; 
+    return a1;
 }
 
 void PHadronDecayM1N::SubPrint(Int_t) const {
     //Print sub-models
-    
+
     if (unstable_model) {
 	cout << " ";
 	cout << unstable_model->GetDescription();

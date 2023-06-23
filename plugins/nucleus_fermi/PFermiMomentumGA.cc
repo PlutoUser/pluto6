@@ -20,10 +20,10 @@ PFermiMomentumGA::PFermiMomentumGA() {
 };
 
 
-PFermiMomentumGA::PFermiMomentumGA(const Char_t *id, const Char_t *de, Int_t key) : 
+PFermiMomentumGA::PFermiMomentumGA(const Char_t *id, const Char_t *de, Int_t key) :
     PChannelModel(id, de, key) {
-    
-    fermi_model = NULL;    
+
+    fermi_model = NULL;
     beam = NULL;
     target = NULL;
     spectator = NULL;
@@ -41,16 +41,16 @@ PDistribution *PFermiMomentumGA::Clone(const char *) const {
 
 //-----------------------------------------------------------------------------------
 Bool_t PFermiMomentumGA::Init(void) {
-    
+
     beam   = GetParticle("beam");
     target = GetParticle("target");
     parent = GetParticle("parent");
-    
+
     if (!beam || !target) {
 	Warning("Init", "<%s> beam or target not found", GetIdentifier());
 	return kFALSE;
     }
-    
+
     spectator   = GetParticle("spectator");
     participant = GetParticle("participant");
     p2 = GetParticle("p2");
@@ -70,7 +70,7 @@ Double_t PFermiMomentumGA::GetRandomFermiMomentum(Double_t &px, Double_t &py, Do
 	//Read secondary fermi model
 	//This can only happen in Init, so after the freeze-out of the user
 	Int_t parent_id = makeStaticData()->GetDecayParentByKey(primary_key);
-	
+
 	Int_t id1 = parent_id/1000;
 	Int_t id2 = parent_id%1000;
 	if (id1 > 600) {
@@ -87,7 +87,7 @@ Double_t PFermiMomentumGA::GetRandomFermiMomentum(Double_t &px, Double_t &py, Do
 		   > makeStaticData()->GetParticleBaryon(id1))  {
 	    fermi_model = makeDynamicData()->
 		GetParticleSecondaryModel(makeStaticData()->GetParticleName(id2), "fermi");
-	} 
+	}
 
 	if (!fermi_model) {
 	    Error("GetRandomFermiMomentum", "No fermi model found");
@@ -108,11 +108,11 @@ Double_t PFermiMomentumGA::GetRandomFermiMomentum(Double_t &px, Double_t &py, Do
 }
 
 Bool_t PFermiMomentumGA::SampleMass(void) {
-    
+
     Double_t massS, eS, eP, ptot, px, py, pz, t=-1., mAi;
 
-    parent->Reconstruct(); 
- 
+    parent->Reconstruct();
+
     while (t < 0.) {
 	ptot  = GetRandomFermiMomentum(px,py,pz);         // Fermi momentum
 	massS = spectator->M();                           // mass of spectator fragment
@@ -123,11 +123,11 @@ Bool_t PFermiMomentumGA::SampleMass(void) {
 
     eP = sqrt(ptot*ptot + t);                             // participant total energy
 
-    participant->SetPxPyPzE(-px,-py,-pz,eP);              // initialize participant 
+    participant->SetPxPyPzE(-px,-py,-pz,eP);              // initialize participant
     spectator->SetPxPyPzE(px,py,pz,eS);                   // initialize spectator fragment
-    
+
     participant->Boost(target->BoostVector());
-    spectator->Boost(target->BoostVector());  
+    spectator->Boost(target->BoostVector());
 
     *p2 = *beam;
 
@@ -136,7 +136,7 @@ Bool_t PFermiMomentumGA::SampleMass(void) {
     p2->Boost(-parent->BoostVector());
     spectator->Boost(-parent->BoostVector());
 
-    composite->Reconstruct();                        
+    composite->Reconstruct();
 
     //boost scatter back to lab
     participant->Boost(parent->BoostVector());

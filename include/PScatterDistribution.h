@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 27.9.2006
-// Revised: 
+// Revised:
 
 #ifndef _PSCATTERDISTRIBUTION_H_
 #define _PSCATTERDISTRIBUTION_H_
@@ -13,7 +13,7 @@
 
 
 class PScatterDistribution : public PDistribution  {
-  
+
  public:
 
     PScatterDistribution();
@@ -33,7 +33,7 @@ class PScatterDistribution : public PDistribution  {
 
 
  private:
-  
+
     TF1       *angles1;
     TF2       *angles2;
     PParticle *primary;

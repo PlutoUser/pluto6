@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 27.9.2006
-// Revised: 
+// Revised:
 
 #ifndef _PINCLUSIVEMODEL_H_
 #define _PINCLUSIVEMODEL_H_
@@ -12,7 +12,7 @@
 #include "PChannelModel.h"
 
 class PInclusiveModel : public PChannelModel  {
-  
+
  public:
 
     PInclusiveModel();
@@ -24,7 +24,7 @@ class PInclusiveModel : public PChannelModel  {
 
     using PChannelModel::GetWeight;
     Double_t GetWeight(void);
-    
+
     Bool_t SampleMass(void);
     int    GetDepth(int i=0);
 
@@ -32,7 +32,7 @@ class PInclusiveModel : public PChannelModel  {
     void   SetSampleFunction(Double_t f) {sample_d=f;};
 
  private:
-    PParticle *parent, *daughters[INCLUSIVE_MAX_DAUGHTERS], *primary; 
+    PParticle *parent, *daughters[INCLUSIVE_MAX_DAUGHTERS], *primary;
     PChannelModel *daughter_models[INCLUSIVE_MAX_DAUGHTERS];
     int daughter_pos;
     TF1 *sample;
@@ -40,7 +40,7 @@ class PInclusiveModel : public PChannelModel  {
     Double_t weight;
 
     void Setup();
-  
+
     ClassDef(PInclusiveModel, 0)  //Model for mass sampling for X in a->b+c+X
 };
 

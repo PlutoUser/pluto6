@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 09.11.2010
-// Revised: 
+// Revised:
 
 #ifndef _PETAPIPIDILEPTONMASS_H_
 #define _PETAPIPIDILEPTONMASS_H_
@@ -12,7 +12,7 @@
 #include "PKinematics.h"
 
 class PEtaPiPiDileptonMass : public PChannelModel  {
-  
+
  public:
     PEtaPiPiDileptonMass();
     PEtaPiPiDileptonMass(const Char_t *id, const Char_t *de, Int_t key);
@@ -30,12 +30,12 @@ class PEtaPiPiDileptonMass : public PChannelModel  {
     Double_t Eval(Double_t x, Double_t y, Double_t z, Double_t t) const;
 
  protected:
-  
+
     PParticle *parent, *pip, *pim, *ep, *em;
     Double_t  m_pi, mass_ee, mass_e;
 
     PChannelModel *vmd_formfactor_model;     //form factor object
-  
+
     ClassDef(PEtaPiPiDileptonMass, 0)  // Decay eta -> pi+ pi- dilepton (mass sampling)
 };
 

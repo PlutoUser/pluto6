@@ -1,7 +1,7 @@
 // Author: I. Froehlich
 // Written: 02.02.2011
-// Revised: 
-// 
+// Revised:
+//
 
 
 #ifndef _PPDG_PLUGIN_H_
@@ -16,7 +16,7 @@
 using namespace std;
 
 class PPDGPlugin : public PDistributionCollection {
-    
+
  public:
 
     //constructor
@@ -24,7 +24,7 @@ class PPDGPlugin : public PDistributionCollection {
     //destructor
     ~PPDGPlugin();
 
-    Bool_t ExecCommand(const char *command, Double_t value); 
+    Bool_t ExecCommand(const char *command, Double_t value);
 
     Bool_t Activate(void);
 

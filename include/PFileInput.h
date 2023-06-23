@@ -23,11 +23,11 @@ private:
 
  public:
     PFileInput(Char_t *mode, Char_t *filename);
-    
+
     void setToMidrapidity(float agev);
-    Int_t IsFileInput() { 
-	return 1; 
-    } 
+    Int_t IsFileInput() {
+	return 1;
+    }
     Int_t readEventHeader(Float_t &b);
     Int_t readParticle(Double_t &px, Double_t &py, Double_t &pz, Double_t &E,
 		       Double_t &vx, Double_t &vy, Double_t &vz, Double_t &vt,
@@ -37,7 +37,7 @@ private:
     virtual ~PFileInput() {
 	if (fp) fclose(fp);
     }
-    
+
     ClassDef(PFileInput,1) // Pluto file input
 };
 

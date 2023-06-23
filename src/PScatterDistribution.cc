@@ -69,12 +69,12 @@ Bool_t PScatterDistribution::Init(void) {
 	Warning("Init", "Parent not found");
 	return kFALSE;
     }
-    return kTRUE;    
+    return kTRUE;
 };
 
 
 Bool_t PScatterDistribution::IsNotRejected(void) {
-       
+
     PParticle tmp_primary(primary);  //particle under investigation. Make better a copy
     PParticle tmp_parent(parent);    //particle under investigation. Make better a copy
 
@@ -90,18 +90,18 @@ Bool_t PScatterDistribution::IsNotRejected(void) {
     tu = 0;
 
 
-    if (parent->GetValue(T_MATRIX, &t) && 
+    if (parent->GetValue(T_MATRIX, &t) &&
 	parent->GetValue(U_MATRIX, &u) &&
 	parent->GetValue(TU_MATRIX, &tu)&&
 	parent->GetValue(CHANNEL_POS, &i) ) {
-		
+
 	//Calculate which process is more likely
 	sum = t+u+tu;
-    } 
-    
+    }
+
     sam = PUtils::sampleFlat()*sum;
-    
-    if (sam > (t+0.5*tu)) { //u-channel      
+
+    if (sam > (t+0.5*tu)) { //u-channel
 	tmp_beam   = *target;
 	tmp_target = *beam;
     }
@@ -132,16 +132,16 @@ Bool_t PScatterDistribution::IsNotRejected(void) {
     Double_t tmp_c0 = cos(tmp_primary.Theta());
     Double_t f;
 
-    
+
 
     if (angles1)
 	f = angles1->Eval(tmp_c0);
-    else 
+    else
 	f = angles2->Eval(tmp_c0,tmp_parent.M());
- 
-    if (f > PUtils::sampleFlat()) 
+
+    if (f > PUtils::sampleFlat())
 	return kTRUE; // sample now angular distribution
-    
+
 
     return kFALSE;
 

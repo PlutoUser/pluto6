@@ -1,7 +1,7 @@
 // Author:
 // Written: 20.5.2009
-// Revised: 
-// 
+// Revised:
+//
 
 
 #ifndef _PNUCLEUS_FERMI_PLUGIN_H_
@@ -18,7 +18,7 @@
 using namespace std;
 
 class PNucleusFermiPlugin : public PDistributionCollection {
-    
+
  public:
 
     //constructor
@@ -26,7 +26,7 @@ class PNucleusFermiPlugin : public PDistributionCollection {
     //destructor
     ~PNucleusFermiPlugin();
 
-    Bool_t ExecCommand(const char *command, Double_t value); 
+    Bool_t ExecCommand(const char *command, Double_t value);
 
     Bool_t Activate(void);
 

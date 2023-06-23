@@ -1,6 +1,6 @@
 // Author: Ingo Froehlich
 // Written: 10/07/2007
-// Modified: 
+// Modified:
 // PBulkInterface Class Header
 
 #ifndef _PBULKINTERFACE_H_
@@ -22,10 +22,10 @@ class PBulkInterface: public TObject {
 
  private:
 
-    static Int_t gBulkCounter; 
-    
+    static Int_t gBulkCounter;
+
  protected:
-    
+
     Double_t current_weight;
     Int_t    bulk_id;      //Unique bulk ID
     Int_t    fPriority;    //order when adding the bulk in PReaction
@@ -38,7 +38,7 @@ class PBulkInterface: public TObject {
  public:
 
     PBulkInterface();
-    
+
     virtual bool Modify(PParticle ** array, int *decay_done, int *num, int maxnum);  //Modify particle bulk
 
     void SetWeight(Double_t c) {current_weight = c;};
@@ -66,7 +66,7 @@ ClassDef(PBulkInterface,0) // Pluto bulk interface base class
 };
 
 
-#endif 
+#endif
 
 
 

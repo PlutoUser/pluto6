@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 //
-// Calculates the total cross section weights for 
+// Calculates the total cross section weights for
 // a decay (a+b) -> something
 //
 //                                  Author:  I. Froehlich
@@ -57,14 +57,14 @@ Bool_t PTCrossWeight::Init(void) {
     //Now get all daugthers
     for (int i=0; i<TCROSS_MAX_DAUGHTERS; i++) {
 	daughters[i] = GetParticle("daughter");
-	if (daughters[i]) {	    
+	if (daughters[i]) {
 	    daughter_pos++;
 	}
     }
-  
+
 //    if (!tcross && !tcrossg) Fatal("Init","No function found");
 
-    return kTRUE;    
+    return kTRUE;
 };
 
 
@@ -78,8 +78,8 @@ Double_t PTCrossWeight::GetWeight(void) {
 	for (int i=0; i<daughter_pos; i++)
 	    q -= daughters[i]->M();
     }
-    
-    if (isMevEnergy) 
+
+    if (isMevEnergy)
 	q *= 1000.;
     Double_t ret = GetWeight(&q);
 
@@ -100,7 +100,7 @@ Double_t PTCrossWeight::GetWeight(Double_t *mass, Int_t *) {
 	}
     } else if (tcross)
 	ret = tcross->Eval(mass[0]);
-    else 
+    else
 	ret = tcrossc;
     // cout << "ret:" << ret << endl;
     if (ret>0) return ret*scaling;

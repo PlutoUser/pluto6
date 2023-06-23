@@ -31,7 +31,7 @@
 
 
 class PChannel : public TObject {
-  
+
  public:
 
     PChannel(PParticle **, int nt=2, int mf=0, int af=0, int bf=0);
@@ -45,7 +45,7 @@ class PChannel : public TObject {
 
     ~PChannel() {
 	// Channel destructor
-	if (ipid.GetArray()) 
+	if (ipid.GetArray())
 	    ipid.~TArrayI();
 	// necessary, because of constr 2+3, for constr 1 also better
 	if (ptcls && ptcls_extern>=0) {
@@ -69,7 +69,7 @@ class PChannel : public TObject {
     }
 
     int Decay();
-    // N-body phase-space decay function based on the CERNLIB routine 
+    // N-body phase-space decay function based on the CERNLIB routine
     // GENBOD. Resonance and dilepton masses (for Dalitz decays)
     // are sampled in PData. Scattering angles are sampled here, for
     // selected channels (see idChannel).
@@ -77,7 +77,7 @@ class PChannel : public TObject {
     int decay() {
 	//kept for comp.
 	return Decay();
-    }; 
+    };
 
     PParticle **GetParticles() {
 	// address of array of pointers to the channel particles
@@ -87,13 +87,13 @@ class PChannel : public TObject {
     int *GetPids() {
 	// address of array of channel-particle ids
 	return ipid.GetArray();
-    }   
-
-    int GetNumPar() {  
-	// number of decay products
-	return n; 
     }
-    
+
+    int GetNumPar() {
+	// number of decay products
+	return n;
+    }
+
     //******for distribution handling:
     int SetDistribution(PDistribution *distribution);
     // return -1 if distribution does not match the channel
@@ -102,7 +102,7 @@ class PChannel : public TObject {
     double GetBT() {
 	PParticle *beam   = ptcls[0]->GetScattering(0);
 	PParticle *target = ptcls[0]->GetScattering(1);
-	
+
 	if (beam) {
 	    return (beam->KE() > target->KE()? beam->KE(): target->KE());
 	}
@@ -117,21 +117,21 @@ class PChannel : public TObject {
 	quasi_pchannel = NULL;
     };
 
-    int GetParentSize() { 
+    int GetParentSize() {
 	// 1 or 2 for elementary or quasi particles respectively
-	return 1 + (ipid[0]>=1000); 
-    }   
-
-    static void SetGlobalWeight(double w) { 
-	globalWeight = w; 
-    } 
-    static double GetGlobalWeight() { 
-	return globalWeight; 
+	return 1 + (ipid[0]>=1000);
     }
 
-    int GetDMIndex() { 
+    static void SetGlobalWeight(double w) {
+	globalWeight = w;
+    }
+    static double GetGlobalWeight() {
+	return globalWeight;
+    }
+
+    int GetDMIndex() {
 	//returns the decay mode index of this channel
-	return DMIndex; 
+	return DMIndex;
     }
 
     void GetMessage();
@@ -140,7 +140,7 @@ class PChannel : public TObject {
     void Print(const Option_t *delme="") const;
     void PrintReaction(Int_t check_key = 1) const;
     void PrintNew();
-    
+
     void PrintReport() const; //Print a final report after sampling
     void CheckDecayKey() const;
 
@@ -152,7 +152,7 @@ class PChannel : public TObject {
     // sampled independently in PData, the simulated events are distributed
     // as ds/dOmega (normalized). Ref: NPA459 (1986) 503
 
-    void SetPrintTentative(bool t){ 
+    void SetPrintTentative(bool t){
 	// Print the tentative messages on the 1st call
 	print_tentative = t;
     };
@@ -168,7 +168,7 @@ class PChannel : public TObject {
     PDistribution *GetDistributionNotFinalized(int i) {
 	return distribution_not_finalized[i];
     };
-    
+
     Bool_t AddBulk(PBulkInterface *mybulk);
     Bool_t AddPrologueBulk(PBulkInterface *mybulk); //Bulk IO before any decay
 
@@ -197,7 +197,7 @@ class PChannel : public TObject {
 
     int decay_key;                       //! Key to data base entry
     TString decay_string; //! For parsing the decay string
-    TString decay_string2; 
+    TString decay_string2;
 
     // For generic distributions
     PDistribution *dist[MAX_DISTRIBUTIONS];
@@ -261,7 +261,7 @@ class PChannel : public TObject {
     PDistribution *distribution_not_finalized[MAX_NUM_NOT_FINALIZED];
 
     int bulkdecay_pos, pro_bulkdecay_pos;
-    
+
     PBulkInterface *bulk[MAX_BULKDECAY];
     PBulkInterface *pro_bulk[MAX_BULKDECAY];
     PProjector *current_projector;
@@ -279,14 +279,14 @@ class PChannel : public TObject {
 		    current_projector = new PProjector();
 		    AddBulk(current_projector);
 		}
-	    } else {		
+	    } else {
 		current_projector = new PProjector();
 		AddBulk(current_projector);
 	    }
 	}
 	return current_projector;
     }
-    
+
     ClassDef(PChannel,0) //Pluto Channel Class
 
 };

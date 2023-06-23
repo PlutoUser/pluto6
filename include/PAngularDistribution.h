@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 3.7.2006
-// Revised: 
+// Revised:
 
 #ifndef _PANGULARDISTRIBUTION_H_
 #define _PANGULARDISTRIBUTION_H_
@@ -17,13 +17,13 @@
 
 
 class PAngularDistribution : public PDistribution  {
-  
+
  public:
     PAngularDistribution();
     PAngularDistribution(const Char_t *id, const Char_t *de);
-    
+
     PDistribution* Clone(const char *delme=NULL) const;
-    
+
     Bool_t Init(void);
     Bool_t Prepare(void);
     Bool_t Finalize(void);
@@ -33,7 +33,7 @@ class PAngularDistribution : public PDistribution  {
 
     void SetAngleFunction(TF1 *f) {angles1=f;};
     void SetAngleFunction(TF2 *f) {angles2=f;};
-    void SetAngleFunction(TGraph *f, Bool_t useSpline=kFALSE, 
+    void SetAngleFunction(TGraph *f, Bool_t useSpline=kFALSE,
                           Bool_t useSymmetry=kFALSE) {
 	anglesg = f;
 	spline  = useSpline;
@@ -57,7 +57,7 @@ class PAngularDistribution : public PDistribution  {
     Bool_t direct_sampling_possible, direct_sampling_done; //Try to use direct sampling and not rejection
 
  protected:
-  
+
     TF1       *angles1;
     TF2       *angles2;
     TH1       *anglesh;

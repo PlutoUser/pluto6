@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 26.7.2008
-// Revised: 
+// Revised:
 // Util class for common distributions
 
 #ifndef _PDISTRIBUTIONMANAGERUTIL_H_
@@ -25,7 +25,7 @@ PDistributionManagerUtil &fDistributionManagerUtil();
 PDistributionManagerUtil *makeDistributionManagerUtil();
 
 class PDistributionManagerUtil : public TObject {
-  
+
  public:
 
     PDistributionManagerUtil();
@@ -61,17 +61,17 @@ class PDistributionManagerUtil : public TObject {
     Bool_t no_warning;
 
  private:
-  
+
     Int_t position;
     PDistribution *distribution[MAX_DISTRIBUTION_LIST];
     int alt_distribution[MAX_DISTRIBUTION_LIST];
 
-  
+
     Int_t group_position;
     const Char_t *group_identifier[MAX_GROUP_LIST], *group_description[MAX_GROUP_LIST];
     Int_t group_expanded[MAX_GROUP_LIST];
     Int_t group_corr[MAX_GROUP_LIST];
-  
+
     Int_t GetGroup(const Char_t *id, Int_t warning=1);  //get the group number from string
     //return a "none" (=0) when id not found
     Int_t current_group;
@@ -83,7 +83,7 @@ class PDistributionManagerUtil : public TObject {
     Int_t linkdb_done; //flag for linkdb freeze out BUGBUG: Needs to be checked in Add()
 
     ClassDef(PDistributionManagerUtil,0)  //Util class for the distribution manager
-	
+
 };
 
 #endif

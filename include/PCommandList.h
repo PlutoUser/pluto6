@@ -14,7 +14,7 @@ class PCommandList : public TObjString {
 
     TObjString fCmd;  //command
 
-    TObjString fNext;     //Next command 
+    TObjString fNext;     //Next command
     PCommandList *fNextP; //! Pointer to next command
     Int_t fLevel;         //! Level of nested objects
 
@@ -28,7 +28,7 @@ class PCommandList : public TObjString {
     PCommandList(TString name, TString cmd);
     PCommandList(TObject *obj, TString name, TString cmd);
     ~PCommandList();
- 
+
     const char *GetCmd() const {
 	return fCmd.GetString().Data();
     };
@@ -37,8 +37,8 @@ class PCommandList : public TObjString {
     Bool_t AddCommand(TObject *obj, const char *cmd, const char *basename = NULL, int level = 0);
     Bool_t GetCommand(char **cmd, int level = 0, TObject **obj = NULL);
 
-    using TObject::Write; 
-    Int_t Write(const char *name, Int_t option, Int_t bufsize) const; 
+    using TObject::Write;
+    Int_t Write(const char *name, Int_t option, Int_t bufsize) const;
     void Print(const Option_t *delme = NULL) const;
 
     ClassDef(PCommandList, 1)  //Tool class to make lists of commands

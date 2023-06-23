@@ -1,6 +1,6 @@
 // Author: Ingo Froehlich
 // Written: 14/05/2007
-// Modified: 
+// Modified:
 // PFileOutput Class Header
 
 #ifndef _PFILEOUTPUT_H_
@@ -33,7 +33,7 @@ class PFileOutput: public PBulkInterface {
   public:
     PFileOutput();
 
-    void SetHeader(Int_t _cnt, 
+    void SetHeader(Int_t _cnt,
 		   Int_t _allPARTICLES,
 		   Int_t _getVERTEX,
 		   Int_t _asciiOUTPUT,
@@ -71,7 +71,7 @@ class PFileOutput: public PBulkInterface {
 
     ClassDef(PFileOutput, 0) // Pluto file output base class
 };
-#endif 
+#endif
 
 
 

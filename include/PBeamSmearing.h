@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 18.7.2007
-// Revised: 
+// Revised:
 
 #ifndef _PBEAMSMEARING_H_
 #define _PBEAMSMEARING_H_
@@ -13,19 +13,19 @@
 
 
 class PBeamSmearing : public PDistribution  {
-  
+
  public:
     PBeamSmearing();
     ~PBeamSmearing();
     PBeamSmearing(const Char_t *id, const Char_t *de);
-    
+
     PDistribution *Clone(const char *delme=NULL) const;
 
     Bool_t Init(void);
     Bool_t Prepare(void);
-    
+
     void Print(const Option_t *delme=NULL) const;  //Debug info
-    
+
     void SetMomentumSmearing(TF1 *f) {
 	//A function stretching the beam momentum (x=1 means no modification)
 	mom_smearing = f;
@@ -35,17 +35,17 @@ class PBeamSmearing : public PDistribution  {
 	//A function stretching the beam momentum (x=1 means no modification)
 	mom_smearing_histo = f;
     };
-    
+
     void SetMomentumFunction(TF1 *f) {
 	//A function which desribes the absolute momentum distribution
 	mom_function = f;
     };
-    
+
     void SetMomentumFunction(TH1 *f) {
 	//A function which desribes the absolute momentum distribution
 	mom_function_histo = f;
     };
-    
+
     void SetBeamParameters(Double_t th, Double_t ph, Double_t sig) {
 	//N.B. these are in units DEGREE because this is more convenient!
 	thetaBeam = th * TMath::Pi() / 180.;
@@ -57,7 +57,7 @@ class PBeamSmearing : public PDistribution  {
 	//smearing distribution in degree
 	ang_smearing=f;
     };
-    
+
     void SetReaction(const char *reaction);
 
  private:

@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 23.6.2007
-// Revised: 
+// Revised:
 
 #ifndef _PFERMIMOMENTUM_H_
 #define _PFERMIMOMENTUM_H_
@@ -14,7 +14,7 @@
 
 
 class PFermiMomentum : public PChannelModel  {
-  
+
  public:
     PFermiMomentum();
     PFermiMomentum(const Char_t *id, const Char_t *de, Int_t key);
@@ -29,7 +29,7 @@ class PFermiMomentum : public PChannelModel  {
 
     void   Print(const Option_t *delme=NULL) const;  //Debug info
     void   SubPrint(Int_t opt) const;
-    
+
     using PDistribution::GetWeight;
     Double_t GetWeight(Double_t *mass, Int_t *didx=NULL);
 
@@ -49,7 +49,7 @@ class PFermiMomentum : public PChannelModel  {
     //TF1 wrapper
 
  protected:
-    
+
     double SampleFermi(double &px, double &py, double &pz);
 
  private:

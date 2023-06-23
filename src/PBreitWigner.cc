@@ -4,11 +4,11 @@
 // Breit-Wigner distribution with mass-dependent width Breit-Wigner
 // (low-mass cutoff through Gamma0*(q/q0)**(2L+1) ).
 //
-//                                  Author:  Kagarlis 
+//                                  Author:  Kagarlis
 //                                  Implemented: I. Froehlich
 //                                  Written: 23.5.2007
-//                                  Revised: 
-// 
+//                                  Revised:
+//
 /////////////////////////////////////////////////////////////////////
 
 
@@ -52,7 +52,7 @@ Bool_t PBreitWigner::SampleMass(Double_t *mass, Int_t *didx) {
 	    SetParameter(1, didx_option);
 	}
     }
-    
+
     mass[0] = this->GetRandom();
 
     return kTRUE;
@@ -60,12 +60,12 @@ Bool_t PBreitWigner::SampleMass(Double_t *mass, Int_t *didx) {
 
 Double_t PBreitWigner::GetWeight(Double_t *mass, Int_t *didx) {
 // relativistic Breit-Wigner distribution function for particle "key"
-    
+
     double m = mass[0];
 
     if ((m < GetMin()) || (m > GetMax())) return 0.;
 
-    double m2 = m*m, 	
+    double m2 = m*m,
 	mm = mr*mr-m2;
     int didx_local = -1;
     if (didx) didx_local = didx[0];
@@ -79,18 +79,18 @@ Double_t PBreitWigner::GetWeight(Double_t *mass, Int_t *didx) {
     }
     //N.B.: If didx is used, we sample the partial decay width
 
-    double g = width, 
+    double g = width,
 	g2 = g*g;
     double partial_width;
     if (didx_local >= 0) {
 	if (!GetWidth(m, &partial_width, didx_local)) {
 	    Warning("GetWeight", "GetWidth failed");
 	    return -1;
-	}	
+	}
 	if (width_model) {
 	    width_model->GetWidth(m, &partial_width, didx_local);
 	}
-    } else 
+    } else
 	partial_width = width;
 
 
@@ -99,7 +99,7 @@ Double_t PBreitWigner::GetWeight(Double_t *mass, Int_t *didx) {
 //    fold rho line shape with thermal distribution
 //    double mcut = TMath::Max(m,0.28);  // cut mass at 2 pion masses
 //    wmt = mtIntegral(mcut,tempMtScaling)/mtIntegral(Mass(id),tempMtScaling);
-//  } 
+//  }
 //  return wmt*m2*g2/(mm*mm+m2*g2);  // ->  BW(Mres) = 1
 //    cout << "result: " << global_weight_scaling*wmt*m2*partial_width/(mm*mm+m2*g2) << endl;
 

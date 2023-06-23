@@ -4,7 +4,7 @@
 //
 //                             Author:  I. Froehlich
 //                             Written: 27.6.2007
-//                             Revised: 
+//                             Revised:
 //////////////////////////////////////////////////////////////////////
 
 #include "PDataBase.h"
@@ -33,7 +33,7 @@ PStdModels::~PStdModels() {
 }
 
 void PStdModels::Add(PDistributionManagerUtil *pdmutil) {
-	
+
     if (!generic_physics_done) {
 	generic_physics_done = kTRUE;
 	//Include the standard Pluto distributions
@@ -49,9 +49,9 @@ double f_eta_decay(double *x, double *) {
 }
 
 Double_t f_delta_decay(Double_t *x, Double_t *) {
-    //    return (1+3*x[0]*x[0])/4; 
-    //    return (1+1.35*x[0]*x[0])/4.; 
-    return (1+1.35*x[0]*x[0])/2.35; //faster 
+    //    return (1+3*x[0]*x[0])/4;
+    //    return (1+1.35*x[0]*x[0])/4.;
+    return (1+1.35*x[0]*x[0])/2.35; //faster
 }
 
 Double_t f_delta_decay2(Double_t *x, Double_t *) {
@@ -59,7 +59,7 @@ Double_t f_delta_decay2(Double_t *x, Double_t *) {
 }
 
 void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
-    //First, add a set of groups, which helps to switch 
+    //First, add a set of groups, which helps to switch
     //off certain aspects of physics
 
     pdmutil->AddGroup("root", "Root group");
@@ -80,18 +80,18 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     pdmutil->SetGroup("particle_models");
 
     //**** rho/omega propagator used e.g. for pion beam plugin
-    PPropagator *Rho0Propagator = new 
+    PPropagator *Rho0Propagator = new
 	PPropagator("Rho0Propagator@rho0_prop/propagator",
 		    "Complex rho0 propagator",-1);
-    
-    PPropagator *OmegaPropagator = new 
+
+    PPropagator *OmegaPropagator = new
 	PPropagator("OmegaPropagator@w_prop/propagator",
 		    "Complex omega propagator",-1);
 
     pdmutil->Add(Rho0Propagator);
     pdmutil->Add(OmegaPropagator);
 
-    //**** Complex BW for rho/omega interference 
+    //**** Complex BW for rho/omega interference
     int ipid[11], decaykey;
     ipid[0]  = makeStaticData()->GetParticleID("rho0");
     ipid[1]  = makeStaticData()->GetParticleID("e+");
@@ -121,7 +121,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     pdmutil->Add(GetModels());
     pdmutil->SetGroup("decay_models");
 
-    //Alternative models for the rho:    
+    //Alternative models for the rho:
     ipid[0]=makeStaticData()->GetParticleID("rho0");
     ipid[1]=makeStaticData()->GetParticleID("e+");
     ipid[2]=makeStaticData()->GetParticleID("e-");
@@ -146,7 +146,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     ipid[2]=makeStaticData()->GetParticleID("mu-");
 
     decaykey = makeStaticData()->GetDecayKey(ipid, 2);
-    
+
     PEEDirectDecay *pmodel_mumu = new PEEDirectDecay("rho_picutoff_mu-_mu+",
 						     "Dimuon direct decay with pion cutoff", decaykey);
     pmodel_mumu->SetPiCutoff(1);
@@ -156,7 +156,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     pdmutil->Add(pmodel_mumu);
 
     //    linkDB();
-    
+
     //
     // Eta Physics
     //
@@ -168,7 +168,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     TF2 *eta_angles = new TF2("eta_angles",
 			      "(1+(3.74041e+01-2.76688e+01*y+5.07488e+00*y*y)*0.5*(3*x*x-1))/2 ", -1, 1, 0, 10);
     gROOT->GetListOfFunctions()->Remove(eta_angles);
-    PAngularDistribution *pp_eta_prod_angle = 
+    PAngularDistribution *pp_eta_prod_angle =
 	new PAngularDistribution("pp_eta_prod_angle",
 				 "Eta polar angles in pp reactions for direct production");
     pp_eta_prod_angle->Add("eta,  daughter, primary");
@@ -178,10 +178,10 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     pp_eta_prod_angle->SetRotate(kFALSE);
     pp_eta_prod_angle->SetAngleFunction(eta_angles);
     pdmutil->Add(pp_eta_prod_angle);
-    
 
-    PAngularDistribution *pp_ns_eta_prod_angle = 
-	new PAngularDistribution("pp_ns_eta_prod_angle", 
+
+    PAngularDistribution *pp_ns_eta_prod_angle =
+	new PAngularDistribution("pp_ns_eta_prod_angle",
 				 "Eta polar angles in pp reactions via N*");
     pp_ns_eta_prod_angle->Add("eta,  daughter,    primary");
     pp_ns_eta_prod_angle->Add("p,    daughter");
@@ -192,10 +192,10 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     pdmutil->Add(pp_ns_eta_prod_angle);
 
     //pp alignment for eta production
-    TF2 *pp_angles2=new TF2("pp_angles2", 
+    TF2 *pp_angles2=new TF2("pp_angles2",
 			    "(1+(5.037074-4.537543*y+1.010214*y*y)*0.5*(3*x*x-1))/2 ", -1, 1, 0, 10);
     gROOT->GetListOfFunctions()->Remove(pp_angles2);
-    PAngularDistribution *pp_eta_pp_align = 
+    PAngularDistribution *pp_eta_pp_align =
 	new PAngularDistribution("pp_eta_pp_align",
 				 "pp alignment in pp reactions for direct eta production");
     pp_eta_pp_align->Add("eta,  daughter");
@@ -205,8 +205,8 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     pp_eta_pp_align->SetRotate(kFALSE);//DISTO measured just with boost, no rotation
     pp_eta_pp_align->SetAngleFunction(pp_angles2);
     pdmutil->Add(pp_eta_pp_align);
-    
-    PAngularDistribution *pp_ns_eta_pp_align = 
+
+    PAngularDistribution *pp_ns_eta_pp_align =
 	new PAngularDistribution("pp_ns_eta_pp_align",
 				 "pp alignment in pp reactions for eta production via N*");
     pp_ns_eta_pp_align->Add("eta,    daughter");
@@ -217,7 +217,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     pp_ns_eta_pp_align->SetRotate(kFALSE);//DISTO measured just with boost, no rotation
     pp_ns_eta_pp_align->SetAngleFunction(pp_angles2);
     pdmutil->Add(pp_ns_eta_pp_align);
-    
+
     //matrix element for eta -> pi+pi-pi0
     PDalitzDistribution *eta_hadronic_decay =
 	new PDalitzDistribution("eta_hadronic_decay",
@@ -238,7 +238,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     //Ref.7
     TF1 *pseudoscalar_decay = new TF1("helicity", f_eta_decay, -1, 1, 1);
     gROOT->GetListOfFunctions()->Remove(pseudoscalar_decay);
-    PAngularDistribution *eta_dilepton_helicity = 
+    PAngularDistribution *eta_dilepton_helicity =
 	new PAngularDistribution("eta_dilepton_helicity",
 				 "Helicity angle of the dilepton decay of eta");
     eta_dilepton_helicity->Add("dilepton","PARENT");
@@ -249,8 +249,8 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     eta_dilepton_helicity->SetAngleFunction(pseudoscalar_decay);
     eta_dilepton_helicity->NeverAbort(kTRUE);
     pdmutil->Add(eta_dilepton_helicity);
-    
-    PAngularDistribution *etaprime_dilepton_helicity = 
+
+    PAngularDistribution *etaprime_dilepton_helicity =
 	new PAngularDistribution("etaprime_dilepton_helicity",
 				 "Helicity angle of the dilepton decay of etaprime");
     etaprime_dilepton_helicity->Add("dilepton","PARENT");
@@ -260,7 +260,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     etaprime_dilepton_helicity->SetAngleFunction(pseudoscalar_decay);
     etaprime_dilepton_helicity->NeverAbort(kTRUE);
     pdmutil->Add(etaprime_dilepton_helicity);
-    
+
     PAngularDistribution *pi0_dilepton_helicity =
 	new PAngularDistribution("pi0_dilepton_helicity",
 				 "Helicity angle of the dilepton decay of pi0");
@@ -278,7 +278,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
 
     TF1 * pw_decay = new TF1("pw", f_delta_decay, -1, 1, 1);
     gROOT->GetListOfFunctions()->Remove(pw_decay);
-    PScatterDistribution *delta_waves1 = 
+    PScatterDistribution *delta_waves1 =
 	new PScatterDistribution("pp_delta_waves1", "Delta+ PW pi0 scattering");
     delta_waves1->Add("D+",   "PARENT");
     delta_waves1->Add("pi0",  "DAUGHTER", "primary");
@@ -289,7 +289,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     delta_waves1->SetAngleFunction(pw_decay);
     pdmutil->Add(delta_waves1);
 
-    PScatterDistribution *delta_waves2 = 
+    PScatterDistribution *delta_waves2 =
 	new PScatterDistribution("pp_delta_waves2", "Delta+ PW pi+ scattering");
     delta_waves2->Add("D+",   "PARENT");
     delta_waves2->Add("pi+",  "DAUGHTER", "primary");
@@ -300,7 +300,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     delta_waves2->SetAngleFunction(pw_decay);
     pdmutil->Add(delta_waves2);
 
-    PScatterDistribution *delta_waves3 = 
+    PScatterDistribution *delta_waves3 =
 	new PScatterDistribution("pp_delta_waves3", "Delta++ PW pi+ scattering");
     delta_waves3->Add("D++",  "PARENT");
     delta_waves3->Add("pi+",  "DAUGHTER", "primary");
@@ -313,7 +313,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
 
     TF1 *pw_decay2 = new TF1("pw", f_delta_decay2, -1, 1, 1);
     gROOT->GetListOfFunctions()->Remove(pw_decay2);
-    PScatterDistribution *delta_waves1dil = 
+    PScatterDistribution *delta_waves1dil =
 	new PScatterDistribution("pp_delta_waves1dil", "Delta+ PW DiLepton scattering");
     delta_waves1dil->Add("D+",        "PARENT");
     delta_waves1dil->Add("dilepton",  "DAUGHTER", "primary");
@@ -325,7 +325,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     pdmutil->Add(delta_waves1dil);
 
 
-    PScatterDistribution *delta_waves1a = 
+    PScatterDistribution *delta_waves1a =
 	new PScatterDistribution("pp_delta_waves1a", "Delta0 PW pi0 scattering");
     delta_waves1a->Add("D0",   "PARENT");
     delta_waves1a->Add("pi0",  "DAUGHTER", "primary");
@@ -336,7 +336,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     delta_waves1a->SetAngleFunction(pw_decay);
     pdmutil->Add(delta_waves1a);
 
-    PScatterDistribution *delta_waves2a = 
+    PScatterDistribution *delta_waves2a =
 	new PScatterDistribution("pp_delta_waves2a", "Delta0 PW pi- scattering");
     delta_waves2a->Add("D0",   "PARENT");
     delta_waves2a->Add("pi-",  "DAUGHTER", "primary");
@@ -358,7 +358,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     pdmutil->Add(delta_waves3a);
 
 
-    PScatterDistribution *delta_waves2dil = 
+    PScatterDistribution *delta_waves2dil =
 	new PScatterDistribution("pp_delta_waves2dil", "Delta0 PW DiLepton scattering");
     delta_waves2dil->Add("D0",        "PARENT");
     delta_waves2dil->Add("dilepton",  "DAUGHTER", "primary");
@@ -372,7 +372,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     pdmutil->SetGroup("polar_angles");
     TF1 *dummy = new TF1("dummy", "1", -1, 1);
     gROOT->GetListOfFunctions()->Remove(dummy);
-    PDeltaAngularDistribution *delta_production = 
+    PDeltaAngularDistribution *delta_production =
 	new PDeltaAngularDistribution("NN_delta+_angle", "N+N->N+Delta angular distribution");
     delta_production->Add("N,grandparent,beam");
     delta_production->Add("N,grandparent,target");
@@ -382,7 +382,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     delta_production->SetAngleFunction(dummy);
     pdmutil->Add(delta_production);
 
-    PDeltaAngularDistribution *delta_production2 = 
+    PDeltaAngularDistribution *delta_production2 =
 	new PDeltaAngularDistribution("NN_delta++_angle", "N+N->N+Delta angular distribution");
     delta_production2->Add("N", "GRANDPARENT", "beam");
     delta_production2->Add("N", "GRANDPARENT", "target");
@@ -392,7 +392,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     delta_production2->SetAngleFunction(dummy);
     pdmutil->Add(delta_production2);
 
-    PDeltaAngularDistribution *delta_production3 = 
+    PDeltaAngularDistribution *delta_production3 =
 	new PDeltaAngularDistribution("NN_delta0_angle","N+N->N+Delta angular distribution");
     delta_production3->Add("N", "GRANDPARENT", "beam");
     delta_production3->Add("N", "GRANDPARENT", "target");
@@ -411,7 +411,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     said->SetAngleFunction(dummy);
     pdmutil->Add(said);
 
-    PPiOmegaAngularDistribution *omega_production = 
+    PPiOmegaAngularDistribution *omega_production =
 	new PPiOmegaAngularDistribution("pi+n_wp_angle", "pi+ + n --> w + p angular distribution");
     omega_production->Add("pi+", "GRANDPARENT", "beam");
     omega_production->Add("n",   "GRANDPARENT", "target");
@@ -422,7 +422,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     omega_production->SetVersion(PI_OMEGA_piNNw);
     pdmutil->Add(omega_production);
 
-    PPiOmegaAngularDistribution *omega_production2 = 
+    PPiOmegaAngularDistribution *omega_production2 =
 	new PPiOmegaAngularDistribution("pi-p_wn_angle", "pi- + p --> w + n angular distribution");
     omega_production2->Add("pi-", "GRANDPARENT", "beam");
     omega_production2->Add("p",   "GRANDPARENT", "target");
@@ -433,7 +433,7 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     omega_production2->SetVersion(PI_OMEGA_piNNw);
     pdmutil->Add(omega_production2);
 
-    PPiOmegaAngularDistribution *omega_production3 = 
+    PPiOmegaAngularDistribution *omega_production3 =
 	new PPiOmegaAngularDistribution("pi+p_pi+wp_angle", "pi+ + p -> pi+ + p + w angular distribution");
     omega_production3->Add("pi+", "GRANDPARENT", "beam");
     omega_production3->Add("p",   "GRANDPARENT", "target");
@@ -445,8 +445,8 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     omega_production3->SetVersion(PI_OMEGA_piPPpiw);
     pdmutil->Add(omega_production3);
 
-    
-    PPiOmegaAngularDistribution *omega_production4 = 
+
+    PPiOmegaAngularDistribution *omega_production4 =
 	new PPiOmegaAngularDistribution("pi+p_D++w_angle", "pi+ + p -> D++ + w angular distribution");
     omega_production4->Add("pi+", "GRANDPARENT", "beam");
     omega_production4->Add("p",   "GRANDPARENT", "target");
@@ -462,16 +462,16 @@ void PStdModels::GenericPhysics(PDistributionManagerUtil *pdmutil) {
     pdmutil->Add(new PHadronDecayM3("w_phasespace_pi+_pi-_pi0",   "Width including 3-body p.s.", -1));
     pdmutil->Add(new PHadronDecayM3("phi_phasespace_pi+_pi-_pi0", "Width including 3-body p.s.", -1));
 
-    PEEDirectDecay *ee = (PEEDirectDecay *) 
+    PEEDirectDecay *ee = (PEEDirectDecay *)
 	pdmutil->GetDistribution("w_ee_e-_e+");
-    if (ee) 
+    if (ee)
 	ee->SetHadronicPS(1);
-    else 
+    else
 	Warning("GenericPhysics", "[w_ee_e-_e+] not found");
     ee = (PEEDirectDecay *) pdmutil->GetDistribution("phi_ee_e-_e+");
-    if (ee) 
+    if (ee)
 	ee->SetHadronicPS(1);
-    else 
+    else
 	Warning("GenericPhysics","[phi_ee_e-_e+] not found");
 
     pdmutil->ExpandGroup("user");
@@ -502,7 +502,7 @@ TObjArray *PStdModels::GetModels(void) {
 	//cout << "pid:" << pid << endl;
 	Int_t decaykey=-1;
 
-	while ((makeStaticData()->GetParticleNChannelsByKey(particlekey)>0) && 
+	while ((makeStaticData()->GetParticleNChannelsByKey(particlekey)>0) &&
 	       (makeDataBase()->MakeListIterator(particlekey, "pnmodes", "link", &decaykey))) {
 
 
@@ -514,22 +514,22 @@ TObjArray *PStdModels::GetModels(void) {
 
 	    int decay_has_composite = 0;
 	    Int_t tid[11];
-	    tid[0] = 10; 
+	    tid[0] = 10;
 	    makeStaticData()->GetDecayModeByKey(decaykey, tid); // retrieve current mode info
-	    
+
 	    for (int p=1; p<=tid[0]; p++) {
 		if (tid[p] > 1000)
 		    decay_has_composite = 1;
 	    }
 
-	    if (!makeDynamicData()->GetDecayModelByKey(decaykey)) { 
+	    if (!makeDynamicData()->GetDecayModelByKey(decaykey)) {
 		//Check first if we are alraedy done
 
 		model = NULL;
 
 		if ((tid[0] == 2) && (!decay_has_composite)) {
 		    /* 2 decay products */
-		    
+
 		    /* Dalitz Decays */
 		    if (PData::IsDalitz(pid, tid[1], tid[2])) {
 			id = new TString(makeStaticData()->GetParticleName(pid));
@@ -544,31 +544,31 @@ TObjArray *PStdModels::GetModels(void) {
 			((PData::IsDirectEE(pid,tid[1],tid[2]) ||
 			  PData::IsDirectMuMu(pid,tid[1],tid[2]))
 			 && (!makeStaticData()->IsParticle(pid, "eta")
-			     && !makeStaticData()->IsParticle(pid, "J/Psi") 
-			     && !makeStaticData()->IsParticle(pid, "Psi'") 
-			     && !makeStaticData()->IsParticle(pid, "sigma") //Not included  
+			     && !makeStaticData()->IsParticle(pid, "J/Psi")
+			     && !makeStaticData()->IsParticle(pid, "Psi'")
+			     && !makeStaticData()->IsParticle(pid, "sigma") //Not included
 			     )) {
 			id = new TString(makeStaticData()->GetParticleName(pid));
 			id->Append("_ee_");
 			id->Append(makeStaticData()->GetParticleName(tid[1]));
 			id->Append("_");
 			id->Append(makeStaticData()->GetParticleName(tid[2]));
-			PEEDirectDecay *pmodel = 
+			PEEDirectDecay *pmodel =
 			    new PEEDirectDecay((char*)id->Data(),
 					       "Dilepton direct decay",decaykey);
 			model = (PChannelModel*) pmodel;
 			makeDataBase()->SetParamInt (particlekey, "maxmesh", new Int_t(2000)); //-> take into accoutn strong variations
-			makeDataBase()->SetParamInt (decaykey, "maxmesh", new Int_t(2000)); 
+			makeDataBase()->SetParamInt (decaykey, "maxmesh", new Int_t(2000));
 		    } else {
 			int n1=1, n2=1;
 			if (makeStaticData()->
-			    GetParticleTotalWidth(tid[1]) < unstable_width) 
-			    n1 = 0; // too narrow 
-			
+			    GetParticleTotalWidth(tid[1]) < unstable_width)
+			    n1 = 0; // too narrow
+
 			if (makeStaticData()->
-			    GetParticleTotalWidth(tid[2]) < unstable_width ) 
+			    GetParticleTotalWidth(tid[2]) < unstable_width )
 			    n2 = 0; // too narrow
-		    
+
 			int h = makeStaticData()->IsParticleHadron(tid[1])+
 			    makeStaticData()->IsParticleHadron(tid[2]);
 
@@ -605,7 +605,7 @@ TObjArray *PStdModels::GetModels(void) {
 								    "2-body fixed mass, partial width", decaykey);
 			    model = (PChannelModel*) pmodel;
 			}
-			
+
 		    }
 		} /* END 2 products */
 
@@ -617,11 +617,11 @@ TObjArray *PStdModels::GetModels(void) {
 
 		    Int_t ust = 0;
 		    if (makeStaticData()->
-			GetParticleTotalWidth(tid[1]) > unstable_width)  ust++; 
+			GetParticleTotalWidth(tid[1]) > unstable_width)  ust++;
 		    if (makeStaticData()->
-			GetParticleTotalWidth(tid[2]) > unstable_width ) ust++; 
+			GetParticleTotalWidth(tid[2]) > unstable_width ) ust++;
 		    if (makeStaticData()->
-			GetParticleTotalWidth(tid[3]) > unstable_width ) ust++; 
+			GetParticleTotalWidth(tid[3]) > unstable_width ) ust++;
 
 		    if (h && (ust) && (*(makeStaticData()->GetBatchValue("_system_force_m1n")))) {
 
@@ -632,13 +632,13 @@ TObjArray *PStdModels::GetModels(void) {
 			id->Append(makeStaticData()->GetParticleName(tid[2]));
 			id->Append("_");
 			id->Append(makeStaticData()->GetParticleName(tid[3]));
-			PHadronDecayM3 *pmodel = 
+			PHadronDecayM3 *pmodel =
 			    new PHadronDecayM3((char*)id->Data(), "3-body phase space", decaykey);
 			model = (PChannelModel*) pmodel;
 
 			if (ust == 1) {
 			    AddModel(arr, model, pid, tid);
-			    
+
 			    id = new TString(makeStaticData()->GetParticleName(pid));
 			    id->Append("_m1n_");
 			    id->Append(makeStaticData()->GetParticleName(tid[1]));
@@ -646,13 +646,13 @@ TObjArray *PStdModels::GetModels(void) {
 			    id->Append(makeStaticData()->GetParticleName(tid[2]));
 			    id->Append("_");
 			    id->Append(makeStaticData()->GetParticleName(tid[3]));
-			    PHadronDecayM1N *pmodel = 
-				new PHadronDecayM1N((char*)id->Data(), 
+			    PHadronDecayM1N *pmodel =
+				new PHadronDecayM1N((char*)id->Data(),
 						    "N-body phase space with unstable hadron ", decaykey);
 			    model = (PChannelModel*) pmodel;
 			}
 		    } else if (h && (ust)) {
-			
+
 			id = new TString(makeStaticData()->GetParticleName(pid));
 			id->Append("_m1n_");
 			id->Append(makeStaticData()->GetParticleName(tid[1]));
@@ -660,15 +660,15 @@ TObjArray *PStdModels::GetModels(void) {
 			id->Append(makeStaticData()->GetParticleName(tid[2]));
 			id->Append("_");
 			id->Append(makeStaticData()->GetParticleName(tid[3]));
-			PHadronDecayM1N *pmodel = 
+			PHadronDecayM1N *pmodel =
 			    new PHadronDecayM1N((char*)id->Data(),
 						"N-body phase space with unstable hadron ", decaykey);
-			
+
 			model = (PChannelModel*) pmodel;
-			
+
 			if (ust == 1) {
 			    AddModel(arr, model, pid, tid);
-			    
+
 			    id = new TString(makeStaticData()->GetParticleName(pid));
 			    id->Append("_m3_");
 			    id->Append(makeStaticData()->GetParticleName(tid[1]));
@@ -676,12 +676,12 @@ TObjArray *PStdModels::GetModels(void) {
 			    id->Append(makeStaticData()->GetParticleName(tid[2]));
 			    id->Append("_");
 			    id->Append(makeStaticData()->GetParticleName(tid[3]));
-			    PHadronDecayM3 *pmodel = 
+			    PHadronDecayM3 *pmodel =
 				new PHadronDecayM3((char*)id->Data(), "3-body phase space", decaykey);
-			    
+
 			    model = (PChannelModel*) pmodel;
 			}
-		    } 
+		    }
 		}
 
 		// N>3 models
@@ -699,15 +699,15 @@ TObjArray *PStdModels::GetModels(void) {
 			    id->Append(makeStaticData()->GetParticleName(tid[p]));
 			    if (p != tid[0]) id->Append("_");
 			}
-			PHadronDecayM1N *pmodel = 
+			PHadronDecayM1N *pmodel =
 			    new PHadronDecayM1N((char*)id->Data(),
 						"N-body phase space with unstable hadron ", decaykey);
 			model = (PChannelModel*) pmodel;
 		    }
 		}
-    
+
 		if (!model && !decay_has_composite && tid[0]>1) {
-		    //Add dummy model			
+		    //Add dummy model
 		    id = new TString(makeStaticData()->GetParticleName(pid));
 		    id->Append("_fixed_");
 		    for (int p=1; p<=tid[0]; p++) {
@@ -715,7 +715,7 @@ TObjArray *PStdModels::GetModels(void) {
 			if (p != tid[0]) id->Append("_");
 		    }
 
-		    PFixedDecay *pmodel = 
+		    PFixedDecay *pmodel =
 			new PFixedDecay((char*)id->Data(), "Fixed product masses", decaykey);
 		    model = (PChannelModel*) pmodel;
 		    model->SetGroupID("decay_models");
@@ -724,15 +724,15 @@ TObjArray *PStdModels::GetModels(void) {
 		if (!model && !decay_has_composite && tid[0] == 1) {
 		    //beam fusion
 		    id = new TString(makeStaticData()->GetParticleName(pid));
-		    id->Append("_prod_");		    
-		    id->Append(makeStaticData()->GetParticleName(tid[1]));		
+		    id->Append("_prod_");
+		    id->Append(makeStaticData()->GetParticleName(tid[1]));
 		    id->Append("@");
 		    id->Append(makeStaticData()->GetParticleName(pid));
 		    id->Append("#prod#");
-		
+
 		    id->Append(makeStaticData()->GetParticleName(tid[1]));
-		
-		    PFixedProduction *pmodel = 
+
+		    PFixedProduction *pmodel =
 		      new PFixedProduction((char*)id->Data(), "Particle Production (fusion)", -2);
 
 		    //pmodel->Add(makeStaticData()->GetParticleName(pid),"parent");
@@ -743,7 +743,7 @@ TObjArray *PStdModels::GetModels(void) {
 
 		if (model) {
 		    AddModel(arr, model, pid, tid);
-		} 
+		}
 
 
 		if ((tid[0] == 2) && (decay_has_composite) && ( PData::IsN(tid[1]) ||  PData::IsN(tid[2]) )) {
@@ -756,7 +756,7 @@ TObjArray *PStdModels::GetModels(void) {
 		    }
 		    PFermiMomentum *pmodel = new PFermiMomentum(
 			(char*)id->Data(), "Quasi-free particle production", -1);
-		    if (pid < 1000) 
+		    if (pid < 1000)
 			pmodel->Add(makeStaticData()->GetParticleName(pid), "parent");
 		    else {
 			pmodel->Add("q", "parent");  //"White" decay of composite
@@ -764,22 +764,22 @@ TObjArray *PStdModels::GetModels(void) {
 			pmodel->Add(makeStaticData()->GetParticleName(pid/1000), "grandparent", "target");
 		    }
 		    for (int num=0; num<tid[0]; num++) {
-			if (tid[1+num] < 1000) 
+			if (tid[1+num] < 1000)
 			    pmodel->Add(makeStaticData()->GetParticleName(tid[1+num]), "daughter", "spectator");
 			else {
 			    //This is the quasi-reaction
-			    pmodel->Add("q", "daughter", "composite"); 
+			    pmodel->Add("q", "daughter", "composite");
 			    pmodel->Add(makeStaticData()->GetParticleName(tid[1+num]/1000), "granddaughter", "p1");
 			    pmodel->Add(makeStaticData()->GetParticleName(tid[1+num]%1000), "granddaughter", "p2");
 			}
 		    }
 
 		    pmodel->SetGroupID("genbod_models");
-		    arr->Add((TObject *)pmodel);		    
+		    arr->Add((TObject *)pmodel);
 		}
 	    } //END check for existing primary model
 
-	    if (!makeDynamicData()->GetDecayModelByKey(decaykey, genbod_key)) { 
+	    if (!makeDynamicData()->GetDecayModelByKey(decaykey, genbod_key)) {
 
 		if (!decay_has_composite && tid[0]>1) {
 
@@ -801,7 +801,7 @@ TObjArray *PStdModels::GetModels(void) {
 			}
 			id->Append("&genbod");
 			PGenBod *pmodel = new PGenBod((char*)id->Data(), "Pluto build-in genbod", -2);
-			//if (pid<1000) 
+			//if (pid<1000)
 			pmodel->Add(makeStaticData()->GetParticleName(pid), "parent");
 			//else pmodel->Add("q","parent");  //"White" decay of composite
 			for (int num=0; num<tid[0]; num++)
@@ -860,7 +860,7 @@ TObjArray *PStdModels::GetModels(void) {
 // 			}
 // 		    }
 
-		} 
+		}
 	    }
 
 	} //END decay mode iterator
@@ -884,7 +884,7 @@ TObjArray *PStdModels::GetModels(void) {
 		model->Add(makeStaticData()->GetParticleName(pid), "daughter");
 		model->SetGroupID("particle_models");
 		arr->Add((TObject *)model);
-	    }   
+	    }
 	}
     } //END particle iterator
     makeStaticData()->SetFreezeOut();
@@ -895,9 +895,9 @@ TObjArray *PStdModels::GetModels(void) {
 void PStdModels::AddModel(TObjArray *arr, PChannelModel *model, int pid, int *tid) {
 
     //If a model has been identified we make it known to the PChannel world
-    if (pid < 1000) 
+    if (pid < 1000)
 	model->Add(makeStaticData()->GetParticleName(pid), "parent");
-    else 
+    else
 	model->Add("q", "parent");  //"White" decay of composite
     for (int num=0; num<tid[0]; num++)
 	model->Add(makeStaticData()->GetParticleName(tid[1+num]), "daughter");

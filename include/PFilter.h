@@ -10,12 +10,12 @@
 class PReaction;
 
 class PFilter : public TObject {
-    
+
  public:
-    
+
     PFilter(PReaction *, char *);
     // PFilter constructor by pointer to the PReaction where the filter should apply,
-    
+
     ClassDef(PFilter, 0)//Pluto Filter Class
 
 };

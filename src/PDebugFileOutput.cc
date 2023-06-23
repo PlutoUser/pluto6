@@ -30,16 +30,16 @@ bool PDebugFileOutput::OpenFile(char *filename) {
 bool PDebugFileOutput::CloseFile(void) {
     if (fp) fclose(fp);
     fp = NULL;
-    return kTRUE; 
+    return kTRUE;
 };
 
 bool PDebugFileOutput::WriteEvent(void) {
     //next event
     if (fp) {
 	fprintf(fp, "next event\n");
-	return kTRUE; 
+	return kTRUE;
     }
-    return kFALSE; 
+    return kFALSE;
 };
 
 bool PDebugFileOutput::WriteParticle(PParticle *par) {
@@ -47,11 +47,11 @@ bool PDebugFileOutput::WriteParticle(PParticle *par) {
     if (fp) {
 	fprintf(fp, "name: %s\n",  par->Name());
 	fprintf(fp, "debug: %s\n", par->GetDebugString()->Data());
-	
-	return kTRUE; 
+
+	return kTRUE;
     }
-    return kFALSE; 
+    return kFALSE;
 }
 
 
-ClassImp(PDebugFileOutput) 
+ClassImp(PDebugFileOutput)

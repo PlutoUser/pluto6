@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 09.11.2010
-// Revised: 
+// Revised:
 
 #ifndef _PSIMPLEVMDFF_H_
 #define _PSIMPLEVMDFF_H_
@@ -11,16 +11,16 @@
 #include "PBatch.h"
 
 class PSimpleVMDFF : public PChannelModel  {
-  
+
  public:
     PSimpleVMDFF();
     PSimpleVMDFF(const Char_t *id, const Char_t *de, Int_t key);
     PDistribution* Clone(const char *delme=NULL) const;
 
     Bool_t Init(void);
-    
+
     using PChannelModel::GetWeight;
-	
+
     Double_t GetWeight(void);
     Double_t GetWeight(Double_t *mass, Int_t *didx=NULL);
 

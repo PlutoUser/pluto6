@@ -14,7 +14,7 @@
 
 
 class PAnyDistribution : public PDistribution  {
-  
+
  public:
     PAnyDistribution();
     PAnyDistribution(const Char_t *id, const Char_t *de);
@@ -30,7 +30,7 @@ class PAnyDistribution : public PDistribution  {
     Bool_t AddEquation(TH2 *histo, const char *command);  //adds an equation + cache for non-uniform distributions
     Bool_t AddEquation(TH3 *histo, const char *command);  //adds an equation + cache for non-uniform distributions
     Bool_t AddEquation(const char *command);
-    
+
     void SetMaxEnhancementFactor(Double_t _max_enhance_factor) {
 	max_enhance_factor = _max_enhance_factor;
     };
@@ -55,7 +55,7 @@ class PAnyDistribution : public PDistribution  {
     Double_t *x, *y, *z;
     Double_t max, max_enhance_factor;
 
-    ClassDef(PAnyDistribution, 0)  //Any possible distribution for a->b+c+d 
+    ClassDef(PAnyDistribution, 0)  //Any possible distribution for a->b+c+d
 
 };
 

@@ -50,7 +50,7 @@ Bool_t PPDGPlugin::ExecCommand(const char *command, Double_t) {
 				       "D-,pi+", 0.097482/6. );
 	    //------------------ N,rho -------------
 	    makeStaticData()->AddDecay("NF150 --> p + rho-", "NF150",
-				       "p,rho-", 0.1/3. );		//PDG - {0.03-0.15}		
+				       "p,rho-", 0.1/3. );		//PDG - {0.03-0.15}
 	    makeStaticData()->AddDecay("NF150 --> n + rho0", "NF150",
 				       "n,rho0", 0.1*2./3. );
 	    //------------------ p,pi,pi -------------
@@ -86,7 +86,7 @@ Bool_t PPDGPlugin::ExecCommand(const char *command, Double_t) {
 				       "D0,pi+", 0.097482/6. );
 	    //------------------ N,rho -------------
 	    makeStaticData()->AddDecay("NF15+ --> p + rho0", "NF15+",
-				       "p,rho0", 0.1/3. );		//PDG - {0.03-0.15}		
+				       "p,rho0", 0.1/3. );		//PDG - {0.03-0.15}
 	    makeStaticData()->AddDecay("NF15+ --> n + rho+", "NF15+",
 				       "n,rho+", 0.1*2./3. );
 	    //------------------ p,pi,pi -------------
@@ -247,7 +247,7 @@ Bool_t PPDGPlugin::ExecCommand(const char *command, Double_t) {
 	    makeStaticData()->AddDecay("DF350 --> p + pi-", "DF350",
 				       "p,pi-", 0.12/3. );		//PDG - {0.09-0.15}
 	    makeStaticData()->AddDecay("DF350 --> n + pi0", "DF350",
-				       "n,pi0", 0.12*2./3. );		
+				       "n,pi0", 0.12*2./3. );
 	    //------------------ D1232,pi -------------
 	    makeStaticData()->AddDecay("DF350 --> Delta+ + pi-", "DF350",
 				       "D+,pi-", 1.479854e-01*8./15. );//PDG - {0.3-0.6}
@@ -279,7 +279,7 @@ Bool_t PPDGPlugin::ExecCommand(const char *command, Double_t) {
 	    makeStaticData()->AddDecay("DF35+ --> p + pi0", "DF35+",
 				       "p,pi0", 0.12*2./3. );		//PDG - {0.09-0.15}
 	    makeStaticData()->AddDecay("DF35+ --> n + pi+", "DF35+",
-				       "n,pi+", 0.12/3. );		
+				       "n,pi+", 0.12/3. );
 	    //------------------ D1232,pi -------------
 	    makeStaticData()->AddDecay("DF35+ --> Delta++ + pi-", "DF35+",
 				       "D++,pi-", 1.479854e-01*2./5. );//PDG - {<25%}
@@ -399,24 +399,24 @@ Bool_t PPDGPlugin::ExecCommand(const char *command, Double_t) {
 			     443,
 			     100443,
 			     0};
-	    
+
 	    for (int i=0; i<71; i++) { //loop over known particles
-		
+
 		int pkey = makeStaticData()->GetParticleKey(i);
-		
+
 		if (pkey > 0) {
 		    if (!makeDataBase()->SetParamInt (pkey, "pdg", new Int_t(pdg[i])))
 			return kFALSE;
 // 		    else
 // 			cout << pkey << ":" << pdg[i] << endl;
 		}
-		
+
 	    }
 	}
 	return kTRUE;
     }
 
-    
+
     return kFALSE;
 }
 
@@ -426,4 +426,4 @@ ClassImp(PPDGPlugin)
 
 
 
-    
+

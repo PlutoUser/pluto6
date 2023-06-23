@@ -10,7 +10,7 @@ using namespace std;
 //____________________________________________________________________
 //
 // UParticle
-// 
+//
 // Class for particle description.
 //
 

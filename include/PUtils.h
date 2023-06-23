@@ -16,7 +16,7 @@ using namespace std;
 #include "PStaticData.h"
 
 
-//#define SEED 65539   
+//#define SEED 65539
 // set to 0 for random initialization of seed at startup
 // (this initializes TRandom3 with systime (but only a
 // granularity of 1 second)
@@ -32,20 +32,20 @@ PUtilsREngine *makePUtilsREngine();
 
 
 class PUtilsREngine : public TObject {
-    
+
  public:
     PUtilsREngine ();
-  
+
     Double_t sampleFlat() {
 	// Samples uniformly between 0 and 1
 	return rnd->Rndm();
     }
-    
+
     Double_t sampleGaus(Double_t c, Double_t s) {
 	// Samples from a Gaussian distribution
 	return rnd->Gaus(c,s);
     }
-    
+
     Int_t samplePoisson(Double_t mean) {
 	// Samples from a Poisson distribution
 	return rnd->Poisson(mean);
@@ -55,23 +55,23 @@ class PUtilsREngine : public TObject {
 	// Samples from a binomial distribution
 	return rnd->Binomial(ntot,prob);
     }
-    
+
     Double_t sampleBW(Double_t c, Double_t g) {
 	// Samples from a Breit Wigner distribution
 	if (g == 0.) return c;
 	return (c+0.5*g*TMath::Tan((2.0*rnd->Rndm()-1.0)*TMath::Pi()*0.5));
     }
-    
+
     void SetSeed(UInt_t s);
 
     Double_t lambda(double M, double m1, double m2) {
 	return PKinematics::lambda(M, m1, m2);
     }
-    
+
     Double_t pcms2(double M, double m1, double m2) {
 	return PKinematics::pcms2(M, m1, m2);
     }
-    
+
     Double_t pcms(double M, double m1, double m2) {
 	// cm momentum for the decay of M to m1 and m2
 	return PKinematics::pcms(M, m1, m2);
@@ -79,9 +79,9 @@ class PUtilsREngine : public TObject {
 
 
  private:
-    
+
     TRandom3 *rnd;
-    
+
     ClassDef(PUtilsREngine, 0) //Pluto Utilities Class (random wrapper)
 };
 
@@ -89,9 +89,9 @@ class PUtilsREngine : public TObject {
 class PUtils : public TObject {
 
  public:
-  PUtils() { 
+  PUtils() {
       cout << "seed: " << SEED << endl;
-      SetSeed(SEED); 
+      SetSeed(SEED);
   }
   // create former behaviour
 
@@ -106,15 +106,15 @@ class PUtils : public TObject {
       //see example:
       //Int_t a[3]={8,9,9};
       //PUtils::isort(a,3);
-      
+
       //workaround: add very small number
-      
+
     Double_t x[n];
 
-    for (int j=0; j<n; ++j) 
+    for (int j=0; j<n; ++j)
 	x[j] = ((Double_t)i[j]) + ((Double_t)j)*0.00001;
     dsort(x, n);
-    for (int j=0; j<n; ++j) 
+    for (int j=0; j<n; ++j)
 	i[j] = (int)x[j];
   }
 
@@ -146,21 +146,21 @@ class PUtils : public TObject {
   static Double_t cgc(const int &, const int &, const int &,
 		      const int &, const int &);
   // Clebsch-Gordan coefficients (arguments are 2 x j or m)
-  
+
   static Double_t s3j(const Double_t &, const Double_t &, const Double_t &,
 		      const Double_t &, const Double_t &, Double_t m3 = 0.);
   // 3j-symbol, related to Clebsch-Gordan coefficient
-  
+
   static Double_t racah(const int &, const int &, const int &,
 			const int &, const int &, const int &);
   // Racah coefficients (arguments are 2 x j or m)
-  
+
   static Double_t s6j(const Double_t &, const Double_t &, const Double_t &,
 		      const Double_t &, const Double_t &, const Double_t &);
   // 6j-symbol, related to Racah coefficient
 
   static Int_t FindIndex(Int_t n, Double_t *a, Double_t r);
-  
+
   static void SetSeed(UInt_t s) { makePUtilsREngine()->SetSeed(s); }
 
   static Bool_t Tokenize(const char *options, const char *delimiter, char **array, int *size);
@@ -173,7 +173,7 @@ class PUtils : public TObject {
       sprintf(newvar, "%s", var);
       return newvar;
   };
-  
+
   static void correct_histo(TH1 *histo);
   static void correct(TH1 *histo);
 

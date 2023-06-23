@@ -30,7 +30,7 @@ PScatterCrossSection::PScatterCrossSection(const Char_t *id, const Char_t *de) :
 
     TF1 *dummy = new TF1("dummy", "1", -1, 1);
     SetAngleFunction(dummy);
- 
+
 };
 
 PDistribution *PScatterCrossSection::Clone(const char *) const {
@@ -46,7 +46,7 @@ void PScatterCrossSection::SetNpy(Int_t my_npy) {
     npy = my_npy;
     if (pf2) pf2->SetNpy(npy);
 };
-  
+
 Bool_t PScatterCrossSection::MakeVars() {
     if (qmin < 0) {
 	Error("MakeVars", "Range of the c.m. energy not defined");
@@ -58,8 +58,8 @@ Bool_t PScatterCrossSection::MakeVars() {
 	if (npy > 0) pf2->SetNpy(npy);
     }
 
-    vprimary   = makeDynamicData()->GetBatchParticle("_primary");  
-    vf         = makeStaticData()->GetBatchValue("_f"); 
+    vprimary   = makeDynamicData()->GetBatchParticle("_primary");
+    vf         = makeStaticData()->GetBatchValue("_f");
     return kTRUE;
 };
 
@@ -68,7 +68,7 @@ Bool_t PScatterCrossSection::AddEquation(char *command) {
     return pf2->Add(command);
 };
 
-Bool_t PScatterCrossSection::AddHistogram(TH1 *histo, char *command) {    
+Bool_t PScatterCrossSection::AddHistogram(TH1 *histo, char *command) {
     if (!MakeVars()) return kFALSE;
     return pf2->Add(histo, command);
 };
@@ -86,7 +86,7 @@ Bool_t PScatterCrossSection::Init(void) {
 	return kFALSE;
     }
 
-    return kTRUE;    
+    return kTRUE;
 };
 
 Bool_t PScatterCrossSection::Prepare(void) {

@@ -1,6 +1,6 @@
 // Author: Ingo Froehlich
 // Written: 14/02/2007
-// Modified: 
+// Modified:
 
 #ifndef _PPROJECTOR_H_
 #define _PPROJECTOR_H_
@@ -53,27 +53,27 @@ class PProjector: public PBulkInterface {
     //for embedding particles
     Int_t stackpointer;
     PParticle stack[PROJECTOR_MAX_STACK];
-    Int_t  SetParticles(PParticle ** mstack, int *decay_done, 
+    Int_t  SetParticles(PParticle ** mstack, int *decay_done,
 			int * num, int stacksize, Int_t first_time);  //set the particles from the stream
 
  protected:
-    
-    
+
+
  public:
-    
+
     PProjector();
     ~PProjector();
 
 
     Bool_t Modify(PParticle **stack, int *decay_done, int *num, int stacksize);  //bulk interface
-    
+
     Bool_t AddCommand(const char *command); //adds a command line to batch
     Bool_t Do(const char *command) {return AddCommand(command);};
-    Bool_t AddHistogram(TH3 *histo, const char *command = "", 
+    Bool_t AddHistogram(TH3 *histo, const char *command = "",
 			Int_t fillflag = 1); //Add a command and a histogram as a tool object
-    Bool_t AddHistogram(TH2 * histo, const char *command = "", 
+    Bool_t AddHistogram(TH2 * histo, const char *command = "",
 			Int_t fillflag = 1); //Add a command and a histogram as a tool object
-    Bool_t AddHistogram(TH1 *histo, const char *command = "", 
+    Bool_t AddHistogram(TH1 *histo, const char *command = "",
 			Int_t fillflag = 1); //Add a command and a histogram as a tool object
     //fillflag=0: do not fill
     //        =1: fill with weight
@@ -87,7 +87,7 @@ class PProjector: public PBulkInterface {
 	return AddInputTNtuple(n);
     };
     Bool_t AddInputASCII(const char *filename, const char *command = "");
- 
+
     Bool_t AddOutputTNtuple(TNtuple *n, const char *command = "");
     Bool_t AddOutputASCII(const char *filename, const char *command = "");
 
@@ -105,7 +105,7 @@ class PProjector: public PBulkInterface {
 
     ClassDef(PProjector, 0) // Project particle array to histograms
 };
-#endif 
+#endif
 
 
 

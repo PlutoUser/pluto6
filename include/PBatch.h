@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 14.02.2008
-// 
+//
 
 #ifndef _PBATCH_H_
 #define _PBATCH_H_
@@ -109,8 +109,8 @@ class PBatch : public TObject {
  private:
 
     Bool_t CheckAndSplit(char * arg, char delim, int *key1, int *key2);
-    
-    Bool_t GetArguments(const char *a, /* const char *b, */ 
+
+    Bool_t GetArguments(const char *a, /* const char *b, */
 			char *name, char **function, char **arg1, char **arg2);
     Int_t  CheckObjectType(Int_t key);
     Int_t  GetKey(char *name, int fl, int makeflag);
@@ -153,13 +153,13 @@ class PBatch : public TObject {
     Int_t else_position;
     Int_t current_position;
 
-    static Int_t stack_num_batch[MAX_STACK_GOSUB], stack_num_bulk[MAX_STACK_GOSUB], 
+    static Int_t stack_num_batch[MAX_STACK_GOSUB], stack_num_bulk[MAX_STACK_GOSUB],
 	stack_num_command[MAX_STACK_GOSUB], stack_num_pos;
 
     void  AddSpacePlaceholder(char *command);
     void  RemoveSpacePlaceholder(char *command);
     Int_t EvalPFormula(char *command);
-    
+
 
     PValues pdummy;
 
@@ -182,7 +182,7 @@ class PBatch : public TObject {
     TTree *tree;         //Pointer to storage tree
     Int_t *size_branches;
     Int_t *key_branches;
-    
+
 
  public:
 
@@ -195,7 +195,7 @@ class PBatch : public TObject {
     Bool_t AddCommand(char command, int key_a, int key1, int key2, int key3=-1, int key4=-1, int key5=-1);
 
     void SetPosition(Int_t my_num_batch, Int_t my_num_bulk) {
-	num_batch = my_num_batch; 
+	num_batch = my_num_batch;
 	num_bulk  = my_num_bulk;
     };
     Int_t GetNewBatch()   {return locnum_batch;};
@@ -260,7 +260,7 @@ class PBatch : public TObject {
 
     void SetVarList(char *my_x) {
 	//Allowed commands for new variables
-	//Format must be "a;b;c;" with trailing ;'s 
+	//Format must be "a;b;c;" with trailing ;'s
 	//If NULL don't care!
 	varlist = my_x;
     };

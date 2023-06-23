@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 27.5.2007
-// Revised: 
+// Revised:
 
 #ifndef _PDALITZDECAY_H_
 #define _PDALITZDECAY_H_
@@ -12,7 +12,7 @@
 #include "PKinematics.h"
 
 class PDalitzDecay : public PChannelModel  {
-  
+
  public:
     PDalitzDecay();
     PDalitzDecay(const Char_t *id, const Char_t *de, Int_t key);
@@ -24,7 +24,7 @@ class PDalitzDecay : public PChannelModel  {
 
     Bool_t GetWidth(Double_t mass, Double_t *width, Int_t didx=-1);
 
-    using PDistribution::GetWeight;  
+    using PDistribution::GetWeight;
     Double_t GetWeight(Double_t *mass, Int_t *didx=NULL);
     Double_t GetWeight(void);
     int GetDepth(int i=0);
@@ -42,7 +42,7 @@ class PDalitzDecay : public PChannelModel  {
     Double_t draw_parent_mass;
 
  protected:
-  
+
     PParticle *parent, *dilepton, *other;
 
     long double alpha;
@@ -53,7 +53,7 @@ class PDalitzDecay : public PChannelModel  {
     double p1;
 
     double mass_e, mass_ee;
-    
+
     double p2;
     double p3;
     double mass_x;   // mass of second (non dilepton) product
@@ -81,10 +81,10 @@ class PDalitzDecay : public PChannelModel  {
     //they are used here by the official wrapper funcions
     virtual double dGdM(const int &id, const double &m, const double &ecm);
     double FDalitz(const int &id, const double &m, double ecm);
-    void sampleMD(const double &ecm, const int &id, 
+    void sampleMD(const double &ecm, const int &id,
 		  double &m, const double &m1);
     double PhotonBR(const int &id);
- 
+
     ClassDef(PDalitzDecay, 0)  // Dalitz decays "a -> dilepton/dimuon + b"
 };
 

@@ -27,7 +27,7 @@ class PUniGenInput: public PBulkInterface {
     TTree  *fInTree;               // Input tree
     URun   *fRun;                  // Run object
     UEvent *fEvent;                // Event
-    
+
     Int_t centry, nentries, reset_mass;
 
     Int_t pdg_param, pid_param, *i_result;
@@ -36,22 +36,22 @@ class PUniGenInput: public PBulkInterface {
     Int_t unknown_pdg_pointer;
 
  protected:
-    
-    
+
+
  public:
-    
+
     PUniGenInput();
     PUniGenInput(char *filename);
-    
+
     Bool_t Input(char *filename);
 
     Bool_t Modify(PParticle **stack, int *decay_done, int *num, int stacksize);  //bulk interface
-    
+
     void ResetInvalidMass(void) {reset_mass=1;};
-    
+
     ClassDef(PUniGenInput, 0) // Adds particles from an UniGen file into a PReaction
 };
-#endif 
+#endif
 
 
 

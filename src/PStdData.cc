@@ -64,7 +64,7 @@ Bool_t PStdData::fillDataBase(void) {
     base->MakeParamInt("slink", "Particle link");
 
     Int_t pidkey=base->MakeParamInt("pid", "Pluto particle ID");
-    
+
     base->SetFastKey(pidkey, 100000);
     base->MakeParamDouble("width", "Particle static width [GeV]");
     base->MakeParamDouble("mass",  "Particle pole mass [GeV]");
@@ -98,7 +98,7 @@ Bool_t PStdData::fillDataBase(void) {
     base->MakeParamDouble("ethreshold", "Energy threshold");
     base->MakeParamDouble("scfactor",  "Self consistency factor");
     base->MakeParamInt("sccount", "Self consistency count (max tries)");
-    
+
 
     base->MakeParamTObj("mesh", "Mesh object");
     base->MakeParamTObj("tf1", "TF1 object");
@@ -181,14 +181,14 @@ Bool_t PStdData::fillDataBase(void) {
 	if (!base->SetParamDouble (pkey, "width", &(PStdData::PWidth[i])))
 	    return kFALSE;
     }
-    
+
     for (int i=0; i<maxnumpar; i++) {
 //	Int_t pkey=base->getEntry(PStdData::PName[i]);
 	//now the decays
 	int jmin = 0, jmax = PStdData::maxnummodes;
 	jmin = PPosition[i];
 	jmax = jmin+PStdData::PNModes[i];
-	
+
 	for (int j=jmin; j<jmax; ++j) {
 
 	    TString s = PMode[j];  // retrieve decay mode string
@@ -208,7 +208,7 @@ Bool_t PStdData::fillDataBase(void) {
 	    ii = new int(0);  //never destructed, but called only once!
 	    if (!base->SetParamInt (dkey, "widx", ii))
 		return kFALSE;
-	    
+
 	    if (!base->SetParamDouble (dkey, "br", &(PStdData::PBR[j])))
 		return kFALSE;
 
@@ -218,11 +218,11 @@ Bool_t PStdData::fillDataBase(void) {
 	    dd = new Double_t(0.);
 	    if (!base->SetParamDouble (dkey, "ethreshold", dd))
 		return kFALSE;
-	    
+
 	    dd = new Double_t(0.); //partial width resetted later
 	    if (!base->SetParamDouble (dkey, "width", dd))
 		return kFALSE;
-	    
+
 	    dd = new Double_t(1.); //sc factor=1.
 	    if (!base->SetParamDouble (dkey, "scfactor", dd))
 		return kFALSE;
@@ -234,10 +234,10 @@ Bool_t PStdData::fillDataBase(void) {
 	    for (int ii=0; ii<np; ++ii) {   // loop over product particles
 		Int_t m = (!ii&&res) ? res : 3;  // number of digits in current pid
 		pid = 0;              // reset id
-		for (int jj=1; jj<=m; ++jj) 
+		for (int jj=1; jj<=m; ++jj)
 		    pid += (*(s(k+jj-1,1).Data())-48)
 			*int(pow(10.,m-jj));
-		
+
 		Int_t *pkey = new int(base->GetEntryInt("pid", pid));
 		if (*pkey<0) {
 		    Error("fillDataBase" , "Processing decay: do not find pid %i", pid);
@@ -255,7 +255,7 @@ Bool_t PStdData::fillDataBase(void) {
 	    } //end decay products
 	} //end decay mode loop
     }
-    
+
     disable = 1;
     return kTRUE;
 }
@@ -277,7 +277,7 @@ const char *PStdData::NAME[mnpar] = {
   "Sigma-", "Xi0", "Xi-", "Omega", "anti_n",
   "anti_Lambda", "anti_Sigma-", "anti_Sigma0",
   "anti_Sigma+","anti_Xi0", "anti_Xi+",
-  "anti_Omega+","File", "D0", "D++", "D+", "D-", "NP11+", 
+  "anti_Omega+","File", "D0", "D++", "D+", "D-", "NP11+",
   "ND13+", "NS11+", "rho0", "rho+", "rho-",
   "BOZO", "d", "t", "alpha", "BOZO2", "He3", //BOZO->BOZO2
   "dimuon", "dilepton", "w", "eta'", "sigma",
@@ -721,7 +721,7 @@ const int PStdData::NMODES[mnpar]={
 // different charge states are included explicitly
 // with the appropriate isospin factors.
 // Note: The static branching ratios for decay modes of
-// the type 1) hadron -> hadron + hadron and 
+// the type 1) hadron -> hadron + hadron and
 // 2) hadron -> N + pi + pi are averages of PDG data, and
 // are only included for completeness. They are actually
 // calculated as functions of mass explicitly (see Width()
@@ -838,9 +838,9 @@ double PStdData::BRR[mnmodes]={
   4.67e-5,       // id=41 rho0 --> e+ + e-
   4.55e-5,       // id=41 rho0 --> mu+ + mu-
   // rho+, 1 channel
-  1.,            // id=42 rho+ --> pi+ + pi0 
+  1.,            // id=42 rho+ --> pi+ + pi0
   // rho-, 1 channel
-  1.,            // id=43 rho- --> pi- + pi0 
+  1.,            // id=43 rho- --> pi- + pi0
   // dimuon, 1 channel
   1.,            // id=50 dimuon --> mu+ + mu-
   // dilepton, 1 channel
@@ -1106,9 +1106,9 @@ const char *PStdData::MODE[mnmodes]={
   "3002",           // id=41 rho0 --> e+ + e-
   "5006",           // id=41 rho0 --> mu+ + mu-
   // rho+, 1 channel
-  "7008",           // id=42 rho+ --> pi+ + pi0 
+  "7008",           // id=42 rho+ --> pi+ + pi0
   // rho-, 1 channel
-  "7009",           // id=43 rho- --> pi- + pi0 
+  "7009",           // id=43 rho- --> pi- + pi0
   // dimuon, 1 channel
   "6005",           // id=50  dimuon --> mu+ + mu-
   // dilepton, 1 channel
@@ -1122,7 +1122,7 @@ const char *PStdData::MODE[mnmodes]={
   "3002",           // id=52 omega --> e+ + e-
   "5006",           // id=52 omega --> mu+ + mu-
   // eta', 7 channels
-  "9008017",        // id=53 eta' --> eta + pi- + pi+ 
+  "9008017",        // id=53 eta' --> eta + pi- + pi+
   "1041",           // id=53 eta' --> rho0 + photon
   "7007017",        // id=53 eta' --> eta + pi0 + pi0
   "1052",           // id=53 eta' --> omega + photon
@@ -1132,7 +1132,7 @@ const char *PStdData::MODE[mnmodes]={
   // sigma, 3 channels
   "9008",           // id=54 sigma --> pi+ + pi-
   "3002",           // id=54 sigma --> e+ + e-
-  "5006",           // id=54 sigma --> mu+ + mu-  
+  "5006",           // id=54 sigma --> mu+ + mu-
   // phi, 8 channels
   "12011",          // id=55 phi --> K+ + K-
   "16010",          // id=55 phi --> K0L + K0S

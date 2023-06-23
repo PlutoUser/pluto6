@@ -29,7 +29,7 @@ void listModes(int id = -1);
 void listModes(const char *id);
 
 class PStaticData : public TObject {
-      
+
  public:
 
     PStaticData();
@@ -43,7 +43,7 @@ class PStaticData : public TObject {
 	//re-loop PStdModels
 	freeze = kFALSE;
     };
-    
+
     bool GetFreezeOut(void) {
 	return freeze;
     }
@@ -53,7 +53,7 @@ class PStaticData : public TObject {
 		   const char *new_name); //adds an alias, ret value is alias key
     int   GetAliasParent(const char *alias_name);
     int   GetAliasParent(int key);
-    
+
     int   MakeDirectoryEntry(const char *name, const char *n, const char *l,
 			     const char *ename);  //adds a directory, ret value is key
     Double_t *GetBatchValue(const char *name, Int_t make_val=1);
@@ -114,13 +114,13 @@ class PStaticData : public TObject {
     int   GetParticleParity(const char *id);   // parity (0 if irrelevant)
     void  SetParticleParity(const char *id, Int_t parity);
 
-    double GetParticleMass(const int &id);   // mass by id  
+    double GetParticleMass(const int &id);   // mass by id
     double GetParticleMass(const char *id);  // mass by name
     double GetParticleMassByKey(const int &id);
     void SetParticleMass(Int_t id, Float_t mass); //reset mass
     void SetParticleMass(const char *id, Float_t mass); //reset mass
 
-    int GetParticleNChannels(const int &id); // number of decay channels by pid  
+    int GetParticleNChannels(const int &id); // number of decay channels by pid
     int GetParticleNChannels(const char *id);// number of decay channels by name
     int GetParticleNChannelsByKey(int id);
 
@@ -130,7 +130,7 @@ class PStaticData : public TObject {
     double GetParticleTotalWidth(const char *id) {
 	return GetParticleTotalWidth(GetParticleID(id));
     };
-    double GetParticleTotalWidthByKey(const int &id); 
+    double GetParticleTotalWidthByKey(const int &id);
 
     double GetParticleEmin(const int &id); // Returns the energy threshold for the particle
     void   SetParticleEmin(const int &id, const double v);
@@ -171,34 +171,34 @@ class PStaticData : public TObject {
     const char *GetDecayNameByKey(Int_t key);
 
     Int_t IsDecayHadronic(Int_t didx);
-    
-    int  AddDecay(int didx, const char *name, const char *parent, 
+
+    int  AddDecay(int didx, const char *name, const char *parent,
 		  const char *daughters , double br);
-    int  AddDecay(const char *name, const char *parent, 
+    int  AddDecay(const char *name, const char *parent,
 		  const char *daughters , double br) {
-	return AddDecay(-1, name, parent, 
+	return AddDecay(-1, name, parent,
 			daughters , br); };
     int  AddDecay(int *ipid, int n);
     void PrintDecayByKey(int key);
 
-    int GetDecayNProducts(const int &); // retrieve number of products by mode index 
-    int GetDecayNProducts(const char *);// number of products by name 
+    int GetDecayNProducts(const int &); // retrieve number of products by mode index
+    int GetDecayNProducts(const char *);// number of products by name
     int GetDecayNProductsByKey(const int &key);
 
     int GetDecayParent(const int &); // parent pid from decay mode index
-    int GetDecayParentByKey(const int &); 
+    int GetDecayParentByKey(const int &);
     void GetDecayMode(const int, int *n); // retrieve product number, pids, by mode index
-    void GetDecayModeByKey(const int, int *n); 
+    void GetDecayModeByKey(const int, int *n);
 
     int GetDecayIdx(int *pid, int n); // decay-mode index from parent and product ids; ->getChannel
     int GetDecayIdx(const char *parent, const char *daughters);
-    int GetDecayKey(int *pid, int n); 
+    int GetDecayKey(int *pid, int n);
     int GetDecayKey(const int &id);
     int GetDecayIdxByKey(int key);
-     
+
     int GetDecayBRFlag(int didx);
     void SetDecayBRFlag(int didx, int flag);
-     
+
     double GetDecayEmin(const int &idx); // Returns the energy threshold for the decay mode with index=idx
     void   SetDecayEmin(const int &idx, const double v);
 
@@ -213,10 +213,10 @@ class PStaticData : public TObject {
     void SetTWidx(const int &, const int &); // total width flag from index
     void SetPWidx(const int &, const int &); // partial width flag from index
 
-    int GetTDepth(const int &); 
-    void SetTDepth(const int &, const int &); 
-    int GetHDepth(const int &); 
-    void SetHDepth(const int &, const int &); 
+    int GetTDepth(const int &);
+    void SetTDepth(const int &, const int &);
+    int GetHDepth(const int &);
+    void SetHDepth(const int &, const int &);
 
     void SetTWidthMesh(const int &, PMesh *mesh);
     PMesh * GetTWidthMesh(const int &);
@@ -229,7 +229,7 @@ class PStaticData : public TObject {
 
     //global friend functions
     //Keeping for backward compatibility
-  
+
     friend void listParticle(int id);
     // list particles in data base and their properties, by particle pid
 
@@ -237,16 +237,16 @@ class PStaticData : public TObject {
 	listParticle(makeStaticData()->GetParticleID(id));
     };
     // list particles in data base and their properties, by particle code name
-    
+
     friend void listModes(int id);
     // list decay modes in data base, by particle pid
-    
+
     friend void listModes(const char *id){
 	listModes(makeStaticData()->GetParticleID(id));
     };
     // list decay modes in data base, by particle name
-    
-    
+
+
 
  private:
     Int_t *i_result;
@@ -282,4 +282,4 @@ class PStaticData : public TObject {
 
 
 
-	
+

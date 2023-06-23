@@ -1,11 +1,11 @@
 ////////////////////////////////////////////////////////
-//  Small tool class to convert text files into TGraph 
+//  Small tool class to convert text files into TGraph
 //  objects
-//  
+//
 //
 //                    Author: I. Froehlich
 //                    Written: 1.08.2007
-//                    Revised: 
+//                    Revised:
 //
 ////////////////////////////////////////////////////////
 
@@ -52,7 +52,7 @@ Bool_t PArray::OpenFile(const char *filename, Int_t, Int_t num_columns, Double_t
 	Error("OpenFile", "Cannot open file %s", filename);
 	return kFALSE;
     }
-    
+
     Int_t ret = 0;
     while (ret != EOF) {
 	if (num_columns == 5) {
@@ -91,7 +91,7 @@ Bool_t PArray::OpenFile(const char *filename, Int_t, Int_t num_columns, Double_t
     real_size_1d += row;
 
     Info("OpenFile", "%d lines read from file %s", row, filename);
-    
+
     fclose(fp);
     return kTRUE;
 }
@@ -99,7 +99,7 @@ Bool_t PArray::OpenFile(const char *filename, Int_t, Int_t num_columns, Double_t
 
 TGraph *PArray::GetTGraph(Int_t xcol, Int_t ycol) {
     //NB: TGraph is not killed, it must be deleted in the app.
-    
+
     if (dim == 1) {
 	if (!vals_1d[0]) {
 	    Error ("GetTGraph", "No (1dim) file opened");
@@ -114,7 +114,7 @@ TGraph *PArray::GetTGraph(Int_t xcol, Int_t ycol) {
 
 TGraph2D *PArray::GetTGraph2D(Int_t xcol, Int_t ycol) {
     //NB: TGraph is not killed, it must be deleted in the app.
-    
+
     if (dim == 2) {
 	if (!vals_1d[0]) {
 	    Error ("GetTGraph", "No (2dim) files opened");

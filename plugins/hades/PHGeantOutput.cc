@@ -31,7 +31,7 @@
 //
 //  {
 //      PReaction my_reaction(..settings...);      // create reaction
-//                                                
+//
 //      ...                                        // add all channels , bulk etc
 //
 //      PHGeantOutput* output = new PHGeantOutput();  // created output
@@ -181,7 +181,7 @@ bool PHGeantOutput::WriteParticle(PParticle *par) {
 		}
 	    }
 	} else {
-	    
+
 	    if (writeINDEX == 0) {
 		if(!writeSEQNUMBER){
 		    fprintf(asciiFile," %e %e %e %e %e %e %e %e %i %i %i %e\n",                 // 12 vars
@@ -220,4 +220,4 @@ bool PHGeantOutput::WriteParticle(PParticle *par) {
 }
 
 
-ClassImp(PHGeantOutput) 
+ClassImp(PHGeantOutput)
