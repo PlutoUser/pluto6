@@ -329,7 +329,7 @@ void PDecayChannel::AddChannel(Double_t w, const char *d1, const char *d2, const
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void PDecayChannel::AddChannel(Double_t w, Int_t nd, char **ld) {
+void PDecayChannel::AddChannel(Double_t w, Int_t nd, const char **ld) {
     // The channel describes a decay into nd daughter particles represented by
     // an array of their names ld and branching ratio w.
     if (!Daughters.GetArray()) {
