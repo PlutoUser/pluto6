@@ -63,7 +63,7 @@ Bool_t PMesonsPlugin::ExecCommand(const char *command, Double_t) {
                 makeStaticData()->SetParticleCharge("f1", 0);
                 makeStaticData()->SetParticleIsospin("f1", 0);
 
-                makeStaticData()->AddDecay("f1 --> pi+ + pi0 + eta",    "f1", "pi+,pi-,eta",        0.35);
+                makeStaticData()->AddDecay("f1 --> pi+ + pi- + eta",    "f1", "pi+,pi-,eta",        0.35);
                 makeStaticData()->AddDecay("f1 --> 2pi0 + pi+ + pi-",   "f1", "pi+,pi-,pi0,pi0",    0.218);
                 makeStaticData()->AddDecay("f1 --> 2pi+ + 2pi-",        "f1", "pi+,pi-,pi+,pi-",    0.109);
             }
