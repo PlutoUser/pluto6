@@ -53,10 +53,9 @@ Bool_t PMesonsPlugin::ExecCommand(const char *command, Double_t) {
                 Error("ExecCommand", "PIDs blocked, plugin disabled");
             }
 
-
-            if (makeStaticData()->AddParticle(-1,"f1", 1.2821) > 0) {
-                makeStaticData()->AddAlias("f1","f1(1285)");
-                makeStaticData()->SetParticleTotalWidth("f1", 0.0242);
+            if (makeStaticData()->AddParticle(-1, "f1", 1.2819) > 0) {
+                makeStaticData()->AddAlias("f1", "f1(1285)");
+                makeStaticData()->SetParticleTotalWidth("f1", 0.0227);
                 makeStaticData()->SetParticleMeson("f1", 1);
                 makeStaticData()->SetParticleSpin("f1", 1);
                 makeStaticData()->SetParticleParity("f1", 1);
@@ -66,8 +65,27 @@ Bool_t PMesonsPlugin::ExecCommand(const char *command, Double_t) {
                 makeStaticData()->AddDecay("f1 --> pi+ + pi- + eta",    "f1", "pi+,pi-,eta",        0.35);
                 makeStaticData()->AddDecay("f1 --> 2pi0 + pi+ + pi-",   "f1", "pi+,pi-,pi0,pi0",    0.218);
                 makeStaticData()->AddDecay("f1 --> 2pi+ + 2pi-",        "f1", "pi+,pi-,pi+,pi-",    0.109);
+            } else {
+                Error("ExecCommand", "PIDs blocked, plugin disabled");
             }
 
+            if (makeStaticData()->AddParticle(-1, "eta1295", 1.294) > 0) {
+                makeStaticData()->AddAlias("eta1295", "eta(1295)");
+                makeStaticData()->SetParticleTotalWidth("eta1295", 0.055);
+                makeStaticData()->SetParticleMeson("eta1295", 1);
+                makeStaticData()->SetParticleSpin("eta1295", 0);
+                makeStaticData()->SetParticleParity("eta1295", -1);
+                makeStaticData()->SetParticleCharge("eta1295", 0);
+                makeStaticData()->SetParticleIsospin("eta1295", 0);
+
+                makeStaticData()->AddDecay("eta1295 --> pi+ + pi- + eta",    "eta1295", "pi+,pi-,eta",        1.0);
+            } else {
+                Error("ExecCommand", "PIDs blocked, plugin disabled");
+            }
+
+            if (experimental_decays) {
+                makeStaticData()->AddDecay("eta --> pi0 + g + g",       "eta", "pi0,g,g",       2.5e-4);
+            }
             (*system_alloc_verbosity) = old;
         }
         return kTRUE;
