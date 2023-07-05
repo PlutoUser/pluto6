@@ -42,7 +42,7 @@ Bool_t PMesonsPlugin::ExecCommand(const char *command, Double_t) {
 
             if (makeStaticData()->AddParticle(117, "X17", 0.017) > 0) {
                 // makeStaticData()->AddAlias("X17","x17");
-                makeStaticData()->SetParticleTotalWidth("X17", 0.197/4e-14);
+                makeStaticData()->SetParticleTotalWidth("X17", 6.582122e-25/4e-14);
                 makeStaticData()->SetParticleParity("X17", 1);
 
                 if (experimental_decays) {
