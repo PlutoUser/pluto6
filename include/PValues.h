@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 9.7.2007
-// Revised: 
+// Revised:
 // PValues Class Header
 
 #ifndef _PVALUES_H_

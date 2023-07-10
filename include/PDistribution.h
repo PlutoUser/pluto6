@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 3.7.2006
-// Revised: 
+// Revised:
 // Base class for common distributions
 
 #ifndef _PDISTRIBUTION_H_
@@ -36,29 +36,29 @@
 
 
 class PDistribution : public TF1 {
-  
+
  public:
 
     PDistribution();
     PDistribution(const Char_t *id, const Char_t *de);
     virtual ~PDistribution();
-  
+
     virtual PDistribution* Clone(const char *delme=NULL) const;
 
     Int_t Add(const Char_t *opt);
-    Int_t Add(const Char_t *name, int flag, 
+    Int_t Add(const Char_t *name, int flag,
 	      const Char_t *pflag);  //Adds a particle placehoulder to the list
-  
-    Int_t Add(const Char_t *name, const Char_t *flag1, 
+
+    Int_t Add(const Char_t *name, const Char_t *flag1,
 	      const Char_t *flag2 = NULL, const Char_t *flag3 = NULL);
     //Helper function
-  
+
     Int_t Set(const Char_t *opt);
     Int_t Set(const Char_t *name, const Char_t *pflag); //Like Add(), but rather replace it
 
     void Reset(void);
-  
-    Int_t SetParticle(PParticle *part, int pid, int flag); 
+
+    Int_t SetParticle(PParticle *part, int pid, int flag);
     //Replaces the pointer for the given particle
     //This function should be called from PChannel
 
@@ -70,13 +70,13 @@ class PDistribution : public TF1 {
 	group=gr;
     }
 
-    PParticle *GetParticle(const Char_t *pflag=NULL); //get the particly with the private flag 
-  
+    PParticle *GetParticle(const Char_t *pflag=NULL); //get the particly with the private flag
+
     Int_t GetStatus(void); //returns 0 if all particles are set
     Int_t CheckDaughters(void) ; //returns 0 if all daughters are set
     void  NoDaughters(void) {no_daughters=1;};
     void  ResetStatus(void);  //Clean setted particles
-  
+
     virtual void Print(const Option_t *delme=NULL) const ;  //Debug info
     void BasePrint(void) const ;  //Debug info
     const Char_t *OptString(void) {return opt_string;};
@@ -90,19 +90,19 @@ class PDistribution : public TF1 {
     Int_t GetEnable(void)        {return enable;};
     void  SetActivated(Int_t en) {is_activated=en;};
     Int_t GetActivated(void)     {return is_activated;};
-    
+
     void  SetVersionFlag(Int_t f)   {version_flag |= f;};
     void  ClearVersionFlag(Int_t f) {version_flag &= (~f);};
     UInt_t GetVersionFlag(UInt_t f = 0xffffffff)  const {
 	return version_flag & f;
     };
-    
+
 
     /* the following tool functions set different versions */
     void DisableSampling(void) {
 	ClearVersionFlag(VERSION_SAMPLING);
     }; //No Sampling in the GenBod
-    
+
     void EnableGenerator(void) {
 	ClearVersionFlag(VERSION_WEIGHTING);
 	SetVersionFlag(VERSION_INVERT_WEIGHTING);
@@ -112,17 +112,17 @@ class PDistribution : public TF1 {
 	ClearVersionFlag(VERSION_SAMPLING);
 	SetVersionFlag(VERSION_WEIGHTING);
     }; //Use distribution as a generator
-    
+
     virtual Bool_t FreezeOut(void);
 
     virtual Bool_t Init(void);
 
     virtual Bool_t Prepare(void);
- 
+
     virtual Bool_t SampleMass(void);
 
     virtual Bool_t SampleMomentum(void);
-  
+
     virtual Bool_t SampleAngle(void);
 
     virtual Bool_t IsNotRejected(void);
@@ -132,7 +132,7 @@ class PDistribution : public TF1 {
     virtual Bool_t Finalize(void);
 
     virtual Bool_t EndOfChain(void);
- 
+
     virtual Double_t GetWeight(void);
 
     virtual Bool_t WriteDebugInfo(PParticle *par);
@@ -182,17 +182,17 @@ class PDistribution : public TF1 {
 	return dynamic_range;
     };
 
-    Bool_t Exec(const char * command); 
-    virtual Bool_t ExecCommand(const char *command, Double_t value); 
+    Bool_t Exec(const char * command);
+    virtual Bool_t ExecCommand(const char *command, Double_t value);
 
-    Int_t  debug_flag;  
+    Int_t  debug_flag;
 
     void PreParticles(void) {preliminary_particles = 1;};
 
     void SetDrawScaling(Double_t my_draw_scaling) {draw_scaling = my_draw_scaling;};
 
  protected:
-  
+
     const Char_t *identifier, *description;
     Int_t enable, is_activated;
     char *parse[4];  //Option strings
@@ -202,7 +202,7 @@ class PDistribution : public TF1 {
     const Char_t *names[MAX_PARTICLE_LIST];
     const Char_t *private_flag[MAX_PARTICLE_LIST];
     const Char_t *private_flag_int[MAX_PARTICLE_LIST];
-    const Char_t *opt_string;  
+    const Char_t *opt_string;
     Int_t particle_flag[MAX_PARTICLE_LIST], pid[MAX_PARTICLE_LIST];
     Int_t position, current_flag;
 
@@ -231,4 +231,4 @@ class PDistribution : public TF1 {
 #endif
 
 
-	
+

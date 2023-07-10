@@ -3,7 +3,7 @@
 //
 //  PDistributionManager keeps information about all distributions
 //  Users can add user-defined distributions
-// 
+//
 //
 //                                  Author:  I. Froehlich
 /////////////////////////////////////////////////////////////////////
@@ -18,7 +18,7 @@ using namespace std;
 #include "Plugins.h"
 #include "TFile.h"
 
-PDistributionManager *gDM=0;          // global pointer 
+PDistributionManager *gDM=0;          // global pointer
 
 PDistributionManager &fDistributionManager() {
     static PDistributionManager *ans = new PDistributionManager();
@@ -35,9 +35,9 @@ PDistributionManager::PDistributionManager() {
     makeStaticData();
 
     pdmutil = makeDistributionManagerUtil();
-    
+
     pdmutil->no_warning = kTRUE;
-	
+
     //some bugfixes .... TODO: Move this to extra plugin
     //makeStaticData()->AddDecay("eta' Dalitz", "eta'","dilepton,g",0.0009);
 
@@ -67,7 +67,7 @@ int PDistributionManager::Attach(PChannel *ch) {
     //and fills the PChannel with life
 
     //before Attaching, make the data base link
-    pdmutil->LinkDB(); 
+    pdmutil->LinkDB();
 
     ActivateStdModels();
 
@@ -75,7 +75,7 @@ int PDistributionManager::Attach(PChannel *ch) {
 }
 
 void PDistributionManager::ActivateStdModels(void) {
-    pdmutil->LinkDB(); 
+    pdmutil->LinkDB();
     if (!makeStaticData()->GetFreezeOut()) {
         pdmutil->no_warning = kTRUE;
         //remove warning, otherwise the Add() will cause warning
@@ -84,8 +84,8 @@ void PDistributionManager::ActivateStdModels(void) {
 
         pdmutil->no_warning = kFALSE;
 	Info("Attach", "Re-iteration of std plugin done");
-	pdmutil->LinkDB(); 
-    }    
+	pdmutil->LinkDB();
+    }
 }
 
 Bool_t PDistributionManager::AddPlugin(PDistributionCollection *plugin) {
@@ -112,7 +112,7 @@ Bool_t PDistributionManager::Activate(const char *name) {
     }
     //first check if model is already activated
     if (GetDistribution(name)->GetEnable() && GetDistribution(name)->GetActivated()) return kTRUE;
-    
+
     for (int i=0; i<collect_pointer; i++) {
 	if (strcmp(name,collect[i]->GetIdentifier()) == 0) {
 	    //first we check the dependencies
@@ -156,9 +156,9 @@ Bool_t PDistributionManager::Exec(const char *command) {
 
     //split at ":"
     char *array2[200];
-    Int_t array2_s = 200; 
+    Int_t array2_s = 200;
     PUtils::Tokenize(command, ":", array2, &array2_s);
-    
+
     if (array2_s > 2) {
 	Warning("Exec", "Syntax error: Too many :'s");
 	return kFALSE;
@@ -195,13 +195,13 @@ Bool_t PDistributionManager::Exec(const char *command) {
     return kFALSE;
 };
 
-void PDistributionManager::PluginInfo(const char *info) {   
+void PDistributionManager::PluginInfo(const char *info) {
     Info("PDistributionManager", info);
 };
 
 
 Bool_t PDistributionManager::Startup(const char *command) {
-    if (!batch) 
+    if (!batch)
 	batch = new PBatch;
     batch->AddCommand(command);
     return kTRUE;
@@ -253,7 +253,7 @@ Bool_t PDistributionManager::Unpack(const char *filename) {
     }
 
     //Unpack first projector for event loop
-    PCommandList *loop_start_cmd = 
+    PCommandList *loop_start_cmd =
 	(PCommandList*)gROOT->FindObject("_loop");
 
     if (loop_start_cmd) {
@@ -288,7 +288,7 @@ Bool_t PDistributionManager::Unpack(const char *filename) {
 
 		}
 		if (level>MAX_COMMAND_POINTER) return kFALSE; //break
-	    }	    
+	    }
 	}
     }
 

@@ -7,7 +7,7 @@
 //
 //                             Author:  IF
 //                             Written: 23.7.2007
-//                             Revised: 
+//                             Revised:
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -30,7 +30,7 @@ PDynamicData *makeDynamicData() {
 }
 
 PDynamicData::PDynamicData() {
-    
+
     PDataBase *base = makeDataBase();
     i_result = NULL;
     c_result = NULL;
@@ -81,10 +81,10 @@ double PDynamicData::GetParticleTotalWidthSum(Double_t mass, Int_t id, Int_t fla
     // Due to roundoff error in the interpolation, Width() returns a value
     // that differs slightly from the sum of the partial widths Width1().
     // As a result, small branching ratios (e.g. electromagnetic processes)
-    // may never be sampled if Width() is used. For this reason, if a BR is 
-    // requested, it is best to calculate the total width explicitly by 
+    // may never be sampled if Width() is used. For this reason, if a BR is
+    // requested, it is best to calculate the total width explicitly by
     // summing the partial widths for any given mass.
-    // 
+    //
     // flag=1: take into account only hadronic decays
 
     static double mo    = 0.;
@@ -106,7 +106,7 @@ double PDynamicData::GetParticleTotalWidthSum(Double_t mass, Int_t id, Int_t fla
 	return wt = makeStaticData()->GetParticleTotalWidth(id);
 	// static total width
     }
-    
+
     if (io != id) {                        // parent id changed since last call
 	io = id;
 	mo = 0.;
@@ -115,7 +115,7 @@ double PDynamicData::GetParticleTotalWidthSum(Double_t mass, Int_t id, Int_t fla
     if (mo!=mass || flag!=old_flag) {     // mass changed since last call
 	mo = mass;
 	old_flag = flag;
-	if (mass<PData::LMass(id) || mass>PData::UMass(id)) 
+	if (mass<PData::LMass(id) || mass>PData::UMass(id))
 	    return 0.;    // out of range
 
 	double g_tmp = 0.;         // reset sums
@@ -128,19 +128,19 @@ double PDynamicData::GetParticleTotalWidthSum(Double_t mass, Int_t id, Int_t fla
 	       (key, "pnmodes", "link", &listkey)) {
 	    makeDataBase()->GetParamInt(listkey, "didx", &didx); //small workaround
 	    if (makeStaticData()->GetPWidx(*didx) == -1
-		&& mass >= makeStaticData()->GetDecayEmin(*didx)) 
+		&& mass >= makeStaticData()->GetDecayEmin(*didx))
 		// if mode is unknown but kinematically accessible...
 		g_tmp +=
 		    makeStaticData()->GetDecayBR(*didx)*
 		    makeStaticData()->GetParticleTotalWidth(id);
 	    // ...update with the current static BR
-	    else if (flag == 0) 
-		g_tmp += GetDecayPartialWidth(mass, *didx);         
+	    else if (flag == 0)
+		g_tmp += GetDecayPartialWidth(mass, *didx);
 	    else if (makeStaticData()->IsDecayHadronic(*didx))
-		g_tmp += GetDecayPartialWidth(mass, *didx);  
+		g_tmp += GetDecayPartialWidth(mass, *didx);
 	    // otherwise, decay width of known mode
 	}
-	wt = g_tmp;          
+	wt = g_tmp;
     }
 
     return wt;
@@ -150,7 +150,7 @@ double PDynamicData::GetDecayBR(int idx, double m) {
     // returns branching ratio by mode index and mass (GeV/c^2)
 
     PChannelModel *model = GetDecayModel(idx);
-    if (!model) {	
+    if (!model) {
 	return makeStaticData()->GetDecayBR(idx);
     }
     Double_t br;
@@ -164,7 +164,7 @@ double PDynamicData::GetDecayBR(int idx, double m) {
 
 void PDynamicData::ListDecayBR(int id, double m) {
     // list branching ratios of particle id for mass m
-    
+
     if (!makeStaticData()->IsParticleValid(id)) {  // pid out of range
 	return;
     }
@@ -203,16 +203,16 @@ void PDynamicData::ListDecayBR(int id, double m) {
 int PDynamicData::PickDecayChannel(const int &id, const double &m) {
     // returns the index of a decay mode for particle pid=id of mass m (GeV/c**2)
     // selected randomly, consistent with the branching ratios
-    
+
     if (!makeStaticData()->IsParticleValid(id)) {
 	// pid out of range
 	Warning("PickDecayChannel","id %i out of range", id);
 	return -1;
     } else if (m<PData::LMass(id) || m>PData::UMass(id)) return -2; // mass out of range
-    
+
     int n = makeStaticData()->
 	GetParticleNChannels(id); // number of channels available
-    
+
     if (!n) return -3;                        // stable particle
     double r = PUtils::sampleFlat(), br = 0.; // pick a random number
     double sum = 0.;
@@ -221,8 +221,8 @@ int PDynamicData::PickDecayChannel(const int &id, const double &m) {
     Int_t listkey = -1;
 
     while (makeDataBase()->MakeListIterator
-	   (key, pnmodes_param, link_param, &listkey)) {	
-	makeDataBase()->GetParamInt 
+	   (key, pnmodes_param, link_param, &listkey)) {
+	makeDataBase()->GetParamInt
 	    (listkey, didx_param , &didx); //small workaround -> should work on keys
 	sum+=GetDecayBR(*didx,m)*makeStaticData()->GetEnhanceChannelBR(*didx); // normalize first branching ratios
 	//cout << "BR is " << GetDecayBR(*didx,m) << " for " << didx[0] << endl;
@@ -242,13 +242,13 @@ int PDynamicData::PickDecayChannel(const int &id, const double &m) {
 	    return *didx; // return selected index
 	}
     }
-    
+
     Warning("PickDecayChannel", "id=%d sum=%f\n", id, sum);
     return -5;
 }
 
 int PDynamicData::PickDecayChannel(const int &id, const double &m, int *array) {
-    // returns the number and pids of the decay products for the decay 
+    // returns the number and pids of the decay products for the decay
     // of particle pid=id of mass m (GeV/c**2), via a mode selected
     // randomly, consistent with the branching ratios
     // In addition, it does not hurt to return the index (IF)
@@ -256,16 +256,16 @@ int PDynamicData::PickDecayChannel(const int &id, const double &m, int *array) {
     if (!array) {  // invalid address of array
 	Warning("PickDecayChannel", "Invalid address of array");
 	return -1;
-    } else if (!makeStaticData()->IsParticleValid(id)) {            
+    } else if (!makeStaticData()->IsParticleValid(id)) {
 	// pid out of range
 	Warning("PickDecayChannel", "id %i out of range", id);
 	return -1;
     }
-    
+
     array[0] = 0;  // failed to select an index
     Int_t p  = PickDecayChannel(id, m);
     array[0] = 10; //max 10 particles -> for the Mode() BUGBUG: Size of array not checked
-    if (p >= 0) makeStaticData()->GetDecayMode(p, array); 
+    if (p >= 0) makeStaticData()->GetDecayMode(p, array);
     // return number of products and pids
     return p;
 }
@@ -304,7 +304,7 @@ void PDynamicData::SetDecaySCFactor(Int_t didx, Double_t factor) {
 bool PDynamicData::CheckSCAbort(Int_t didx) {
     //to stop endless loops
     if (! makeDataBase()->GetParamInt (didx_param, didx , sccount_param, &i_result)) {
-	makeDataBase()->SetParamInt (makeDataBase()->GetEntryInt(didx_param, didx) , 
+	makeDataBase()->SetParamInt (makeDataBase()->GetEntryInt(didx_param, didx) ,
 				     "sccount", new Int_t(10)); //TODO:MAX_TRIES
 	return kTRUE;
     }
@@ -331,7 +331,7 @@ PChannelModel *PDynamicData::GetDecayModelByKey(Int_t key) {
 
 PChannelModel *PDynamicData::GetDecayModelByKey(Int_t key, Int_t defkey) {
     //returns the secondary decay model
-    
+
     Int_t listkey = makeStaticData()->GetSecondaryKey(key, defkey);
     if (listkey<0) return NULL;
 
@@ -355,15 +355,15 @@ PChannelModel *PDynamicData::GetParticleModel(Int_t pid) {
     return (PChannelModel *) t_result;
 }
 
-PChannelModel *PDynamicData::GetParticleSecondaryModel(const char *name, 
+PChannelModel *PDynamicData::GetParticleSecondaryModel(const char *name,
 						       const char *modelname) {
     Int_t sec_key = makeStaticData()->MakeDirectoryEntry("modeldef", NMODEL_NAME, LMODEL_NAME, modelname);
-    if (sec_key < 0) 
+    if (sec_key < 0)
 	return NULL;
 
     Int_t primary_key = makeStaticData()->GetParticleKey(name);
     Int_t listkey = makeStaticData()->GetSecondaryKey(primary_key, sec_key);
-    if (listkey < 0) 
+    if (listkey < 0)
 	return NULL;
 
     Int_t model_param = makeDataBase()->GetParamTObj("model");
@@ -394,16 +394,16 @@ Double_t PDynamicData::GetParticleTotalWidth(Double_t mass, Int_t pid) {
 Double_t PDynamicData::GetParticleTotalWeight(Double_t mass, Int_t pid, Int_t didx) {
     //return the mass-dependent width if a model exists
     //no mode: use the fixed Breit-Wigner with the total width
-    
+
     PChannelModel *model = GetParticleModel(pid);
 
     if (model) {
-	Double_t w = model->GetWeight(&mass, &didx);	
-	if (w > 0) 
+	Double_t w = model->GetWeight(&mass, &didx);
+	if (w > 0)
 	    return w;
 	return 0;
     }
-    
+
     return 0; //BUGBUG make fixed BW here
 }
 
@@ -412,7 +412,7 @@ bool PDynamicData::SetDecayModel(Int_t didx, PChannelModel *model) {
     Int_t key = makeDataBase()->GetEntryInt("didx", didx);
     if (! makeDataBase()->SetParamTObj (key, "model", (TObject *)model)) {
 	return kFALSE;
-    }   
+    }
     return kTRUE;
 }
 
@@ -420,44 +420,44 @@ bool PDynamicData::SetDecayModelByKey(Int_t didx, PChannelModel *model) {
 
     if (! makeDataBase()->SetParamTObj (didx, "model", (TObject *)model)) {
 	return kFALSE;
-    }   
+    }
     return kTRUE;
 }
 
 double PDynamicData:: GetParticleLife(const int &id, double m, int idx) {
     // mean life
-    // Arguments: 1. id=particle id 
+    // Arguments: 1. id=particle id
     //            2. m=mass (GeV/c**2)
     //            3. idx=decay-mode index (PPosition)
-    
+
     //CALLED FROM: PParticle, PReaction
     const long double hbar = 6.582122e-25;// (s GeV/c**2)
 
-    double w0 = 
+    double w0 =
 	makeStaticData()->GetParticleTotalWidth(
 	    makeStaticData()->IsParticleValid(id)); // static total width
-    if (id == 50 || 
-	makeStaticData()->IsParticle(id,"dilepton")) {  
+    if (id == 50 ||
+	makeStaticData()->IsParticle(id,"dilepton")) {
 	// dilepton = virtual particle!
 	if (w0 > 0.0) return hbar/w0;
 	else if (m > 0.0) return hbar/m;
 	else return 0.0;
     }
 
-    double tau0 = (w0>0.) ? hbar/w0 : 1.e16; 
+    double tau0 = (w0>0.) ? hbar/w0 : 1.e16;
     // static total mean life (width=0 means stable!)
-  
+
     if (m>0. && w0>0.) {  // unstable particle with non-zero mass
 	if (idx == -1) {  // request for total mass-dependent mean life
 	    double w = GetParticleTotalWidth(m,id);     // total mass-dependent width
-	    if (w > 0.) 
-		return hbar/w;  
+	    if (w > 0.)
+		return hbar/w;
             // total mass-dependent mean life, if non zero width
 	} else {     // request for partial mass-dependent mean life
-	    double w1 = GetDecayPartialWidth(m,idx);     
+	    double w1 = GetDecayPartialWidth(m,idx);
 	    // partial mass-dependent width for decay via channel idx
-	    if (w1 > 0.) 
-		return hbar/w1;      
+	    if (w1 > 0.)
+		return hbar/w1;
 	    // partial mass-dependent mean life, if non zero partial width
 	}
     }
@@ -465,46 +465,46 @@ double PDynamicData:: GetParticleLife(const int &id, double m, int idx) {
 }
 
 int PDynamicData::GetParticleDepth(const int &id, int flag) {
-    // Returns the total number of embedded recursive decays 
+    // Returns the total number of embedded recursive decays
     // (TDepth if flag=0) or the number of embedded recursive
     // hadronic decays (HDepth if flag=1).
     // The default value 0 means the index has not been accessed yet.
     // Zero depth corresponds to index -1.
-  
+
     if (makeStaticData()->IsParticleValid(id) == 0) {
 	Warning("GetParticleDepth", "Particle id %i out of range", id);
 	return 0;
     } else if (makeStaticData()->GetTDepth(id)) {
-	return (flag) ? 
-	    ((makeStaticData()->GetHDepth(id)!=-1) ? 
+	return (flag) ?
+	    ((makeStaticData()->GetHDepth(id)!=-1) ?
 	     makeStaticData()->GetHDepth(id) : 0) :
-	    ((makeStaticData()->GetTDepth(id)!=-1) ? 
+	    ((makeStaticData()->GetTDepth(id)!=-1) ?
 	     makeStaticData()->GetTDepth(id) : 0);
     }
     // Enters once on the first call;
     // It also turns off the full-width (TWidx) and partial-width
     // indices (PWidx) for particles and decay modes, respectively,
-    // if the total and partial widths are not calculated. In the 
+    // if the total and partial widths are not calculated. In the
     // latter case the static width and branching ratio are used.
 
     int n = makeStaticData()->GetParticleNChannels(id);
-    
+
     if (!n) {                             // no decay modes
 	makeStaticData()->SetTWidx(id,  -1);      // turn off total-width flag
 	makeStaticData()->SetTDepth(id, -1);      // turn off total depth index
 	makeStaticData()->SetHDepth(id, -1);      // turn off hadronic depth index
-    } else { 
-	int iter = 0, 
+    } else {
+	int iter = 0,
 	    iter2 = 0;
-	
+
 	//now loop over decay modes
 	Int_t key = makeDataBase()->GetEntryInt("pid", id);
 	Int_t listkey = -1;
-	
+
 	Int_t tid[11];
 	while (makeDataBase()->MakeListIterator
 	       (key, "pnmodes", "link", &listkey)) {
-	    tid[0] = 10; 
+	    tid[0] = 10;
 	    makeStaticData()->GetDecayModeByKey(listkey, tid); // retrieve current mode info
 	    int pos = makeStaticData()->GetDecayIdxByKey(listkey);
 	    //np=tid[0];
@@ -525,10 +525,10 @@ int PDynamicData::GetParticleDepth(const int &id, int flag) {
 	makeStaticData()->SetTDepth(id, (iter)?iter:-1);          // store total depth
 	makeStaticData()->SetHDepth(id, (iter2)?iter2:-1);        // store hadronic depth
     }
-    return (flag) ? 
-	((makeStaticData()->GetHDepth(id)!=-1) ? 
+    return (flag) ?
+	((makeStaticData()->GetHDepth(id)!=-1) ?
 	 makeStaticData()->GetHDepth(id) : 0) :
-	((makeStaticData()->GetTDepth(id)!=-1) ? 
+	((makeStaticData()->GetTDepth(id)!=-1) ?
 	 makeStaticData()->GetTDepth(id) : 0);
 }
 
@@ -571,7 +571,7 @@ PParticle *PDynamicData::GetBatchParticle(const char *name, Int_t make_val) {
 
     TObject *ret;
     Int_t batch_particle_param = makeDataBase()->GetParamTObj("batch_particle");
-    if (batch_particle_param < 0) 
+    if (batch_particle_param < 0)
 	batch_particle_param = makeDataBase()->MakeParamTObj("batch_particle", "PParticle storage for batch");
 
     if (!makeDataBase()->GetParamTObj(key_a ,batch_particle_param,&ret)) {
@@ -589,7 +589,7 @@ TH1 *PDynamicData::GetBatchHistogram(const char *name) {
 
     TObject *ret;
     Int_t batch_histogram_param = makeDataBase()->GetParamTObj("batch_histogram");
-    if (batch_histogram_param < 0) 
+    if (batch_histogram_param < 0)
 	batch_histogram_param = makeDataBase()->MakeParamTObj("batch_histogram", "Histogram storage for batch");
 
     if (!makeDataBase()->GetParamTObj(key_a, batch_histogram_param, &ret)) {
@@ -600,11 +600,11 @@ TH1 *PDynamicData::GetBatchHistogram(const char *name) {
 
 Bool_t PDynamicData::SetBatchHistogram(const char *name, TH1 *histo) {
     Int_t key_a = makeStaticData()->MakeDirectoryEntry("batch_objects", NBATCH_NAME, LBATCH_NAME, name);
-    
+
     Int_t batch_histogram_param = makeDataBase()->GetParamTObj("batch_histogram");
-    if (batch_histogram_param < 0) 
+    if (batch_histogram_param < 0)
 	batch_histogram_param = makeDataBase()->MakeParamTObj("batch_histogram", "Histogram storage for batch");
-   
+
     return makeDataBase()->SetParamTObj(key_a, "batch_histogram", histo);
 };
 

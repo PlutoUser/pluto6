@@ -48,14 +48,14 @@ class PReaction : public TObject  {
     PReaction(PChannel **, int n=2, unsigned int ff=0, TTree *ttree=NULL, const char *filename=NULL);
 
     PReaction(Double_t momentum, const char *beam, const char *target, const char *reaction, const char *file_name=NULL,
-	      Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL); 
+	      Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL);
     // build reaction from a descriptor string
-    PReaction(const char *command,  const char *beam, const char *target, 
+    PReaction(const char *command,  const char *beam, const char *target,
 	      const char *reaction, const char *file_name=NULL,
-	      Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL); 
+	      Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL);
     // build reaction from a descriptor string but uses energy parser
     PReaction(PParticle *, const char *reaction, const char *file_name=NULL,
-	      Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL); 
+	      Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL);
     // build reaction from a descriptor string but uses a seed particle
 
     void AddReaction(const char *reaction);
@@ -77,7 +77,7 @@ class PReaction : public TObject  {
     int GetNumAll() { return ndpar; }
     // returns number of all the particles in the reaction
 
-    int *GetCIndex() { 
+    int *GetCIndex() {
 	return cindex.GetArray(); }
     // returns product channel index
 
@@ -147,7 +147,7 @@ class PReaction : public TObject  {
     // close root output file
 
     void SetHGeant(int flag) {HGeant = (flag!=0);}  // set to 1, if PLUTO is run
-    // from the HGeant prompt 
+    // from the HGeant prompt
     void setHGeant(int flag) {SetHGeant(flag);}; //backward comp.
 
     void SetUserSelection(Int_t (*f)(PParticle*)) { // compiled user selection
@@ -162,12 +162,12 @@ class PReaction : public TObject  {
 
     void SetTrigCond(Int_t n) {nTrigCond = n;}      // set trigger level
 
-    void setDecayAll(Float_t tau=1.) { 
+    void setDecayAll(Float_t tau=1.) {
 	Warning ("setDecayAll", "This method is depreciated: use SetDecayAll()");
 	SetDecayAll(tau);
     }
 
-    void SetDecayAll(Float_t tau=1.) {              
+    void SetDecayAll(Float_t tau=1.) {
 	// decay all particles with
 	// lifetime < tau (in ns)
 	// choose either Pluto or Pythia, depending on availability
@@ -180,10 +180,10 @@ class PReaction : public TObject  {
 
 	//Wrapper to the new scheme
 	tauMax = tau;   // go to sec
-    
+
 
 #ifdef USE_PYTHIA6
-    
+
 	PPythiaBulkDecay *pl = new PPythiaBulkDecay();
 	pl->SetPythia(fPythia);
 	pl->SetTauMax(tauMax);
@@ -197,7 +197,7 @@ class PReaction : public TObject  {
 	AddBulk(pl);
 
 #endif
-    
+
     }
 
 
@@ -207,7 +207,7 @@ class PReaction : public TObject  {
 
 #if 0
     Int_t testPointer(void *p2f) {   // determine type of pointer-to-function
-	// (see CINT reference manual for details) 
+	// (see CINT reference manual for details)
 	if (p2f == NULL) return -1;
 	Int_t ret = G__isinterpretedp2f(p2f);
 	char *fname;
@@ -283,7 +283,7 @@ class PReaction : public TObject  {
 		    current_projector = new PProjector();
 		    AddBulk(current_projector);
 		}
-	    } else {		
+	    } else {
 		current_projector = new PProjector();
 		AddBulk(current_projector);
 	    }
@@ -291,7 +291,7 @@ class PReaction : public TObject  {
 /* 		&& (bulk[bulkdecay_pos-1] -> GetPriority() > FILTER_PRIORITY)) { */
 /* 		current_projector = (PProjector *)bulk[bulkdecay_pos-1]; */
 /* 	    } else { */
-		
+
 /* 		current_projector = new PProjector(); */
 /* 		AddBulk(current_projector); */
 /* 	    } */
@@ -309,12 +309,12 @@ class PReaction : public TObject  {
  private:
 
     Int_t reactionId;                          //  reaction identifier
-    Int_t (*userSelection)(PParticle*);        //! pointer to selection function 
-    Int_t (*userAnalysis)(PParticle**,Int_t);  //! pointer to analysis function 
+    Int_t (*userSelection)(PParticle*);        //! pointer to selection function
+    Int_t (*userAnalysis)(PParticle**,Int_t);  //! pointer to analysis function
 
     Int_t num_filters;           //! Filters from PBatch commands
-    Int_t filter_keys[MAX_REACTION_FILTERS], filter_counter[MAX_REACTION_FILTERS]; 
-    Double_t *filter_values[MAX_REACTION_FILTERS]; 
+    Int_t filter_keys[MAX_REACTION_FILTERS], filter_counter[MAX_REACTION_FILTERS];
+    Double_t *filter_values[MAX_REACTION_FILTERS];
 
     int nchan, ntpar, ndpar, nclones, loop_count, reset_count, status;
     // number of reaction channels (channels),
@@ -336,7 +336,7 @@ class PReaction : public TObject  {
     static const unsigned int ff0, ff1, ff2, ff3, ff4;
     // option flags (see constructor)
 
-    Float_t tauMax;   // max lifetime for decay (see decayALL option) 
+    Float_t tauMax;   // max lifetime for decay (see decayALL option)
 
     PChannel **channel;
     // address of array of pointers to reaction channels
@@ -344,7 +344,7 @@ class PReaction : public TObject  {
     TString filename, file1, file2, original_filename,reaction_string;
     // output file name, filename.evt for (GEANT), filename.root (ROOT)
     void ConvertFilename(void);
-    
+
     TTree *tree;
     // address of the event tree
 
@@ -369,12 +369,12 @@ class PReaction : public TObject  {
     int fileoutput_pos;
     PFileOutput *files[MAX_FILEOUTPUT];
     int bulkdecay_pos, pro_bulkdecay_pos;
-    
+
     PBulkInterface *bulk[MAX_BULKDECAY];
     PBulkInterface *pro_bulk[MAX_BULKDECAY];
     PProjector *current_projector;
 
-  
+
     Int_t nTrigCond;
 
     TPythia6 *fPythia;                   //! pointer to Pythia object
@@ -386,7 +386,7 @@ class PReaction : public TObject  {
     // get the channels and particles, identify the physics, set up the defaults.
 
     Bool_t parse_script(const char *e, const char *beam, const char *target, const char *reaction, const char *file_name=NULL,
-			Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL); 
+			Int_t f0=1, Int_t f1=0, Int_t f2=0, Int_t f3=0, TTree *ttree=NULL);
 
     void InitLoop();
     // resets the dynamical objects of the reaction and opens files
@@ -447,4 +447,4 @@ class PReaction : public TObject  {
 
 
 
-	
+

@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 23.5.2007
-// Revised: 
+// Revised:
 
 #ifndef _PHADRONMODEL_H_
 #define _PHADRONMODEL_H_
@@ -11,7 +11,7 @@
 #include "PDynamicData.h"
 
 class PHadronModel : public PChannelModel  {
-  
+
  public:
     PHadronModel();
     PHadronModel(const Char_t *id, const Char_t *de, Int_t key);

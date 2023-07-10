@@ -1,6 +1,6 @@
 // Author: Ingo Froehlich
 // Written: 10/07/2007
-// Modified: 
+// Modified:
 // PPlutoBulkDecay Class Header
 
 #ifndef _PPLUTOBULKDECAY_H_
@@ -18,28 +18,28 @@ class PPlutoBulkDecay: public PBulkInterface {
     int recursiveMode;
 
  protected:
-    
+
 
  public:
 
   PPlutoBulkDecay();
 
   bool Modify(PParticle **stack, int *decay_done, int *num, int maxnum);  //decay all particle
-  
+
   void SetTauMax(double t) {
       // go to sec
       tauMax = t*1.e-9;
-  }; 
+  };
 
   void SetRecursiveMode(int t) {
       //0: no recursive decay
       //1: recursive decay enabled
       recursiveMode=t;
   };
-  
-  ClassDef(PPlutoBulkDecay, 0) // Let particles decay the Pluto way 
+
+  ClassDef(PPlutoBulkDecay, 0) // Let particles decay the Pluto way
 };
-#endif 
+#endif
 
 
 

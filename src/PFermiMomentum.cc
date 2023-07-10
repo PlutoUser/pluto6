@@ -57,7 +57,7 @@ PFermiMomentum::~PFermiMomentum() {
 
 double PFermiMomentum::SampleFermi(double &px, double &py, double &pz) {
     // sample Deuteron Fermi momentum in GeV/c
-  
+
     double p = this->GetRandom();
     while (p>0.3)
 	p = this->GetRandom();
@@ -93,7 +93,7 @@ Double_t PFermiMomentum::GetWeight(Double_t *mass, Int_t *) {
     eS = sqrt(ptot*ptot + massS*massS);            // spectator total energy in deuteron c.m.
     mdeut = makeStaticData()->GetParticleMass("d");
     t = pow(mdeut-massS,2) - 2.*mdeut*(eS-massS);  // off-shell mass**2 of participant
-    eP = sqrt(ptot*ptot + t);         // participant total energy	
+    eP = sqrt(ptot*ptot + t);         // participant total energy
     TLorentzVector my_part(px,py,pz,eP);
 
     TLorentzVector my_q = my_part + my_beam;
@@ -103,7 +103,7 @@ Double_t PFermiMomentum::GetWeight(Double_t *mass, Int_t *) {
 	w *= composite_model->GetWeight(&my_sqrt);
     }
 
-    return w;    
+    return w;
 };
 
 double PFermiMomentum::EvalPar(const double *x, const double *) {
@@ -130,21 +130,21 @@ Double_t PFermiMomentum::Eval(Double_t x, Double_t, Double_t, Double_t) const {
 	m[i]  = alpha + i;
 	m2[i] = m[i]*m[i];
     }
-  
+
     double c[13] = {0.88688076e0, -0.34717093e0, -0.30502380e1, 0.56207766e2,
 		    -0.74957334e3,  0.53365279e4, -0.22706863e5, 0.60434469e5,
 		    -0.10292058e6,  0.11223357e6, -0.75925226e5, 0.29059715e5,
 		    0.};
-  
+
     double d[13] = {0.23135193e-1, -0.85604572e0, 0.56068193e1, -0.69462922e2,
 		    0.41631118e3,  -0.12546621e4, 0.12387830e4,  0.33739172e4,
-		    -0.13041151e5,   0.19512524e5, 0., 0., 0.}; 
-  
+		    -0.13041151e5,   0.19512524e5, 0., 0., 0.};
+
     c[12] = 0.;
     for(int i=0; i<12; i++) c[12] -= c[i];   // normalize c[] properly
-  
+
     int n = 12, n1 = 11, n2 = 10;
-  
+
     double sum1 = 0.;
     double sum2 = 0.;
     double sum3 = 0.;
@@ -157,7 +157,7 @@ Double_t PFermiMomentum::Eval(Double_t x, Double_t, Double_t, Double_t) const {
 	rtemp = d[i*2]*m2[i*2] + d[i*2+1]*m2[i*2+1];
 	sum3  = sum3 + rtemp;
     }
-  
+
     for(int i=0; i<3; i++) {                 // normalize d[] properly
 	d[n2] = -m2[n1]*m2[n]*sum1 + (m2[n1]+m2[n])*sum2 - sum3;
 	d[n2] = d[n2] * m2[n2]/(m2[n]-m2[n2])/(m2[n1]-m2[n2]);
@@ -166,7 +166,7 @@ Double_t PFermiMomentum::Eval(Double_t x, Double_t, Double_t, Double_t) const {
 	n1 = n;
 	n  = cycle;
     }
-  
+
     double U = 0.;
     double W = 0.;
     for(int i=0; i<13; i++) {
@@ -175,7 +175,7 @@ Double_t PFermiMomentum::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     }
     U = sqrtpi2 * U;    // s wave
     W = sqrtpi2 * W;    // d wave
-  
+
     return draw_scaling*r*r*(U*U + W*W);  // total probability to have momentum p
 };
 
@@ -214,7 +214,7 @@ int PFermiMomentum::GetDepth(int) {
 }
 
 void PFermiMomentum::SubPrint(Int_t) const {
-    //Print sub-models    
+    //Print sub-models
     if (composite_model) {cout << " {";cout << composite_model->GetIdentifier()<<"}";}
 }
 
@@ -228,22 +228,22 @@ Bool_t PFermiMomentum::Prepare(void) {
 		makeDynamicData()->GetDecayModelByKey(
 		    makeStaticData()->GetDecayKey(didx_composite), tcross_key);
 	}
-    } 
+    }
 
     return kTRUE;
 }
 
 Bool_t PFermiMomentum::SampleMass(void) {
-    
+
     Int_t beam_breakup = 0;
 
     //This is the d+N reaction:
     if ((beam->ID() == makeStaticData()->GetParticleID("d")) && (
 	    target->ID() != makeStaticData()->GetParticleID("d"))) {
 	beam_breakup = 1;
-    } 
+    }
     else if ((beam->ID() == makeStaticData()->GetParticleID("d")) && (
-	    target->ID() == makeStaticData()->GetParticleID("d"))) { 
+	    target->ID() == makeStaticData()->GetParticleID("d"))) {
 	//d+d_coherent reaction
 	Double_t is_breakup = 0;
 	if (beam->GetValue(IS_BREAKUP, &is_breakup)) //value used
@@ -271,7 +271,7 @@ Bool_t PFermiMomentum::SampleMass(void) {
 	exp_w_mean = (Double_t)num_of_realevents/(Double_t)num_of_sampledevents;
 	makeloop = kFALSE;
 	if (!composite_model || ((composite_model->GetVersionFlag()) & VERSION_WEIGHTING)) {
-	    //no consecutive decay model or 
+	    //no consecutive decay model or
 	    //Taken into account in next step
 	    Double_t massS, eS, eP, ptot, px, py, pz, t=-1., mdeut;
 	    while (t < 0.) {
@@ -281,10 +281,10 @@ Bool_t PFermiMomentum::SampleMass(void) {
 		mdeut = makeStaticData()->GetParticleMass("d");
 		t = pow(mdeut-massS,2) - 2.*mdeut*(eS-massS);  // off-shell mass**2 of participant
 	    }
-	    
+
 	    eP = sqrt(ptot*ptot + t);         // participant total energy
-	    
-	    participant.SetPxPyPzE(-px, -py, -pz, eP);  // initialize participant nucleon	    
+
+	    participant.SetPxPyPzE(-px, -py, -pz, eP);  // initialize participant nucleon
 	    spectator->SetPxPyPzE(px, py, pz, eS);      // initialize spectator nucleon
 	} else {
 	    //here we have to fold in consecutive decay model
@@ -304,37 +304,37 @@ Bool_t PFermiMomentum::SampleMass(void) {
 		mesh->ReCalcYMax();
 		mesh->SetThreshold(1.5, 0.01);
 		mesh->SetMCPoints(1000);
-		mesh->Divide(5, 2);		
+		mesh->Divide(5, 2);
 	    }
 	    debug_print = 1;
 	    mesh->GetRandom();
-	    
+
 //	double p = mesh->GetArrayValue(0);
 // 	double theta = acos(mesh->GetArrayValue(1));
-	    
+
 // 	cout << mesh->GetArrayValue(0) << ":" << mesh->GetArrayValue(1) << endl;
-	    
+
 // 	double phi = 2.*TMath::Pi()*PUtils::sampleFlat();
 // 	double sth=sin(theta);
 // 	px = p*cos(phi)*sth;
 // 	py = p*sin(phi)*sth;
 // 	pz = p*cos(theta);
 //	cout << px << ":" << py << ":" <<pz << endl;
-	    
+
 	    Double_t massS, eS, eP, ptot, t=-1., mdeut;
-	    
+
 	    ptot = sqrt(px*px+py*py+pz*pz);
-	    
+
 	    massS = spectator->M();                        // mass of spectator nucleon
 
 	    eS = sqrt(ptot*ptot + massS*massS);            // spectator total energy in deuteron c.m.
 	    mdeut = makeStaticData()->GetParticleMass("d");
 	    t = pow(mdeut-massS,2) - 2.*mdeut*(eS-massS);  // off-shell mass**2 of participant
-	    eP = sqrt(ptot*ptot + t);         // participant total energy	
+	    eP = sqrt(ptot*ptot + t);         // participant total energy
 	    participant.SetPxPyPzE(px, py, pz, eP);  // initialize participant nucleon
 	    spectator->SetPxPyPzE(-px, -py, -pz, eS);      // initialize spectator nucleon
 	}
-		
+
 	//Up to now we are in the (breakup-)deuteron frame.
 	//Let us go into the lab frame first
 	if (beam_breakup) {
@@ -348,7 +348,7 @@ Bool_t PFermiMomentum::SampleMass(void) {
 		*p2 = *target;
 		*p1 = participant;
 	    }
-	    
+
 	} else {
 	    //target is (breakup-)deuteron
 	    //for consistency (target might move) we boost also here
@@ -361,7 +361,7 @@ Bool_t PFermiMomentum::SampleMass(void) {
 		*p2 = *beam;
 		*p1 = participant;
 	    }
-	} 
+	}
 	//go into parent frame
 	p1->Boost(-parent->BoostVector());
 	p2->Boost(-parent->BoostVector());
@@ -371,7 +371,7 @@ Bool_t PFermiMomentum::SampleMass(void) {
 	//now check if we fall into the kinematic limits
 	if (composite_model && ((composite_model->GetVersionFlag()) & VERSION_WEIGHTING)) {
 
-	    if (composite_model->GetWeight(composite->M()) <= 0.) {		
+	    if (composite_model->GetWeight(composite->M()) <= 0.) {
 		makeloop = kTRUE;
 	    }
 	}

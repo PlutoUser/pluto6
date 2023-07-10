@@ -17,16 +17,16 @@
 class PSaid : public PAngularDistribution {
 
  public:
-    
+
     PSaid();
     PSaid(const Char_t *id, const Char_t *de);
-    
+
     PDistribution *Clone(const char *delme=NULL) const;
 
     Bool_t Init(void);
     Bool_t Prepare(void);
     Bool_t IsNotRejected(void);
-        
+
     double SamplePolarAngle(double);
 
     ~PSaid();
@@ -34,7 +34,7 @@ class PSaid : public PAngularDistribution {
  private:
 
     double told;
- 
+
     int dim;
     //TRandom3 *REngine;                   // private M-Twistor random number engine
     TArrayD y, aa;                       // private arrays for the sampling algorithm

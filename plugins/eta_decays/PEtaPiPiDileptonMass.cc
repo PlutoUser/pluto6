@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////
-// 
+//
 // Decay eta -> pi+ pi- dilepton
 // Model to sample the dilepton mass
 //
 // References:
 // [L1] Thimo Petri and Andreas Wirzba
 //      Internal Report, Juelich
-// 
+//
 //                                  Author:  I. Froehlich
 /////////////////////////////////////////////////////////////////////
 
@@ -31,7 +31,7 @@ PEtaPiPiDileptonMass::PEtaPiPiDileptonMass(const Char_t *id, const Char_t *de, I
 	Warning("PEtaPiPiDileptonMass", "This model should be bound to CHANNELS only");
 
     m_pi    = makeStaticData()->GetParticleMass("pi+");
-    mass_e  = makeStaticData()->GetParticleMass("e-"); 
+    mass_e  = makeStaticData()->GetParticleMass("e-");
     mass_ee = 2.*mass_e;
     vmd_formfactor_model = NULL;
 
@@ -46,7 +46,7 @@ PDistribution* PEtaPiPiDileptonMass::Clone(const char*) const {
 
 Bool_t PEtaPiPiDileptonMass::Init(void) {
     //Init function called once for each PChannel
-    
+
     //looking for parent. This is mandatory
     parent = GetParticle("parent");
     if (!parent) {
@@ -89,7 +89,7 @@ Double_t PEtaPiPiDileptonMass::GetWeight(Double_t *mass, Int_t *) {
 }
 
 Double_t PEtaPiPiDileptonMass::GetMassWeight(Double_t mass) const {
-    
+
     //Mass-dependent part of the eqn. 64
 
     if (mass < mass_ee) return 0.;

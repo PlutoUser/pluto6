@@ -1,7 +1,7 @@
 // Author: I. Froehlich
 // Written: 27.7.2008
-// Revised: 
-// 
+// Revised:
+//
 
 
 #ifndef _PBREMSSTRAHLUNG_PLUGIN_H_
@@ -21,7 +21,7 @@
 using namespace std;
 
 class PBremsstrahlungPlugin : public PDistributionCollection {
-    
+
  public:
 
     //constructor
@@ -29,7 +29,7 @@ class PBremsstrahlungPlugin : public PDistributionCollection {
     //destructor
     ~PBremsstrahlungPlugin();
 
-    Bool_t ExecCommand(const char *command, Double_t value); 
+    Bool_t ExecCommand(const char *command, Double_t value);
 
     Bool_t Activate(void);
 

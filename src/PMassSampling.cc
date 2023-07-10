@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 //
-// General purpose resonance mass sampling 
+// General purpose resonance mass sampling
 // Resonance shapes can be defined by a TF1-object
 // This class allows to "play" around with different resonance shapes
 // in coupled-channel calculations
@@ -24,7 +24,7 @@ PMassSampling::PMassSampling()  {
 
 PMassSampling::PMassSampling(const Char_t *id, const Char_t *de, Int_t key) :
     PHadronModel(id, de, key) {
-    
+
     shape1 = NULL;
 }
 

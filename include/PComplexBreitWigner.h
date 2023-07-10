@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 28.6.2007
-// Revised: 
+// Revised:
 
 #ifndef _PCOMPLEXBREITWIGNER_H_
 #define _PCOMPLEXBREITWIGNER_H_
@@ -14,13 +14,13 @@
 
 
 class PComplexBreitWigner : public PBreitWigner  {
-  
+
  public:
     PComplexBreitWigner();
     PComplexBreitWigner(const Char_t *id, const Char_t *de, Int_t key);
     PDistribution* Clone(const char *delme=NULL) const;
 
-    using PDistribution::GetWeight;   
+    using PDistribution::GetWeight;
     Double_t GetWeight(Double_t *mass, Int_t *didx=NULL);
     TComplex GetAmplitude(Double_t *mass, Int_t *didx=NULL);
 
@@ -41,7 +41,7 @@ class PComplexBreitWigner : public PBreitWigner  {
     virtual void Print(const Option_t *delme=NULL) const ;  //Debug info
 
  private:
-    
+
     void ReadModes(void);
     void ReadModels(void);
     int readModesDone,readModelsDone,updateAmplitude;

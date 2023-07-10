@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////
-//  
+//
 // Adapted TFormula
-//  
-// Changes (and the reason why) are marked with 
+//
+// Changes (and the reason why) are marked with
 // <PLUTOCHANGE>  .... </PLUTOCHANGE>
 //
 ////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ PFormula::PFormula() : ROOT::v5::TFormula() {
 //PFormula::PFormula(const char *name,const char *expression) : TFormula(name,expression) {
 PFormula::PFormula(const char *name, const char *expression) : ROOT::v5::TFormula()
 {
-    
+
     fNdim   = 0;
     fNpar   = 0;
     fNoper  = 0;
@@ -77,7 +77,7 @@ PFormula::PFormula(const char *name, const char *expression) : ROOT::v5::TFormul
     nch = strlen(expression);
     char *expr = new char[nch+1];
     j = 0;
-    for (i=0;i<nch;i++) {       
+    for (i=0;i<nch;i++) {
 	if (expression[i] == ' ') continue;
 	if (i > 0 && (expression[i] == '*') && (expression[i-1] == '*')) {
 	    expr[j-1] = '^';
@@ -156,7 +156,7 @@ PFormula::PFormula(const char *name, const char *expression) : ROOT::v5::TFormul
     }
 
     // </PLUTOCHANGE>
-   
+
     if (Compile()) return;
 
     if (gausNorm)   SetBit(kNormalized);

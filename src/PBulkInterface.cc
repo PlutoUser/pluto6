@@ -4,7 +4,7 @@
 //  This class serves as a base class for bulk modifications
 //  It can be used for bulk decays (e.g. Pythia, Pluto)
 //  or to add array of particles to the particle stream
-// 
+//
 //                    Author:  Ingo Froehlich
 //                    Written: 14/05/2007
 //                    Revised:
@@ -22,7 +22,7 @@ PBulkInterface *makeGlobalBulk() {
     return &fPBulkInterface();
 }
 
-PBulkInterface::PBulkInterface() {  
+PBulkInterface::PBulkInterface() {
     bulk_id       = (++gBulkCounter);
     fPriority     = -1;
     tree          = NULL;
@@ -42,4 +42,4 @@ bool PBulkInterface::Modify(PParticle**, int*, int*, int) {
 
 Int_t PBulkInterface::gBulkCounter=0;
 
-ClassImp(PBulkInterface) 
+ClassImp(PBulkInterface)

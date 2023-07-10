@@ -27,7 +27,7 @@ public:
     Bool_t Read(ifstream& in) {
 	if(in.eof())   return kFALSE;
 	if(!in.good()) return kFALSE;
-	in >> n_in >> n_out >> process_id >> n_collision >> t_collision >> 
+	in >> n_in >> n_out >> process_id >> n_collision >> t_collision >>
 	    E_total_CM >> sig_total >> sig_partial >> baryon_density;
 	if(n_in!=-2 && !in.eof() && !in.good()) return kFALSE;
         return kTRUE;

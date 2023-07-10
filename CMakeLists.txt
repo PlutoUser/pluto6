@@ -52,7 +52,7 @@ ENDFOREACH(f)
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/PluginLinkDef.h)
 FOREACH(f ${PLUGIN_CLASSES_NAMES})
    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/PluginLinkDef.h "\#pragma link C++ class ${f};\n")
-ENDFOREACH(f) 
+ENDFOREACH(f)
 
 ###########################################################
 

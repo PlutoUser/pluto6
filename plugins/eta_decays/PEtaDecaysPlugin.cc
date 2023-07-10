@@ -15,7 +15,7 @@
 //--------------------
 //This decay uses the "genbod" technique:
 //The 4-body decay is done via genbod, and the mass distribution
-//  
+//
 //  M(q^2) = F(q^2) / (8*q^2)
 //
 //is folded into the genbod model. For the form factor by default
@@ -76,7 +76,7 @@
 //                             Author:   I. Froehlich
 //                             Written:  17.09.2009
 //                             Released: 08.12.2010
-//                           
+//
 //////////////////////////////////////////////////////////////////////
 
 #include "PDataBase.h"
@@ -123,19 +123,19 @@ Bool_t PEtaDecaysPlugin::ExecCommand(const char *, Double_t) {
 	//
 	// eta -> pipi gamma (not rare)
 	//
-	
+
 	//Standalone models, up to now nothing special
-	eta_pipi_gamma = 
+	eta_pipi_gamma =
 	    new PEtaPiPiGamma("eta_pipi_gamma_matrix_weighting@eta_to_pi+_pi-_g/matrix",
 			      "Matrix element eta -> pipi gamma (Weighting)", -1);
-	
+
 	eta_pipi_gamma->EnableWeighting();
 	makeDistributionManagerUtil()->Add(eta_pipi_gamma);
-	eta_pipi_gamma = 
+	eta_pipi_gamma =
 	    new PEtaPiPiGamma("eta_pipi_gamma_matrix@eta_to_pi+_pi-_g/matrix",
 			      "Matrix element eta -> pipi gamma", -1);
 	makeDistributionManagerUtil()->Add(eta_pipi_gamma);
-	
+
 	//
 	// eta -> e+e-e+e- (rare)
 	//
@@ -146,15 +146,15 @@ Bool_t PEtaDecaysPlugin::ExecCommand(const char *, Double_t) {
 	ipid[0] = makeStaticData()->GetParticleID("eta");
 	ipid[1] = makeStaticData()->GetParticleID("dilepton");
 	ipid[2] = makeStaticData()->GetParticleID("dilepton");
-	
+
 	if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
-	    makeStaticData()->AddDecay(-1,"eta -> dilepton + dilepton", 
+	    makeStaticData()->AddDecay(-1,"eta -> dilepton + dilepton",
 				       "eta", "dilepton,dilepton", ETA_DOUBLE_DALITZ_BR);
-	
+
 	//Create and add simple model:
 	eta_dd_simple = new PEtaDoubleDalitz("eta_double_dalitz_simple@eta_to_dilepton_dilepton",
 					     "Dilepton generator for eta -> dilepton + dilepton", -1);
-	
+
 	makeDistributionManagerUtil()->SetGroup("rare_eta_decays");
 	makeDistributionManagerUtil()->Add(eta_dd_simple);
 
@@ -178,24 +178,24 @@ Bool_t PEtaDecaysPlugin::ExecCommand(const char *, Double_t) {
 					    "Simple VMD form factor for eta Double Dalitz", -1);
 	ff->SetVectorMesonMass(0.77);
 	ff->SetWeightMax(5.);
-	
+
 	makeDistributionManagerUtil()->Add(ff);
 
 	//
 	// eta -> e+e-pi+pi- (rare)
-	// 
 	//
-	
-	
+	//
+
+
 	//Add  decay, if not yet present:
 	ipid[0] = makeStaticData()->GetParticleID("eta");
 	ipid[1] = makeStaticData()->GetParticleID("e+");
 	ipid[2] = makeStaticData()->GetParticleID("e-");
 	ipid[3] = makeStaticData()->GetParticleID("pi+");
 	ipid[4] = makeStaticData()->GetParticleID("pi-");
-	
+
 	if (makeStaticData()->GetDecayKey(ipid, 4) < 0)
-	    makeStaticData()->AddDecay(-1,"eta -> e+ + e- + pi+ + pi-", 
+	    makeStaticData()->AddDecay(-1,"eta -> e+ + e- + pi+ + pi-",
 				       "eta", "e+,e-,pi+,pi-", ETA_EE_PIPI_BR);
 
 	//first, the standard ff
@@ -207,7 +207,7 @@ Bool_t PEtaDecaysPlugin::ExecCommand(const char *, Double_t) {
 
 	//mass distribution of the di-lepton mass. Here we use the
 	//function to be folded into the genbod model
-	PEtaPiPiDileptonMass *main = 
+	PEtaPiPiDileptonMass *main =
 	    new PEtaPiPiDileptonMass("eta_ee_pipi_mass@eta_to_e+_e-_pi+_pi-/correlation",
 				     "eta -> pi pi dilepton a la Wirzba (dilepton mass)", -1);
 	makeDistributionManagerUtil()->Add(main);

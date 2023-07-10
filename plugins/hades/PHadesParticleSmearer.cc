@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////
 //  Momentum smearer implementation file
 //
-//  
+//
 //
 ////////////////////////////////////////////////////////
 
@@ -11,7 +11,7 @@
 #include <cmath>
 
 using namespace std;
- 
+
 PHadesParticleSmearer:: PHadesParticleSmearer() {
     resolution_factor = 1;
     fPriority = FILTER_PRIORITY+1; //for HADES it is standard to filter first and then smear
@@ -22,8 +22,8 @@ bool PHadesParticleSmearer::Modify(PParticle **stack, int *, int *num, int) {
     for (int i=0; i<*num; i++) {
 	PParticle *cur = stack[i];
 	//cur->Print();
-	
-	if (cur->Is("pi+") || cur->Is("pi-")|| cur->Is("p") 
+
+	if (cur->Is("pi+") || cur->Is("pi-")|| cur->Is("p")
 	    || cur->LeptonN()) {
 
 /*
@@ -33,14 +33,14 @@ bool PHadesParticleSmearer::Modify(PParticle **stack, int *, int *num, int) {
 		*/
 	    //double mom_measured = PUtils::sampleGaus(Impulsx, Impulsx*0.1);
 	    //cur->SetPx(mom_measured);
-	    
-	    double res = GetResolution(cur, 4); 
-	    Smear(cur, res);// momentum smearing / 4mdcs / geidar's parametrisation 
-	    	    
+
+	    double res = GetResolution(cur, 4);
+	    Smear(cur, res);// momentum smearing / 4mdcs / geidar's parametrisation
+
  	    cur->ResetE();
 	}
     }
-    
+
     return kTRUE;
 };
 
@@ -87,7 +87,7 @@ void PHadesParticleSmearer::Smear(PParticle *p, double gamma)  {
     double ptot = p->P();
     if (ptot <= 0.) return;
     double th = p->Theta(), ph=p->Phi(), sth =sin(th), mass=p->M();
-    if (fabs(sth) < 1.e-6) 
+    if (fabs(sth) < 1.e-6)
 	sth = (sth>0.) ? 1.e-6 : -1.e-6;
     double smeared_ptot = ( rand.Gaus(ptot, gamma ) );
     if(gamma == 0.1) smeared_ptot = ptot+0.04;
@@ -99,7 +99,7 @@ void PHadesParticleSmearer::Smear(PParticle *p, double gamma)  {
     double smeared_theta = rand.Gaus(th, 0.0023 );
     double smeared_phi = ( rand.Gaus(sth*ph, 0.0023 ) )/sth;
     double theta_check = smeared_theta-2.*TMath::Pi()*int(smeared_theta/(2.*TMath::Pi()));
-    if (theta_check>TMath::Pi() || theta_check<0.) 
+    if (theta_check>TMath::Pi() || theta_check<0.)
 	smeared_phi -= TMath::Pi();
     p->SetRho(smeared_ptot);                    // keeping theta, phi constant
     p->SetTheta(smeared_theta);                 // keeping |p|, phi constant

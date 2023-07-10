@@ -14,7 +14,7 @@ class PDensityMatrix: public PEmbeddedParticles {
 
  private:
 
-    Double_t *matrix[DENSITYMATRIX_MAX_MATRICES], 
+    Double_t *matrix[DENSITYMATRIX_MAX_MATRICES],
 	*matrix_integral[DENSITYMATRIX_MAX_MATRICES];
 
     Double_t *axes[3];
@@ -24,16 +24,16 @@ class PDensityMatrix: public PEmbeddedParticles {
     Int_t     current_matrix;
 
     Bool_t    IsBorder(Int_t bin);
-    
+
     PProjector *projector;
     Double_t *x,*y,*z;
-    
+
  public:
-    
+
     PDensityMatrix();
-    
+
     Bool_t Modify(PParticle **stack, int *decay_done, int *num, int stacksize);  //bulk interface
-    
+
     Bool_t ReadDensityMatrix(const char *filename, Int_t dim, Bool_t use_bin_width,
 			     Double_t min_selection, Double_t max_selection);
 
@@ -48,7 +48,7 @@ class PDensityMatrix: public PEmbeddedParticles {
 
     ClassDef(PDensityMatrix, 0) // Add particles from a density matrix
 };
-#endif 
+#endif
 
 
 

@@ -2,9 +2,9 @@
 // Fast conversion gamma -> e+e- in material
 //
 //
-//                    Author:  
+//                    Author:
 //                    Written: 12/01/2014
-//                    Revised: 
+//                    Revised:
 //
 ////////////////////////////////////////////////////////
 
@@ -23,8 +23,8 @@ PGammaConversion::PGammaConversion() {
     convpar[2] = 0.000359;
     ep = PParticle("e+");
     em = PParticle("e-");
-    
-    for (Int_t i=0; i<NEFUNCS; i++) 
+
+    for (Int_t i=0; i<NEFUNCS; i++)
 	Elepton[i] = NULL;
     RGen = new TRandom3();
     ulep = new TF1("ulep","x*exp(-0.625*x)*(1+27*exp(-1.25*x))",0,20); // lepton angle w.r.t. photon
@@ -68,7 +68,7 @@ PGammaConversion::PGammaConversion(Float_t z, Float_t p, Int_t run = 0) {
     ep = PParticle("e+");
     em = PParticle("e-");
 
-    for (Int_t i=0; i<NEFUNCS; i++) 
+    for (Int_t i=0; i<NEFUNCS; i++)
 	Elepton[i] = NULL;
     RGen = new TRandom3();
     ulep = new TF1("ulep", "x*exp(-0.625*x)*(1+27*exp(-1.25*x))", 0, 20); // lepton angle w.r.t. photon (GEANT3)
@@ -87,8 +87,8 @@ PGammaConversion::PGammaConversion(Float_t z, Float_t p, Int_t run = 0) {
 
 
 PGammaConversion::~PGammaConversion() {  // clean up
-    for (Int_t i=0; i<NEFUNCS; i++) 
-	if (Elepton[i] != NULL) 
+    for (Int_t i=0; i<NEFUNCS; i++)
+	if (Elepton[i] != NULL)
 	    Elepton[i]->Delete();
     ulep->Delete();
     RGen->Delete();
@@ -100,14 +100,14 @@ Float_t PGammaConversion::ConversionXS(Float_t E) { // return total conversion c
     const Float_t EMass = 5.109990615e-4; // electron mass in GeV
     if ( E<2.*EMass ) return 0;     // unphysical region
     Float_t Eph = (E<10 ? E : 10.);
-    
+
     //  Coefficients from Geant3 routine GPRSGA
     const Float_t CPar[18] = {0.87842E-3, -0.19625E-2,  0.12949E-2, -0.20028E-3,  0.12575E-4, -0.28333E-6,
 			      -0.10342E-4,  0.17692E-4, -0.82391E-5,  0.13063E-5, -0.90815E-7,  0.23586E-8,
 			      -0.45263E-3,  0.11161E-2, -0.86749E-3,  0.21773E-3, -0.20467E-4,  0.65372E-6};
     Float_t CC[3] = {0, 0, 0};
     Float_t  X = log(Eph/EMass);
-    
+
     // initialising parameters of CC1, CC2, CC3
     for (Int_t i=0; i<3; i++) {
 	Float_t D = 1;
@@ -117,7 +117,7 @@ Float_t PGammaConversion::ConversionXS(Float_t E) { // return total conversion c
 	    D = D*X;
 	}
     }
-    
+
     //  total cross section for element with Z
     return (Z*(Z+1.0) * (CC[0] + CC[1]*Z + CC[2]/Z));
 }
@@ -125,17 +125,17 @@ Float_t PGammaConversion::ConversionXS(Float_t E) { // return total conversion c
 
 Float_t PGammaConversion::GetConversionProb(Float_t E, Float_t th, Int_t run = 0) {
     // return conversion prob for photon of energy E [GeV] and polar angle theta [deg]
-    if (th<0. || th>90) 
+    if (th<0. || th>90)
 	return 0;      // out of HADES acceptance
-    if (ConvProb >= 1.0) 
+    if (ConvProb >= 1.0)
 	return 1;      // convert all
-    if (ConvProb > 0) 
-	return ConvProb;   // use constant conversion probability 
+    if (ConvProb > 0)
+	return ConvProb;   // use constant conversion probability
     else {
-	if (run != 2)  
+	if (run != 2)
 	    return 0.01 * convpar[0] * (1. + convpar[1]*th + convpar[2]*th*th) * ConversionXS(E);
-	if (run == 2)  
-	    return 0.01 * convpar[0] * (1. + convpar[1]*th + convpar[2]*th*th + 
+	if (run == 2)
+	    return 0.01 * convpar[0] * (1. + convpar[1]*th + convpar[2]*th*th +
 					convpar[3]*th*th*th+convpar[4]*th*th*th*th) * ConversionXS(E);
     }
     return 0.;
@@ -146,12 +146,12 @@ Double_t PGammaConversion::dSde(Double_t *x, Double_t *par) {  // electron energ
     Double_t Z = par[1];     // average atomic charge of converter material
 
     Double_t eps = x[0]/E;   // electron fraction of photon energy
-    if (eps<=0 || eps>=1 || Z<1) 
+    if (eps<=0 || eps>=1 || Z<1)
 	return 0;
 
     const Double_t alpha = 1./137.036;   // fine structure constant
     const Double_t me = 0.0005109989;    // electron mass in GeV
-    
+
     Double_t a   = pow(alpha*Z,2);
     Double_t fcZ = alpha*(1/(1+alpha) + 0.20206 - 0.0369*a + 0.0083*a*a - 0.002*a*a*a); // Coulomb correction
     Double_t FZ  = E<0.05 ? 4./3.*log(Z) : 4./3.*log(Z)+4.*fcZ;
@@ -176,7 +176,7 @@ Double_t PGammaConversion::dSde(Double_t *x, Double_t *par) {  // electron energ
 }
 
 Int_t PGammaConversion::readHist(TString input) {
-    
+
     if(gSystem->AccessPathName(input.Data())!=0) {
 	Error("readHist()", "File %s not found!", input.Data());
         return -1;
@@ -200,7 +200,7 @@ Int_t PGammaConversion::readHist(TString input) {
 		nbinTheta = h->GetNbinsZ();
 		nbinR     = h->GetNbinsY();
 		nbinZ     = h->GetNbinsX();
-		
+
 		if(size == -1) {
 		    hdimension = h;
 
@@ -208,7 +208,7 @@ Int_t PGammaConversion::readHist(TString input) {
 		    for(Int_t i=0; i<size; i++){
 			fhzr.push_back(0);
 		    }
-		    cout << "Histogram binning : theta " << nbinTheta << " r " << 
+		    cout << "Histogram binning : theta " << nbinTheta << " r " <<
 			nbinR << " z " << nbinZ << endl;
 		}
 
@@ -235,9 +235,9 @@ Int_t PGammaConversion::findVertexBin(Float_t zVertexEvt) {
     Int_t bin = -1;
     if(hvertexgeom) {
 	bin = hvertexgeom->GetXaxis()->FindBin(zVertexEvt);
-	if(bin > hvertexgeom->GetNbinsX()) 
+	if(bin > hvertexgeom->GetNbinsX())
 	    bin = -1;
-	else 
+	else
 	    bin -= 1;
         return bin;
     } else return bin;
@@ -247,9 +247,9 @@ Int_t PGammaConversion::getThetaBin(Double_t thetadeg) {
 
     if(hdimension) {
 	Int_t bin = hdimension->GetZaxis()->FindBin(thetadeg);
-	if(thetadeg==0||thetadeg>=nbinTheta) 
+	if(thetadeg==0||thetadeg>=nbinTheta)
 	    return -1;
-        else 
+        else
 	    return bin;
     }
     return -1;
@@ -259,11 +259,11 @@ TH2F *PGammaConversion::getHist(Double_t zVertexEvt, Double_t thetadeg)
 {
     if(hdimension) {
 	Int_t thbin = getThetaBin(thetadeg);
-	if(thbin < 0) 
+	if(thbin < 0)
 	    return 0;
 
         Int_t binVertex = findVertexBin(zVertexEvt);
-        if(binVertex < 0) 
+        if(binVertex < 0)
 	    return 0;
 
 	return fhzr[binVertex*nbinTheta+thbin] ;
@@ -277,16 +277,16 @@ Bool_t PGammaConversion::Modify(PParticle **mstack, int *decay_done, int *num, i
 
     const Double_t R2D = 57.295780;    // rad to deg
     const Double_t me = 0.0005109989;  // electron mass in GeV
-    
+
     int cur = *num;
     int gamma_id = makeStaticData()->GetParticleID("g");
-    
+
     //    cout << cur << "   " << mstack[0]->ID() << endl;
-    
+
     for (int i=0; i<cur; i++) {
-	
+
 	if (mstack[i]->HasID(gamma_id) && mstack[i]->IsActive()) {  // this is a photon
-	    
+
 	    if ((*num) == stacksize) {
 		Warning("Modify", "stacksize reached");
 		return kFALSE;
@@ -309,10 +309,10 @@ Bool_t PGammaConversion::Modify(PParticle **mstack, int *decay_done, int *num, i
             */
 	    // Int_t mesonId = track->GetParentId();
 
-	    if (Ephot < 2*me) 
+	    if (Ephot < 2*me)
 		return kFALSE;
 	    Int_t index = int(Ephot/0.01);          // select energy slice of 0.01 GeV/c
-	    if (index < 0) 
+	    if (index < 0)
 		return kFALSE;
 	    index = min(index, NEFUNCS-1);
 
@@ -392,31 +392,31 @@ Bool_t PGammaConversion::Modify(PParticle **mstack, int *decay_done, int *num, i
 		//----------------------------------
 		// Convert vertex into target num
 		TH2F *hzr = getHist(vertex.Z(), thphot);
-		
+
 		if(!hzr) {
 		    Error("Modify()", "hzr at theta %f and vertex %f not found !", thphot, vertex.Z());
 		    continue;
 		}
-		
+
 		Double_t z,r;
 		hzr->GetRandom2(z, r);
-		
+
 		if(!TMath::Finite(z) || !TMath::Finite(r)) {
 		    ep.SetVertex(0, 0, 10000, 0);
 		    em.SetVertex(0, 0, 10000, 0);
-		} else {		    
+		} else {
 		    Double_t phi = gRandom->Rndm()*2*TMath::Pi();
 		    Double_t x   = cos(phi)*r;
 		    Double_t y   = sin(phi)*r;;
 		    ep.SetVertex(x, y, z, 0);
-		    em.SetVertex(x, y, z, 0);		    
-		    
-		    cout<<" x " << x << " y " << y << " phi " << phi*TMath::RadToDeg() << 
-			" r " << r << " th " << thphot << endl;		    
+		    em.SetVertex(x, y, z, 0);
+
+		    cout<<" x " << x << " y " << y << " phi " << phi*TMath::RadToDeg() <<
+			" r " << r << " th " << thphot << endl;
 		}
 	    } else {
 		ep.SetVertex(x1, y1, z1, 0);
-		em.SetVertex(x1, y1, z1, 0);	
+		em.SetVertex(x1, y1, z1, 0);
 	    }
 
  	    *(mstack[*num]) = ep;
@@ -424,9 +424,9 @@ Bool_t PGammaConversion::Modify(PParticle **mstack, int *decay_done, int *num, i
 	    *(mstack[*num]) = em;
 	    (*num)++;
 	    decay_done[i] = 1;
-	} 
+	}
     }
-    
+
     return kTRUE;
 
 }

@@ -44,7 +44,7 @@ public:
 	if(!in.good()) return kFALSE;
         Double_t px, py, pz, E;
 	Double_t rx, ry, rz;
-	in >> ind >> t >> rx >> ry >> rz >> E >> px >> py >> pz >> mass >> id >> I3 >> 
+	in >> ind >> t >> rx >> ry >> rz >> E >> px >> py >> pz >> mass >> id >> I3 >>
 	    chrg >> ind_part >> ncoll >> s >> parent_process;
 	ind      -= 1;  // fortran ->C++
 	ind_part -= 1;  // fortran ->C++

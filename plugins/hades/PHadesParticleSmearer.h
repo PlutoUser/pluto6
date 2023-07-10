@@ -1,6 +1,6 @@
-// Author: 
+// Author:
 // Written: 12.5.2009
-// Revised: 
+// Revised:
 // PHadesParticleSmearer Class Header
 
 #ifndef _PHADESPARTICLESMEARER_H_
@@ -11,12 +11,12 @@
 #include "PUtils.h"
 
 class PHadesParticleSmearer: public PBulkInterface {
- 
+
  public:
     PHadesParticleSmearer();
-    
-    Bool_t Modify(PParticle **stack, int *decay_done, int *num, int stacksize);   
-    
+
+    Bool_t Modify(PParticle **stack, int *decay_done, int *num, int stacksize);
+
     void SetResolutionFactor(Double_t x) {
 	resolution_factor = x;
     };
@@ -34,7 +34,7 @@ class PHadesParticleSmearer: public PBulkInterface {
     double GetResolution(PParticle *p, Int_t iSetup=4);
     void   Smear(PParticle *p, double gamma);
     double resolution_factor ;
- 
+
     ClassDef(PHadesParticleSmearer, 0)  // Momentum smearing of HADES particle tracks
 
 };

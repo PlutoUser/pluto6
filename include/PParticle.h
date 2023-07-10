@@ -6,10 +6,10 @@
 //                    and decayTime)
 // Revised: 15.12.00  R. Holzmann  (creation time added)
 // Revised: 22.03.05  R. Holzmann  (get/setParent() added)
-// Revised: 23.07.07  IF (new framework) 
+// Revised: 23.07.07  IF (new framework)
 
 // PParticle Class Header
- 
+
 #ifndef _PPARTICLE_H_
 #define _PPARTICLE_H_
 
@@ -23,26 +23,26 @@
 
 
 class PParticle: public TLorentzVector {
-    
+
  public:
     PParticle(Int_t id=0, Double_t T=0., Double_t w=1.);
     // id, lab kinetic energy (GeV), weight
-    
+
     PParticle(const char *, Double_t T=0., Double_t w=1.);
     // name, lab kinetic energy (GeV), weight
-    
+
     PParticle(Int_t, Double_t, Double_t, Double_t, Double_t m=0., Double_t w=1.);
     // id, Px, Py, Pz (GeV/c), mass (GeV/c**2) overrides default, weight
-    
+
     PParticle(const char *, Double_t, Double_t, Double_t,Double_t m=0., Double_t w=1.);
     // name, Px, Py, Pz (GeV/c), mass (GeV/c**2) overrides default, weight
-    
+
     PParticle(Int_t, const TVector3 &, Double_t m=0., Double_t w=1.);
     // id, 3-momentum vector (GeV/c), mass (GeV/c**2) overrides default, weight
 
     PParticle(Int_t, Double_t *, Double_t w=1.);
     // id, pointer to 4-dim array (Px, Py, Pz, E) (GeV/c, GeV), weight
-  
+
     PParticle(Int_t, float *, Double_t w=1.);
     // id, pointer to 4-dim array (Px, Py, Pz, E) (GeV/c, GeV), weight
 
@@ -58,18 +58,18 @@ class PParticle: public TLorentzVector {
 	if (values)  delete values;
     }
 
-    Int_t Is(const char * id) { 
-	return (pid==makeStaticData()->GetParticleID(id)); 
+    Int_t Is(const char * id) {
+	return (pid==makeStaticData()->GetParticleID(id));
     }
-    Int_t is(const char * id) { 
+    Int_t is(const char * id) {
 	//kept for compatibility only
-	return Is(id); 
+	return Is(id);
     }
-    Int_t HasID(const Int_t id) { 
-	return (pid==id); 
+    Int_t HasID(const Int_t id) {
+	return (pid==id);
     }
-    Int_t HasNotID(const Int_t id) { 
-	return (pid!=id); 
+    Int_t HasNotID(const Int_t id) {
+	return (pid!=id);
     }
 
     Int_t size()      { return (pid<1000)?1:2; }
@@ -79,8 +79,8 @@ class PParticle: public TLorentzVector {
     Int_t IsRho()     { return (Is("rho0") || Is("rho+") || Is("rho-")); }
     Int_t ID() const  { return pid; }
 
-    const char *Name() { 
-	return makeStaticData()->GetParticleName(pid); 
+    const char *Name() {
+	return makeStaticData()->GetParticleName(pid);
     }
 
     void SetSpectator(Int_t s) {spectator=s;};
@@ -105,7 +105,7 @@ class PParticle: public TLorentzVector {
     void SetMom(Double_t mom=0.); // reset by momentum
 
     void ResetE() {             // reset E to be consistent with mass(ID)
-	if (makeStaticData()->GetParticleTotalWidth(pid) > 1.e-3) 
+	if (makeStaticData()->GetParticleTotalWidth(pid) > 1.e-3)
 	    return;      // broad particle
 	Double_t m = makeStaticData()->GetParticleMass(pid);            // get tabulated mass
 	Double_t px = Px(), py = Py(), pz = Pz();
@@ -122,7 +122,7 @@ class PParticle: public TLorentzVector {
     Int_t LeptonN() const  { return makeStaticData()->GetParticleLepton(pid); }
     Int_t Charge() const   { return makeStaticData()->GetParticleCharge(pid); }
     Int_t Key() const      { return makeStaticData()->GetParticleKey(pid); }
-    void Reset(const Int_t id, const TLorentzVector & v, const Double_t w=1.) { 
+    void Reset(const Int_t id, const TLorentzVector & v, const Double_t w=1.) {
 	pid = id;
 	wt  = w;
 	SetVect4(v);
@@ -155,7 +155,7 @@ class PParticle: public TLorentzVector {
 	if (!values) return kFALSE;
 	return values->GetValue(id, val);
     };
-   
+
 
     Int_t GetDBInt(char *name) {
 	Int_t param = makeDataBase()->GetParamInt(name);
@@ -188,14 +188,14 @@ class PParticle: public TLorentzVector {
     void SetStatus(Int_t st){
 	status=st;
     };
-  
+
     Int_t GetStatus(){
 	return status;
     };
 
     Double_t InvariantT(Double_t m3, Double_t m4, Double_t cos_th_cm);
     // The Mandelstam invariant t in 1 + 2 --> 3 + 4 scattering
-  
+
     PParticle operator + (const PParticle & b) const {
 	// "addition" for composite quasi-particles
 	PParticle v( *this );
@@ -222,7 +222,7 @@ class PParticle: public TLorentzVector {
     PParticle & SubTmp( const PParticle & p);
 
     void Print(const Option_t* delme= NULL) const;
-  
+
 
     inline void SetParentId(Int_t pId) {parentId = pId;}
     inline void SetSourceId(Int_t sId) {sourceId = sId;}
@@ -236,17 +236,17 @@ class PParticle: public TLorentzVector {
     inline void  SetDecayModeIndex(Int_t pInd, Int_t i=0) {
 	if (i) {
 	    decayModeIndex = -1;
-	    destroyDecayModeIndex = pInd;	  
+	    destroyDecayModeIndex = pInd;
 	} else {
 	    decayModeIndex = pInd;
 	    destroyDecayModeIndex = -1;
 	}
     }
-  
+
     //Internal models should use opt=1, they will not get the "wrong" getDecayModeIndex
     inline Int_t GetDecayModeIndex(Int_t opt=0) const {
 	if ((opt ==0) && (decayModeIndex<0) && (destroyDecayModeIndex>0))
-	    return destroyDecayModeIndex;      
+	    return destroyDecayModeIndex;
 	return decayModeIndex;
     }
     inline void  SetDaughterIndex(Int_t dInd) {daughterIndex = dInd;}
@@ -262,10 +262,10 @@ class PParticle: public TLorentzVector {
 
     void SetProperTime();     // sample time until decay in proper time (sec)
     void SetProperTime(Double_t t) {decayTime = t;}
-    inline Double_t GetProperTime() const {return decayTime;}  
+    inline Double_t GetProperTime() const {return decayTime;}
 
     void SetVertex(Double_t x, Double_t y, Double_t z, Double_t t) {
-	fV.SetXYZ(x, y, z); 
+	fV.SetXYZ(x, y, z);
 	fT = t;
     }
     void SetVertex(Double_t x, Double_t y, Double_t z) {
@@ -286,9 +286,9 @@ class PParticle: public TLorentzVector {
     inline PParticle* GetParent() {return pParticle;}
     inline void SetSibling(PParticle *p) {sParticle = p;}
     inline PParticle* GetSibling() {
-	if (sParticle) 
+	if (sParticle)
 	    return sParticle;
-	else 
+	else
 	    return this;
     };
 
@@ -307,14 +307,14 @@ class PParticle: public TLorentzVector {
 	Error("SetDaughter","MAX_DAUGHTERS reached");
     };
 
-    inline PParticle *GetDaughter(int i) { 
+    inline PParticle *GetDaughter(int i) {
 	return daughters[i];
     }
 
     inline PParticle *GetScattering(Int_t i) {
-	if (i == 0) 
-	    return qParticle1; 
-	else 
+	if (i == 0)
+	    return qParticle1;
+	else
 	    return qParticle2;
     };
 
@@ -326,8 +326,8 @@ class PParticle: public TLorentzVector {
     };
 
     void addDebugString(char * s) {
-	debug.Append(s);  
-	debug.Append(":");  
+	debug.Append(s);
+	debug.Append(":");
     }
     void clearDebugString() {
 	debug = "";  //BUGBUG memory leak?
@@ -372,7 +372,7 @@ class PParticle: public TLorentzVector {
     PParticle* qParticle1;//!
     PParticle* qParticle2;//!
     PParticle* sParticle; //! pointer to particle object
-    PParticle* daughters[MAX_DAUGHTERS+1]; //!pointer to daughter array 
+    PParticle* daughters[MAX_DAUGHTERS+1]; //!pointer to daughter array
     TString debug;        //! debug string
 
     PValues * values;   //!pointer to value container

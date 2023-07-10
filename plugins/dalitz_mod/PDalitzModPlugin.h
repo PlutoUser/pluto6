@@ -1,7 +1,7 @@
 // Author: I. Froehlich
 // Written: 17.9.2008
-// Revised: 
-// 
+// Revised:
+//
 
 
 #ifndef _PDALITZMOD_PLUGIN_H_
@@ -20,7 +20,7 @@
 using namespace std;
 
 class PDalitzModPlugin : public PDistributionCollection {
-    
+
  public:
 
     //constructor
@@ -28,7 +28,7 @@ class PDalitzModPlugin : public PDistributionCollection {
     //destructor
     ~PDalitzModPlugin();
 
-    Bool_t ExecCommand(const char *command, Double_t value); 
+    Bool_t ExecCommand(const char *command, Double_t value);
 
     Bool_t Activate(void);
 
@@ -39,7 +39,7 @@ class PDalitzModPlugin : public PDistributionCollection {
     Double_t static_br_thresh;   //Threshold for disabling static br in GeV
 
     Bool_t resonances_done;
-       
+
     PDeltaDalitzKrivoruchenko *kriv1, *kriv2;
 
     ClassDef(PDalitzModPlugin, 0) //Plugin to modify Dalitz decays

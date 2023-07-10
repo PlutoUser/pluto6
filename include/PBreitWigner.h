@@ -10,13 +10,13 @@
 #include "PHadronModel.h"
 
 class PBreitWigner : public PHadronModel  {
-  
+
  public:
     PBreitWigner();
     PBreitWigner(const Char_t *id, const Char_t *de, Int_t key);
     PDistribution* Clone(const char *delme=NULL) const;
 
-    using PDistribution::GetWeight;   
+    using PDistribution::GetWeight;
     virtual Double_t GetWeight(Double_t *mass, Int_t *didx=NULL);
     using PDistribution::SampleMass;
     Bool_t SampleMass(Double_t *mass, Int_t *didx=NULL);
@@ -25,9 +25,9 @@ class PBreitWigner : public PHadronModel  {
 	//overwrites the partial model from the data base
 	width_model = m;
     };
-    
+
  protected:
-  
+
     Double_t mr; // Resonance pole mass
     PChannelModel *width_model;
 

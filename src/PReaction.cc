@@ -3,7 +3,7 @@
 //
 //  A PReaction object represents a complete reaction process,
 //  made up of a sequence of PChannels, namely a succession of
-//  particle decays. All the participating PParticles and PChannels 
+//  particle decays. All the participating PParticles and PChannels
 //  must be instantiated before the PReaction is set up.
 //
 //                                  Author:  M.A. Kagarlis
@@ -61,7 +61,7 @@ const char *percent="\%";
 
 
 Int_t passEvent(float eb, float bp, float ph, int n,  // passes event to HGEANT
-		int *id, int *src, int *par, int *parindex, float *px, float *py, float *pz, 
+		int *id, int *src, int *par, int *parindex, float *px, float *py, float *pz,
 		float *vx, float *vy, float *vz, float *vt, float *w);
 
 Int_t CalledSelection(PParticle *p);
@@ -90,7 +90,7 @@ PReaction::PReaction(PChannel **pchannel, const char *file_name, int n,
     // Reaction constructor by pointer to array of pointers to Channels,
     // output file name (see below), options (see below), pointer to external event tree
     // (if called from the decay manager).
-    // Options: 
+    // Options:
     //   f0: 0=Tracked, 1=All particles in ROOT output file_name.root
     //   f1: unused
     //   f2: 0=Do not calculate, 1=Calculate production vertices for product particles
@@ -101,7 +101,7 @@ PReaction::PReaction(PChannel **pchannel, const char *file_name, int n,
     //   E1 px1  py1  pz1  ID1  weight1      <-- 3-momentum components in GeV/c,
     //   E2 px2  py2  pz2  ID2  weight2        <-- GEANT particle ID,
     //   E3 px3  py3  pz3  ID3  weight3          <-- weight
-    //   .    .    .    .   .    .   .   .   .   .  .   . 
+    //   .    .    .    .   .    .   .   .   .   .  .   .
     //   _________________________________________________________________
     // See also PProjector/PBatch for additional conventions if filters are used.
     //   _________________________________________________________________
@@ -110,11 +110,11 @@ PReaction::PReaction(PChannel **pchannel, const char *file_name, int n,
     makeDistributionManager()->DisableAddWarning();
     makeDistributionManager()->ExecAll("init"); //init physics, if not yet done, and allow for didx-plugins
 
-    if (!pchannel) 
+    if (!pchannel)
 	n = 0;
     sub_reaction = NULL;
 
-    status = 0; 
+    status = 0;
     tree   = ttree;
     int check_options = (f0!=0&&f0!=1) + (f1!=0&&f1!=1)
 	+ (f2!=0&&f2!=1) + (f3!=0&&f3!=1&&f3!=2);
@@ -128,7 +128,7 @@ PReaction::PReaction(PChannel **pchannel, const char *file_name, int n,
 	getVERTEX = f2;
 	asciiOUTPUT = f3;
 	extTREE = tree!=NULL;
-	ropt = 0 | ff0*allPARTICLES | ff1*resetCHANNELS | ff2*getVERTEX 
+	ropt = 0 | ff0*allPARTICLES | ff1*resetCHANNELS | ff2*getVERTEX
 	    | ff3*(asciiOUTPUT>0)  | ff4*extTREE;
     }
     nchan = n;
@@ -176,7 +176,7 @@ PReaction:: PReaction(const char *filename) {
     SetName(filename);
 }
 
-PReaction::PReaction(PChannel **pchannel, int n, unsigned int ff, 
+PReaction::PReaction(PChannel **pchannel, int n, unsigned int ff,
 		     TTree *ttree, const char *file_name) {
     // same as above, but passing one unsigned int as flag
     // position of arguments shuffled to break ambiguity with previous constructor
@@ -203,14 +203,14 @@ PReaction::PReaction(Double_t momentum,
 		     const char *reaction, const char *file_name,
 		     Int_t f0, Int_t f1, Int_t f2, Int_t f3, TTree *ttree) {
     // build reaction completely from descriptor string
-    
+
     char dummy[100];
     sprintf(dummy, "_P1=%lf", momentum);
     parse_script(dummy,
 		 beam, target,
 		 reaction, file_name,
 		 f0, f1,f2, f3, ttree);
-} 
+}
 
 PReaction::PReaction(const char *e,
 		     const char *beam, const char *target,
@@ -222,7 +222,7 @@ PReaction::PReaction(const char *e,
 		 beam, target,
 		 reaction, file_name,
 		 f0, f1,f2, f3, ttree);
-} 
+}
 
 Bool_t PReaction::parse_script(const char *command,
                       const char *beam, const char *target,
@@ -232,12 +232,12 @@ Bool_t PReaction::parse_script(const char *command,
     // For "command, the batch script syntax is supported
     // to set the beam parameters. The following variables
     // can be used:
-    // _T1, _T2, _P1, _P2 as kinetic beam energy/momentum 
+    // _T1, _T2, _P1, _P2 as kinetic beam energy/momentum
     // for the beam/target (in GeV), and
-    // _theta1, _theta2, _phi as beam inclination (in rad). 
+    // _theta1, _theta2, _phi as beam inclination (in rad).
     // It should be mentioned, that for the target, the
     // notation is opposite, i.e. theta2 has the opposite
-    // rotation as theta1, and T2 goes into the opposite 
+    // rotation as theta1, and T2 goes into the opposite
     // direction as T1
     //
     // If no variable is used, only T1 as the beam energy is
@@ -249,7 +249,7 @@ Bool_t PReaction::parse_script(const char *command,
     // "_T1=1.5; _theta=2*TMath::DegToRad();"
     //                     -> Beam inclination of 2 deg
 
-  
+
     r_beam = beam, r_target = target;
     reaction_string = reaction;
     makeDistributionManager()->DisableAddWarning();
@@ -268,7 +268,7 @@ Bool_t PReaction::parse_script(const char *command,
 				  "_T1;_T2;_P1;_P2;_theta1;_theta2;_phi;");
     makeGlobalBatch()->Execute(newcommand);
     makeGlobalBatch()->SetVarList(NULL);
-    
+
     Double_t beam_energy1 = 0.;
     if (makeStaticData()->GetBatchValue("_T1",0)) {
 	beam_energy1 = *(makeStaticData()->GetBatchValue("_T1",0));
@@ -303,27 +303,27 @@ Bool_t PReaction::parse_script(const char *command,
     // }
 
     char *array[200];
-    Int_t array_s = 200; 
+    Int_t array_s = 200;
     PUtils::Tokenize(reaction, ";", array, &array_s);
 
     Int_t total_channels = 0;
     TList plutoList;
-   
+
     for (int i=0; i<array_s; i++) {
-       
+
 	PParticle pb,pt;
 
 	Int_t n = 0;
 	if (beam_momentum1 > 0) {
-	    pb = PParticle(beam, 0, 0, beam_momentum1);  
+	    pb = PParticle(beam, 0, 0, beam_momentum1);
 	} else {
-	    pb = PParticle(beam, beam_energy1);  
+	    pb = PParticle(beam, beam_energy1);
 	}
 	if (beam_momentum2 > 0) {
-	    pt = PParticle(target, 0, 0, -beam_momentum2);  
+	    pt = PParticle(target, 0, 0, -beam_momentum2);
 	} else {
 	    pt = PParticle(target, 0, 0, -sqrt(beam_energy2*beam_energy2+2*beam_energy2*
-					       makeStaticData()->GetParticleMass(target)));  
+					       makeStaticData()->GetParticleMass(target)));
 	}
 	pb.RotateY(beam_theta1);
 	pb.RotateZ(beam_phi1);
@@ -331,7 +331,7 @@ Bool_t PReaction::parse_script(const char *command,
 	pt.RotateZ(beam_phi1);
 
 	cout << "<Beam>" << endl;
-	pb.Print();	
+	pb.Print();
 	cout << "<Target>" << endl;
 	pt.Print();
 
@@ -345,10 +345,10 @@ Bool_t PReaction::parse_script(const char *command,
 
     PChannel **pchannel = new PChannel*[total_channels];
     TIter next(&plutoList);
-    
+
     Int_t pos = 0;
     while (TObject *t = next()) {
-	if (t->IsA() == PChannel::Class()) { 
+	if (t->IsA() == PChannel::Class()) {
 	    pchannel[pos++] = (PChannel*) t;
 	}
     }
@@ -372,9 +372,9 @@ Bool_t PReaction::parse_script(const char *command,
     }
     nchan = total_channels;
     SetUp(pchannel);
-    SetName(file_name); 
+    SetName(file_name);
     return kTRUE;
-} 
+}
 
 PReaction::PReaction(PParticle *q,
 		     const char *reaction, const char *file_name,
@@ -387,27 +387,27 @@ PReaction::PReaction(PParticle *q,
     sub_reaction = NULL;
 
     char *array[200];
-    Int_t array_s = 200; 
+    Int_t array_s = 200;
     PUtils::Tokenize(reaction, ";", array, &array_s);
 
     Int_t total_channels = 0;
     TList plutoList;
-   
+
     for (int i=0; i<array_s; i++) {
 	Int_t n = 0;
-	
+
 	plutoList.AddLast(q);
 	ParseChannel(q, array[i], plutoList, n);
-	
+
 	total_channels += n;
     }
 
     PChannel **pchannel = new PChannel*[total_channels];
     TIter next(&plutoList);
-    
+
     Int_t pos = 0;
     while (TObject *t = next()) {
-	if (t->IsA() == PChannel::Class()) { 
+	if (t->IsA() == PChannel::Class()) {
 	    pchannel[pos++] = (PChannel*) t;
 	}
     }
@@ -432,8 +432,8 @@ PReaction::PReaction(PParticle *q,
     }
     nchan = total_channels;
     SetUp(pchannel);
-    SetName(file_name); 
-} 
+    SetName(file_name);
+}
 
 void PReaction::AddReaction(const char *reaction) {
     if (sub_reaction) {
@@ -447,7 +447,7 @@ void PReaction::AddReaction(const char *reaction) {
 	    sub_reaction = new PReaction((char*)"", r_beam, r_target,
 					 reaction,(char*)original_filename.Data(),
 					 allPARTICLES, 1-resetCHANNELS,
-					 getVERTEX, asciiOUTPUT);	
+					 getVERTEX, asciiOUTPUT);
 	else
 	    sub_reaction = new PReaction((char*)"", r_beam, r_target,
 					 reaction, NULL,
@@ -480,17 +480,17 @@ void PReaction::ConvertFilename(void) {
 
     SetName((char*)filename.Data());
     original_filename=original_filename2;
-    
+
     cout << "New name: " << filename << endl;
 }
 
 PReaction::~PReaction() {
     // Reaction destructor
 
-    cindex.~TArrayI(); 
+    cindex.~TArrayI();
     if (particle_stack)
 	delete [] particle_stack;
-    
+
     if (evt[0]) {
 	delete evt[0];
 	evt[0] = NULL;
@@ -501,7 +501,7 @@ PReaction::~PReaction() {
 	    evt[i+1] = NULL;
 	}
     }
-    
+
     if (dindex.GetArray()) dindex.~TArrayI();
     if (ftrack.GetArray()) ftrack.~TArrayI();
     if (!extTREE&&tree) delete tree;
@@ -522,15 +522,15 @@ PParticle *PReaction::MakeParticle(char *name) {
     //    cout << name << endl;
     int is_spec = -1;
     int len     = strlen(name)-1;
-    if ((name[0]=='(') && (name[len]==')'))  { 
+    if ((name[0]=='(') && (name[len]==')'))  {
 	is_spec = 1;
 	PUtils::remove_brackets(&name, '(', ')');
     }
-    if (name[0]=='(') { 
+    if (name[0]=='(') {
 	is_spec = 2;
 	name++;
     }
-    if (name[len]==')') { 
+    if (name[len]==')') {
 	is_spec = 3;
 	name[len]='\0';
     }
@@ -563,7 +563,7 @@ Int_t PReaction::ParseChannel(PParticle *parent, const char *channel,
 		i += ParseChannel(current, &channel[i], plutoList, numChannels);
 		if (channel[i]) i++;
 		start = i;
-		break; 
+		break;
 	    case 0:
 	    case ']': {
 		if (start!=i) {
@@ -587,7 +587,7 @@ Int_t PReaction::ParseChannel(PParticle *parent, const char *channel,
 		numChannels++;
 		return i;
 		break;
-	    } 
+	    }
 	    case ' ': {
 		if (start==i) { start = ++i; break; }
 		TString name(&channel[start], i-start);
@@ -613,7 +613,7 @@ Bool_t PReaction::AddBulk(PBulkInterface *mybulk) {
     //Add a bulk interface to the list
     //Each bulk object will be executed during the event loop
     //after the normal decay
-  
+
     if (bulkdecay_pos == MAX_BULKDECAY ) {
 	Error("AddBulk", "MAX_BULKDECAY reached");
 	return kFALSE;
@@ -639,7 +639,7 @@ Bool_t PReaction::AddPrologueBulk(PBulkInterface *mybulk) {
 	Error("AddPrologueBulk", "MAX_BULKDECAY reached");
 	return kFALSE;
     }
-    
+
     if (pro_bulkdecay_pos && (pro_bulk[pro_bulkdecay_pos-1]->GetPriority() > mybulk->GetPriority())) {
 	pro_bulk[pro_bulkdecay_pos]   = pro_bulk[pro_bulkdecay_pos-1];
 	pro_bulk[pro_bulkdecay_pos-1] = mybulk;
@@ -659,7 +659,7 @@ void PReaction::SetReactionId() {
     PChannel *pch0 = channel[0];  // 1st channel in reaction
     Int_t n = pch0->GetNumPar();  // nb of decay products
     Int_t *ids = pch0->GetPids(); // array of product ids
-    if (ids[0]/100 != 5) {
+    if (ids[0] < 500 || ids[0] > 1000) {
 	Int_t fac = 1;
 	reactionId = 0;
 	if(n>5) n = 5;              // cannot handle more in 32 bits
@@ -668,14 +668,14 @@ void PReaction::SetReactionId() {
 	    fac *= 100;
 	}
 	(pch0->GetParticles())[0]->SetSourceId(reactionId); // source id of 1st part. in 1st ch.
-    } else reactionId = ids[0];   // this is a thermal source, dilepton generator, etc. 
+    } else reactionId = ids[0];   // this is a thermal source, dilepton generator, etc.
 }
 
 void PReaction::SetUp(PChannel **pchannel) {
     // get the channels and particles, identify the physics, set up the defaults.
 
 //    cout << "PReaction:: setUp called" << endl;
-    
+
     int j, i, cnew, l=-1, m=-1, k, pcount;
 
     num_filters   = 0;
@@ -725,7 +725,7 @@ void PReaction::SetUp(PChannel **pchannel) {
 	//TODO: add dummy bulk for separation, otherwise
 	//GetCurrentPorjector gets the global one
     }
-    
+
     event_impact_param = (makeStaticData()->GetBatchValue("_event_impact_param"));
     event_plane        = (makeStaticData()->GetBatchValue("_event_plane"));
     vertex_x = makeStaticData()->GetBatchValue("_event_vertex_x");
@@ -748,7 +748,7 @@ void PReaction::SetUp(PChannel **pchannel) {
     channel = NULL;
     if (pchannel) {
 	if (pchannel[0]->GetQuasi()) {
-	    //Workaround for d+p quasi-construction 
+	    //Workaround for d+p quasi-construction
 	    //Simply move everything by one and fill in the scattering
 	    channel = new PChannel*[nchan+1];
 	    for (int j=0; j<nchan; ++j) {
@@ -784,11 +784,11 @@ void PReaction::SetUp(PChannel **pchannel) {
 	is_fireball = 1;
     } else
 	nclones = ndpar + 1;                    // initialize number of clones for root tree
-  
+
     for (j=0; j<nchan; ++j) {
 	if (makeDistributionManager()->from_pdecaymanager == 0) {
 //	    channel[j]->Print();
-	    makeDistributionManager()->Attach(channel[j]); 
+	    makeDistributionManager()->Attach(channel[j]);
 
 	} //if no DecayManager, do this by hand
     }
@@ -823,7 +823,7 @@ void PReaction::SetUp(PChannel **pchannel) {
 		    poth=channel[k]->GetParticles();// address of that channels particle array
 		    if (pnew[i] == poth[0]) {         // current particle decays at a later channel
 			if (pnew[i]->Is("dilepton")) ++pcount;
-			++dcount;	    
+			++dcount;
 			dindex[k-1] = m;              // keep track which particle decays at which channel
 		    }
 		}
@@ -855,7 +855,7 @@ void PReaction::SetUp(PChannel **pchannel) {
 	particle[j]->SetSiblingIndex(-1);     // sibling(s) not known yet
 	particle[j]->SetSibling(NULL);
     }
-  
+
 
     //initialize PChannels
     for (j=0; j<nchan; ++j) {
@@ -889,7 +889,7 @@ void PReaction::SetName(const char *name) {
     if (name) {
 	filename = name;
 	file2    = name;
-	if (extTREE) 
+	if (extTREE)
 	    file2 = tree->GetCurrentFile()->GetName();
 	else file2 += ".root";  // root file name
     } else {
@@ -903,7 +903,7 @@ void PReaction::SetName(const char *name) {
 	rootfile->Close();
 	delete rootfile;
     }
-    if (asciiOUTPUT && (strlen(filename) > 0) ) {      
+    if (asciiOUTPUT && (strlen(filename) > 0) ) {
 	// ascii output required
 	file1 = filename+".evt";
     }
@@ -918,7 +918,7 @@ void PReaction::InitLoop() {
     int size = ntpar;
     static int count = 0;
 
-    if (!evt[0]) 
+    if (!evt[0])
 	evt[0] = new TClonesArray("PParticle", size);   // create on 1st time
     else return;
 
@@ -942,7 +942,7 @@ void PReaction::InitLoop() {
 	    if (size_branches) {
 		Error("InitLoop", "Multiple branches not supported when using an external tree");
 	    }
-	} else {                                             // create branches 
+	} else {                                             // create branches
 	    tree->Branch("Npart",  &activeCnt, "Npart/I");
 	    tree->Branch("Impact", event_impact_param, "Impact/D");
 	    tree->Branch("Phi",    event_plane, "Phi/D");
@@ -957,7 +957,7 @@ void PReaction::InitLoop() {
 	}
     }
 
-    if (asciiOUTPUT == 1) 
+    if (asciiOUTPUT == 1)
 	asciif = fopen(file1, "w");
 
     if (nMaxBytes>0 && tree) tree->SetMaxTreeSize(nMaxBytes);
@@ -965,12 +965,12 @@ void PReaction::InitLoop() {
     Int_t listkey = -1;
     num_filters = 0;
     Int_t primary_key = makeDataBase()->GetEntry("batch_objects");
-    
+
     if (primary_key >- 1)
 	while (makeDataBase()->MakeListIterator(primary_key, NBATCH_NAME, LBATCH_NAME,
 						&listkey)) {
 	    //cout << makeDataBase()->GetName(listkey);
-	    if ((*makeDataBase()->GetName(listkey) == '#') && 
+	    if ((*makeDataBase()->GetName(listkey) == '#') &&
 		PUtils::ValidVariableName(makeDataBase()->GetName(listkey))) {
 		//Filter found
 		cout << "Found filter variable " << makeDataBase()->GetName(listkey) << endl;
@@ -1004,10 +1004,10 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
     }
     // from one and the same PReaction object
 
-    int i, j, k, error_count=0, error_count_failed=0, empty_count=0, good_event=0, 
+    int i, j, k, error_count=0, error_count_failed=0, empty_count=0, good_event=0,
 	size, current_size_branches[MAX_NUM_BRANCHES],
 	size_tracked;
-    int percentevents = (nevents/100) * (*makeStaticData()->GetBatchValue("_system_printout_percent")), 
+    int percentevents = (nevents/100) * (*makeStaticData()->GetBatchValue("_system_printout_percent")),
 	cpc=1, ipc=cpc*percentevents;
     if (verbose) (*makeStaticData()->GetBatchValue("_system_total_events_to_sample")) = nevents;
     int system_printout_percent = int(*makeStaticData()->GetBatchValue("_system_printout_percent"));
@@ -1017,7 +1017,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 
     double *events = makeStaticData()->GetBatchValue("_system_total_event_number");
 
-    // PParticle **file_particle, **ascii_particle, **tree_particle; 
+    // PParticle **file_particle, **ascii_particle, **tree_particle;
     // particles to be kept on file
 
     //Create additional particles for the bulk decay
@@ -1035,14 +1035,14 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 //    if ((bulkdecay_pos || pro_bulkdecay_pos) && !doonce) {
     if (!doonce) {
 	doonce = 1;
-	for (k=0;k<stacksize;k++) { 
+	for (k=0;k<stacksize;k++) {
 	    p_array[k] = new PParticle("dummy");
 	    particle_stack[k] = p_array[k];
 	    for (int i=0; i<MAX_NUM_BRANCHES; i++) {
 		p_array_branches[i*stacksize + k] = new PParticle("dummy");
 	    }
 	}
-    } 
+    }
     //else {
 	//Fix stack for the rest of reaction lifetime to save time
 	//stacksize = nclones;
@@ -1071,12 +1071,12 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	    bulk[bu]->SetBranchNum(i,   &(current_size_branches[i]));
 	}
     }
-    
+
     for (int i=0; i<MAX_NUM_BRANCHES; i++) {
 	makeGlobalBulk()->SetBranchArray(i, &(p_array_branches[i*stacksize]));
 	makeGlobalBulk()->SetBranchNum(i,   &(current_size_branches[i]));
     }
-    
+
 /////////////////////////////    Event loop    ////////////////////////////////
 
     if (verbose) printf("%s\n", RMessage[1]); //calculating widths in PData...
@@ -1095,7 +1095,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	//the PChannel list
 	for (k=0; k<nclones; k++) {
 	    particle_stack[k] = particle[k];
-	}	
+	}
 
 	//First of all, the size is the filled size
 	//(can also be 0)
@@ -1111,7 +1111,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 		    if (verbose) printf("New loop: %i events\n", nevents);
 		    timer.Continue();
 		}
-		
+
 		if (verbose && i==1000) {   // estimate total exec time from 1000 events
 		    Double_t elaps = timer.RealTime()-t0;
 		    printf("Expected execution time = %.3f sec\n", nevents*0.001*elaps);
@@ -1120,7 +1120,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 		print_welcome = 0;
 	    }
 
-#if 0	    
+#if 0
 	    if (i == ipc) {
 		if (verbose) printf(" %i%s done in %f sec\n", cpc*20, percent, timer.RealTime()-t0);
 		++cpc;
@@ -1136,7 +1136,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 							   *vertex_y,
 							   *vertex_z,0.);
 		(channel[j]->GetParticles())[0]->clearDebugString();
-	    } 
+	    }
 	}
 
 	*event_impact_param = 0.0;             // reset reaction impact parameter
@@ -1156,22 +1156,22 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	for (int bu=0; bu<pro_bulkdecay_pos; bu++) {
 	    int old_size = size;
 	    pro_bulk[bu]->SetTree(tree);
-	    if(!(statusOfModify = pro_bulk[bu]->Modify(particle_stack, 
-						       decay_done, &size, stacksize))) { 
-		break; 
+	    if(!(statusOfModify = pro_bulk[bu]->Modify(particle_stack,
+						       decay_done, &size, stacksize))) {
+		break;
 	    }
 
 	    for (int ii=old_size; ii<size; ii++) {
-		//set index for "new" particles. 
-		particle_stack[ii]->SetIndex(ii);		
-	    }	
+		//set index for "new" particles.
+		particle_stack[ii]->SetIndex(ii);
+	    }
 	    for (int ii=0; ii<size; ii++) {
 		//check for decayed particles and set them inactive
-		if (!allPARTICLES && decay_done[ii]) 
+		if (!allPARTICLES && decay_done[ii])
 		    particle_stack[ii]->SetInActive();  // decayed particle
 	    }
 	}
-	
+
         // if Modify failed we will stop the eventloop
 	if(statusOfModify == kFALSE) {
 	    if (nevents > 0)
@@ -1192,18 +1192,18 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	    }
 	    particle_stack[ii]->SetStatus(STATUS_NOT_DECAYED);
 	    //cout << "set particle " << ii << " active" << endl;
-	    particle_stack[ii]->SetActive(); //active by default, otherwise it is 
+	    particle_stack[ii]->SetActive(); //active by default, otherwise it is
 	    //un-initialized in PChannel::decay()
 	}
 	for (j=0; j<nchan; ++j) {
 	    PParticle *parent = (channel[j]->GetParticles())[0];
-	    if (*weight_version) 
+	    if (*weight_version)
 		parent->SetW(PChannel::GetGlobalWeight() * parent->GetMultiplicity());
 	    parent->SetGenW(1.);
 	    parent->SetInvGenW(1.);
 	    //parent->Print();
 	}
-	
+
 	Int_t ret   = 0;
 	Int_t start = 0;
 
@@ -1212,7 +1212,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	if (error_count_failed > max_failed_events-0.5) {
 	    status = 3;
 	    Error("Loop", "Stalled in one single event (_system_max_failed_events reached). Giving up....");
-	    Info("Loop", "Last error code was: %i", ret);	    
+	    Info("Loop", "Last error code was: %i", ret);
 	    break;
 	}
 
@@ -1229,7 +1229,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 		    //cout << "goto repeat, code=" << ret << ", event nr=" << *events << endl;
 		    goto repeat;            // FAILED, repeat event
 		}
-	    } 
+	    }
 
 	    //Clear status flag for the parent particle
 	    (channel[j]->GetParticles())[0]->SetStatus(ret);
@@ -1252,29 +1252,29 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 		}
 	    }
 	}
-	
+
 	if (pre_heating) {
 	    pre_heating--;
 	    if (pre_heating == 1) Info("Loop()","Preheating done");
 	    goto repeat2;            // dummy, repeat event
 	}
-	
+
 	if (ret == 8) break;                // EOF in PChannel::readFileInput()
 
-	Double_t my_global_weight = 1.;	
+	Double_t my_global_weight = 1.;
 
 	if (*weight_version) {
-	    
+
 	    //BUGBUG: The following lines should go into a separate class:
 #if 1
 	    //Now starting to combine the individual weights
 	    //to (at least) a chain weight
-	    for (k=0; k<size; k++) { 
+	    for (k=0; k<size; k++) {
 		particle_stack[k]->weight_divisor = 1.;
 		//cout << particle_stack[k]->W() << endl;
 	    }
-	    
-	    //Step1: Collect the divisors 
+
+	    //Step1: Collect the divisors
 	    for (k=size-1; k>=0; k--) {
 		if (particle_stack[k]->GetParent() && (particle_stack[k]->W()>0.)) {
 		    particle_stack[k]->GetParent()->weight_divisor =
@@ -1282,41 +1282,41 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 			particle_stack[k]->W();
 		}
 	    }
-	    
-	    //Step2: Combine the divisors 
+
+	    //Step2: Combine the divisors
 	    for (k=size-1; k>=0; k--) {
 		if (particle_stack[k]->GetParent())
 		    particle_stack[k]->GetParent()->weight_divisor *=
 			particle_stack[k]->weight_divisor;
 	    }
-	
+
 	    //Step3: InitWeight
 	    for (k=size-1; k>=0; k--) {
 		particle_stack[k]->SetW(
 		    particle_stack[k]->W() / (particle_stack[k]->weight_divisor));
 	    }
-	    
+
 	    //Step4: Now we assume that the "Adam" has the correct weight
 	    //       for all daughters. This will be copied, thus a
 	    //       chain has the same weight
 	    //
 	    //       At the same time we collect already the "global" weight
-	    
-	    
+
+
 	    for (k=size-1; k>=0; k--) {
 		if (particle_stack[k]->GetParent()) {
 		    particle_stack[k]->SetW(particle_stack[k]->GetParent()->W());
 		} else //adam
 		    my_global_weight *= particle_stack[k]->W();
 	    }
-	    
+
 	    //cout << "W: "<< my_global_weight << endl;
-	    
+
 	    //Step5: (optional)
 	    //Here, we give all particles the same weight (=event weight)
 	    //BUGBUG: Problem when we have different chains and the default weight
 	    //is the number of events???
-	    for (k=size-1; k>=0; k--) 
+	    for (k=size-1; k>=0; k--)
 		particle_stack[k]->SetW(my_global_weight);
 #endif
 	}
@@ -1333,14 +1333,14 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 
 	////////////////////////    Decay all particles (Epilogue)  ////////////////////////////
 
-	//Set the decay flag of the original particles	
+	//Set the decay flag of the original particles
 	for (k=0; k<size; k++) {
 	    if ((particle_stack[k]->GetStatus()) == STATUS_OK)
 		decay_done[k] = 1;
 	    else
 		decay_done[k] = 0;
 	}
-	
+
 	//set the remaining particles to 0
 	for (k=size; k<stacksize; k++) {
 	    decay_done[k] = 0;
@@ -1351,7 +1351,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	if (inactivate_decayed_particles) {
 	    for (int ii=0; ii<size; ii++) {
 		//check for decayed particles and set them inactive ... to be consistent with below
-		if (!allPARTICLES && decay_done[ii]) {		   
+		if (!allPARTICLES && decay_done[ii]) {
 		    particle_stack[ii]->SetInActive();  // decayed particle
 		}
 	    }
@@ -1368,21 +1368,21 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 // 	    }
 
 //	    bulk[bu]->Print();
-	    if(!(statusOfModify = bulk[bu]->Modify(particle_stack, 
+	    if(!(statusOfModify = bulk[bu]->Modify(particle_stack,
 						   decay_done, &size, stacksize))) { break; }
 	    my_global_weight = bulk[bu]->GetWeight();
 	    if (*weight_version) {
-		for (k=size-1; k>=0; k--) 
+		for (k=size-1; k>=0; k--)
 		    particle_stack[k]->SetW(my_global_weight);
 	    }
 
 	    for (int ii=old_size; ii<size; ii++) {
-		//set index for "new" particles. 
+		//set index for "new" particles.
 		particle_stack[ii]->SetIndex(ii);
 	    }
 	    for (int ii=0; ii<size; ii++) {
 		//check for decayed particles and set them inactive
-		if (!allPARTICLES && decay_done[ii]) {		   
+		if (!allPARTICLES && decay_done[ii]) {
 		    //cout << "remove particle " << ii << endl;
 		    particle_stack[ii]->SetInActive();  // decayed particle
 		}
@@ -1391,9 +1391,9 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 #if 0
  	cout << "after EPI " << size << endl;
  	for (k=0;k<size;++k) {
-	    if (particle_stack[k]->IsActive()) 
+	    if (particle_stack[k]->IsActive())
 		particle_stack[k]->Print();
-	    else 
+	    else
 		cout << "particle " << k << " inactive" << endl;
 	}
 #endif
@@ -1405,10 +1405,10 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 			"Bulk return kFALSE. Not full number of events calculated! nEvents = %i !",i);
 	    break;
 	}
-    
+
 	Int_t cnt0 = 0;         // check for empty event
 	for (k=0; k<size; ++k) {
-//     	    cout << "act: " << particle_stack[k]->IsActive() << "done: " <<decay_done[k]<< 
+//     	    cout << "act: " << particle_stack[k]->IsActive() << "done: " <<decay_done[k]<<
 //     		":" << particle_stack[k]->ID() << endl;
 	    if (particle_stack[k]->IsActive()==kTRUE) cnt0++;
 	}
@@ -1417,12 +1417,12 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	    error_count++;
 	    if (last_nonempty < i) {
 		//firts time here....
-		error_count_array[STATUS_EMPTY_EVENT]++;		
+		error_count_array[STATUS_EMPTY_EVENT]++;
 	    } else {
 		//passed already
 		error_count_array[STATUS_PSEUDO_EMPTY_EVENT]++;
 	    }
-	    goto repeat_empty; 
+	    goto repeat_empty;
 	} else {
 	    last_nonempty = i;
 	}
@@ -1431,7 +1431,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 
 //-------------------------------------------------------------------------------------
 
-// 	Double_t xSave = tree_particle[0]->Px(); // save momenta of 1st particle 
+// 	Double_t xSave = tree_particle[0]->Px(); // save momenta of 1st particle
 // 	Double_t ySave = tree_particle[0]->Py();
 // 	Double_t zSave = tree_particle[0]->Pz();
 
@@ -1487,7 +1487,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 // .
 // gROOT->ProcessLine(".L userSelect.C+");  // or .L userSelect.C++
 // r->SetUserSelection(userSelect);
-// r->loop(1000); 
+// r->loop(1000);
 //
 //
 // 3) true compiled function (i.e. embedded into Pluto code)
@@ -1496,14 +1496,14 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 // .
 // .
 // r->SetUserSelection(userSelect);
-// r->loop(1000); 
-// 
+// r->loop(1000);
+//
 // Remark:
 // A select function explicitely compiled into the code (e.g. in PReaction.cc)
 // has to be Set directly with userSelection = select in SetUserSelection(f),
 // and not with via TMethodCall. In addition, to be set from the interpreter, select
 // has to made known to Cint via an entry in the LinkDef.h file.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 	if (userSelection) {  // test user selection function
@@ -1527,9 +1527,9 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 
 	Int_t filters_sum = 0;
 	for (k=0; k<num_filters; k++) {
-	    //	    cout << makeDataBase()->GetName(filter_keys[k]) << ":" << 
+	    //	    cout << makeDataBase()->GetName(filter_keys[k]) << ":" <<
 	    //		*(filter_values[k]) << endl;
-	    
+
 	    if (*(filter_values[k]) < PUtils::sampleFlat()) {
 		//Random variable failed
 		filter_counter[k]++;
@@ -1592,20 +1592,20 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	    float phiEv = 57.29578 * (*event_plane);   // go to degrees
 	    passEvent(Ebeam, bpar, phiEv, cnt, id_tmp, src_tmp, par_tmp, ind_tmp,
 		      px_tmp, py_tmp, pz_tmp, vx_tmp, vy_tmp, vz_tmp, vt_tmp, w_tmp);
-	    gROOT->ProcessLine("doGeant(\"trigger 1\");"); 
-	} 
+	    gROOT->ProcessLine("doGeant(\"trigger 1\");");
+	}
 
 	if (asciiOUTPUT) {                      // write event to ASCII file
-      
+
 	    if (!getVERTEX) {
 		cnt = 0;
-		for(k=0; k<size_tracked; ++k)  
+		for(k=0; k<size_tracked; ++k)
 		    if (stable_particle[k]->IsActive()==kTRUE) cnt++;
 		if (writeINDEX == 0) {
 		    fprintf(asciif," %i %i %f %f 2\n",
 			    PReaction::globalEventCounter,cnt,
 			    channel[0]->GetBT(),*event_impact_param);
-		} else { 
+		} else {
 		    if (channel) fprintf(asciif," %i %i %f %f -2\n",
 					 PReaction::globalEventCounter, cnt,
 					 channel[0]->GetBT(), *event_impact_param);
@@ -1628,7 +1628,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 		}
 	    } else {
 		cnt = 0;
-		for(k=0; k<size_tracked; ++k)  
+		for(k=0; k<size_tracked; ++k)
 		    if (stable_particle[k]->IsActive()==kTRUE) cnt++;
 		if (writeINDEX==0) {
 		    fprintf(asciif, " %i %i %f %f 4\n",
@@ -1672,9 +1672,9 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	    //Write standard particles into tree
 	    for (k=0; k<size; ++k) {  // update TClonesArrays
 
-		if (particle_stack[k]->IsActive() == kFALSE) 
+		if (particle_stack[k]->IsActive() == kFALSE)
 		    continue; //skip inactive prtcls.
-		if (!allPARTICLES && decay_done[k]) 
+		if (!allPARTICLES && decay_done[k])
 		    continue; //skip decayed prtcls.
 
 		particle_stack[k]->SetT(particle_stack[k]->T()/300.);// go from mm/c to ns
@@ -1691,7 +1691,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	    for (int i=0; i<size_branches; i++) {
 		pclone = evt[i+1];
 		pclone->Delete();
-		for (k=0; k<(current_size_branches[i]); k++) { 
+		for (k=0; k<(current_size_branches[i]); k++) {
 		    (*pclone)[k] = new((*pclone)[k]) PParticle(*(p_array_branches[i*stacksize + k]));
 		    cnt++;
 		}
@@ -1702,15 +1702,15 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 		files[z]->WriteEventHeader();
 		files[z]->SetBranchHeader(activeCnt, 0, "Particles");
 		files[z]->WriteBranchHeader();
-		files[z]->Modify(particle_stack, 
-				 decay_done, &size, 
+		files[z]->Modify(particle_stack,
+				 decay_done, &size,
 				 stacksize);
 
 		//First write the standard particles
 		for (k=0; k<size; ++k) {
-		    if (particle_stack[k]->IsActive() == kFALSE) 
+		    if (particle_stack[k]->IsActive() == kFALSE)
 			continue; //skip inactive prtcls.
-		    if (!allPARTICLES && decay_done[k]) 
+		    if (!allPARTICLES && decay_done[k])
 			continue; //skip decayed prtcls.
 		    files[z]->WriteParticle(particle_stack[k]);
 		}
@@ -1719,7 +1719,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 		for (int i=0; i<size_branches; i++) {
 		    files[z]->SetBranchHeader(current_size_branches[i], i+1, makeDataBase()->GetName(key_branches[i]));
 		    files[z]->WriteBranchHeader();
-		    for (k=0; k<(current_size_branches[i]); k++) { 
+		    for (k=0; k<(current_size_branches[i]); k++) {
 			files[z]->WriteParticle(p_array_branches[i*stacksize + k]);
 		    }
 		}
@@ -1729,7 +1729,7 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	    if ((tree) && ((strlen(filename)>0) || extTREE)) //otherwise memory leak
 		tree->Fill();
 	}
-    
+
 // 	if (thetaBeam>0. || sigmaBeam>0.) {    // Set 1st particle back to be ready for next event.
 // 	    // This is needed because it is not resampled by
 // 	    // PChannel::decay() and would cumulate successive rotations.
@@ -1761,10 +1761,10 @@ int PReaction::Loop(int nevents, int wf, int verbose) {
 	printf("\n");
     }
 
-    for (i=0; i<num_filters; i++) 
+    for (i=0; i<num_filters; i++)
 	if (filter_counter[i]) printf(" %i events failed filter %s\n",filter_counter[i],
 				      makeDataBase()->GetName(filter_keys[i]));
-	
+
     if (asciiOUTPUT==1) fclose(asciif);
     if (tree) {
 	if (!extTREE && (strlen(filename) > 0)) {
@@ -1794,7 +1794,7 @@ void PReaction::SetFilter(int, PFilter *) {
 void PReaction::Close() {
     // close root output file
 
-    if (!extTREE && (strlen(filename) > 0)) 
+    if (!extTREE && (strlen(filename) > 0))
 	rootfile->Close();
     else printf("%s\n", RMessage[0]);
 }
@@ -1831,7 +1831,7 @@ void PReaction::Print(const Option_t *delme) const {
 	    printf(" quasi-particle (%s beam and %s target)\n",
 		   makeStaticData()->GetParticleName(iid%1000),makeStaticData()->GetParticleName(iid/1000));
 	}
-    }	   
+    }
     for (;j<nclones; ++j) {
 	printf("     %i. %s",j,makeStaticData()->GetParticleName(particle[j]->ID()));
 	if ((!allPARTICLES||asciiOUTPUT)*ftrack[j]) {
@@ -1848,31 +1848,31 @@ void PReaction::Print(const Option_t *delme) const {
 	printf("   Bulk Classes:\n");
 	if (pro_bulkdecay_pos) {
 	    printf("     Prologue: ");
-	    for (j=0; j<pro_bulkdecay_pos; j++) 
+	    for (j=0; j<pro_bulkdecay_pos; j++)
 		cout << "<" << pro_bulk[j]->ClassName() << "> ";
 	    cout << endl;
 	}
 	if (bulkdecay_pos) {
 	    printf("     Epilogue: ");
-	    for (j=0; j<bulkdecay_pos; j++) 
+	    for (j=0; j<bulkdecay_pos; j++)
 		cout << "<" << bulk[j]->ClassName() << "> ";
 	    cout << endl;
 	}
     }
- 
+
     if (fileoutput_pos || strlen(filename)>0) {
 	printf("   Output File(s):\n");
 	if (strlen(filename) > 0) {
 	    printf("     Root : '%s', %s", (const char*)file2, OType[allPARTICLES]);
-	    if (getVERTEX) 
+	    if (getVERTEX)
 		printf(" including vertices.\n");
-	    else 
+	    else
 		printf(".\n");
-	    if (asciiOUTPUT) 
+	    if (asciiOUTPUT)
 		printf("     ASCII: '%s', %s\n", (const char*)file1, OType[0]);
-	
+
 	}
-	for (int i=0; i<fileoutput_pos; i++) {	    
+	for (int i=0; i<fileoutput_pos; i++) {
 	    printf("     User-file: '%s', %s\n", files[i]->GetFilename(), OType[allPARTICLES]);
 	}
 	if (size_branches) {
@@ -1904,7 +1904,7 @@ void PReaction::SetUserSelection(void *) {  // set user selection function
 	userSelection = (int (*)(PParticle*))f;
 	printf("\n>>> User selection ");
     } else { // this is an interpreted function or a method call
-	char *funcname = G__p2f2funcname(f);      // modeled on TMinuit constructor 
+	char *funcname = G__p2f2funcname(f);      // modeled on TMinuit constructor
 	TMethodCall *fMethodCall = NULL;
 	if (funcname) {
 	    fMethodCall = new TMethodCall();
@@ -1934,7 +1934,7 @@ Int_t CalledSelection(PParticle*) { // interface for interactive user
     return (Int_t)result;
 #endif
     return -1;
-} 
+}
 
 void PReaction::SetUserAnalysis(void *) { // set user analysis function
 
@@ -1947,7 +1947,7 @@ void PReaction::SetUserAnalysis(void *) { // set user analysis function
 	userAnalysis = (int (*)(PParticle**,int))f;
 	printf("\n>>> User analysis ");
     } else { // this is an interpreted function or a method call
-	char *funcname = G__p2f2funcname(f);      // modeled on TMinuit constructor 
+	char *funcname = G__p2f2funcname(f);      // modeled on TMinuit constructor
 	TMethodCall *fMethodCall=NULL;
 	if (funcname) {
 	    fMethodCall = new TMethodCall();
@@ -1978,7 +1978,7 @@ Int_t CalledAnalysis(PParticle **, Int_t) { // interface for user
     return (Int_t)result;
 #endif
     return -1;
-} 
+}
 
 
 //Int_t select(PParticle* p) {  // example of a user selection function

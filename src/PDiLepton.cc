@@ -4,7 +4,7 @@
 //  The Dilepton class sets up an e+e- quasiparticle
 //  that subsequently decays into e+ and e-.
 //  Mass, pt and rapidity are sampled from a box distribution.
-// 
+//
 //                    Author:  Romain Holzmann
 //                    Written: 22.08.01
 //
@@ -46,7 +46,7 @@ void PDiLepton::samplePartCM(double &px, double &py, double &pz, double &E) {
     Double_t pt;
     Double_t phi;
 
-    do {  
+    do {
 	m = m1 + (m2-m1)*PUtils::sampleFlat();     // sample m, pt, y and phi uniformly
     } while (m < makeStaticData()->GetParticleMass(prodId));
     pt  = pt1 + (pt2-pt1)*PUtils::sampleFlat();

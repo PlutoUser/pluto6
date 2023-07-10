@@ -9,7 +9,7 @@
 #include "PKinematics.h"
 
 class PFixedProduction : public PChannelModel  {
-  
+
  public:
     PFixedProduction();
     PFixedProduction(const Char_t *id, const Char_t *de, Int_t key);

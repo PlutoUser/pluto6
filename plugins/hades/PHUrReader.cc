@@ -513,9 +513,9 @@ Bool_t PHUrReader::ReadEvent() {
 
 	    for(Int_t i = 0; i < colheader.n_in; i++) {
 		PHUrParticle part;
-		if(!part.Read(fInputAscii)) { 
-		    Error("ReadEvent()", "Could not read in-going particle!"); 
-		    return kFALSE; 
+		if(!part.Read(fInputAscii)) {
+		    Error("ReadEvent()", "Could not read in-going particle!");
+		    return kFALSE;
 		}
 
                 Int_t pdg = 1000;
@@ -535,9 +535,9 @@ Bool_t PHUrReader::ReadEvent() {
 
 	    for(Int_t i = 0; i < colheader.n_out; i++) {
 		PHUrParticle part;
-		if(!part.Read(fInputAscii)) { 
-		    Error("ReadEvent()", "Could not read out-going particle!"); 
-		    return kFALSE; 
+		if(!part.Read(fInputAscii)) {
+		    Error("ReadEvent()", "Could not read out-going particle!");
+		    return kFALSE;
 		}
 
 		Int_t pdg = 1000;
@@ -565,7 +565,7 @@ Bool_t PHUrReader::ReadEvent() {
 Bool_t PHUrReader::Modify(PParticle **mstack, int *, int *num, int stacksize) {
 
     if(!ReadEvent()) return kFALSE;
-    
+
 
     //----------------------------------------------------------------------------------
     // for the first call : create event structure
@@ -685,7 +685,7 @@ Bool_t PHUrReader::Modify(PParticle **mstack, int *, int *num, int stacksize) {
 		   ) {  // dilepton interest
 		    continue;
 		}
-		
+
 		if(ct == fNumMax-50) {
                     continue;
 		}
@@ -714,7 +714,7 @@ Bool_t PHUrReader::Modify(PParticle **mstack, int *, int *num, int stacksize) {
 	    }
 
 	    for(UInt_t iout = 0; iout <  collisionsOut[icol].size(); iout++) { // out-going particles
-	    
+
 		PHUrParticle &particle = collisionsOut [icol][iout];
 		PHUrCollisionHeader &collision = collisions[icol];
 
@@ -769,52 +769,52 @@ Bool_t PHUrReader::Modify(PParticle **mstack, int *, int *num, int stacksize) {
             // following collisions
 	    for(UInt_t icol2 = icol+1; icol2 < numberCol; icol2++) {   // following collisions
 		for(UInt_t iin = 0; iin < collisionsIn[icol2].size(); iin++) {   // in-going particles
-	
+
 		    PHUrParticle &particleIn  = collisionsIn [icol2][iin];
 		    PHUrParticle &particleOut = collisionsOut[icol ][iout];
-		    
+
 		    if (particleIn.id == particleOut.id && particleIn.Pz() == particleOut.Pz()) {
 			// same particle in following collision
-			
+
 			// found the same particle
 			Bool_t dilepton = kFALSE;
-			
+
 			if(particleIn.id == dilep.omega ||
 			   particleIn.id == dilep.delta ||   // omega || delta || rho || phi
 			   particleIn.id == dilep.rho   ||
 			   particleIn.id == dilep.phi) {  // dilepton interest
-			    
+
 			    dilep.evtheader    = &evtheader;
 			    dilep.particleIn   = &particleIn;
 			    dilep.particleOut  = &particleOut;
 			    dilep.collisionIn  = &collisions[icol2];
 			    dilep.collisionOut = &collisions[icol ];
-			    
-			    if(!outputFreezeoutDiLeptons) { 
-				dilep.Dilep(); 
-			    } else    
+
+			    if(!outputFreezeoutDiLeptons) {
+				dilep.Dilep();
+			    } else
 				flag = 0;             // not final state
-			    
+
 			    dilepton = kTRUE;
-			    
+
 			} // if dilepton interest
-			
+
 			if(particleIn.id == dilep.pion     ||
 			   particleIn.id == dilep.etaprime ||
 			   particleIn.id == dilep.eta) {  // pion || etaprime || eta
 			    flag = 0;
 			    dilepton = kTRUE;
 			}
-			
-			if(!dilepton) flag_noLep = 0;			
-			
+
+			if(!dilepton) flag_noLep = 0;
+
 		    } // if same particle in following collision
 		} // for iin
 	    } // for col2
             //----------------------------------------------------------------------------------
-	    
+
 	    PHUrParticle &particleOut = collisionsOut[icol ][iout];
-	    
+
             //----------------------------------------------------------------------------------
 	    // in case of freeze out dileptons we have to
             // take care
@@ -822,15 +822,15 @@ Bool_t PHUrReader::Modify(PParticle **mstack, int *, int *num, int stacksize) {
 	       particleOut.id == dilep.delta ||   // omega || delta || rho || phi
 	       particleOut.id == dilep.rho   ||
 	       particleOut.id == dilep.phi) {  // dilepton interest
-		
+
 		if(outputFreezeoutDiLeptons && flag != 0)  {
-		    
+
 		    dilep.evtheader    = &evtheader;
 		    dilep.particleIn   = &particleOut;
 		    dilep.particleOut  = &particleOut;
 		    dilep.collisionIn  = &collisions[icol];
 		    dilep.collisionOut = &collisions[icol];
-		    
+
 		    dilep.Dilep();
 		}
 	    }
@@ -857,9 +857,9 @@ Bool_t PHUrReader::Modify(PParticle **mstack, int *, int *num, int stacksize) {
 		      particleOut.id == dilep.delta ||   // omega || delta || rho || phi
 		      particleOut.id == dilep.rho   ||
 		      particleOut.id == dilep.phi )
-		    
+
 		    ) {
-		    
+
 		    if (flag_noLep != 0) {  // final out non lepton
 
 			if (outputNonDiLeptons == 1) {
@@ -914,7 +914,7 @@ Bool_t PHUrReader::Modify(PParticle **mstack, int *, int *num, int stacksize) {
 
 	PParticle *part = (PParticle*) fEvent->At(i);
 	Int_t id = part->ID();   // already urqmd -> pdg code
-	
+
 	if (!makeDataBase()->GetParamInt (pdg_param, id, pid_param, &i_result)) {
 
 	    if(find(funknownIDs.begin(),funknownIDs.end(),id) == funknownIDs.end()){

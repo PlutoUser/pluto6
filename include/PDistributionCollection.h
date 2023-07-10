@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 13.8.2008
-// Revised: 
+// Revised:
 
 #ifndef _PDISTRIBUTIONCOLLECTION_H_
 #define _PDISTRIBUTIONCOLLECTION_H_
@@ -11,7 +11,7 @@
 
 
 class PDistributionCollection : public PDistribution {
-  
+
  public:
 
     PDistributionCollection();
@@ -22,7 +22,7 @@ class PDistributionCollection : public PDistribution {
     const char *GetDependency(Int_t *pointer);
 
  protected:
-  
+
     Bool_t RequiresPlugin(const char *name);
 
     Int_t  plugin_pointer;

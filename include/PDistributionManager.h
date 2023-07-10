@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 3.7.2006
-// Revised: 
+// Revised:
 // Base class for common distributions
 
 #ifndef _PDISTRIBUTIONMANAGER_H_
@@ -26,11 +26,11 @@ PDistributionManager &fDistributionManager();
 PDistributionManager *makeDistributionManager();
 
 class PDistributionManager : public TObject {
-    
+
  public:
-    
+
     PDistributionManager();
-    
+
     int Add(PDistribution *dist) {
 	//Adds user-defined distribution
 	return pdmutil->Add(dist);
@@ -102,7 +102,7 @@ class PDistributionManager : public TObject {
 
     Bool_t AddPlugin(PDistributionCollection *plugin);
 
-    Bool_t Exec(const char *command); 
+    Bool_t Exec(const char *command);
     Bool_t ExecAll(const char *command = "init");
     Bool_t Activate(const char *name);
 
@@ -116,7 +116,7 @@ class PDistributionManager : public TObject {
     };
 
  private:
-  
+
 
     PDistributionManagerUtil *pdmutil;
     PStdModels *std_models;

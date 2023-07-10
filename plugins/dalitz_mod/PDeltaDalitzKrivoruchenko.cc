@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////
-// 
+//
 // Dalitz decay following
 // Eq. 2 from  Comment on delta radiative and Dalitz decays.
 // M.I. Krivoruchenko (Tubingen U. & Moscow, ITEP) , Amand Faessler (Tubingen U.) . Apr 2001. 5pp.
 // Published in Phys.Rev.D65:017502,2002.
 // e-Print: nucl-th/0104045 (Ref21)
-// 
+//
 //                                  Author:  I. Froehlich
 /////////////////////////////////////////////////////////////////////
 
@@ -17,7 +17,7 @@ PDistribution *PDeltaDalitzKrivoruchenko::Clone(const char*) const {
     return new PDeltaDalitzKrivoruchenko((const PDeltaDalitzKrivoruchenko &)* this);
 };
 
-PDeltaDalitzKrivoruchenko::PDeltaDalitzKrivoruchenko(const Char_t *id, const Char_t *de, Int_t key) : 
+PDeltaDalitzKrivoruchenko::PDeltaDalitzKrivoruchenko(const Char_t *id, const Char_t *de, Int_t key) :
     PDalitzDecay(id, de, key) {
 
     //Constructor
@@ -38,7 +38,7 @@ double PDeltaDalitzKrivoruchenko::dGdM(const int& id, const double& m, const dou
 //    cout << m << ":" << ecm << endl;
 
     double mn = mass_n;
-    if (id==Delta_plus || id==S11_plus) 
+    if (id==Delta_plus || id==S11_plus)
 	mn = mass_p;
 
     double ff = 2.7*2.7;

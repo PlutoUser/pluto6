@@ -4,15 +4,15 @@
 //This plugin enables the amplitudes from Ref. 23 for the
 //reaction pi + N -> N e+ e-
 //
-//The energy-dependent matrix elements have been supported by 
-//the authors of Ref. 23 
+//The energy-dependent matrix elements have been supported by
+//the authors of Ref. 23
 //
 //To use this plugin, type:
 //makeDistributionManager()->Exec("pion_beam");
 //A flat di-electron generator is automatially employed
 //Therefore, the weights of the particles have to be used.
 //
-// 
+//
 //                             Author:  Schuldes/Froehlich
 //                             Written: Jul 2009
 //////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ PPionBeamPlugin::PPionBeamPlugin(const Char_t *id, const Char_t *de):
 Bool_t PPionBeamPlugin::Activate(void) {
 
     PDistributionManagerUtil *pdmutil = makeDistributionManagerUtil();
-    
+
     if (!makeStaticData()->IsParticleValid("pi- + p")) {
 	makeStaticData()->AddParticle(14009, "pi- + p", 1.1);
     }
@@ -52,27 +52,27 @@ Bool_t PPionBeamPlugin::Activate(void) {
     ipid[1] = makeStaticData()->GetParticleID("n");
     ipid[2] = makeStaticData()->GetParticleID("dilepton");
 
-  
+
     //Add decay
     if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
-	makeStaticData()->AddDecay(-1, "pi- + p -> n + dilepton", 
+	makeStaticData()->AddDecay(-1, "pi- + p -> n + dilepton",
 				   "pi- + p","n,dilepton", 1.0 );
-  
+
     ipid[0] = makeStaticData()->GetParticleID("pi+ + n");
     ipid[1] = makeStaticData()->GetParticleID("p");
     ipid[2] = makeStaticData()->GetParticleID("dilepton");
 
 
     if (makeStaticData()->GetDecayKey(ipid, 2) < 0)
-	makeStaticData()->AddDecay(-1, "pi+ + n -> p + dilepton", 
+	makeStaticData()->AddDecay(-1, "pi+ + n -> p + dilepton",
 				   "pi+ + n","p,dilepton", 1.0 );
-   
-    
+
+
     pdmutil->AddSubGroup("pion_beam", "Elementary pion beam reactions", "root");
     pdmutil->SetGroup("pion_beam");
 
 
-    Pi_minusBeamAmplitude = 
+    Pi_minusBeamAmplitude =
 	new PPionBeamAmplitude("Pi_minusBeamAmplitude@pi- + p_to_n_dilepton",
 			       "Model from Lutz/Soyeur/Friman", -1);
 
@@ -82,10 +82,10 @@ Bool_t PPionBeamPlugin::Activate(void) {
     Pi_minusBeamAmplitude->Add("n,daughter,p_out");
     Pi_minusBeamAmplitude->Add("q,parent");
 
-    PPionBeamAmplitude *Pi_plusBeamAmplitude = 
+    PPionBeamAmplitude *Pi_plusBeamAmplitude =
 	new PPionBeamAmplitude("Pi_plusBeamAmplitude@pi+ + n_to_p_dilepton",
 			       "Model from Lutz/Soyeur/Friman", -1);
-  
+
     Pi_plusBeamAmplitude->Add("pi+,grandparent,pion");
     Pi_plusBeamAmplitude->Add("n,grandparent,p_in");
     Pi_plusBeamAmplitude->Add("dilepton,daughter");
@@ -95,38 +95,38 @@ Bool_t PPionBeamPlugin::Activate(void) {
     TF1 *flat = new TF1("pion_flat", "1.", 0, 0.99);
     //The "PInclusiveModel" can be used as a generator:
 
-    Pi_minusBeamAmplitude_gen = 
+    Pi_minusBeamAmplitude_gen =
 	new PInclusiveModel("pi-_flat@pi- + p_brems_n_dilepton/generator", "Dilepton generator", -1);
-	
+
     //The distribution template:
-    Pi_minusBeamAmplitude_gen->Add("q,parent");	
+    Pi_minusBeamAmplitude_gen->Add("q,parent");
     Pi_minusBeamAmplitude_gen->Add("n,daughter");
     Pi_minusBeamAmplitude_gen->Add("dilepton,daughter,primary");
     Pi_minusBeamAmplitude_gen->SetSampleFunction(flat);
     //Enable distribution as a generator
-    Pi_minusBeamAmplitude_gen->EnableGenerator();    
+    Pi_minusBeamAmplitude_gen->EnableGenerator();
     pdmutil->Add(Pi_minusBeamAmplitude_gen);
 
-    Pi_plusBeamAmplitude_gen = 
+    Pi_plusBeamAmplitude_gen =
 	new PInclusiveModel("pi+_flat@pi+ + n_brems_p_dilepton/generator", "Dilepton generator", -1);
-	
+
     //The distribution template:
-    Pi_plusBeamAmplitude_gen->Add("q,parent");	
+    Pi_plusBeamAmplitude_gen->Add("q,parent");
     Pi_plusBeamAmplitude_gen->Add("p,daughter");
     Pi_plusBeamAmplitude_gen->Add("dilepton,daughter,primary");
     Pi_plusBeamAmplitude_gen->SetSampleFunction(flat);
     //Enable distribution as a generator
-    Pi_plusBeamAmplitude_gen->EnableGenerator();    
+    Pi_plusBeamAmplitude_gen->EnableGenerator();
     pdmutil->Add(Pi_plusBeamAmplitude_gen);
 
-    
+
     double Graph_Rho_x[150] = {	1.200010,
 				1.205343,
-				1.210677,	
+				1.210677,
 				1.216010,
 				1.221343,
 			 	1.226677,
-			 	1.232010,	
+			 	1.232010,
 			 	1.237343,
 			 	1.242677,
 			 	1.248010,
@@ -571,9 +571,9 @@ Bool_t PPionBeamPlugin::Activate(void) {
 				      3.610366,
 				      3.591602,
 				      3.573178,
-				      3.555080			 
+				      3.555080
     };
-  
+
     double Graph_Rho_y_Re_T13[150] = {79.999754,
 				      81.202991,
 				      82.440358,
@@ -1182,7 +1182,7 @@ Bool_t PPionBeamPlugin::Activate(void) {
 				      8.882464,
 				      8.852699
     };
-  
+
     double Graph_Rho_y_Re_T33[150] = {-44.165564,
 				      -44.782299,
 				      -45.413780,
@@ -1334,8 +1334,8 @@ Bool_t PPionBeamPlugin::Activate(void) {
 				      -6.711708,
 				      -7.032907
     };
-  
-  
+
+
     double Graph_Rho_y_Im_T33[150] = {-0.009574,
 				      -0.011236,
 				      -0.013128,
@@ -1639,13 +1639,13 @@ Bool_t PPionBeamPlugin::Activate(void) {
 			       1.989343,
 			       1.994677
     };
-	
 
 
 
 
-	   
-  
+
+
+
     double Graph_Om_y_Im_T11 [150] = {   1.389068,
 					 1.456658,
 					 1.526448,
@@ -1950,7 +1950,7 @@ Bool_t PPionBeamPlugin::Activate(void) {
 					2.288926,
 					2.310179
     };
-  
+
     double Graph_Om_y_Re_T13 [150] = { 145.316208,
 				       148.083055,
 				       150.944508,
@@ -2103,7 +2103,7 @@ Bool_t PPionBeamPlugin::Activate(void) {
 				       -38.132059
     };
 
-  
+
     double Graph_Om_y_Im_T13 [150] = { 0.313878,
 				       0.368610,
 				       0.431055,
@@ -2269,7 +2269,7 @@ Bool_t PPionBeamPlugin::Activate(void) {
     TGraph *Graph_Om_Im_T11 = new TGraph(150, Graph_Om_x, Graph_Om_y_Im_T11 );
     TGraph *Graph_Om_Re_T13 = new TGraph(150, Graph_Om_x, Graph_Om_y_Re_T13 );
     TGraph *Graph_Om_Im_T13 = new TGraph(150, Graph_Om_x, Graph_Om_y_Im_T13 );
-  
+
     Pi_minusBeamAmplitude->SetGraph_Rho_Re_T11(Graph_Rho_Re_T11);
     Pi_minusBeamAmplitude->SetGraph_Rho_Im_T11(Graph_Rho_Im_T11);
     Pi_minusBeamAmplitude->SetGraph_Rho_Re_T13(Graph_Rho_Re_T13);
@@ -2286,10 +2286,10 @@ Bool_t PPionBeamPlugin::Activate(void) {
     Pi_minusBeamAmplitude->EnableWeighting();
     Pi_minusBeamAmplitude->SetExpectedWeightMean(-1);
     Pi_minusBeamAmplitude->SetVersionFlag(512);
-  
+
 
     pdmutil->Add(Pi_minusBeamAmplitude);
-  
+
 
 
     Pi_plusBeamAmplitude->SetGraph_Rho_Re_T11(Graph_Rho_Re_T11);

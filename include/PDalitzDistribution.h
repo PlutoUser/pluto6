@@ -1,6 +1,6 @@
 // Author: I. Froehlich
 // Written: 3.7.2006
-// Revised: 
+// Revised:
 
 #ifndef _PDALITZDISTRIBUTION_H_
 #define _PDALITZDISTRIBUTION_H_
@@ -12,7 +12,7 @@
 
 
 class PDalitzDistribution : public PDistribution  {
-  
+
  public:
     PDalitzDistribution();
     PDalitzDistribution(const Char_t *id, const Char_t *de);
@@ -51,7 +51,7 @@ class PDalitzDistribution : public PDistribution  {
 
     void MakeVars(void);
 
-    ClassDef(PDalitzDistribution, 0)  //Dalitz plane decay slopes for a->b+c+d 
+    ClassDef(PDalitzDistribution, 0)  //Dalitz plane decay slopes for a->b+c+d
 };
 
 #endif

@@ -72,13 +72,13 @@ PChannel::PChannel(PParticle **particles, int nt, int, int, int) {
     int i, k = -1;
     status = (!particles);         // true if argument pid array is invalid
     n = nt;                        // number of product particles
-  
+
     if (!status) {
 	ipid.Set(n+1);                 // pid array
 	for (i=0; i<=n; ++i) {
 	    k = particles[i]->ID();      // id of current particle
 //      if ((i&&k>1000)||!k) {       // error in pid (Not longer true, IF)
-	    if (!k) { 
+	    if (!k) {
 		status = 1;
 		ipid.~TArrayI();
 		break;
@@ -107,7 +107,7 @@ PChannel::PChannel(PParticle **particles, int nt, int, int, int) {
 
 PChannel::PChannel(int idx, PParticle **particles, int, int, int) {
     // Channel constructor by decay-mode index
-    
+
     makeStdData()->fillDataBase();//init physics, if not yet done
     init_done = kFALSE;
     e_cm = 0;
@@ -119,13 +119,13 @@ PChannel::PChannel(int idx, PParticle **particles, int, int, int) {
     if (key < 0) {
 	printf("%s\n", Message[12]);    // invalid decay mode
 	return;
-    } else 
+    } else
 	makeStaticData()->GetDecayMode(idx,ia); // retrieve decay-mode info
 
     DMIndex = idx;                   // decay-mode index
     n = ia[0];                       // number of products in current mode
     ipid.Set(n+1);                   // set up pid array
-    
+
     if (!particles) {                // no particle-array passed as argument
 	ptcls = new PParticle*[n+1];   // create channel particle array
 	for(int i=0; i<=n; i++) ptcls[i] = 0;
@@ -134,20 +134,20 @@ PChannel::PChannel(int idx, PParticle **particles, int, int, int) {
 	ptcls = particles;          // copy
 	ptcls_extern = -1;
     }
-    
+
     int i;
     for (i=0; i<=n; ++i) {             // fill particle and id arrays
-	if (particles) 
+	if (particles)
 	    ipid[i] = particles[i]->ID();
 	else {                         // create from decay-mode info
 	    if (!i)                      // parent id
 		ipid[0] = makeStaticData()->GetDecayParent(idx);
-	    else 
+	    else
 		ipid[i] = ia[i+1];        // product ids
 	    ptcls[i] = new PParticle(ipid[i]);
 	}
-    }      
-    
+    }
+
     if (particles) {                 // consistency checks
 	ia[0] = ipid[0];               // reset first entry to parent pid
 	PUtils::isort(ia, n+1);        // sort pids (parent & products) in ascending order
@@ -162,18 +162,18 @@ PChannel::PChannel(int idx, PParticle **particles, int, int, int) {
 	    return;
 	}
     }
-    
+
     IsReaction();                  // if reaction channel identify beam, target & decay mode
 
     ptcls[0]->SetDecayModeIndex(makeStaticData()->GetDecayIdxByKey(decay_key));
 
     w = ptcls[0]->W();               // weight on instantiation
     ecm = ptcls[0]->M();             // system invariant mass on instantiation
-}     
+}
 
 PChannel::PChannel(int idx, PParticle &parent, int, int, int) {
     // Channel constructor by decay-mode index and parent reference
-    
+
     makeStdData()->fillDataBase();//init physics, if not yet done
     init_done = kFALSE;
     e_cm = 0;
@@ -185,13 +185,13 @@ PChannel::PChannel(int idx, PParticle &parent, int, int, int) {
     if (key < 0) {
 	printf("%s\n", Message[12]);    // invalid decay mode
 	return;
-    } else 
+    } else
 	makeStaticData()->GetDecayMode(idx,ia); // retrieve decay-mode info
 
     DMIndex = idx;                   // decay-mode index
     n = ia[0];                       // number of products in current mode
     ipid.Set(n+1);                   // set up pid array
-    
+
     ptcls = new PParticle*[n+1];     // create channel particle array
     ptcls[0] = &parent;
     ptcls_extern = 1;
@@ -216,11 +216,11 @@ PChannel::PChannel(int idx, PParticle &parent, int, int, int) {
 
     w = ptcls[0]->W();                 // weight on instantiation
     ecm = ptcls[0]->M();               // system invariant mass on instantiation
-}     
+}
 
 void PChannel::IsReaction() {
     // Identify beam and target if the current channel is a beam + target reaction.
- 
+
     event_impact_param = (makeStaticData()->GetBatchValue("_event_impact_param"));
     event_plane        = (makeStaticData()->GetBatchValue("_event_plane"));
     weight_version     = makeStaticData()->GetBatchValue("_system_weight_version");
@@ -262,18 +262,18 @@ void PChannel::IsReaction() {
     emin = 0.;                       // channel energy threshold
 
     if (k == 1) {                              // decay of size=1 parent
-	if (parent->IsFireball()) 
+	if (parent->IsFireball())
 	    thSrc = 1;
-	else if (parent->IsFileInput()) 
+	else if (parent->IsFileInput())
 	    tcSrc = 1;
-	else if (parent->IsDilepton()) 
+	else if (parent->IsDilepton())
 	    dlSrc = 1;
 	else {
 	    IdChannel();
 	    //get data base key:
 	    decay_key = makeStaticData()->GetDecayKey(ipid.GetArray(), n);
 	    CheckDecayKey();
-	    return;	 
+	    return;
 	}
     }
 
@@ -286,7 +286,7 @@ void PChannel::IsReaction() {
     bid = ipid[0]%1000;                    // beam id
 
     IdChannel();                             // identify reaction if known
- 
+
     //get data base key:
     decay_key = makeStaticData()->GetDecayKey(ipid.GetArray(), n);
     if ((decay_key < 0) && (ipid[0]>999)) {
@@ -295,7 +295,7 @@ void PChannel::IsReaction() {
     }
     if (!thSrc && !tcSrc) CheckDecayKey();
     //check for emin in initial states
-    for (int i=1; i<=n; ++i) { 
+    for (int i=1; i<=n; ++i) {
 	emin += PData::LMass(ptcls[i]->ID());
     }
 
@@ -337,7 +337,7 @@ void PChannel::IdChannel() {
 	if (ptcls[n]->IsSpectator() != -1)
 	    has_spec=1;
     }
-    
+
     if (!has_spec) return;
 
     has_spec = ptcls[n]->IsSpectator();
@@ -350,19 +350,19 @@ void PChannel::IdChannel() {
 	//in this case the, spectator must be a nucleon
 	if (!ptcls[n]->IsNucleon()) return;
     }
-        
+
     for (i=1; i<=n; ++i) {
 	if (!has_spec) {
-	    if (ptcls[i]->ID() == makeStaticData()->GetParticleID("d")) 
+	    if (ptcls[i]->ID() == makeStaticData()->GetParticleID("d"))
 		return; // coherent scattering
 	}
 	if (ptcls[i]->ID()>1000) return; //dummy PChannel
     }
 
     //get the nucleon pid
-    if (bid == makeStaticData()->GetParticleID("d")) 
+    if (bid == makeStaticData()->GetParticleID("d"))
 	nucleon_pid = tid;
-    else 
+    else
 	nucleon_pid = bid;
 
     //identify the spectator
@@ -408,7 +408,7 @@ void PChannel::IdChannel() {
     if (nucleon_pid == tid) { //d beam
 	quasi_composite = new PParticle(*participant + dummy);
     } else {
-	quasi_composite = new PParticle(dummy + *participant);  
+	quasi_composite = new PParticle(dummy + *participant);
     }
     PParticle **cc1 = new PParticle*[3];   // create channel particle array
     cc1[0] = parent;
@@ -420,11 +420,11 @@ void PChannel::IdChannel() {
     //now we have to touch a little bit myself:
     //the spectator is removed from the list, and the parent id replaced by
     //the dummy composite
-    
+
     Info("IdChannel", "(%s) Quasi-free production", PRINT_AUTO_ALLOC);
 
     n--;
-  
+
     parent      = quasi_composite;
     orig_parent = quasi_composite;
     ptcls[0]    = quasi_composite;
@@ -452,11 +452,11 @@ void PChannel::ThermalSampling() {
 	if (nTherm > n) nTherm = n;
     } else if (pFire->IsRandomN()) {        // sample multiplicity directly
 	nTherm = pFire->sampleNProd();
-	if (*event_plane == 0.) 
+	if (*event_plane == 0.)
 	    phi = 2.*TMath::Pi()*PUtils::sampleFlat(); // ev plane
-	else 
+	else
 	    phi = *event_plane;
-	if (nTherm > n) 
+	if (nTherm > n)
 	    nTherm = n;
     }
 
@@ -484,11 +484,11 @@ void PChannel::ThermalSampling() {
 	ptcls[i]->SetPxPyPzE(px, py, pz, Energy);
 	if (ptcls[i]->M() < PData::LMass(ptcls[i]->ID()) || ptcls[i]->M() > PData::UMass(ptcls[i]->ID())) goto redo_thermal; //DONEv6
 	ptcls[i]->SetW(w*(pFire->mtScale(ptcls[i]->M())));  // weight * mt-scaling
-	if (sourceid) 
+	if (sourceid)
 	    ptcls[i]->SetSourceId(sourceid);
-	else 
+	else
 	    ptcls[i]->SetSourceId(pFire->ID());
-	
+
 	ptcls[i]->SetParentId(pFire->ID());
 	ptcls[i]->SetActive();
     }
@@ -534,13 +534,13 @@ Int_t PChannel:: ReadFileInput() {  // parent is file input
     nMax = nFile = pFile->readEventHeader(b);  // read event header
     if (nFile == -1) {
 	printf("**** EOF reached on file input ****\n");
-	for(i=1; i<=n; i++) 
+	for(i=1; i<=n; i++)
 	    ptcls[i]->SetInActive();  // inactivate all
 	return 8;
     }
 
     if (nMax > n) nMax = n;
-  
+
     if (*event_impact_param == 0.) {
 	phi = 2.*TMath::Pi()*PUtils::sampleFlat(); // ev plane
     }
@@ -551,7 +551,7 @@ Int_t PChannel:: ReadFileInput() {  // parent is file input
 
     *event_impact_param = b;
     *event_plane = phi;
-    
+
     for(i=1; i<=nFile; i++) {
 	ret = pFile->readParticle(px,py,pz,Energy,vx,vy,vz,vt,id,idSrc,idPar,indPar,w);
 	if (ret == -1) break;  // EOF
@@ -567,12 +567,12 @@ Int_t PChannel:: ReadFileInput() {  // parent is file input
 	ptcls[i]->SetVertex(vx,vy,vz,vt);
     }
     if (ret == -1) return 8;
-    for(i=nMax+1; i<=n; i++) 
+    for(i=nMax+1; i<=n; i++)
 	ptcls[i]->SetInActive();  // inactivate rest
 
     TVector3 Beta = pFile->BoostVector();
-    if (Beta.Mag() > 0.) 
-	for(i=1; i<=nMax; ++i) 
+    if (Beta.Mag() > 0.)
+	for(i=1; i<=nMax; ++i)
 	    ptcls[i]->Boost(Beta);
     return 0;
 }
@@ -589,23 +589,23 @@ int PChannel::CheckSiblings(PParticle *p, PDistribution *dist, int flag) {
 
    //  cout << "******************checkSiblings for " <<dist->GetName() <<   ", SEED: " << endl;
 //      p->Print();
-    
-    PParticle *currentSibling = p->GetSibling();   
+
+    PParticle *currentSibling = p->GetSibling();
     Int_t counter = 0; //break condition
     Int_t ret     = -1;
     while (currentSibling != p) {
 	if (currentSibling == NULL) return ret;
-	if (ret == 0) { //found one more "additional" sibling -> reset 
+	if (ret == 0) { //found one more "additional" sibling -> reset
 	    ret = -1;
 	}
   	//cout << "My sibling is:" << endl;
  	//currentSibling->Print();
 
-	if (dist->SetParticle(currentSibling, currentSibling->ID(), flag | PARTICLE_LIST_SIBLING) == 0) { 
+	if (dist->SetParticle(currentSibling, currentSibling->ID(), flag | PARTICLE_LIST_SIBLING) == 0) {
 	    //I found the missing sibling
 	    ret = 0;
 	    //cout << "found the missing sibling" << endl;
-	}  
+	}
 	//jump to next sibling
 	currentSibling = currentSibling->GetSibling();
 	counter++;
@@ -637,7 +637,7 @@ Bool_t PChannel::Reset() {
 Bool_t PChannel::SetDaughters() {
     if (thSrc || tcSrc)  return kTRUE; //makes no sense and print errors
     parent->ResetDaughters();
-    
+
     if (parent->IsActive() == kTRUE) {
 	for (Int_t k=1; k<=n; k++) {
 	    parent->SetDaughter(ptcls[k]);
@@ -649,7 +649,7 @@ Bool_t PChannel::SetDaughters() {
 Bool_t PChannel::Init() {
     //On the 1st call, set the grandparent, etc...
     //look for tentative distributions
-    
+
     int has_printed = 0;
     //set parent, grandparent
     if (orig_parent != ptcls[0]) {
@@ -660,7 +660,7 @@ Bool_t PChannel::Init() {
 
     grandparent = parent->GetParent();
     grandgrandparent = NULL;
-    if (grandparent) 
+    if (grandparent)
 	grandgrandparent = grandparent->GetParent();
 
     Double_t set_mode_index = 0;
@@ -668,14 +668,14 @@ Bool_t PChannel::Init() {
     for (int j=0; j<distribution_position; j++) { //loop over all valid distributions
 	if (dist[j]->GetVersionFlag() & VERSION_INVERT_WEIGHTING) {
 	    set_mode_index++;
-	} else if ((dist[j]->GetVersionFlag() & VERSION_WEIGHTING) 
-		   && (dist[j]->GetVersionFlag() & VERSION_GENERATOR_MC) 
-//		   && (dist[j]->GetExpectedWeightMean() < 0) 		
+	} else if ((dist[j]->GetVersionFlag() & VERSION_WEIGHTING)
+		   && (dist[j]->GetVersionFlag() & VERSION_GENERATOR_MC)
+//		   && (dist[j]->GetExpectedWeightMean() < 0)
 // This must be disabled, otherwise the Delta mass is not taken correctly
-// Mass shape of the epja figure disagrees for sampling/weighting method		   
+// Mass shape of the epja figure disagrees for sampling/weighting method
 		   ) {
 	    set_mode_index++;
-	} else if (dist[j]->GetVersionFlag() & VERSION_FORCE_NO_PARTIAL_WIDTH) 
+	} else if (dist[j]->GetVersionFlag() & VERSION_FORCE_NO_PARTIAL_WIDTH)
 	    set_mode_index =  set_mode_index + 2;
     }
 
@@ -690,9 +690,9 @@ Bool_t PChannel::Init() {
 	Int_t parId, parInd;
 	for (Int_t k=1; k<=n; k++) {
 	    ptcls[k]->SetActive();          // activate children
-	    if (sourceid) 
+	    if (sourceid)
 		ptcls[k]->SetSourceId(sourceid);
-	    else 
+	    else
 		ptcls[k]->SetSourceId(parent->GetSourceId());
 
 	    parId  = parent->ID();
@@ -711,7 +711,7 @@ Bool_t PChannel::Init() {
 	    } else {
 		ptcls[k]->SetSiblingIndex(ptcls[1]->GetIndex());
 		ptcls[k]->SetSibling(ptcls[1]);
-	    }	  
+	    }
 	}
     } //end parent active
 
@@ -730,7 +730,7 @@ Bool_t PChannel::Init() {
 		PrintReaction();
 		cout << endl;
 	    }
-	    if (print_tentative) 
+	    if (print_tentative)
 		printf("                             [checking] %s\n",
 		       dist[j]->GetDescription());
 	    //check grand(grand)parent itself
@@ -765,7 +765,7 @@ Bool_t PChannel::Init() {
 
 #endif
 
-	    //check siblings for parent, grandparent, grandgrandparent	  
+	    //check siblings for parent, grandparent, grandgrandparent
 	    CheckSiblings(parent, dist[j], PARTICLE_LIST_PARENT);
 	    if (grandparent) {
 		CheckSiblings(grandparent, dist[j], PARTICLE_LIST_GRANDPARENT);
@@ -777,20 +777,20 @@ Bool_t PChannel::Init() {
 	    for (Int_t k=1; k<=n; k++) {
 		//looping over daughters
 		int kk = 0;
-		
-		while (ptcls[k]->GetDaughter(kk) != NULL) {  
-		    
-		    dist[j]->SetParticle(ptcls[k]->GetDaughter(kk), 
-					 ptcls[k]->GetDaughter(kk)->ID(), 
+
+		while (ptcls[k]->GetDaughter(kk) != NULL) {
+
+		    dist[j]->SetParticle(ptcls[k]->GetDaughter(kk),
+					 ptcls[k]->GetDaughter(kk)->ID(),
 					 PARTICLE_LIST_GRANDDAUGHTER);
 		    kk++;
 		}
 	    }
-	    
+
 	    //final check
 	    if (dist[j]->GetStatus() == -1) { //not all particles set
 		if (print_tentative) printf("                             [removed] %s\n",dist[j]->GetDescription());
-		dist[j]->SetEnable(0); 
+		dist[j]->SetEnable(0);
 	    }
 	    else {
 		if (dist[j]->Init() == kTRUE) {
@@ -798,10 +798,10 @@ Bool_t PChannel::Init() {
 		else {
 		    printf("                             [error] %s:%s\n",dist[j]->GetDescription(),dist[j]->GetIdentifier());
 		    dist[j]->SetEnable(0);
-		  
+
 		}
 	    }
-	}      
+	}
     }
 
     //after all, look for artificial models (primary)
@@ -832,20 +832,20 @@ Bool_t PChannel::Init() {
 
 // Bool_t PChannel::InitEnv() {
 //   //Init "envelope" afterburner for distributions spanning over a chain
-//   cout << "**********init env" << endl; 
+//   cout << "**********init env" << endl;
 //   for (Int_t k=1;k<=n;k++) {
 //     //looping over daughters
 //     int kk=0;
 //     ptcls[k]->Print();
-//     while (ptcls[k]->GetDaughter(kk) != NULL) {  
+//     while (ptcls[k]->GetDaughter(kk) != NULL) {
 //       cout << "found:" << endl;
 //       ptcls[k]->GetDaughter(kk)->Print();
 //       for (int j=0;j<distribution_position;j++) {
 // 	dist[j]->Print();
 // 	cout << dist[j]->GetStatus() << ":" << dist[j]->GetEnable() << endl;
 // 	if ((dist[j]->GetStatus() == -1) && dist[j]->GetEnable()){ //not all particles set
-// 	  dist[j]->SetParticle(ptcls[k]->GetDaughter(kk), 
-// 			       ptcls[k]->GetDaughter(kk)->ID(), 
+// 	  dist[j]->SetParticle(ptcls[k]->GetDaughter(kk),
+// 			       ptcls[k]->GetDaughter(kk)->ID(),
 // 			       PARTICLE_LIST_GRANDDAUGHTER);
 // 	}
 //       }
@@ -857,7 +857,7 @@ Bool_t PChannel::Init() {
 
 int PChannel::Decay() {
     // The N-body phase-space decay function is based on the CERNLIB
-    // routine GENBOD. 
+    // routine GENBOD.
     //
     // Return code:
     //
@@ -883,7 +883,7 @@ int PChannel::Decay() {
     if (!init_done) Init();
 
     if (parent->IsActive() == kFALSE) {
-	for (Int_t k=1; k<=n; k++) 
+	for (Int_t k=1; k<=n; k++)
 	    ptcls[k]->SetInActive();  // inactivate children
 	return STATUS_OK;
     }
@@ -891,10 +891,10 @@ int PChannel::Decay() {
 	for (Int_t k=1; k<=n; k++) {
 	    if (ptcls[k]->ID() > 0)
 		ptcls[k]->SetM(makeStaticData()->GetParticleMass(ptcls[k]->ID()));
-	    ptcls[k]->SetActive();   
+	    ptcls[k]->SetActive();
 	}
 	// re-activate children as they are de-activated in PReaction
-      
+
 	//Vertex calculations have to be done in each decay
 	vCreation = parent->GetVertex();  // creation vertex of parent
 	tCreation = parent->T();          // creation time of parent
@@ -916,7 +916,7 @@ int PChannel::Decay() {
     }
     for (int bu=0; bu<pro_bulkdecay_pos; bu++) {
 	pro_bulk[bu]->Modify(ptcls, decay_done, &real_size, n+1);
-    }	
+    }
 
     w = parent->W();
     int i, nProd = n;
@@ -931,12 +931,12 @@ int PChannel::Decay() {
 	    bulk[bu]->Modify(ptcls, decay_done, &real_size, n+1);
 
 	return status;
-    }    
+    }
 
     if (tcSrc) {                   // parent is transport code (file input)
 	status = ReadFileInput();
 	return status;
-    }    
+    }
 
     if (dlSrc) {                   // parent is a Dilepton
 	MakeDilepton();
@@ -957,8 +957,8 @@ int PChannel::Decay() {
  	// Print();
 	return status = 4; // not enough energy to do the channel
     }
-    
-    Int_t do_flag = 1, 
+
+    Int_t do_flag = 1,
 	distr_status = 0;
     while (do_flag) {  // do genbod loop until all distributions are convinced
 	status = Genbod(nProd);  // induce first isotropic decay
@@ -966,7 +966,7 @@ int PChannel::Decay() {
 
 	for (int j=0; j<distribution_position; j++) { //loop over all valid distributions
 	    if ((dist[j]->GetStatus() == 0) && dist[j]->GetEnable()) { //all particles set
-		if (dist[j]->IsNotRejected() == kFALSE) { 
+		if (dist[j]->IsNotRejected() == kFALSE) {
 		    distr_status++;
 		    if (dist[j]->CheckAbort()) {
 			do_flag = 1000000;//set to big number, next step will abort
@@ -983,7 +983,7 @@ int PChannel::Decay() {
 	    }
 	} else {
 	    do_flag = 0;
-	} 
+	}
     } //end while (do_flag)
 
     for (int j=0; j<distribution_position; j++) { //loop over all valid distributions
@@ -1003,17 +1003,17 @@ int PChannel::Decay() {
     if (status) return status;                  // genbod failed
 
     //In a first step collect all weights from all distributions
-    //This we have to do because in the increment we have to 
+    //This we have to do because in the increment we have to
     //use the stat. scaling with 1/w
- 
+
     Double_t new_weight              = ptcls[0]->W();
     Double_t hidden_generator_weight = ptcls[0]->GenW();
     Double_t inv_generator_weight    = ptcls[0]->InvGenW();
     Double_t dynamic_range = 1.;
 
-    if (*weight_version) {	
+    if (*weight_version) {
 #if 1
-	Double_t generator_weight = hidden_generator_weight; 
+	Double_t generator_weight = hidden_generator_weight;
 	for (int j=0; j<distribution_position; j++) { //loop over all valid distributions
 	    if ((dist[j]->GetStatus() == 0) && dist[j]->GetEnable()){ //all particles set
 		dist_weight[j] = dist[j]->GetWeight();
@@ -1023,16 +1023,16 @@ int PChannel::Decay() {
 		}
 	    }
 	}
-	
+
 	for (int j=0; j<distribution_position; j++) { //loop over all valid distributions
 	    if ((dist[j]->GetStatus() == 0) && dist[j]->GetEnable()){ //all particles set
 		if (((dist[j]->GetVersionFlag()) & VERSION_INVERT_WEIGHTING) ||
 		    ((dist[j]->GetVersionFlag()) & VERSION_WEIGHTING)) {
-		    
+
 		    Double_t local_weight = dist_weight[j];
 		    //weighting is enabled
-		
-		    if ((dist[j]->GetVersionFlag()) & VERSION_GENERATOR_MC) { 
+
+		    if ((dist[j]->GetVersionFlag()) & VERSION_GENERATOR_MC) {
 			//Pure function models
 			//--> These are function for which we have
 			//Int dx dsigma/dx = sigma
@@ -1040,7 +1040,7 @@ int PChannel::Decay() {
 			//This is the Delta_x in the MC integral
 			local_weight *= dynamic_range;
 			dynamic_range = 1.;
-		    }	
+		    }
 
 		    if (dist[j]->GetExpectedWeightMean() > 0) { //re-scaling is allowed
 			if ((dist[j]->GetVersionFlag()) & VERSION_INVERT_WEIGHTING) {
@@ -1051,10 +1051,10 @@ int PChannel::Decay() {
 			    dist[j]->IncrementWeightSum(local_weight, 1./generator_weight);
 			}
 			local_weight *= (dist[j]->GetExpectedWeightMean()/dist[j]->CalcWeightMean());
-		    } 
+		    }
 
 		    new_weight *= local_weight;  //fold with local weights
-		    
+
 		    dist_weight_sum[j] += local_weight;
 		    dist_counter[j]++;
 		} else { //for sampling models use just the mean
@@ -1062,24 +1062,24 @@ int PChannel::Decay() {
 			new_weight *= dist[j]->GetExpectedWeightMean();
 			dist_weight_sum[j] += dist[j]->GetExpectedWeightMean();
 			dist_counter[j]++;
-			
+
 			//If we have broad resonances, like in the case
 			//Delta->dilepton + gamma we have to keep the information
 			//about the generator
-			
+
 			//this is only possible if we "push" the history of used generators
 			//to the next PChannel(s)
-			
+
 			//check if weight is what we expect
 			Double_t local_weight = dist_weight[j];
 			//		hidden_generator_weight *=local_weight;
-			
+
 			Double_t inv_local_weight = 0.;
-			if (local_weight > 0.) 
+			if (local_weight > 0.)
 			    inv_local_weight = (1./local_weight);
 			dist[j]->IncrementWeightSum(inv_local_weight);
 			//		inv_generator_weight*=(inv_local_weight/dist[j]->CalcWeightMean());
-		    } 
+		    }
 		    // else {
 		    // 	new_weight*=dist_weight[j];
 		    // }
@@ -1087,10 +1087,10 @@ int PChannel::Decay() {
 	    }
 	}
 
-	if (new_weight <= 0.) 
+	if (new_weight <= 0.)
 	    return status = 2; // something wrong
 
-	weight_sum += new_weight;	
+	weight_sum += new_weight;
 #endif
     }
 
@@ -1099,8 +1099,8 @@ int PChannel::Decay() {
 //     }
 
     TVector3 beta = parent->BoostVector();        // inv. mass velocity vector
-    if (beta.Mag() > 0.) 
-	for (i=1; i<=nProd; ++i) 
+    if (beta.Mag() > 0.)
+	for (i=1; i<=nProd; ++i)
 	    ptcls[i]->Boost(beta);
 
     for (i=1; i<=nProd; ++i) {
@@ -1110,7 +1110,7 @@ int PChannel::Decay() {
 	ptcls[i]->SetGenW(hidden_generator_weight);
 	ptcls[i]->SetInvGenW(inv_generator_weight);
     }
-    
+
 #if 0
     for (int j=0; j<distribution_position; j++) { //loop over all valid distributions
 	if ((dist[j]->GetStatus() == 0) && dist[j]->GetEnable()){ //all particles set
@@ -1129,11 +1129,11 @@ int PChannel::Genbod(int nProd) {
     // N-body phase-space decay of a particle in its rest frame,
     // wrapper function to all the distribution methods
 
-    int i; 
-    double conserve_e = 0., 
+    int i;
+    double conserve_e = 0.,
 	em[nProd];
     Bool_t PDistribution_sampleMass  = kFALSE;
-    int PDistribution_sampleMomentum = 0, 
+    int PDistribution_sampleMomentum = 0,
 	PDistribution_sampleModels   = 0;
 
     //MASS SAMPLING
@@ -1151,15 +1151,15 @@ int PChannel::Genbod(int nProd) {
 
     conserve_e = ptcls[0]->M(); //take into account possible reconstruct
 
-    if (PDistribution_sampleMass == kFALSE) { //No user-defined distribution    
+    if (PDistribution_sampleMass == kFALSE) { //No user-defined distribution
 	Warning("Genbod","No mass sampling model(s) found in %s",
 		makeStaticData()->GetDecayNameByKey(decay_key));
 	return status = 6;
     } else { //Recalculate total energy (for user-defined mass sampling)
-	for (i=0; i<nProd; ++i) 
+	for (i=0; i<nProd; ++i)
 	    conserve_e -= em[i];
     }
-  
+
     if ((conserve_e < -1.e-8) && (nProd>1) ) {
       // cout << "***********" << endl;
       // for (i=0;i<=nProd;++i) ptcls[i]->Print();
@@ -1181,14 +1181,14 @@ int PChannel::Genbod(int nProd) {
 		if (dist[j]->SampleMomentum()) {
 		    if (!PDistribution_sampleMomentum) last_sampling_model = j;
 		    PDistribution_sampleMomentum++;
-		} 
+		}
 	    }
 	    if (PDistribution_sampleMomentum > 1) {
 		Warning("Genbod", "More than one momentum sampling model found in %s",
 			makeStaticData()->GetDecayNameByKey(decay_key));
 		Warning("Genbod","Model 1: [%s]", dist[last_sampling_model]->GetIdentifier());
 		Warning("Genbod","Model 2: [%s]", dist[j]->GetIdentifier());
-		
+
 		return status=6;
 	    }
 	}
@@ -1216,7 +1216,7 @@ int PChannel::Genbod(int nProd) {
     }
 
     //check conservation of energy again
-    for (i=0; i<nProd; ++i) 
+    for (i=0; i<nProd; ++i)
 	conserve_e -= ptcls[i+1]->E();
 
     if (fabs(conserve_e) > 1.e-8) {
@@ -1243,32 +1243,32 @@ int PChannel::SetDistribution(PDistribution *distribution) {
     Int_t check = 0;
 
     PParticle *p0 = ptcls[0];
-    
-    //The grand(grand)parent and sisters not known yet at this stage, 
+
+    //The grand(grand)parent and sisters not known yet at this stage,
     //will be done "online"
     //The only thing what I can do here is to have a 1st rough look
 
     distribution->Reset();
 
 //    if (p0->ID() < 1000) //skip quasi-particles
-//	check = distribution->SetParticle(p0, p0->ID(), PARTICLE_LIST_PARENT); 
+//	check = distribution->SetParticle(p0, p0->ID(), PARTICLE_LIST_PARENT);
 //    else
-//	check = distribution->SetParticle(p0, DISTRIBUTION_QUASI_PID, PARTICLE_LIST_PARENT); 
+//	check = distribution->SetParticle(p0, DISTRIBUTION_QUASI_PID, PARTICLE_LIST_PARENT);
 
 //either one of these methods has to work:
-    check = distribution->SetParticle(p0, p0->ID(), PARTICLE_LIST_PARENT); 
+    check = distribution->SetParticle(p0, p0->ID(), PARTICLE_LIST_PARENT);
     if (check<0 && (p0->ID() > 1000))
-	check = distribution->SetParticle(p0, DISTRIBUTION_QUASI_PID, PARTICLE_LIST_PARENT); 
+	check = distribution->SetParticle(p0, DISTRIBUTION_QUASI_PID, PARTICLE_LIST_PARENT);
 
     for (int i=0;i<n;i++) {
-	check += distribution->SetParticle(ptcls[i+1], ptcls[i+1]->ID(), PARTICLE_LIST_DAUGHTER); 
+	check += distribution->SetParticle(ptcls[i+1], ptcls[i+1]->ID(), PARTICLE_LIST_DAUGHTER);
     }
-   
+
     check += distribution->CheckDaughters(); //Are we still a daughter missing?
 
     if (!strcmp(distribution->GetName(), "_testmodel"))
 	cout << "Check number in PChannel::SetDistribution: " << check << endl;
- 
+
     //now check if this worked out....
     if (check < 0) {
 	//forget it!
@@ -1282,7 +1282,7 @@ int PChannel::SetDistribution(PDistribution *distribution) {
 
     //Clone the distribution (done before in PDistributionManagerUtil)
     distribution = (PDistribution*) distribution->Clone();
-    
+
     if (distribution->GetStatus() == 0) { //we are complete
 	//cout << distribution->GetName() << " attached at" <<  distribution_position   << endl;
 	if (distribution->Init() == kFALSE) {
@@ -1305,7 +1305,7 @@ int PChannel::SetDistribution(PDistribution *distribution) {
 		    distribution->GetDepth();  //Init sub-models
 		    dist[distribution_position] = distribution;
 		    distribution_position++;
-		}		
+		}
 		//printf("                             [incomplete] %s\n",distribution->GetDescription());
 	    }
 	} else { //END init_done
@@ -1329,11 +1329,11 @@ char const *PChannel::GetName(void) const {
 	}
 	return makeStaticData()->GetDecayNameByKey(decay_key);
     }
-    if (thSrc) 
+    if (thSrc)
 	return " Fireball";
-    else if (tcSrc) 
+    else if (tcSrc)
 	return " File Input";
-    else if (dlSrc) 
+    else if (dlSrc)
 	return " Dilepton source";
     return "<unknown>";
 }
@@ -1348,12 +1348,12 @@ void PChannel::PrintReport() const {
 // 	    ((dist[j]->GetVersionFlag()) & VERSION_WEIGHTING)) {
 
 	    if (dist[j]->GetExpectedWeightMean() > 0) { //re-scaling is allowed
-		cout << "Expected mean: " << dist[j]->GetExpectedWeightMean() << " Reached: " 
+		cout << "Expected mean: " << dist[j]->GetExpectedWeightMean() << " Reached: "
 		     << dist_weight_sum[j]/dist_counter[j] << endl;
 		cout << "Calc mean: " << dist[j]->CalcWeightMean() << endl;
 	    } else {
 		cout << "Mean: " << dist_weight_sum[j]/dist_counter[j] << endl;
-	    }	    
+	    }
 //	}
     }
 }
@@ -1373,28 +1373,28 @@ void PChannel::PrintReaction(Int_t check_key) const {
 
     int j;
 
-    if (thSrc) 
+    if (thSrc)
 	printf("Fireball");
-    else if (tcSrc) 
+    else if (tcSrc)
 	printf("File Input");
-    else if (dlSrc) 
+    else if (dlSrc)
 	printf("Dilepton source");
-    else 
+    else
 	printf("%s", makeStaticData()->GetParticleName(ipid[0]));
     printf(" --> %s", makeStaticData()->GetParticleName(ipid[1]));
-    for (j=2; j<=n; ++j) 
+    for (j=2; j<=n; ++j)
 	printf(" + %s",makeStaticData()->GetParticleName(ipid[j]));
     cout << endl;
 }
 
 void PChannel::PrintNew() {
-    
+
     Long_t nPattern = 0;
     for (int j=0; j<distribution_position; j++)
 	if (dist[j]->GetEnable() != 0) {
 	    nPattern += ((j<64) ?  1<<(j+1) : 0);
 	}
-    if (nPattern & (~fEnablePattern)) { 
+    if (nPattern & (~fEnablePattern)) {
 	fEnablePattern |= nPattern;
 	Print();
     }
@@ -1410,9 +1410,9 @@ void PChannel::Print(const Option_t *delme) const {
     printf("        Interaction model(s):\n");
     //Distributions
     for (j=0;j<distribution_position;j++) {
-	
+
 	if (dist[j]->GetEnable() != 0) {
-	    if (dist[j]->GetStatus() == 0) { //all particles set 
+	    if (dist[j]->GetStatus() == 0) { //all particles set
 		dist[j]->GetDepth();  //Init sub-models
 		if (dist[j]->Path())
 		    printf("        [%s] %s {/%s}",dist[j]->GetIdentifier(),dist[j]->GetDescription(),dist[j]->Path());
@@ -1424,7 +1424,7 @@ void PChannel::Print(const Option_t *delme) const {
 		printf("        [%s,tentative] %s\n",dist[j]->GetIdentifier(),dist[j]->GetDescription());
 	    if (delme != NULL && strcmp(delme,"debug") == 0) {
 		dist[j]->Print();
-	    }	    
+	    }
 	}
     }
 
@@ -1434,13 +1434,13 @@ void PChannel::Print(const Option_t *delme) const {
 	printf("        Bulk Classes:\n");
 	if (pro_bulkdecay_pos) {
 	    printf("          Prologue: ");
-	    for (j=0;j<pro_bulkdecay_pos;j++) 
+	    for (j=0;j<pro_bulkdecay_pos;j++)
 		cout << "<" << pro_bulk[j]->ClassName() << "> ";
 	    cout << endl;
 	}
 	if (bulkdecay_pos) {
 	    printf("          Epilogue: ");
-	    for (j=0;j<bulkdecay_pos;j++) 
+	    for (j=0;j<bulkdecay_pos;j++)
 		cout << "<" << bulk[j]->ClassName() << "> ";
 	    cout << endl;
 	}
@@ -1452,7 +1452,7 @@ Bool_t PChannel::AddBulk(PBulkInterface *mybulk) {
     //Add a bulk interface to the list
     //Each bulk object will be executed during the event loop
     //after the normal decay
-  
+
     if (bulkdecay_pos == MAX_BULKDECAY ) {
 	Error("AddBulk","MAX_BULKDECAY reached");
 	return kFALSE;
@@ -1476,7 +1476,7 @@ Bool_t PChannel::AddPrologueBulk(PBulkInterface * mybulk) {
 	Error("AddPrologueBulk","MAX_BULKDECAY reached");
 	return kFALSE;
     }
-    
+
     if (pro_bulkdecay_pos && (pro_bulk[pro_bulkdecay_pos-1]->GetPriority() > mybulk->GetPriority())) {
 	pro_bulk[pro_bulkdecay_pos]   = pro_bulk[pro_bulkdecay_pos-1];
 	pro_bulk[pro_bulkdecay_pos-1] = mybulk;
