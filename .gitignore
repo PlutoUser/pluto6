@@ -32,6 +32,11 @@
 G__*
 *.root
 
+#tex
+*.toc
+*.aux
+*.log
+
 #cmake
 CMakeCache.txt
 CMakeFiles
