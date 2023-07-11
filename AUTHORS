@@ -1,0 +1,31 @@
+The following persons have contributed significantly to the Pluto package.
+Names are in alphabetical order.
+
+C. Behnke (gamma conversion)
+L. Cazon Boado (pp elastic)
+M. Dieterle (beam smearing, nucleus_fermi)
+F. Dohrmann (bremsstrahlung)
+A. Dybczak (pdg plugin)
+I. Fr\"ohlich
+T. Galatyuk (bremsstrahlung)
+V. Hejny    (decay manager)
+T. Hennino
+R. Holzmann
+M. Kagarlis
+W. K\"uhn
+H. Kuc (pdg plugin)
+J. Markert
+J.G. Messchendorp
+V. Metag
+Y. Pachmeyer
+M.A. Pleier (HADES filter)
+W. Przygoda
+B. Ramstein (D Dalitz)
+J. Ritman
+P. Salabura
+H. Schuldes (pion_beam)
+T. Scheib (w decay)
+J. Stroth
+M. Tabidze (SAID at low energy)
+J. W\"stenfeld (bremsstrahlung)
+L. Witthauer (nucleus_fermi)

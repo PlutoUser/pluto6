@@ -1544,7 +1544,12 @@ V6.01:
                                         I. Froehlich
                                         IKF, 11/06/2018
 
-dev
-===
+V6.02:
+======
 
 383) Bugfixes, made by S. Wagner (Uni Mainz) and S. Spies (GU Frankfurt)
+
+384) Code cleanup, removed trailing spaces (R. Lalik, JU Krakow)
+
+                                        I. Froehlich
+                                        IKF, 11/07/2023
