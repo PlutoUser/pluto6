@@ -150,8 +150,8 @@ target_link_libraries(Pluto PRIVATE ROOT::Core ROOT::Tree ROOT::EG)
 ###########################################################
 
 configure_file(Version.h.in Version.h)
-target_include_directories(Pluto PUBLIC
-    "${PROJECT_BINARY_DIR}")
+#target_include_directories(Pluto PUBLIC
+#    "${PROJECT_BINARY_DIR}")
 
 add_custom_target(Compiled.h)
 add_custom_command(OUTPUT Compiled.h COMMAND echo char *date_string = \\\(char*\\\) \\\"\$\$\(date +\"%e %B %Y\"\)\\\"  > ${CMAKE_CURRENT_BINARY_DIR}/Compiled.h DEPENDS G__Pluto.cxx ${SOURCES})
