@@ -128,9 +128,9 @@ macro(add_plugin plugin_target)
         set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include;${incdir}")
     endif()
 
-    if (IS_DIRECTORY macros)
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/macros)
         install(DIRECTORY macros/
-            DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PLUTO_SLOT}/plugins/${plugin_target})
+            DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PLUTO_SLOT}/macros/plugins/${plugin_target})
     endif()
 
     # dynamically generate source files and Plugins LinkDef
@@ -170,7 +170,7 @@ install(FILES
         DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 INSTALL(DIRECTORY macros/
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PLUTO_SLOT})
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/macros/${PLUTO_SLOT})
 INSTALL(DIRECTORY include/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PLUTO_SLOT})
 

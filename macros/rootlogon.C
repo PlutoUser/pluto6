@@ -37,14 +37,14 @@
     //to load the FAIRROOT version
     gSystem->SetDynamicPath(TString(".:")+TString(gSystem->GetDynamicPath()));
 
-    if (getenv("PLUTODIR") == NULL) {
+    if (getenv("PLUTO_DIR") == NULL) {
       if (gSystem->Load("../builddir/libPluto.so")==0) {
         printf("Shared library Pluto.so loaded\n");
       } else {
         printf("Unable to load Pluto.so\n");
       }
     } else {
-      if (gSystem->Load("$PLUTODIR/lib64/libPluto.so")==0) {
+      if (gSystem->Load("$PLUTO_DIR/lib64/libPluto.so")==0) {
         printf("Shared library Pluto.so loaded\n");
       } else {
         printf("Unable to load Pluto.so\n");
