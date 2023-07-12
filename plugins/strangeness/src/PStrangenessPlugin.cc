@@ -11,6 +11,8 @@
 
 #include "PStrangenessPlugin.h"
 
+#include "PDistributionManager.h"
+#include "PResonanceDalitz.h"
 
 PStrangenessPlugin::PStrangenessPlugin(const Char_t *id, const Char_t *de):
     PDistributionCollection(id, de) {
@@ -81,7 +83,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
 
 
 
-		makeStaticData()->AddParticle(73,"Sigma13850", 1.3837);
+		makeStaticData()->AddParticle(73, "Sigma13850", 1.3837);
 		makeStaticData()->AddAlias("Sigma13850", "Sigma(1385)0");
 		makeStaticData()->SetParticleTotalWidth("Sigma13850", 0.0365);
 		makeStaticData()->SetParticleBaryon("Sigma13850", 1);

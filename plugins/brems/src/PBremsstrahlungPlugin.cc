@@ -272,9 +272,9 @@ Bool_t PBremsstrahlungPlugin::ExecCommand(const char *command, Double_t value) {
 
     } else  if (strcmp (command,"shyam") == 0) {
 
-	char *path = getenv("PLUTOSYS");
+	char *path = getenv("PLUTO_DIR");
 	if (!path) {
-	    Error ("ExecCommand", "$PLUTOSYS not set: dat files cannot be located");
+	    Error ("ExecCommand", "$PLUTO_DIR not set: dat files cannot be located");
 	    return kFALSE;
 	}
 

@@ -19,7 +19,7 @@
 #include "TObjString.h"
 #include "PDefines.h"
 
-extern char *version_string;
+#include "Version.h"
 
 PStaticData &fStaticData() {
     static PStaticData *ans = new PStaticData();
@@ -164,11 +164,15 @@ PStaticData::PStaticData() {
 
     Double_t *version= GetBatchValue("_system_version");
 
+    *version = Double_t(Pluto_VERSION_MAJOR) + Double_t(Pluto_VERSION_MINOR)/10.;
+
+      /*
     if (!strncmp("Trunk", version_string, 3)) {
 	(*version) = 999.;
     } else {
 	sscanf(version_string, "%lf", version);
     }
+      */
 }
 
 int PStaticData::MakeDirectoryEntry(const char *name, const char *n, const char *l, const char *ename) {

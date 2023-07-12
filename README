@@ -1,9 +1,16 @@
 Installation:
 _____________________________________________________
 
-Standard installation:
-mkdir builddir
-cd builddir
+Out-of-source installation
+--------------------------
+export PLUTO_DIR=/path/to/pluto_installation
+mkdir builddir && cd builddir
+cmake .. -DCMAKE_INSTALL_PREFIX=$PLUTO_DIR
+make install
+
+In-source installation
+----------------------
+mkdir builddir && cd builddir
 cmake ..
 make
 
@@ -1553,3 +1560,9 @@ V6.02:
 
                                         I. Froehlich
                                         IKF, 11/07/2023
+
+
+dev
+===
+
+385) Changed build system (R. Lalik, JU Krakow)

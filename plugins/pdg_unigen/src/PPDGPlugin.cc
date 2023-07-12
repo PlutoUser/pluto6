@@ -400,7 +400,7 @@ Bool_t PPDGPlugin::ExecCommand(const char *command, Double_t) {
 			     100443,
 			     0};
 
-	    for (int i=0; i<71; i++) { //loop over known particles
+	    for (int i=0; i<70; i++) { //loop over known particles
 
 		int pkey = makeStaticData()->GetParticleKey(i);
 

@@ -73,7 +73,7 @@ int PData::IsMDalitz(const int &idx) {
 
 
 #include "TApplication.h"
-#include "../Version.h"
+#include "Version.h"
 #include "Compiled.h"
 ;
 
@@ -92,7 +92,10 @@ PSplash::PSplash() {
 	    cout << "  * The Pluto event generator                              " << endl;
 	    cout << "  * Developed by HADES and all contributing AUTHORS        " << endl;
 	    cout << "  * https://hades.gsi.de/?q=pluto                          " << endl;
-	    cout << "  * Version: " << version_string << endl;
+	    cout << "  * Version: " << Pluto_VERSION_MAJOR << "." << Pluto_VERSION_MINOR << "." << Pluto_VERSION_PATCH << endl;
+	    if (Pluto_VERSION_PATCH > 0) {
+	      cout << "  * WARNING: this is not an officially released Pluto version" << endl;
+	    }
 	    cout << "  * Compiled on " << date_string << endl;
 	    cout << "  *********************************************************" << endl;
 	}
