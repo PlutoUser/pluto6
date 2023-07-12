@@ -1,0 +1,50 @@
+\documentclass[12pt,twoside]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{a4wide}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{bold-extra}
+
+\pagestyle{myheadings}
+%\pagestyle{plain}
+\sloppy
+
+\setlength\parskip{\medskipamount}
+\setlength\parindent{0pt}
+% ispell -p ./acat.dict acat.tex
+
+\newcommand{\nb}[1]{\begin{center}\framebox[0.9\textwidth][l]{\begin{minipage}{0.88\textwidth}#1\end{minipage}}\end{center}}
+\newcommand{\s}[1]{\texttt{#1}}
+
+\newcommand{\manf}{\begin{center}\begin{minipage}[c]{0.9\columnwidth}}
+\newcommand{\mend}{\end{minipage}\end{center} \tableofcontents}
+
+\begin{document}
+
+\section*{Pluto Script Manual}
+
+\today, Pluto version \s{\input{Version.tex}}
+
+\thispagestyle{empty}
+
+\begin{raggedright}
+
+
+\markboth{I. Fr\"ohlich}
+{Pluto Script Manual}
+
+I. Fr\"ohlich$^{1}$
+
+\hspace{-0.4cm}\makebox[0.3cm][r]{$^{1}$}
+Institut f\"{u}r Kernphysik, Goethe-Universit\"{a}t, 60438 ~Frankfurt, Germany\\
+
+\end{raggedright}
+\vspace{1cm}
+
+\input{script_manual_chapter}
+
+\end{document}
+

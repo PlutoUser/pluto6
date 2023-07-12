@@ -1,0 +1,3 @@
+#define Pluto_VERSION_MAJOR @Pluto_VERSION_MAJOR@
+#define Pluto_VERSION_MINOR @Pluto_VERSION_MINOR@
+#define Pluto_VERSION_PATCH @Pluto_VERSION_PATCH@

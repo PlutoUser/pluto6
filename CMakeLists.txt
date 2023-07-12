@@ -1,7 +1,7 @@
 # CMakeLists.txt for event package. It creates a library with dictionary and a main program
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 project(Pluto
-    VERSION 6.1.9
+    VERSION 6.2.1
     LANGUAGES CXX
 )
 
@@ -68,7 +68,7 @@ include(${ROOT_USE_FILE})
 SET(ROOT_VERSION_LEGACY 6.22.00)
 
 #---Create a shared library with geneated dictionary
-add_library(Pluto SHARED ${SOURCES} ${CMAKE_BINARY_DIR}/Compiled.h)
+add_library(Pluto SHARED ${SOURCES} ${CMAKE_BINARY_DIR}/Compiled.h ${CMAKE_BINARY_DIR}/Version.h)
 add_library(Pluto::Pluto ALIAS Pluto)
 
 target_include_directories(Pluto
@@ -128,9 +128,9 @@ macro(add_plugin plugin_target)
         set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include;${incdir}")
     endif()
 
-    if (IS_DIRECTORY macros)
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/macros)
         install(DIRECTORY macros/
-            DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PLUTO_SLOT}/plugins/${plugin_target})
+            DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PLUTO_SLOT}/macros/plugins/${plugin_target})
     endif()
 
     # dynamically generate source files and Plugins LinkDef
@@ -149,6 +149,10 @@ target_link_libraries(Pluto PRIVATE ROOT::Core ROOT::Tree ROOT::EG)
 
 ###########################################################
 
+configure_file(Version.h.in Version.h)
+#target_include_directories(Pluto PUBLIC
+#    "${PROJECT_BINARY_DIR}")
+
 add_custom_target(Compiled.h)
 add_custom_command(OUTPUT Compiled.h COMMAND echo char *date_string = \\\(char*\\\) \\\"\$\$\(date +\"%e %B %Y\"\)\\\"  > ${CMAKE_CURRENT_BINARY_DIR}/Compiled.h DEPENDS G__Pluto.cxx ${SOURCES})
 
@@ -166,7 +170,7 @@ install(FILES
         DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 INSTALL(DIRECTORY macros/
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PLUTO_SLOT})
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/macros/${PLUTO_SLOT})
 INSTALL(DIRECTORY include/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PLUTO_SLOT})
 

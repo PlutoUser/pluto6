@@ -1,0 +1,958 @@
+
+\manf
+
+The idea behind scripting with Pluto (``PlutoScript'') is to combine
+objects like histograms and ntuples via a flexible batch language with
+the event loop and the data base. The commands of the batch script are
+compiled by Pluto via the class \s{PBatch} in advance and can be executed as often as
+required without additional delay.  This execution can be done inside the
+event loop which allows for modifications of particles, e.g.  to
+write acceptance filters or include smearing effects. 
+
+Furthermore, it is also possible to call many public available
+Pluto-methods of the \s{PUtils} class and all methods of the class
+\s{PParticle} (i.e. \s{TLorentzVector}).
+
+
+As the script can combine ROOT-objects (histograms and ntuples) with
+the event loop, particle properties can be converted very quickly to
+histograms and ntuples.
+
+And finally, the script can be packed together with acceptance and
+resolution matrices to form a universal, common format for
+a detector description.
+
+\mend
+
+\section{The syntax}
+
+
+\subsection{Execution of the script commands}
+\label{sec:execution}
+
+The first examples deal with the usual ``hello world'' for which the
+{\tt echo} command is used (which works in a similar way as the echo of
+the unix shell).
+
+In order to execute script commands via the ROOT command shell the
+quickest method is to use the global batch singleton:
+
+\begin{verbatim}
+   makeGlobalBatch()->Execute("echo Hello world");
+\end{verbatim}
+
+Additional new batch objects can be constructed as well:
+
+\begin{verbatim}
+   PBatch * batch = new PBatch();
+   batch->AddCommand("....");    
+   batch->AddCommand("....");
+   batch->Execute();
+\end{verbatim}
+
+In this case, the commands are compiled instantly after {\tt
+  AddCommand}, and are executed later with {\tt Execute}. After the script
+has been compiled without error, it can be
+executed as often as required.
+
+In order to add command lines to the event loop the {\tt Do()} method
+of the {\tt PReaction} (here defined as \s{r})  can be used:
+
+\begin{verbatim}
+   r->Do("echo Yet another event....");
+\end{verbatim}
+
+These commands are executed in each event {\it after} the particles
+of the event have been sampled. 
+
+In the next sections, the following notation is used: commands in
+quotation marks are Pluto batch commands which can be encapsulated
+into the event loop or any of the other execution methods as described
+above; other commands are ROOT-CINT commands.
+
+\subsection{Command line syntax}
+
+One command line can be composed of several single commands.  Like in
+C++ the semi-colon is used as the delimiter:
+
+\begin{verbatim}
+   "command1; command2; ..."
+\end{verbatim}
+
+\nb{There are cases where
+the script is line-sensitive, i.e.\ it makes a difference if several
+commands are written in one single line or splitted into several lines.}
+
+\subsection{Variables}
+
+Variables are always {\tt Double\_t}'s and assigned automatically
+without any definition or constructor:
+
+\begin{verbatim}
+   "myvar = 0.2;"
+\end{verbatim}
+
+Therefore, one should keep in mind that {\it typos} (e.g., a wrong
+variable name) are not catched.
+
+
+
+To get a list of variables, one can access the Pluto global data base via:
+
+\begin{verbatim}
+   makeDataBase()->ListEntries(-1,1,"*name,batch_value");
+\end{verbatim}
+
+It is possible to obtain the pointer to the variable via:
+
+\begin{verbatim}
+   Double_t* makeStaticData()->GetBatchValue(varname,makeflag);
+\end{verbatim}
+
+with {\tt varname} as the name of the (new) batch variable. If
+{\tt makeflag} is set, the variable is constructed, in the other case
+a NULL is returned if the variable does not exist.
+
+For example
+
+\begin{verbatim}
+   makeStaticData()->GetBatchValue("myvar",0);
+\end{verbatim}
+
+will return the pointer to the variable from the example above. Consequently,
+the content of this variable can be changed also via the ROOT macro/shell.
+This allows to communicate with the script (e.g. for the control and setting
+of filters).
+
+\nb{All variables are globals. They can be changed and acessed 
+over the entire Pluto system.}
+
+Variable names must contain alphanumeric characters only plus the ``\_'', they
+must not start with a digit.
+
+\nb{It is not recommended to use variables with a trailing ``\_''. Such names
+are reserved for system variables.}
+
+In addition, variables may start with a hash (``\#''), these are interpreted
+by the {\tt PReaction} loop as a filter variable.
+
+\subsection{The echo command}
+
+Variables can be printed via the {\tt echo} command, by adding a
+``\$'' in front of the variable name, e.g.:
+
+\begin{verbatim}
+   "echo The value of myvar is $myvar"
+\end{verbatim}
+
+\nb{If a definition has a trailing ``\s{\$}'', the corresponding
+  variable cannot be replaced by an operation or calculation. In this
+  cases, only the (precalculated) variable can be used.}
+
+The format of the output can be controlled with the same syntax as in
+the c printf syntax, by using a format string which is in this case,
+however, embedded in the variable name. The format string must have a
+trailing '\%', like in c, but it must be completed with a '\%' as well,
+in order to have a delimiter between the format and the variable.
+
+Syntax:
+
+\begin{verbatim}
+   "echo The value of myvar is $%format%myvar"
+\end{verbatim}
+
+The format can be, e.g. 'i' (for integers), 'x' (for hex numbers), 'c'
+(conversion to a character) but also of more more complex nature, like
+'.2E' (float with 2 digits after the point) or '0\#.8x' (8-byte
+hex). For a complete list of features reference is made to the
+c-manual.
+
+\subsection{Arithmethic operations}
+
+The batch script can use all operations which are allowed by
+{\tt TFormula}. This means, all normal operations like
+``+'', ``-'', ``*'', ``/'', but also boolean,
+are accessible. In particular, all functions
+of {\tt TMath} can be used.
+
+This syntax has been enhanced to include Pluto variables and
+additional features (see Sec.~\ref{sec:add_features}) into the {\tt
+  TFormula} syntax.
+
+\begin{verbatim}
+   "echo $myvar; myvar = myvar + 0.1; echo $myvar;"
+\end{verbatim}
+
+In this example, each time the line is executed, the variable
+{\tt myvar} is increased by 0.1.
+
+
+
+
+\subsection{Conditions and branches}
+
+\subsubsection{Tests using If}
+
+With the {{\tt If} command a conditional execution can be realized.
+
+Syntax:
+
+\begin{verbatim}
+   "if condition; commands...;"
+\end{verbatim}
+
+There are some differences to the ``normal'' c-like \s{if}: there are
+no curly brackets, and there is no else.  The \s{condition} can be
+either a variable or the result of a calculation.  The commands after
+the {\tt if} are executed, if the value of the condition is
+non-zero. This is quite clear for boolean calculations as they are
+translated into 0 or 1. All other non-zero floating point values are
+treated as 1.
+As described above, all functions and
+arithmetic operations which are allowed by \s{TFormula} can be used.
+
+One simple example would be a test for a value:
+
+
+\begin{verbatim}
+   "if myvar < 0.3; echo myvar too small;"
+\end{verbatim}
+
+\subsubsection{The else command}\label{else}
+
+If a test failed, the \s{else} command can catch this situation and
+continue the execution. The \s{else} command can be used in conjuntion
+with \s{if}:
+
+\begin{verbatim}
+   "if condition; commands...; else; other commands..;"
+\end{verbatim}
+
+or even stand alone:
+
+\begin{verbatim}
+   "commands...; else; other commands..;"
+\end{verbatim}
+
+This construction can be helpful, if the \s{commands} require objects
+which are not present or empty. {\it Pluto does not catch empty
+particle objects, it stops the command chain and returns a false
+(e.g. to the \s{PProjector}), so if you need a error message one has to use the \s{else} command.}
+
+\subsubsection{Conditions on equality}
+
+The equality operator (``=='') can be used as usual:
+\begin{verbatim}
+   "myvar = 1; if(myvar == 1); echo myvar is one"
+\end{verbatim}
+
+As the variables are always floating points and therefore can be
+unprecise, the tilde comparator (``\textasciitilde'') provides some
+``equality'' feature:
+
+\begin{verbatim}
+   "myvar = 1; if(myvar ~ 1); echo myvar is similar to one"
+\end{verbatim}
+
+The result of this operator is true, if the difference between the two
+operands is smaller than 0.5.
+
+Tests for zero's can be done in the following ways:
+
+\begin{verbatim}
+   "myvar = ...; if(myvar);  echo myvar is not zero";
+   "myvar = ...; if(!myvar); echo myvar is zero"
+\end{verbatim}
+
+
+
+\subsubsection{Goto}
+
+With {\tt goto} local jumps inside the script can be realized. Syntax:
+
+\begin{verbatim}
+   "label: ..."
+   "goto label;"
+\end{verbatim}
+
+In the following example the {\tt goto} is used to construct a ``for-loop'':
+
+\begin{verbatim}
+   "myvar = 0.0; loop: myvar=myvar + 0.1; 
+      if myvar < 0.7; echo $myvar; goto loop;"
+\end{verbatim}
+
+\subsubsection{Gosub and return}
+
+This allows to jump to subroutines, e.g. to do common calculations.
+
+Syntax:
+
+\begin{verbatim}
+   "gosub label;"
+   "..."
+   "label: ..."
+   "..."
+   "return;"
+\end{verbatim}
+
+\subsubsection{Exit}
+
+Stops the script and returns to the Pluto event loop (or CINT).
+Syntax:
+
+\begin{verbatim}
+   "exit;"
+\end{verbatim}
+
+\section{Additional features of the scripting language}
+\label{sec:add_features}
+
+\subsection{\texttt{PParticle}-objects}
+
+In addition to floating point variables the script can use {\tt
+  PParticle}s objects. Since particles are inherited from Lorentz
+vectors, at least their momenta and the masses (or energies) have to be
+defined. This can be  done by the following constructor functions.
+
+\subsubsection{The P3M constructor}
+
+This constructor uses the 3-momentum ($p_x,p_y,p_z$) and the invariant mass as
+arguments.  Syntax:
+
+\begin{verbatim}
+   "mypar = P3M(px,py,pz,mass);"
+\end{verbatim}
+
+The following example creates a particle with eta mass and 2 GeV momentum in z-direction:
+
+\begin{verbatim}
+   "mypar = P3M(0,0,2.,0.547);"
+\end{verbatim}
+
+\subsubsection{The P3E constructor}
+
+This constructor uses the 3-momentum ($p_x,p_y,p_z$) and the energy as
+arguments.  Syntax:
+
+\begin{verbatim}
+   "mypar = P3E(px,py,pz,e);"
+\end{verbatim}
+
+\subsubsection{Copy constructor}
+
+New particle objects are created automatically. Syntax:
+
+\begin{verbatim}
+   "newpar = mypar;"
+\end{verbatim}
+
+Here, \s{newpar} is a new object, and not a reference to \s{mypar}.
+
+\subsection{Access to \texttt{PParticle} methods}\label{pparticle_methods}
+
+The script can use all public methods of \s{PParticle} (and
+therefore also of the \s{TLorentzVector}) which uses only \s{void}'s, 
+\s{Int\_t}'s, or \s{Double\_t}'s as arguments/return values.
+
+The following example sets the particle id of the above-created vector
+to the id of the $\eta$ meson:
+
+\begin{verbatim}
+   "mypar->SetID(17);"
+\end{verbatim}
+
+The more commonly used feature is to read observables of a particle. Some usual
+examples (e.g. to fill histograms or ntuples) are:
+
+\begin{verbatim}
+   "mass  = mypar->M();"
+   "angle = mypar->Theta();"
+\end{verbatim}
+
+For a complete list, reference is made to the ROOT manual.
+
+\subsection{Additional build-in methods}
+
+
+\subsubsection{\s{obj->Angle(target)}}
+
+Opening angle between  particle \s{obj} and particle \s{target}.
+
+\subsubsection{\s{obj->Boost(target)}}
+
+Boosts the particle \s{obj} into the rest frame of  particle \s{target} 
+(replaces \s{obj->Boost(-target->GetBoostVector())}).
+
+\subsubsection{\s{obj->Rot(target)}}
+
+Rotate particle \s{obj} such, that \s{target} would point to z-Direction.
+
+\subsubsection{\s{composite->GetBeam()}}
+
+Returns a \s{PParticle} object (the beam) from a composite object (like \s{[p+p]})
+
+\subsubsection{\s{composite->GetTarget()}}
+
+Same as above.
+
+\subsection{Access to the particle stream of the event loop}
+
+The link to the Pluto event loop is done via the \s{PProjector} class, which
+internally executes one or more batch objects. By using the \s{Do()}
+method as mentioned in Sec.~\ref{sec:execution}, a \s{PProjector} is
+generated automatically, which consequently connects the particles of
+the event loop with the batch script.
+
+This method works both for complete chains of the \s{PReaction} and
+single decay steps in \s{PChannel}. In the latter case, particles can
+be modified before their consecutive decay.
+
+In this subsection, at first place the syntax to access the particle
+stream will be explained. The connection to histograms will be
+further described in Sec~\ref{histos}.
+
+\nb{The script can access only particles which are stored in the
+  file. If the ``tracked only'' option of \s{PReaction} is used, the
+  unstable (i.e. decayed) particles can not be read by the script.}
+
+The particle objects of the event loop are marked with square brackets. The
+general syntax is:
+
+\begin{verbatim}
+   "mypar = [id,num]"
+   "myvar = [id,num]->...()"
+\end{verbatim}
+
+with {\tt id} as the Pluto particle name, and {\tt num} as the number
+of the individual particle of the species {\tt id} in the current event,
+counting from 1.
+
+If {\tt num} is not defined or equal to zero, the ``current position''
+is used. This is by default the first particle. Inside loops
+(for a further description see~\ref{sub:loops}) the current position is the loop position.
+
+Examples:
+\begin{verbatim}
+   "[eta,1]" //first eta in event
+   "[eta]"   //current position
+\end{verbatim}
+
+There is a placeholder (``\s{*}'') for all particle species, i.e. with
+
+\begin{verbatim}
+   "mypar = [*,num]"
+\end{verbatim}
+
+any particle can be accessed, where ``num'' has to be the number of the particle.
+
+It is, however, also possible to use variable position numbers:
+
+\begin{verbatim}
+   "num=1; mypar = [id,$num]"
+\end{verbatim}
+
+
+
+\subsection{Adding particles to the stack}\label{sub:push}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{New branches}
+
+By default, Pluto has only one particle stack (i.e. a \s{TBranch}) with
+the name ``Particles''. It is, however, possible to create new
+branches with the command \s{Branch}:
+
+\begin{verbatim}
+   "branchid = Branch(newname);"
+\end{verbatim}
+
+with \s{newname} as the name of the \s{TBranch} as it will appear in
+the ROOT-file, and \s{branchid} as the number of the branch (the default branch
+has 0 as its number).
+
+\subsubsection{Pushing particles}
+
+New particles, which are generated by \s{P3M} or \s{P3E}, or the copy
+constructor, can be added to the stack of the event loop by the \s{push} command.
+Syntax:
+
+\begin{verbatim}
+   "push(mypar);"
+\end{verbatim}
+
+In this case, the particle is pushed on the default branch. A complete
+example which reads data from a text file and adds particles can be
+found in~\ref{subsub:push}.
+
+An alternative is to use a method:
+
+\begin{verbatim}
+   "mypar->Push(branchid);"
+\end{verbatim}
+
+E.g. this loop pushes all particles on a second \s{TBranch}:
+
+\begin{verbatim}
+   "foreach(*); [*]->Push(Branch(particles_sim));"
+\end{verbatim}
+
+\subsection{Particle loops}\label{sub:loops}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Pluto has two build-in commands for easy looping over the particle
+array (a self-made loop is discussed in~\ref{npar}).
+
+\subsubsection{The \texttt{foreach} loop}
+
+Syntax:
+
+\begin{verbatim}
+   "foreach(id); ... [id] ..."
+\end{verbatim}
+
+This executes the commands after \s{foreach} until the end of the
+line, repeating it for each particle of the species {\tt id} of the
+current event.  For each execution the current position of {\tt [id]}
+is shifted by one and replaced by the next particle, as discussed
+above. Via this command loop, operations and calculations can be
+easily repeated for each occurence of a particle named {\tt id}.
+
+Example(s):
+
+\begin{verbatim}
+   "foreach(p); mom = [p]->P(); echo proton momentum $mom"
+   "foreach(*); id = [p]->ID(); echo found particle with $id"
+\end{verbatim}
+
+
+\subsubsection{The \texttt{formore} loop}
+
+Syntax:
+
+\begin{verbatim}
+   "loop: ..."
+   "...[id]..."
+   "formore(id); goto loop;"
+\end{verbatim}
+
+The commands after \s{formore} are called, if particle objects of the
+species \s{id} are left over. This allows to construct longer command
+lists, which spans over more than one line.
+
+\subsection{Access to system values}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The batch script can be used to read and change Pluto system
+variables.
+
+\nb{Change Pluto system variables only when you know what you are doing}
+
+\subsubsection{\texttt{\_system\_version}} 
+
+Pluto version number.
+
+\subsubsection{\texttt{\_system\_weight\_version}}
+
+=1 (default): New version, weight is $1/N_{ev} \cdot \Pi b_i  \cdot \Pi W_j$ with
+the branching ratios $b_i$ and the weights of all models $W_j$.
+
+=0: Old version, where weight is set by the seed particle and propagated.
+
+\subsubsection{\texttt{\_system\_unstable\_width}}
+
+Limit (in GeV) of the width where particles are treated as stable particles.
+
+\subsubsection{\texttt{\_system\_thermal\_unstable\_width}}
+
+Limit (in GeV) of the width for enabling the mass sampling in thermal
+models. If the particle width is below the limit, the mass is fixed,
+and only the energy is sampled. For particles with widths equal or larger the
+defined limit, 2-dimensional sampling is applied. I.e., the
+1-dimension sampling is disabled with:
+
+\begin{verbatim}
+*(makeStaticData()->GetBatchValue("_system_thermal_unstable_width")) = -1;
+\end{verbatim}
+
+\subsubsection{\texttt{\_system\_alloc\_verbosity}}
+
+=1 (default): Print allocation infos.
+
+=0: Quiet mode.
+
+\subsubsection{\texttt{\_system\_printout\_percent}}\footnote{since v5.43}
+
+Defines the printout steps in percent (default: 20\%).
+
+\subsubsection{\texttt{\_system\_max\_failed\_events}}
+
+\s{PReaction} will stop the event loop if the number of failed events is larger (default 10000).
+
+\subsubsection{\texttt{\_system\_total\_events\_to\_sample}}\footnote{since v5.43}
+
+Number of events to be sampled in total (taken from \texttt{Loop()}). Readonly!
+
+\subsubsection{\texttt{\_system\_total\_event\_number}}\footnote{since v5.43}
+
+Number of events which have beed sampled already. Readonly!
+
+\subsubsection{\texttt{\_system\_particle\_stacksize}} 
+
+This defines the size of the stack in \s{PReaction} for bulk decays, embedded particles, etc.
+Default: 500.
+
+\subsubsection{\texttt{\_system\_force\_m1n}}
+
+Uses the ROOT based model M1N for decays with 1 unstable and 2 stable daughters
+instead of M3.
+
+\subsubsection{\texttt{\_event\_vertex\_x / ...\_y / ...\_z}}
+
+Default event vertex. Can be changed/smeared inside event loop.
+
+\subsubsection{\texttt{\_event\_plane / \_event\_impact\_param}}
+
+Parameters for fireball sampling.
+
+\subsection{Access to data base values}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The script is able to read basic (static) particle properties from the
+data base (values are read-only). Syntax:
+
+\begin{verbatim}
+   "... = id.varname;"
+\end{verbatim}
+
+where \s{varname} is the data base variable name.  Some usefull
+variable names are listed below:
+
+\subsubsection{mass} 
+
+Static pole mass of a particle. Example(s):
+
+\begin{verbatim}
+   "mass = eta.mass; echo $mass;"
+   "[rho0]->SetM(rho0.mass);"
+\end{verbatim}
+
+\subsubsection{pid} 
+
+Pluto particle id. Example (with the definition above in
+Sec.~\ref{pparticle_methods}):
+
+\begin{verbatim}
+   "mypar->SetID(eta.pid);"
+\end{verbatim}
+
+\subsubsection{width} 
+
+The static width of the particle.
+
+\subsubsection{npar} \label{npar}
+
+Number of particle objects in the current event. This allows
+to build loops by hand:
+
+\begin{verbatim}
+   "cur = 0; myloop: if !(cur ~ p.npar); cur = cur + 1; 
+       echo proton $cur; [p,$cur]->Print(); goto myloop"
+\end{verbatim}
+
+\subsubsection{cpos} 
+
+Current position of the particle object (e.g. in foreach loop)
+
+\subsection{Access to \texttt{PUtils}}
+
+The script offers to call all methods which are available in
+the {\tt PUtilsREngine} class (which is a wrapper to {\tt PUtils}). 
+This can be used, e.g., to access the random number generator:
+\begin{verbatim}
+   "var = sampleFlat();"
+   "echo The number is $var;"
+\end{verbatim}
+The result of {\tt var} is a random number between 0 and 1.
+Via this means it is possible to use various methods, which are, e.g., essential for
+acceptance filtering and momentum smearing. Some other usefull example is the
+sampling of a gaus function:
+\begin{verbatim}
+   "var = sampleGaus(10.,0.1);"
+\end{verbatim}
+which also can make use of variables as arguments:
+\begin{verbatim}
+   "mean = 10;sigma=0.1;"
+   "var = sampleGaus(mean,sigma);"
+\end{verbatim}
+
+\subsection{Access to the Pluto models}
+
+Calculations and numbers can be retreived also by all build-in Pluto
+models (and models of the plug-ins, after their activation).
+
+Syntax:
+
+\begin{verbatim}
+   "var = {modelname}->X(...)"; 
+\end{verbatim}
+
+with \s{modelname} as the unique name of the model , as returned by
+\s{makeDistributionManager->Print("root")} (in addition with
+                                          curly brackets)
+and \s{X(...)} as one of the methods of the class \s{PChannelModel},
+such as:
+
+\subsubsection{\s{SampleTotalMass()}} 
+
+This returns the sampled mass of particle models. The following example:
+\begin{verbatim}
+   "rhomass = {rho0_bw}->SampleTotalMass();"
+   "rho = P3M(0,0,0,rhomass); push(rho)"
+\end{verbatim}
+adds a rho with the mass-dependent Breit-Wigner model to the particle stack.
+
+\subsubsection{\s{GetWeight(mass)}} 
+
+Returns the weight of the model. Can be used, e.g., to fold the event weight (``\s{\_w}'')
+with a local weight of a single model.
+
+\subsubsection{\s{GetWidth(mass)}} 
+
+Returns mass-dependent width of particle models. 
+
+\subsubsection{\s{GetBR(mass)}} 
+
+Returns mass-dependent branching ratios of decay models. The following example re-weights a (free) $\rho^0$
+with the branching ratio of a di-electron decay:
+
+\begin{verbatim}
+   "rhomass = [rho0]->M(); _w = {rho_picutoff_e-_e+}->GetBR(rhomass);"
+\end{verbatim}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Connection to ROOT objects}
+\label{histos}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+The batch script can be used to fill histograms and/or ntuples. This will
+be outlined in the following section.
+
+\subsection{Filling histograms in the event loop}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Syntax:
+
+\begin{verbatim}
+   r->Do(histo,"command"); 
+\end{verbatim}
+
+with \s{histo} as a pointer to a 1-, 2-, or 3-dimensional histogram, and
+\s{command} as the batch command which has to calculate \s{\_x, \_y, \_z} as the
+required position on the axes to fill the histogram. 
+For the weight the current event weight is used, which can be accessed or changed
+via the variable  \s{\_w}.
+
+Example(s):
+
+\begin{verbatim}
+   //Missing mass of the p2 and pi0 pair:
+   r->Do(histo1,"miss= [p + p]- ( [p,2]+ [pi0] );_x=miss->M()");
+   //Theta of the first proton
+   r->Do(histo3,"_x= ([p,1]->Theta() * 180.)/TMath::Pi()");
+\end{verbatim}
+
+N.b. that the histogram is not filled, if one of the particle objects
+is empty. No error message is dumped. This is not a bug, it is a
+feature! See~\ref{else} for a message possibility.
+
+
+\subsection{Filling ntuples in the event loop}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Syntax:
+
+\begin{verbatim}
+   r->Output(ntuple,"var1 = ...; var2 = ...; ...");
+\end{verbatim}
+
+where \s{var1, var2, ...} are the variables of the ntuple.
+
+Example(s):
+
+\begin{verbatim}
+   TNtuple *ntuple = new TNtuple("ntuple","eta events",
+                         "eta_px:eta_py:eta_pz:eta_m");
+   PReaction r("3.5","p","p","p p eta");
+   r.Output(ntuple,"eta_px = [eta]->Px(); eta_py = [eta]->Py(); 
+                    eta_pz = [eta]->Pz(); eta_m  = [eta]->M()");
+\end{verbatim}
+
+\subsection{Filling text files in the event loop}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The \s{echo} command can be redirected to a text file. Syntax:
+
+\begin{verbatim}
+   r->Output("filename.txt","echo $var1 ....");
+\end{verbatim}
+
+This works also with multiple lines. After the \s{Output()} has
+been used, all echo commands are redirected to this file until \s{CloseFile()}
+is used.
+Example:
+
+\begin{verbatim}
+   r->Output("bla.lst","a=[p,1]->P(); echo $a");
+   r->Do("a=[p,2]->P(); echo $a");
+   r->Do("echo newevent");
+   r->CloseFile();
+   r->Do("echo stdout");
+\end{verbatim}
+
+\subsection{Input via ntuples}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Syntax:
+
+\begin{verbatim}
+   r->Input(ntuple);
+   r->Do("... = var1; ... = var2; ....");
+\end{verbatim}
+
+\nb{The writing of histograms, ntuples, and the reading of ntuples can be combined.}
+
+Example(s):
+
+\begin{verbatim}
+   PReaction r;
+   r.Input(ntuple);
+   r.Do("myeta = P3M(eta_px,eta_py,eta_pz,eta.mass)");
+   r.Do("cm = P3E(0.000000,0.000000,4.337961,5.376545) ; 
+         myeta->Boost(cm);");
+   r.Do(histo,"_x= myeta->CosTheta();");
+   r.Loop()
+\end{verbatim}
+
+\subsection{Prologue and Epilogue interfaces}
+
+\subsubsection{Input via text files}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Text files in any possible format can be read in a generic way with the 
+\s{readline} command. Syntax:
+
+\begin{verbatim}
+   "readline{pattern}";
+\end{verbatim}
+
+where \s{pattern} is line pattern similar to
+\s{scanf} but with the variables indicated by an \@.
+
+Example(s):
+
+\begin{verbatim}
+   PProjector *input = new PProjector();
+   input->AddInputASCII("omega.txt", 
+       "readline{@px @py @pz @mass}; [w]->SetXYZM(px,py,pz,mass)");
+   r.AddPrologueBulk(input);
+\end{verbatim}
+
+Similar to the output, following \s{readline} commands read from the
+same file (e.g. when each particle appears in a single line):
+
+\begin{verbatim}
+   PProjector *input = new PProjector();
+   input->AddInputASCII("multiple.txt", 
+       "readline{@p1x @p1y @p1z @p1mass};");
+   input->Do("readline{@p2x @p2y @p2z @p2mass};");
+   r.AddPrologueBulk(input);
+\end{verbatim}
+
+This can be used to convert event files with muliple lines to TNtuples
+    or ASCII files with different formats.
+
+The following example merges two lines into one single line (in this case just an addition):
+
+\begin{verbatim}
+   r.Input("multiple.lst", "readline{@a1,@a2,@a3};");
+   r.Do("readline{@b1,@b2,@b3};"); 
+   r.CloseFile();
+   r.Do("c1=a1+b1; c2=a2+b2; c3=a3+b3;");
+   r.Output("merged.lst","echo $c1,$c2,$c3");
+\end{verbatim}
+
+\subsubsection{Example: pushing particles from text file to the event loop}\label{subsub:push}
+
+\begin{verbatim}
+   PReaction my_reaction("eta_decays");
+    
+   PProjector *input = new PProjector();
+   input->AddCommand("myeta = P3M(0.,0.,0.,eta.mass)");
+   input->AddCommand("myeta->SetID(eta.pid)");
+   input->AddInputASCII("eta_sample.txt", 
+       "readline{@px @py @pz @mass}; myeta->SetXYZM(px,py,pz,mass)");
+   input->AddCommand("push(myeta)");
+\end{verbatim}
+
+
+\subsection{Evaluation}
+
+Histograms (or \s{TGraph(2D)}-objects) can be evaluated via
+the \s{Eval} method. The \s{Eval} method has 1, 2 or 3 arguments for
+1-, 2-, or 3-dimensional histograms in axis coordinates (not bin
+number).
+
+The return value is the content of the respective bin.
+
+Example(s):
+\begin{verbatim}
+   r->Do(histo1,"val = Eval(0.2)"); 
+   r->Do(histo2,"val = Eval(0.2, 0.4)"); 
+\end{verbatim}
+
+In case of a 1-dimensional histogram the argument can be replaced 
+by the content of \s{\_x}:
+\begin{verbatim}
+   r->Do(histo,"_x = 0.2; val = Eval()"); 
+\end{verbatim}
+
+NB: If \s{Eval} is used, the entire \s{Do}-Line is set to
+``read-only'', i.e. the histogram is not filled in this access.
+
+\subsection{Random numbers}
+
+The \s{GetRandom} method can be used to sample random numbers from a
+histogram. Arguments (1, 2 or 3, depending on the dimension of the
+histogram) are the variables which are filled. The variables must have
+been instanced before.
+
+Example(s):
+\begin{verbatim}
+   r->Do(histo1,"x = 0; GetRandom(x)"); 
+   r->Do(histo2,"x = 0; y = 0; GetRandom(x, y)"); 
+\end{verbatim}
+
+In case of a 1-dimensional histogram the argument can be replaced by a return value:
+\begin{verbatim}
+   r->Do(histo,"x = GetRandom()"); 
+\end{verbatim}
+
+NB: If \s{GetRandom} is used, the entire \s{Do}-Line is set to
+``read-only'', i.e. the histogram is not filled in this access.
+
+The \s{GetRandomX}/\s{GetRandomY} method can be used to sample random numbers 
+from a single line (in one direction) of a histrogram, e.g.:
+
+\begin{verbatim}
+   r->Do(histo1,"x = 0; GetRandomY(x)"); 
+\end{verbatim}
+
+
+
+
+
