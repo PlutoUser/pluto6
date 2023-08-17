@@ -5,7 +5,6 @@
 //                                  - Software switches to modify decays
 //
 
-
 #ifndef _PSTRANGENESS_PLUGIN_H_
 #define _PSTRANGENESS_PLUGIN_H_
 
@@ -48,10 +47,3 @@ class PStrangenessPlugin : public PDistributionCollection {
 };
 
 #endif //_PSTRANGENESS_PLUGIN_H_
-
-
-
-
-
-
-
