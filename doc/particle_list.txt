@@ -70,10 +70,14 @@ pid=68  name=Psi'
 pid=69  name=pn                                   
 
 strangeness:
-pid=70  name=Lambda1405                                      
-pid=71  name=Sigma1385+                                      
-pid=72  name=Sigma1385-                                      
-pid=73  name=Sigma13850
+pid=70  name=Sigma13850
+pid=71  name=Sigma1385+
+pid=72  name=Sigma1385-
+pid=73  name=Lambda1405
+pid=74  name=Lambda1520
+pid=75  name=Xi1530-
+pid=76  name=Xi15300
+pid=79  name=Delta2050++
 
 makeDistributionManager()->Exec("pdg:extend_resonances")
 pid=80  name=NF150                                           
