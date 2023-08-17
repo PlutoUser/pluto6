@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////
-//Plugin to add the strangeness particles Lambda(1405) and Sigma(1385)
+//Plugin to add the strangeness particles
+//see doc/particle_list.txt
 //
-//Pids are 70-73
 //
 //This plugin is automatically enabled. If you don't like it, call
 //makeDistributionManager()->Disable("strangeness");
@@ -82,7 +82,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
             }
 
 
-            if (makeStaticData()->AddParticle(-1, "Sigma1385+", 1.3828) > 0) {
+            if (makeStaticData()->AddParticle(71, "Sigma1385+", 1.3828) > 0) {
                 makeStaticData()->AddAlias("Sigma1385+", "Sigma(1385)+");
 
                 makeStaticData()->SetParticleTotalWidth("Sigma1385+", 0.0358);
@@ -99,7 +99,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
             }
 
 
-            if (makeStaticData()->AddParticle(-1, "Sigma1385-", 1.3872) > 0) {
+            if (makeStaticData()->AddParticle(72, "Sigma1385-", 1.3872) > 0) {
                 makeStaticData()->AddAlias("Sigma1385-", "Sigma(1385)-");
 
                 makeStaticData()->SetParticleTotalWidth("Sigma1385-", 0.0394);
@@ -116,7 +116,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
             }
 
 
-            if (makeStaticData()->AddParticle(-1, "Lambda1405", 1.406) > 0) {
+            if (makeStaticData()->AddParticle(73, "Lambda1405", 1.406) > 0) {
                 makeStaticData()->AddAlias("Lambda1405", "Lambda(1405)");
 
                 makeStaticData()->SetParticleTotalWidth("Lambda1405", 0.05);
@@ -147,7 +147,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
             }
 
 
-            if (makeStaticData()->AddParticle(-1,"Lambda1520", 1.5195) > 0) {
+            if (makeStaticData()->AddParticle(74,"Lambda1520", 1.5195) > 0) {
                 makeStaticData()->AddAlias("Lambda1520","Lambda(1520)");
 
                 makeStaticData()->SetParticleTotalWidth("Lambda1520", 0.0156);
