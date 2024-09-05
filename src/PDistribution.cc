@@ -31,6 +31,7 @@ PDistribution::PDistribution() {
     position     = 0;
     linkdbdone   = 0;
     debug_flag   = 0;
+    opt_string   = NULL;
     for (int i=0; i<MAX_PARTICLE_LIST; i++) {
 	particle[i] = NULL;
 	names[i]    = NULL;

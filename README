@@ -1566,3 +1566,6 @@ dev
 ===
 
 385) Changed build system (R. Lalik, JU Krakow)
+
+386) Fixed bug: draw options for PChannelModel were not working any more,
+     removed fFormula.
