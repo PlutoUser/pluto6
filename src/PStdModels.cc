@@ -26,7 +26,7 @@
 
 PStdModels::PStdModels() {
     generic_physics_done = kFALSE;
-    Info("PStdModels()", "(%s), Standard model filler", PRINT_CTOR);
+    Info("PStdModels()", "(%s)", PRINT_CTOR);
 }
 
 PStdModels::~PStdModels() {

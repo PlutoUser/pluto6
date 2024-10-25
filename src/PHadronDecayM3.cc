@@ -113,7 +113,8 @@ int PHadronDecayM3::GetDepth(int i) {
     if (model2) a2 = model2->GetDepth(i);
     if (model3) a3 = model3->GetDepth(i);
 
-    makeStaticData()->SetDecayEmin(is_channel, mass1+mass2+mass3);
+    if (makeStaticData()->GetDecayEmin(is_channel) == 0)
+	makeStaticData()->SetDecayEmin(is_channel, mass1+mass2+mass3);
 
     return TMath::Max(a1+1, TMath::Max(a2+1,a3+1));
 }

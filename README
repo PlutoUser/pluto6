@@ -1569,3 +1569,5 @@ dev
 
 386) Fixed bug: draw options for PChannelModel were not working any more,
      removed fFormula.
+
+387) Fixed bug in decay ND13 -> N + rho, rep. by B. Ramstein

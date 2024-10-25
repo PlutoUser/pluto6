@@ -31,6 +31,8 @@ PStaticData * makeStaticData() {
 }
 
 PStaticData::PStaticData() {
+    Info("PStaticModels()", "(%s)", PRINT_CTOR);
+    
     if (!makeStdData()->fillDataBase()) {
 	Fatal("PStaticData", "Data base could not be filled");
 	exit(1);
@@ -136,6 +138,11 @@ PStaticData::PStaticData() {
     makeDataBase()->SetParamInt("NS11+", "maxmesh", 2000);
     makeDataBase()->SetParamInt("NS11-", "maxmesh", 2000);
 
+    //some fix for ND13 -> rho + p decay
+    makeDataBase()->SetParamDouble(GetDecayKey(GetDecayIdx("ND13+", "p, rho0")), "cutoff_condition", new Double_t(0.00001));
+    makeDataBase()->SetParamDouble(GetDecayKey(GetDecayIdx("ND13+", "n, rho+")), "cutoff_condition", new Double_t(0.00001));
+    makeDataBase()->SetParamDouble(GetDecayKey(GetDecayIdx("ND130", "n, rho0")), "cutoff_condition", new Double_t(0.00001));
+    makeDataBase()->SetParamDouble(GetDecayKey(GetDecayIdx("ND130", "p, rho-")), "cutoff_condition", new Double_t(0.00001));
 
     //Ingo's additions:
     makeDataBase()->SetParamDouble ("D+", "lmass", 1.);

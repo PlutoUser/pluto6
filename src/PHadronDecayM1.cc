@@ -52,6 +52,12 @@ PHadronDecayM1::PHadronDecayM1(const Char_t *id, const Char_t *de, Int_t key) :
     stable_id   = tid[stable_position];
     scale = 1.1;  // good starting value, by trial & error
 
+    Double_t *cutoff_condition_db;
+    if (makeDataBase()->GetParamDouble(key, "cutoff_condition", &cutoff_condition_db))
+	cutoff_condition = *cutoff_condition_db;
+    else
+	cutoff_condition = 0.01;
+    
     //same order then in data base
     id1 = tid[1];
     id2 = tid[2];
@@ -140,10 +146,11 @@ int PHadronDecayM1::GetDepth(int i) {
     if (model2) a2 = model2->GetDepth(i);
 
     //after the GetDepth, the threshs are initialized
-    makeStaticData()->SetDecayEmin(is_channel,
-				   TMath::Min(makeStaticData()->GetParticleEmin(id1),
-					      makeStaticData()->GetParticleEmin(id2)));
-
+    if (makeStaticData()->GetDecayEmin(is_channel) == 0)
+	makeStaticData()->SetDecayEmin(is_channel,
+				       TMath::Min(makeStaticData()->GetParticleEmin(id1),
+						  makeStaticData()->GetParticleEmin(id2)));
+    
     return TMath::Max(a1+1, a2+1);
 }
 
@@ -239,15 +246,15 @@ Bool_t PHadronDecayM1::GetWidth(Double_t mass, Double_t *width, Int_t) {
 	return 0.; // Disabled --> BUGBUG why not static?
 
     if (!makeStaticData()->GetPWidx(is_channel)) { // Enter below only on the first call
-
-	Info("GetWidth", "Called for %s", makeStaticData()->GetDecayName(is_channel));
-
+	
 	makeDynamicData()->GetParticleDepth(parent_id); // if 1st call will initialize flags
 
 	mmin = makeStaticData()->GetDecayEmin(is_channel);  // mass threshold for the decay
 	Double_t w0 = makeStaticData()->GetDecayBR(is_channel);      // starting weight
-
 	mmax = PData::UMass(parent_id);                // mass ceiling
+
+	Info("GetWidth", "Called for %s, energy range (M1) %f GeV to %f GeV", makeStaticData()->GetDecayName(is_channel), mmin, mmax);
+	
 	Double_t dm = (mmax-mmin)/(maxmesh-3.);          // mass increment
 	double mass_threshold, mass_ceiling;
 	mass_threshold = PData::LMass(unstable_id);
@@ -288,7 +295,7 @@ Bool_t PHadronDecayM1::GetWidth(Double_t mass, Double_t *width, Int_t) {
 			//Fold with mass shape of unstable particle
 			Double_t w = makeDynamicData()->GetParticleTotalWeight(running_unstable_mass, unstable_id);
 			temp1 *= w;
-			if (w > (0.01*bw_max)) {
+			if (w > (cutoff_condition*bw_max)) {
 			    //Cut-off condition with avoids arteficialy destructed behaviour
 			    temp0_norm += temp1;
 			    //Get the Gamma_m_m1_m2
