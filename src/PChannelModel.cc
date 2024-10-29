@@ -214,7 +214,9 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 
     }
     didx_param     = makeDataBase()->GetParamInt("didx");
+    pid_param      = makeDataBase()->GetParamInt("pid");
     scfactor_param = makeDataBase()->GetParamDouble("scfactor");
+    model_param    = makeDataBase()->GetParamTObj("model");
     unstable_width = makeStaticData()->GetBatchValue("_system_unstable_width");
 
 };
@@ -348,39 +350,53 @@ Bool_t PChannelModel::GetWidth(Double_t, Double_t *width, Int_t didx) {
 
 Bool_t PChannelModel::GetBR(Double_t mass, Double_t *br, Double_t totalwidth) {
     //Calculates the mass-dependent br
-    //This method is meaningless for particles
     //the totalwidth may be set by the user, otherwise we use the static one
 
-    if (is_pid >= 0)
-	return kFALSE;
+    TObject *t_result;
+    
+    if (is_pid >= 0) {
+	//PARTICLE, only used for Draw-Option, otherwise it does not make sense
+	makeDataBase()->GetParamTObj (didx_param, didx_option, model_param, &t_result);
+	PChannelModel *model = (PChannelModel *) t_result;
+	if (model) 
+	    return model->GetBR(mass, br, totalwidth);
+    } else {
+	//DECAY
+	Double_t lwidth;
 
-    Double_t lwidth;
+	//test if the GetWidth was overloaded
+	//if not, simply use the static values
+	if (!GetWidth(mass, &lwidth)) {
+	    *br = makeStaticData()->GetDecayBR(is_channel);
+	    return kTRUE;
+	}
 
-    //test if the GetWidth was overloaded
-    //if not, simply use the static values
-    if (!GetWidth(mass, &lwidth)) {
- 	*br = makeStaticData()->GetDecayBR(is_channel);
- 	return kTRUE;
+	//Make everything coherent to Dyn.Data
+	Double_t sc = 1.;
+	Double_t *scfactor = &sc;
+
+	makeDataBase()->GetParamDouble (didx_param, is_channel , scfactor_param, &scfactor);
+
+	lwidth *= *scfactor;
+	//if total width is below unstable width-> static BR
+	if (totalwidth < 0.) {
+	    //no custom total width
+	    Int_t parent = makeStaticData()->GetDecayParent(is_channel);
+	    makeDataBase()->GetParamTObj(pid_param, parent, model_param, &t_result);
+	    PChannelModel *model = (PChannelModel *) t_result;
+	    if (model)
+		model->GetWidth(mass, &totalwidth);
+	    //totalwidth = makeStaticData()->GetParticleTotalWidth(makeStaticData()->GetDecayParent(is_channel));
+	}
+
+	if (totalwidth <= (*unstable_width))
+	    *br = makeStaticData()->GetDecayBR(is_channel);
+	else  {
+	    //if we have a local width, the BR is the partial width divided by total
+	    *br = lwidth/totalwidth;
+	}
+	return kTRUE;
     }
-
-    //Make everything coherent to Dyn.Data
-    Double_t sc = 1.;
-    Double_t *scfactor = &sc;
-
-    makeDataBase()->GetParamDouble (didx_param, is_channel , scfactor_param, &scfactor);
-
-    lwidth *= *scfactor;
-    //if total width is below unstable width-> static BR
-    if (totalwidth < 0.)
-	totalwidth = makeStaticData()->GetParticleTotalWidth(makeStaticData()->GetDecayParent(is_channel));
-
-    if (totalwidth <= (*unstable_width))
-	*br = makeStaticData()->GetDecayBR(is_channel);
-    else  {
-	//if we have a local width, the BR is the partial width divided by total
-	*br = lwidth/totalwidth;
-    }
-    return kTRUE;
 }
 
 int PChannelModel::GetDepth(int) {

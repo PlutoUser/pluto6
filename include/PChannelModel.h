@@ -154,7 +154,7 @@ class PChannelModel : public PDistribution {
     Int_t maxmesh;
     Int_t draw_option;
     int mc_max, mc;      //Monte-Carlo intergration params
-    Int_t didx_param, scfactor_param;
+    Int_t didx_param, scfactor_param, model_param, pid_param;
     Double_t *unstable_width;
 
     Int_t loop_flag; //To avoid endless loops of GetWidth/GetAmplitude calls
