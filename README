@@ -1571,3 +1571,5 @@ dev
      removed fFormula.
 
 387) Fixed bug in decay ND13 -> N + rho, rep. by B. Ramstein
+
+388) Added info about model in listParticle()

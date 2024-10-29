@@ -102,9 +102,9 @@ Bool_t PStdData::fillDataBase(void) {
 
     base->MakeParamTObj("mesh", "Mesh object");
     base->MakeParamTObj("tf1", "TF1 object");
-    base->MakeParamTObj("model", "Basic PModel");
+    base->MakeParamTObj("model", "Physical model");
 
-    base->MakeParamInt("maxmesh", "Number of Mesh points");
+    base->MakeParamInt("maxmesh", "Number of mesh points");
     base->MakeParamDouble("lmass", "Lower mass");
     base->MakeParamDouble("umass", "Upper mass");
 

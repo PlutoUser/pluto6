@@ -780,12 +780,21 @@ Bool_t PDataBase::ListEntries(Int_t key, Int_t option, const char *pattern) {
 		    if (run) {
 			if (valid_key[i]>0) {
 
-			    if (option)
-				cout << options << "=<yes>";
-			    else
-				cout << GetDescription(options) << "=<yes>";
-			    if (option) cout << " ";
-			    else        cout << " \n";
+			    if (result4->GetName()) {
+				if (option)
+				    cout << options << "=<" << result4->GetName() << ">";
+				else
+				    cout << GetDescription(options) << "=<" << result4->GetName() << ">";
+				if (option) cout << " ";
+				else        cout << " \n";
+			    } else {
+				if (option)
+				    cout << options << "=<no name>";
+				else
+				    cout << GetDescription(options) << "=<no name>";
+				if (option) cout << " ";
+				else        cout << " \n";
+			    }
 			}
 		    } else {
 			sz[i][pat] = 4; //for the yes

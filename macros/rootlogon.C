@@ -46,6 +46,8 @@
     } else {
       if (gSystem->Load("$PLUTO_DIR/lib64/libPluto.so")==0) {
         printf("Shared library Pluto.so loaded\n");
+      } else if (gSystem->Load("$PLUTO_DIR/builddir/libPluto.so")==0) {
+	printf("Shared library Pluto.so loaded\n");
       } else {
         printf("Unable to load Pluto.so\n");
       } 
