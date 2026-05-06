@@ -171,8 +171,12 @@ Bool_t PHadronDecayM1::Prepare(void) {
 
 void PHadronDecayM1::SubPrint(Int_t) const {
     //Print sub-models
-    if (model1) {cout << " "; cout << model1->GetDescription();}
-    if (model2) {cout << " "; cout << model2->GetDescription();}
+    if (model1) {
+        cout << " [" << model1->GetDescription() << "]<" << model1->ClassName() << ">";
+    }
+    if (model2) {
+        cout << " [" << model2->GetDescription() << "]<" << model2->ClassName() << ">";
+    }
 }
 
 Double_t PHadronDecayM1::GetWeight(void) {

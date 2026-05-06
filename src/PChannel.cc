@@ -1415,13 +1415,13 @@ void PChannel::Print(const Option_t *delme) const {
 	    if (dist[j]->GetStatus() == 0) { //all particles set
 		dist[j]->GetDepth();  //Init sub-models
 		if (dist[j]->Path())
-		    printf("        [%s] %s {/%s}",dist[j]->GetIdentifier(),dist[j]->GetDescription(),dist[j]->Path());
+		    printf("        [%s] %s {/%s} <%s",dist[j]->GetIdentifier(),dist[j]->GetDescription(),dist[j]->Path(),dist[j]->ClassName());
 		else
-		    printf("        [%s] %s",dist[j]->GetIdentifier(),dist[j]->GetDescription());
+		    printf("        [%s] %s <%s",dist[j]->GetIdentifier(),dist[j]->GetDescription(),dist[j]->ClassName());
 		dist[j]->SubPrint(0);
-		cout << endl;
+		cout << ">" << endl;
 	    } else
-		printf("        [%s,tentative] %s\n",dist[j]->GetIdentifier(),dist[j]->GetDescription());
+		printf("        [%s,tentative] %s <%s>\n",dist[j]->GetIdentifier(),dist[j]->GetDescription(),dist[j]->ClassName());
 	    if (delme != NULL && strcmp(delme,"debug") == 0) {
 		dist[j]->Print();
 	    }
