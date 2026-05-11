@@ -69,6 +69,7 @@ PHadronDecayM1::PHadronDecayM1(const Char_t *id, const Char_t *de, Int_t key) :
     didx1         = -1;
     didx2         = -1;
     didx_unstable = -1;
+    old_maxBWWeight = kTRUE; //old sampling by default
 };
 
 PDistribution *PHadronDecayM1::Clone(const char*) const {
@@ -482,15 +483,42 @@ double PHadronDecayM1::maxBWWeight(const int &i1, const double &m, const double 
     }
 
     Int_t counter = 0;
-
-    while ((f1 == 0) && (f2 == 0) && (counter < 10)) {
-	f1 = BWWeight(i1, m, x1, m2, didx_local1, i2);
-	f2 = BWWeight(i1, m, x2, m2, didx_local1, i2);
-
-	if ((f1 == 0) && (f2 == 0))
-	    x2 += (x3-x2)*0.1;
-	counter++;
+    if (old_maxBWWeight == kTRUE) {
+	//old version, keep that
+	while ((f1 == 0) && (f2 == 0) && (counter < 10)) {
+	    f1 = BWWeight(i1, m, x1, m2, didx_local1, i2);
+	    f2 = BWWeight(i1, m, x2, m2, didx_local1, i2);
+	    if ((f1 == 0) && (f2 == 0))
+		x2 += (x3-x2)*0.1;
+	    counter++;
+	}
     }
+    if (counter == 10) {
+	old_maxBWWeight = kFALSE;
+	counter = 0;
+	Info("maxBWWeight", "Old version failed, use new search for %s", makeStaticData()->GetDecayName(is_channel));
+    }
+    if (old_maxBWWeight == kFALSE) {
+	// new version using the pole mass
+	double m_pole = makeStaticData()->GetParticleMass(i1);
+	while ((f1 == 0) && (f2 == 0) && (counter < 10)) {
+	    f1 = BWWeight(i1, m, x1, m2, didx_local1, i2);
+	    f2 = BWWeight(i1, m, x2, m2, didx_local1, i2);
+	    if ((f1 == 0) && (f2 == 0)) {
+		// change strategy: we directly jump to the pole mass,
+		// if this is inside the limits [ax, cx].
+		if (m_pole > ax && m_pole < cx && counter == 0) {
+		    x1 = m_pole - (cx-ax)*0.01; // directly before the pole
+		    x2 = m_pole + (cx-ax)*0.01; // direclty after the pole
+		} else {
+		    // fallback:
+		    x2 += (x3-x2)*0.1;
+		}
+	    }
+	counter++;
+	}
+    }
+    
     if (counter == 10) {
 	//kinematically forbidden region?
 	abort = kTRUE;

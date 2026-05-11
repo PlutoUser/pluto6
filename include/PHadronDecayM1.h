@@ -64,6 +64,7 @@ class PHadronDecayM1 : public PHadronDecay  {
     int didx1, didx2, didx_unstable;
 
     Bool_t abort;
+    Bool_t old_maxBWWeight;
 
     ClassDef(PHadronDecayM1, 0)  // Hadron decay in 1 unstable and 1 stable product
 };
