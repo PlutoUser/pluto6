@@ -31,6 +31,8 @@ PStaticData * makeStaticData() {
 }
 
 PStaticData::PStaticData() {
+    Info("PStaticModels()", "(%s)", PRINT_CTOR);
+    
     if (!makeStdData()->fillDataBase()) {
 	Fatal("PStaticData", "Data base could not be filled");
 	exit(1);
@@ -136,6 +138,11 @@ PStaticData::PStaticData() {
     makeDataBase()->SetParamInt("NS11+", "maxmesh", 2000);
     makeDataBase()->SetParamInt("NS11-", "maxmesh", 2000);
 
+    //some fix for ND13 -> rho + p decay
+    makeDataBase()->SetParamDouble(GetDecayKey(GetDecayIdx("ND13+", "p, rho0")), "cutoff_condition", new Double_t(0.00001));
+    makeDataBase()->SetParamDouble(GetDecayKey(GetDecayIdx("ND13+", "n, rho+")), "cutoff_condition", new Double_t(0.00001));
+    makeDataBase()->SetParamDouble(GetDecayKey(GetDecayIdx("ND130", "n, rho0")), "cutoff_condition", new Double_t(0.00001));
+    makeDataBase()->SetParamDouble(GetDecayKey(GetDecayIdx("ND130", "p, rho-")), "cutoff_condition", new Double_t(0.00001));
 
     //Ingo's additions:
     makeDataBase()->SetParamDouble ("D+", "lmass", 1.);
@@ -461,7 +468,7 @@ void PStaticData::PrintParticle(int pid) {
 
 
 void PStaticData::PrintParticleByKey(int key) {
-    makeDataBase()->ListEntries(key, 0, "name,pid,width,mass");
+    makeDataBase()->ListEntries(key, 0, "name,pid,width,mass,model");
 
     Int_t listkey=-1, alias_printed=0;
     Int_t *dummy;
@@ -1355,19 +1362,19 @@ int PStaticData::AddDecay(int didx, const char *name, const char *parent,
 void PStaticData::PrintDecayByKey(int key) {
     Int_t products = GetDecayNProductsByKey(key);
     if (products == 1)
-	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name");
+	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,model");
     if (products == 2)
-	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name");
+	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name,model");
     if (products == 3)
-	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name,d3:name");
+	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name,d3:name,model");
     if (products == 4)
-	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name,d3:name,d4:name");
+	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name,d3:name,d4:name,model");
     if (products == 5)
-	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name,d3:name,d4:name,d5:name");
+	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name,d3:name,d4:name,d5:name,model");
     if (products == 6)
-	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name,d3:name,d4:name,d5:name,d6:name");
+	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name,d3:name,d4:name,d5:name,d6:name,model");
     if (products == 7)
-	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name,d3:name,d4:name,d5:name,d6:name,d7:name");
+	makeDataBase()->ListEntries(key, 0, "name,didx,br,d1:name,d2:name,d3:name,d4:name,d5:name,d6:name,d7:name,model");
 }
 
 int PStaticData::GetDecayNProductsByKey(const int &key) {

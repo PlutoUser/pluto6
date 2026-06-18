@@ -91,7 +91,7 @@ PSplash::PSplash() {
 	    cout << "  *********************************************************" << endl;
 	    cout << "  * The Pluto event generator                              " << endl;
 	    cout << "  * Developed by HADES and all contributing AUTHORS        " << endl;
-	    cout << "  * https://hades.gsi.de/?q=pluto                          " << endl;
+	    cout << "  * https://hades.gsi.de/pluto                             " << endl;
 	    cout << "  * Version: " << Pluto_VERSION_MAJOR << "." << Pluto_VERSION_MINOR << "." << Pluto_VERSION_PATCH << endl;
 	    if (Pluto_VERSION_PATCH > 0) {
 	      cout << "  * WARNING: this is not an officially released Pluto version" << endl;

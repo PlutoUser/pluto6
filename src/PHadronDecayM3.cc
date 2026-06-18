@@ -113,25 +113,22 @@ int PHadronDecayM3::GetDepth(int i) {
     if (model2) a2 = model2->GetDepth(i);
     if (model3) a3 = model3->GetDepth(i);
 
-    makeStaticData()->SetDecayEmin(is_channel, mass1+mass2+mass3);
+    if (makeStaticData()->GetDecayEmin(is_channel) == 0)
+	makeStaticData()->SetDecayEmin(is_channel, mass1+mass2+mass3);
 
     return TMath::Max(a1+1, TMath::Max(a2+1,a3+1));
 }
 
 void PHadronDecayM3::SubPrint(Int_t) const {
     //Print sub-models
-
     if (model1) {
-	cout << " ";
-	cout << model1->GetDescription();
+        cout << " [" << model1->GetDescription() << "]<" << model1->ClassName() << ">";
     }
     if (model2) {
-	cout << " ";
-	cout << model2->GetDescription();
+        cout << " [" << model2->GetDescription() << "]<" << model2->ClassName() << ">";
     }
     if (model3) {
-	cout << " ";
-	cout << model3->GetDescription();
+	cout << " [" << model3->GetDescription() << "]<" << model3->ClassName() << ">";
     }
 }
 

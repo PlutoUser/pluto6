@@ -114,8 +114,8 @@ Double_t PHadronDecay::Eval(Double_t x, Double_t, Double_t, Double_t) const {
 };
 
 int PHadronDecay::GetDepth(int) {
-
-    makeStaticData()->SetDecayEmin(is_channel, mass1+mass2);
+    if (makeStaticData()->GetDecayEmin(is_channel) == 0)
+	makeStaticData()->SetDecayEmin(is_channel, mass1+mass2);
     return 0; //2 stable products -> depth is 0
 };
 
