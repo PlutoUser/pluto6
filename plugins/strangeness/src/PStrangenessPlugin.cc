@@ -79,6 +79,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
                 }
             } else {
                 Error("ExecCommand", "PIDs blocked, plugin disabled");
+                return kFALSE;
             }
 
 
@@ -96,6 +97,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
                 }
             } else {
                 Error("ExecCommand", "PIDs blocked, plugin disabled");
+                return kFALSE;
             }
 
 
@@ -113,6 +115,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
                 }
             } else {
                 Error("ExecCommand", "PIDs blocked, plugin disabled");
+                return kFALSE;
             }
 
 
@@ -144,6 +147,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
                 }
             } else {
                 Error("ExecCommand", "PIDs blocked, plugin disabled");
+                return kFALSE;
             }
 
 
@@ -181,6 +185,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
                 }
             } else {
                 Error("ExecCommand", "PIDs blocked, plugin disabled");
+                return kFALSE;
             }
 
 
@@ -210,6 +215,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
                 }
             } else {
                 Error("ExecCommand", "PIDs blocked, plugin disabled");
+                return kFALSE;
             }
 
 
@@ -239,6 +245,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
                 }
             } else {
                 Error("ExecCommand", "PIDs blocked, plugin disabled");
+                return kFALSE;
             }
 
 
@@ -253,6 +260,50 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
                 }
             } else {
                 Error("ExecCommand", "PIDs blocked, plugin disabled");
+                return kFALSE;
+            }
+
+            if (makeStaticData()->AddParticle(100, "KStar0", 0.89555) > 0) {
+                makeStaticData()->AddAlias("KStar0", "K*(892)0");
+
+                makeStaticData()->SetParticleTotalWidth("KStar0", 0.0473);
+                makeStaticData()->SetParticleBaryon("KStar0", 0);
+                makeStaticData()->SetParticleMeson("KStar0", 1);
+
+                makeStaticData()->AddDecay("K*(892)0 --> K+ + pi-", "KStar0", "K+,pi-", 1.0/3);
+                makeStaticData()->AddDecay("K*(892)0 --> K0S + pi0", "KStar0", "K0S,pi0", 1.0/3);
+                makeStaticData()->AddDecay("K*(892)0 --> K- + pi+", "KStar0", "K-,pi+", 1.0/3);
+            } else {
+                Error("ExecCommand", "PIDs blocked, plugin disabled");
+                return kFALSE;
+            }
+
+            if (makeStaticData()->AddParticle(101, "KStar+", 0.89176) > 0) {
+                makeStaticData()->AddAlias("KStar+", "K*(892)+");
+
+                makeStaticData()->SetParticleTotalWidth("KStar+", 0.0503);
+                makeStaticData()->SetParticleBaryon("KStar+", 0);
+                makeStaticData()->SetParticleMeson("KStar+", 1);
+
+                makeStaticData()->AddDecay("K*(892)+ --> K0S + pi+", "KStar+", "K0S,pi+", 1.0*2/3);
+                makeStaticData()->AddDecay("K*(892)+ --> K+ + pi0", "KStar+", "K+,pi0", 1.0*1/3);
+            } else {
+                Error("ExecCommand", "PIDs blocked, plugin disabled");
+                return kFALSE;
+            }
+
+            if (makeStaticData()->AddParticle(102, "KStar-", 0.89176) > 0) {
+                makeStaticData()->AddAlias("KStar-", "K*(892)-");
+
+                makeStaticData()->SetParticleTotalWidth("KStar-", 0.0503);
+                makeStaticData()->SetParticleBaryon("KStar-", 0);
+                makeStaticData()->SetParticleMeson("KStar-", 1);
+
+                makeStaticData()->AddDecay("K*(892)- --> K0S + pi-", "KStar-", "K0S,pi-", 1.0*2/3);
+                makeStaticData()->AddDecay("K*(892)- --> K- + pi0", "KStar-", "K-,pi0", 1.0*1/3);
+            } else {
+                Error("ExecCommand", "PIDs blocked, plugin disabled");
+                return kFALSE;
             }
 
             (*system_alloc_verbosity) = old;
