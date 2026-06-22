@@ -149,10 +149,8 @@ int PHadronDecayM1N::GetDepth(int i) {
 
 void PHadronDecayM1N::SubPrint(Int_t) const {
     //Print sub-models
-
     if (unstable_model) {
-	cout << " ";
-	cout << unstable_model->GetDescription();
+	cout << " [" << unstable_model->GetDescription() << "]<" << unstable_model->ClassName() << ">";
     }
 }
 

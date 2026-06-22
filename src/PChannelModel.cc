@@ -172,63 +172,35 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
     didx_option = -1;
 
     //some TF1 defaults...
-
-    //ROOT6
     fNpx  = (maxmesh-1)*3; // 3 interpolation points per meshpoint should be enough
-    fNpar = 4;             // Parameter1: Draw mass/width, Parameter2: Draw _specific_ didx for partial decay
+    fNpar = 4;             // p1: 0=mass, 1=width, 2=br, p2: didx for partial decay (-1: total), p3: Amplitude(abs) for 1st propagator term for didx, p4: Amplitude(phase) for 1st propagator term for didx
 
     fParErrors.resize(fNpar);
     fParMin.resize(fNpar);
     fParMax.resize(fNpar);
 
+    fFormula = NULL;
+    //we kill this at this point as it will otherwise be used as default
+    //we use fParams only, as fFormula has only fixed nParams=0:
 #if ROOT_VERSION_CODE  >= ROOT_VERSION(6,24,0)
     fParams = std::unique_ptr<TF1Parameters>(new TF1Parameters(fNpar));
 #else
     fParams = new TF1Parameters(fNpar);
 #endif
 
-
     for (int i = 0; i < fNpar; i++) {
 	fParErrors[i]  = 0;
 	fParMin[i]     = 0;
 	fParMax[i]     = 0;
     }
-    fParams->SetParName(0, "Drawing option: 0: Weigth, 1:Width, 2: BR");
-    fParams->SetParName(1, "0: Total weight, 1:Partial width(didx) for Weight");
-    fParams->SetParName(2, "Amplitude(abs) for 1st propagator term for didx");
-    fParams->SetParName(3, "Amplitude(phase) for 1st propagator term for didx");
-    fParams->SetParameter(0, 0);
-    fParams->SetParameter(1, -1);
-    fParams->SetParameter(2, 0);
-    fParams->SetParameter(3, 0);
-
-#if 0
-    //ROOT5
-    fNpx       = (maxmesh-1)*3; //3 interpolation points per meshpoint should be enough
-
-    fNpar = 4; //Parameter1: Draw mass/width, Parameter2: Draw _specific_ didx for partial decay
-    if (fNpar) {
-	fNames      = new TString[fNpar];
-	fParams     = new Double_t[fNpar];
-	fParErrors  = new Double_t[fNpar];
-	fParMin     = new Double_t[fNpar];
-	fParMax     = new Double_t[fNpar];
-	for (int i = 0; i < fNpar; i++) {
-	    fParams[i]     = 0;
-	    fParErrors[i]  = 0;
-	    fParMin[i]     = 0;
-	    fParMax[i]     = 0;
-	}
-	fNames[0] = "Drawing option: 0: Weigth, 1:Width, 2: BR";
-	fNames[1] = "0: Total weight, 1:Partial width(didx) for Weight";
-	fNames[2] = "Amplitude(abs) for 1st propagator term for didx";
-	fNames[3] = "Amplitude(phase) for 1st propagator term for didx";
-    }
-    fParams[0] = 0;
-    fParams[1] = -1;
-    fParams[2] = 0;
-    fParams[3] = 0;
-#endif
+    SetParName(0, "draw_option");
+    SetParName(1, "didx");
+    SetParName(2, "amplitude_abs");
+    SetParName(3, "amplitude_phase");
+    SetParameter(0, 0);
+    SetParameter(1, -1);
+    SetParameter(2, 0);
+    SetParameter(3, 0);
 
     mc_max = 1000; //for the integration methods in Width-mesh calculation
 
@@ -242,7 +214,9 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 
     }
     didx_param     = makeDataBase()->GetParamInt("didx");
+    pid_param      = makeDataBase()->GetParamInt("pid");
     scfactor_param = makeDataBase()->GetParamDouble("scfactor");
+    model_param    = makeDataBase()->GetParamTObj("model");
     unstable_width = makeStaticData()->GetBatchValue("_system_unstable_width");
 
 };
@@ -295,8 +269,8 @@ Double_t PChannelModel::Eval(Double_t x, Double_t, Double_t, Double_t) const {
     my_didx_option[0] = didx_option;
 
     if (draw_option == 0) {
+	//std::cout << my_didx_option[0] << std::endl;
 	return ((PChannelModel*)this)->GetWeight(my_x, my_didx_option);
-	//return res;
     }
     if (draw_option == 1) {
 	((PChannelModel*)this)->GetWidth(x, &res, didx_option);
@@ -376,39 +350,53 @@ Bool_t PChannelModel::GetWidth(Double_t, Double_t *width, Int_t didx) {
 
 Bool_t PChannelModel::GetBR(Double_t mass, Double_t *br, Double_t totalwidth) {
     //Calculates the mass-dependent br
-    //This method is meaningless for particles
     //the totalwidth may be set by the user, otherwise we use the static one
 
-    if (is_pid >= 0)
-	return kFALSE;
+    TObject *t_result;
+    
+    if (is_pid >= 0) {
+	//PARTICLE, only used for Draw-Option, otherwise it does not make sense
+	makeDataBase()->GetParamTObj (didx_param, didx_option, model_param, &t_result);
+	PChannelModel *model = (PChannelModel *) t_result;
+	if (model) 
+	    return model->GetBR(mass, br, totalwidth);
+    } else {
+	//DECAY
+	Double_t lwidth;
 
-    Double_t lwidth;
+	//test if the GetWidth was overloaded
+	//if not, simply use the static values
+	if (!GetWidth(mass, &lwidth)) {
+	    *br = makeStaticData()->GetDecayBR(is_channel);
+	    return kTRUE;
+	}
 
-    //test if the GetWidth was overloaded
-    //if not, simply use the static values
-    if (!GetWidth(mass, &lwidth)) {
- 	*br = makeStaticData()->GetDecayBR(is_channel);
- 	return kTRUE;
+	//Make everything coherent to Dyn.Data
+	Double_t sc = 1.;
+	Double_t *scfactor = &sc;
+
+	makeDataBase()->GetParamDouble (didx_param, is_channel , scfactor_param, &scfactor);
+
+	lwidth *= *scfactor;
+	//if total width is below unstable width-> static BR
+	if (totalwidth < 0.) {
+	    //no custom total width
+	    Int_t parent = makeStaticData()->GetDecayParent(is_channel);
+	    makeDataBase()->GetParamTObj(pid_param, parent, model_param, &t_result);
+	    PChannelModel *model = (PChannelModel *) t_result;
+	    if (model)
+		model->GetWidth(mass, &totalwidth);
+	    //totalwidth = makeStaticData()->GetParticleTotalWidth(makeStaticData()->GetDecayParent(is_channel));
+	}
+
+	if (totalwidth <= (*unstable_width))
+	    *br = makeStaticData()->GetDecayBR(is_channel);
+	else  {
+	    //if we have a local width, the BR is the partial width divided by total
+	    *br = lwidth/totalwidth;
+	}
+	return kTRUE;
     }
-
-    //Make everything coherent to Dyn.Data
-    Double_t sc = 1.;
-    Double_t *scfactor = &sc;
-
-    makeDataBase()->GetParamDouble (didx_param, is_channel , scfactor_param, &scfactor);
-
-    lwidth *= *scfactor;
-    //if total width is below unstable width-> static BR
-    if (totalwidth < 0.)
-	totalwidth = makeStaticData()->GetParticleTotalWidth(makeStaticData()->GetDecayParent(is_channel));
-
-    if (totalwidth <= (*unstable_width))
-	*br = makeStaticData()->GetDecayBR(is_channel);
-    else  {
-	//if we have a local width, the BR is the partial width divided by total
-	*br = lwidth/totalwidth;
-    }
-    return kTRUE;
 }
 
 int PChannelModel::GetDepth(int) {

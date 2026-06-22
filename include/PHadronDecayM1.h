@@ -51,7 +51,7 @@ class PHadronDecayM1 : public PHadronDecay  {
     Double_t unstable_dynamic_mass;      //sampled unstable mass
     Double_t stable_mass;
     bool sampleM1(const double &ecm);
-    Double_t scale;
+    Double_t scale, cutoff_condition;
     double BWWeight(const int &i1, const double &m,
 		    const double &m1, const double &m2, int didx_local1=-1,
 		    int i2=0, int didx_local2=-1);
@@ -64,6 +64,7 @@ class PHadronDecayM1 : public PHadronDecay  {
     int didx1, didx2, didx_unstable;
 
     Bool_t abort;
+    Bool_t old_maxBWWeight;
 
     ClassDef(PHadronDecayM1, 0)  // Hadron decay in 1 unstable and 1 stable product
 };

@@ -98,13 +98,13 @@ Bool_t PStdData::fillDataBase(void) {
     base->MakeParamDouble("ethreshold", "Energy threshold");
     base->MakeParamDouble("scfactor",  "Self consistency factor");
     base->MakeParamInt("sccount", "Self consistency count (max tries)");
-
+    base->MakeParamDouble("cutoff_condition", "Model-dependent cutoff conditions");
 
     base->MakeParamTObj("mesh", "Mesh object");
     base->MakeParamTObj("tf1", "TF1 object");
-    base->MakeParamTObj("model", "Basic PModel");
+    base->MakeParamTObj("model", "Physical model");
 
-    base->MakeParamInt("maxmesh", "Number of Mesh points");
+    base->MakeParamInt("maxmesh", "Number of mesh points");
     base->MakeParamDouble("lmass", "Lower mass");
     base->MakeParamDouble("umass", "Upper mass");
 

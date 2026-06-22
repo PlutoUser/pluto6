@@ -76,8 +76,8 @@ int PFixedDecay::GetDepth(int) {
     for (int i=1; i<=n_daughters; i++) {
 	mymin+=dmass[i-1];
     }
-
-    makeStaticData()->SetDecayEmin(is_channel, mymin);
+    if (makeStaticData()->GetDecayEmin(is_channel) == 0)
+	makeStaticData()->SetDecayEmin(is_channel, mymin);
     return 0; //stable products -> depth is 0
 }
 

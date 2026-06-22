@@ -52,6 +52,12 @@ PHadronDecayM1::PHadronDecayM1(const Char_t *id, const Char_t *de, Int_t key) :
     stable_id   = tid[stable_position];
     scale = 1.1;  // good starting value, by trial & error
 
+    Double_t *cutoff_condition_db;
+    if (makeDataBase()->GetParamDouble(key, "cutoff_condition", &cutoff_condition_db))
+	cutoff_condition = *cutoff_condition_db;
+    else
+	cutoff_condition = 0.01;
+    
     //same order then in data base
     id1 = tid[1];
     id2 = tid[2];
@@ -63,6 +69,7 @@ PHadronDecayM1::PHadronDecayM1(const Char_t *id, const Char_t *de, Int_t key) :
     didx1         = -1;
     didx2         = -1;
     didx_unstable = -1;
+    old_maxBWWeight = kTRUE; //old sampling by default
 };
 
 PDistribution *PHadronDecayM1::Clone(const char*) const {
@@ -140,10 +147,11 @@ int PHadronDecayM1::GetDepth(int i) {
     if (model2) a2 = model2->GetDepth(i);
 
     //after the GetDepth, the threshs are initialized
-    makeStaticData()->SetDecayEmin(is_channel,
-				   TMath::Min(makeStaticData()->GetParticleEmin(id1),
-					      makeStaticData()->GetParticleEmin(id2)));
-
+    if (makeStaticData()->GetDecayEmin(is_channel) == 0)
+	makeStaticData()->SetDecayEmin(is_channel,
+				       TMath::Min(makeStaticData()->GetParticleEmin(id1),
+						  makeStaticData()->GetParticleEmin(id2)));
+    
     return TMath::Max(a1+1, a2+1);
 }
 
@@ -164,8 +172,12 @@ Bool_t PHadronDecayM1::Prepare(void) {
 
 void PHadronDecayM1::SubPrint(Int_t) const {
     //Print sub-models
-    if (model1) {cout << " "; cout << model1->GetDescription();}
-    if (model2) {cout << " "; cout << model2->GetDescription();}
+    if (model1) {
+        cout << " [" << model1->GetDescription() << "]<" << model1->ClassName() << ">";
+    }
+    if (model2) {
+        cout << " [" << model2->GetDescription() << "]<" << model2->ClassName() << ">";
+    }
 }
 
 Double_t PHadronDecayM1::GetWeight(void) {
@@ -239,15 +251,15 @@ Bool_t PHadronDecayM1::GetWidth(Double_t mass, Double_t *width, Int_t) {
 	return 0.; // Disabled --> BUGBUG why not static?
 
     if (!makeStaticData()->GetPWidx(is_channel)) { // Enter below only on the first call
-
-	Info("GetWidth", "Called for %s", makeStaticData()->GetDecayName(is_channel));
-
+	
 	makeDynamicData()->GetParticleDepth(parent_id); // if 1st call will initialize flags
 
 	mmin = makeStaticData()->GetDecayEmin(is_channel);  // mass threshold for the decay
 	Double_t w0 = makeStaticData()->GetDecayBR(is_channel);      // starting weight
-
 	mmax = PData::UMass(parent_id);                // mass ceiling
+
+	Info("GetWidth", "Called for %s, energy range (M1) %f GeV to %f GeV", makeStaticData()->GetDecayName(is_channel), mmin, mmax);
+	
 	Double_t dm = (mmax-mmin)/(maxmesh-3.);          // mass increment
 	double mass_threshold, mass_ceiling;
 	mass_threshold = PData::LMass(unstable_id);
@@ -288,7 +300,7 @@ Bool_t PHadronDecayM1::GetWidth(Double_t mass, Double_t *width, Int_t) {
 			//Fold with mass shape of unstable particle
 			Double_t w = makeDynamicData()->GetParticleTotalWeight(running_unstable_mass, unstable_id);
 			temp1 *= w;
-			if (w > (0.01*bw_max)) {
+			if (w > (cutoff_condition*bw_max)) {
 			    //Cut-off condition with avoids arteficialy destructed behaviour
 			    temp0_norm += temp1;
 			    //Get the Gamma_m_m1_m2
@@ -471,15 +483,42 @@ double PHadronDecayM1::maxBWWeight(const int &i1, const double &m, const double 
     }
 
     Int_t counter = 0;
-
-    while ((f1 == 0) && (f2 == 0) && (counter < 10)) {
-	f1 = BWWeight(i1, m, x1, m2, didx_local1, i2);
-	f2 = BWWeight(i1, m, x2, m2, didx_local1, i2);
-
-	if ((f1 == 0) && (f2 == 0))
-	    x2 += (x3-x2)*0.1;
-	counter++;
+    if (old_maxBWWeight == kTRUE) {
+	//old version, keep that
+	while ((f1 == 0) && (f2 == 0) && (counter < 10)) {
+	    f1 = BWWeight(i1, m, x1, m2, didx_local1, i2);
+	    f2 = BWWeight(i1, m, x2, m2, didx_local1, i2);
+	    if ((f1 == 0) && (f2 == 0))
+		x2 += (x3-x2)*0.1;
+	    counter++;
+	}
     }
+    if (counter == 10) {
+	old_maxBWWeight = kFALSE;
+	counter = 0;
+	Info("maxBWWeight", "Old version failed, use new search for %s", makeStaticData()->GetDecayName(is_channel));
+    }
+    if (old_maxBWWeight == kFALSE) {
+	// new version using the pole mass
+	double m_pole = makeStaticData()->GetParticleMass(i1);
+	while ((f1 == 0) && (f2 == 0) && (counter < 10)) {
+	    f1 = BWWeight(i1, m, x1, m2, didx_local1, i2);
+	    f2 = BWWeight(i1, m, x2, m2, didx_local1, i2);
+	    if ((f1 == 0) && (f2 == 0)) {
+		// change strategy: we directly jump to the pole mass,
+		// if this is inside the limits [ax, cx].
+		if (m_pole > ax && m_pole < cx && counter == 0) {
+		    x1 = m_pole - (cx-ax)*0.01; // directly before the pole
+		    x2 = m_pole + (cx-ax)*0.01; // direclty after the pole
+		} else {
+		    // fallback:
+		    x2 += (x3-x2)*0.1;
+		}
+	    }
+	counter++;
+	}
+    }
+    
     if (counter == 10) {
 	//kinematically forbidden region?
 	abort = kTRUE;

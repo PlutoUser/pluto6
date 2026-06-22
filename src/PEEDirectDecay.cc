@@ -80,7 +80,8 @@ Bool_t PEEDirectDecay::Init(void) {
 }
 
 int PEEDirectDecay::GetDepth(int i) {
-    makeStaticData()->SetDecayEmin(is_channel, 2*mlep);
+    if (makeStaticData()->GetDecayEmin(is_channel) == 0)
+	makeStaticData()->SetDecayEmin(is_channel, 2*mlep);
     if (i) return -1; //no Hdepth
     return 0;
 }

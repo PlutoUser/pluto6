@@ -43,12 +43,10 @@ Bool_t PHadronDecayM2::Prepare(void) {
 void PHadronDecayM2::SubPrint(Int_t) const {
     //Print sub-models
     if (model1) {
-	cout << " ";
-	cout << model1->GetDescription();
+	cout << " [" << model1->GetDescription() << "]<" << model1->ClassName() << ">";
     }
     if (model2) {
-	cout << " ";
-	cout << model2->GetDescription();
+	cout << " [" << model2->GetDescription() << "]<" << model2->ClassName() << ">";
     }
 };
 
