@@ -13,8 +13,9 @@
 //   - draw basic histograms
 //
 ///////////////////////////////////////////////////////////////
-
-{
+void inspect_phi2170(
+    TString infile = "phi2170_phipipi.root"
+){
     //----------------------------------------------------------
     // Register exotic particles (e.g. phi2170, f0_980)
     //----------------------------------------------------------
@@ -25,10 +26,10 @@
     // Open ROOT file
     //----------------------------------------------------------
 
-    TFile *f = TFile::Open("test_phi2170.root");
+    TFile *f = TFile::Open(infile);
 
     if (!f || f->IsZombie()) {
-        cout << "Cannot open test_phi2170.root" << endl;
+        cout << "Cannot open " << infile << endl;
         return;
     }
 
@@ -59,10 +60,15 @@
     // Histograms
     //----------------------------------------------------------
 
+    Double_t mKKmax = 1.10;
+
+    if (infile.Contains("KKpipi"))
+        mKKmax = 2.2;
+
     TH1D *h_mKK = new TH1D(
         "h_mKK",
-        "K^{+}K^{-} invariant mass;M(K^{+}K^{-}) [GeV/c^{2}];Events",
-        100, 0.95, 1.10);
+        "K^{+}K^{-};M(K^{+}K^{-}) [GeV/c^{2}];Events",
+        100,0.95,mKKmax);
 
     TH1D *h_mpipi = new TH1D(
         "h_mpipi",
@@ -157,9 +163,20 @@
     c->cd(3);
     h_mKKpipi->Draw();
 
-    c->SaveAs("phi2170_inspect.pdf");
+    TString outfile = infile;
+    outfile.ReplaceAll(".root", "_inspect.pdf");
+    c->SaveAs(outfile);
 
     cout << endl;
+    cout << "==========================================" << endl;
+    cout << "phi(2170) inspection" << endl;
+    cout << "==========================================" << endl;
+    cout << "Input file : " << infile << endl;
+    cout << "Events     : " << tree->GetEntries() << endl;
+    cout << "==========================================" << endl;
+
+    cout << endl;
+    cout << endl;
     cout << "Inspection finished." << endl;
-    cout << "Plots saved to phi2170_inspect.pdf" << endl;
+    cout << "Plots saved to " << outfile << endl;
 }
