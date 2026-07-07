@@ -15,7 +15,7 @@
         reaction = "p p phi2170 [phi [K+ K-] f0_980 [pi+ pi-]]";
     }
 
-    PReaction r(beamE, "p", "p", reaction.Data());
+    PReaction r(beamE, "p", "p", reaction.Data(), "test_phi2170");
 
     listParticle("f0_980");
     listParticle("phi2170");
