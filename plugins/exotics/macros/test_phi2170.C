@@ -1,4 +1,6 @@
 {
+    // Example reactions currently used for the CBM φ(2170) feasibility studies.
+    // Additional decay channels can be added as needed.
 
     Int_t decay_mode = 0;
     double beamE = 29.0;
