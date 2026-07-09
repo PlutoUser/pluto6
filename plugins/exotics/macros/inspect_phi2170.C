@@ -60,20 +60,24 @@ void inspect_phi2170(
     // Histograms
     //----------------------------------------------------------
 
-    Double_t mKKmax = 1.10;
+    Double_t mKKmax = 1.08;
 
     if (infile.Contains("KKpipi"))
         mKKmax = 2.2;
 
+    Double_t mpipimin = 0.2;
+    if (infile.Contains("phif0"))
+        mpipimin = 0.7;
+
     TH1D *h_mKK = new TH1D(
         "h_mKK",
         "K^{+}K^{-} invariant mass;M(K^{+}K^{-}) [GeV/c^{2}];Events",
-        100,0.95,mKKmax);
+        100,0.98,mKKmax);
 
     TH1D *h_mpipi = new TH1D(
         "h_mpipi",
         "#pi^{+}#pi^{-} invariant mass;M(#pi^{+}#pi^{-}) [GeV/c^{2}];Events",
-        100, 0.2, 1.5);
+        100, mpipimin, 1.5);
 
     TH1D *h_mKKpipi = new TH1D(
         "h_mKKpipi",
