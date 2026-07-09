@@ -67,7 +67,7 @@ void inspect_phi2170(
 
     TH1D *h_mKK = new TH1D(
         "h_mKK",
-        "K^{+}K^{-};M(K^{+}K^{-}) [GeV/c^{2}];Events",
+        "K^{+}K^{-} invariant mass;M(K^{+}K^{-}) [GeV/c^{2}];Events",
         100,0.95,mKKmax);
 
     TH1D *h_mpipi = new TH1D(
