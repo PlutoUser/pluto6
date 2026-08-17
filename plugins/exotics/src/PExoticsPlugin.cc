@@ -111,15 +111,16 @@ Bool_t PExoticsPlugin::ExecCommand(const char *command, Double_t) {
 	    }
 	    //END AI generated
 
-	    //phi(2170)
+	    // PID 204: phi(2170) (PDG average mass and width, July 2026)
 	    if (makeStaticData()->AddParticle(204, "phi2170", 2.164) > 0) {
 		makeStaticData()->AddAlias("phi2170", "phi(2170)");
 		makeStaticData()->SetParticleCharge("phi2170", 0);
 		makeStaticData()->SetParticleTotalWidth("phi2170", 0.088);
 		makeStaticData()->SetParticleMeson("phi2170", kTRUE);
-		makeStaticData()->AddDecay("phi2170_to_phi_pipi", "phi2170", "phi,pi+,pi-",   .33);
-		makeStaticData()->AddDecay("phi2170_to_KKpipi",   "phi2170", "K+,K-,pi+,pi-", .33);
-		makeStaticData()->AddDecay("phi2170_to_phif0",    "phi2170", "phi,f0_980",    .33);
+		// Default decay channels: the branching fractions below are placeholders and may be modified by users depending on their intended study.
+		makeStaticData()->AddDecay("phi2170_to_phi_pipi", "phi2170", "phi,pi+,pi-",   1.0/3.0);
+		makeStaticData()->AddDecay("phi2170_to_KKpipi",   "phi2170", "K+,K-,pi+,pi-", 1.0/3.0);
+		makeStaticData()->AddDecay("phi2170_to_phif0",    "phi2170", "phi,f0_980",    1.0/3.0);
 
 	    } else {
                 Error("ExecCommand", "PID blocked for phi2170, plugin disabled");
