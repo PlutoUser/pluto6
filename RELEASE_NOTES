@@ -1562,3 +1562,4 @@ dev
 
 390) added the K*(892) isospin-duplets (R. Lalik, JU Krakow)
 
+391) fixed bug in PHadronDecayM2 which lead to artificial spikes
