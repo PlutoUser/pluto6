@@ -24,8 +24,8 @@ PHadronDecayM1::PHadronDecayM1(const Char_t *id, const Char_t *de, Int_t key) :
     //Get particles
     Int_t tid[11];
     tid[0] = 10;
-    makeStaticData()->GetDecayModeByKey(key, tid); // retrieve current mode info
-    parent_id = makeStaticData()->GetDecayParentByKey(key);
+    makeStaticData()->GetDecayModeByKey(primary_key, tid); // retrieve current mode info
+    parent_id = makeStaticData()->GetDecayParentByKey(primary_key);
 
     if (tid[0] != 2)
 	Warning("PHadronDecayM1", "(%s):  Only 2 body decay", de);
