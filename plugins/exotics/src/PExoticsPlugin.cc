@@ -13,6 +13,7 @@
 
 #include "PDistributionManager.h"
 #include "PResonanceDalitz.h"
+#include "PHadronDecayM2Mesh.h"
 
 PExoticsPlugin::PExoticsPlugin(const Char_t *id, const Char_t *de) :
     PDistributionCollection(id, de), is_initialized(0) {
@@ -33,9 +34,13 @@ Bool_t PExoticsPlugin::ExecCommand(const char *command, Double_t) {
         if (!is_initialized) {
             is_initialized = 1;
 
-            Double_t *system_alloc_verbosity = makeStaticData()->GetBatchValue("_system_alloc_verbosity");
+	    Double_t *system_alloc_verbosity = makeStaticData()->GetBatchValue("_system_alloc_verbosity");
             Double_t old = (*system_alloc_verbosity);
             (*system_alloc_verbosity) = 0;
+
+	    PDistributionManagerUtil *pdmutil = makeDistributionManagerUtil();
+	    pdmutil->AddSubGroup("root", "Models for exotics", "exotics");
+	    pdmutil->SetGroup("exotics");
 
 	    //f0(980)
 	    if (makeStaticData()->AddParticle(200, "f0_980", 0.99) > 0) {
@@ -118,10 +123,11 @@ Bool_t PExoticsPlugin::ExecCommand(const char *command, Double_t) {
 		makeStaticData()->SetParticleTotalWidth("phi2170", 0.088);
 		makeStaticData()->SetParticleMeson("phi2170", kTRUE);
 		// Default decay channels: the branching fractions below are placeholders and may be modified by users depending on their intended study.
-		makeStaticData()->AddDecay("phi2170_to_phi_pipi", "phi2170", "phi,pi+,pi-",   1.0/3.0);
-		makeStaticData()->AddDecay("phi2170_to_KKpipi",   "phi2170", "K+,K-,pi+,pi-", 1.0/3.0);
-		makeStaticData()->AddDecay("phi2170_to_phif0",    "phi2170", "phi,f0_980",    1.0/3.0);
-
+		makeStaticData()->AddDecay("phi(2170) --> phi + pi+ + pi-", "phi2170", "phi,pi+,pi-",   1.0/3.0);
+		makeStaticData()->AddDecay("phi(2170) --> K+ + K- + pi+ + pi-",   "phi2170", "K+,K-,pi+,pi-", 1.0/3.0);
+		Int_t decay_key = makeStaticData()->GetDecayKey(makeStaticData()->AddDecay("phi(2170) --> phi + f0(980)",    "phi2170", "phi,f0_980", 1.0/3.0));
+		PHadronDecayM2Mesh  *model = new PHadronDecayM2Mesh("phi2170_m2mesh_phi_f0_980", "Mesh decay for phi2170", decay_key);
+		pdmutil->Add(model);
 	    } else {
                 Error("ExecCommand", "PID blocked for phi2170, plugin disabled");
 		(*system_alloc_verbosity) = old;
