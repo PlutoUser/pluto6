@@ -39,7 +39,7 @@ Bool_t PExoticsPlugin::ExecCommand(const char *command, Double_t) {
             (*system_alloc_verbosity) = 0;
 
 	    PDistributionManagerUtil *pdmutil = makeDistributionManagerUtil();
-	    pdmutil->AddSubGroup("root", "Models for exotics", "exotics");
+	    pdmutil->AddSubGroup("exotics", "Models for exotics", "decay_models");
 	    pdmutil->SetGroup("exotics");
 
 	    //f0(980)
