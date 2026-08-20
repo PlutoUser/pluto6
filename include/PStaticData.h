@@ -70,6 +70,9 @@ class PStaticData : public TObject {
     int   GetParticleID(const char *id, int warn=1);     // pid by name
     int   GetParticleIDByKey(int key);        // pid by key
     const char *GetParticleName(const int &id);  // name by pid
+    const char *GetParticleNameByKey(const int &id) {
+	return GetParticleName(GetParticleIDByKey(id));
+    };
     int   GetParticleKey(const int &id);     // data base key by pid
     int   GetParticleKey(const char *id) {
 	return GetParticleKey(GetParticleID(id));

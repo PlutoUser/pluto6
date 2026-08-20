@@ -126,11 +126,12 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
 		ClearVersionFlag(VERSION_IS_PRIMARY);
  	    }
 
-	    //To make life more easy, add "default" track template
- 	    Add(arr1[0], "parent");
- 	    for (int i=1; i<=(arr1_s-2); i++)
- 		Add(arr1[i+1], "daughter");
- 	    preliminary_particles = 1;
+	    //Add "default" track template
+	    Add(arr1[0], "parent");
+	    for (int i=1; i<=(arr1_s-2); i++)
+		Add(arr1[i+1], "daughter");
+	    preliminary_particles = 1;
+
 	} // end "decay"
 
 	if (alt_position) {
@@ -154,6 +155,19 @@ PChannelModel::PChannelModel(const Char_t *id, const Char_t *de, Int_t key) :
     if (sec_key < 0) { //No sec. model
 	is_channel = makeStaticData()->GetDecayIdxByKey(key);
 	is_pid     = makeStaticData()->GetParticleIDByKey(key);
+    }
+
+    if (is_channel > 0 && !preliminary_particles) {
+	//Add "default" track template, if not yet done
+	Add(makeStaticData()->GetParticleName(makeStaticData()->GetDecayParentByKey(primary_key)), "parent");
+	int daughters[11];
+	daughters[0] = 10;
+	makeStaticData()->GetDecayModeByKey(primary_key, daughters);
+	for (int i=0 ; i<daughters[0] ; i++) {
+	    Add(makeStaticData()->GetParticleName(daughters[i+1]), "daughter");
+	}
+	preliminary_particles = 1;
+	//this does not hurt, as PStdModels overwrites that with Add(particle)
     }
 
     if (is_pid<0 && !is_channel) {
