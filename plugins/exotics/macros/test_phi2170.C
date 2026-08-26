@@ -1,7 +1,7 @@
 void test_phi2170(
     Int_t decay_mode = 0,     // decay channel (see below)
     Int_t nev = 1000,         // number of events
-    Double_t beamE = 29.0     // proton beam kinetic energy [GeV]
+    Double_t Tbeam = 29.0     // proton beam kinetic energy [GeV]
 ){
     ///////////////////////////////////////////////////////////
     //
@@ -16,6 +16,16 @@ void test_phi2170(
     // Additional decay channels can be added as needed.
     //
     ///////////////////////////////////////////////////////////
+
+    // ============================================================
+    // Beam kinetic-energy as input
+    // ============================================================
+    // Use the TString/parser constructor so the first argument is
+    // interpreted as proton beam kinetic energy [GeV].
+    // The Double_t PReaction overload interprets the first argument
+    // as beam momentum [GeV/c].
+    TString Tbeam_str;
+    Tbeam_str.Form("%.6f", Tbeam);
 
     TString reaction;
     TString outfile;
@@ -48,7 +58,23 @@ void test_phi2170(
             return;
     }
 
-    PReaction r(beamE,
+    // Add number-of-events tag
+    TString nev_tag;
+    if (nev >= 1000 && nev % 1000 == 0) {
+        nev_tag.Form("_%dk", nev / 1000);
+    }
+    else {
+        nev_tag.Form("_%d", nev);
+    }
+    outfile += nev_tag;
+
+    // Add beam-energy tag
+    TString energy_tag;
+    energy_tag.Form("_Tbeam%.1fGeV", Tbeam);
+    energy_tag.ReplaceAll(".", "p");
+    outfile += energy_tag;
+
+    PReaction r(Tbeam_str.Data(),
                 "p",
                 "p",
                 reaction.Data(),
@@ -61,7 +87,7 @@ void test_phi2170(
     cout << "==========================================" << endl;
     cout << "phi(2170) example generation" << endl;
     cout << "==========================================" << endl;
-    cout << "Beam energy : " << beamE << " GeV" << endl;
+    cout << "Beam kinetic energy : " << Tbeam << " GeV" << endl;
     cout << "Events      : " << nev << endl;
     cout << "Decay mode  : " << decay_mode << " (" << mode_name << ")" << endl;
     cout << "Reaction    : " << reaction << endl;
