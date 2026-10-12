@@ -36,7 +36,7 @@ class PHadronDecayM2 : public PHadronDecayM1  {
 
     Double_t dynamic_mass1, dynamic_mass2; //return value from sampleM2
 
-    bool sampleM2(const double &ecm);
+    virtual bool sampleM2(const double &ecm);
 
     ClassDef(PHadronDecayM2, 0)  // Hadron decay in 2 unstable products
 };

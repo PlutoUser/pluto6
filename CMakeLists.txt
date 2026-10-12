@@ -23,7 +23,7 @@ SET(SOURCES src/PAdaptiveMesh.cc src/PAdaptiveMeshN.cc src/PAngularDistribution.
     src/PEEDirectDecay.cc src/PEmbeddedParticles.cc src/PF1.cc src/PF2.cc src/PF3.cc src/PFermiMomentum.cc
     src/PFermiMomentumDD.cc src/PFileInput.cc src/PFileOutput.cc src/PFilter.cc src/PFireball.cc src/PFixedDecay.cc
     src/PFixedProduction.cc src/PFormula.cc src/PFunction.cc src/PGenBod.cc src/PHadronDecay.cc src/PHadronDecayM1.cc
-    src/PHadronDecayM1N.cc src/PHadronDecayM2.cc src/PHadronDecayM3.cc src/PHadronModel.cc src/PInclusiveModel.cc
+    src/PHadronDecayM1N.cc src/PHadronDecayM2.cc src/PHadronDecayM2Mesh.cc src/PHadronDecayM3.cc src/PHadronModel.cc src/PInclusiveModel.cc
     src/PMassSampling.cc src/PMesh.cc src/PParticle.cc src/PPiOmegaAngularDistribution.cc src/PPlutoBulkDecay.cc
     src/PProjector.cc src/PPropagator.cc src/PReaction.cc src/PSaid.cc src/PScatterDistribution.cc src/PSimpleVMDFF.cc
     src/PStaticData.cc src/PStdData.cc src/PStdModels.cc src/PTCrossWeight.cc src/PTGenPhaseSpace.cc src/PThermal.cc
