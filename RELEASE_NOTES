@@ -1566,8 +1566,13 @@ dev
 
 392) removed abolute pathes from the headers (S. Spies)
 
-393) added plugin for exotic hadrons
+393) added plugin for exotic hadrons, like
+     - X17
+     - f0(980)
+     - a0(980)
+     - phi(2170)
 
 394) added PHadronDecayM2Mesh for much faster generation
      (used for the exotics plugin)
-     
+
+395) added mesons plugin with f1 and eta1295

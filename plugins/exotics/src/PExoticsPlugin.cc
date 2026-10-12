@@ -30,6 +30,22 @@ PExoticsPlugin::~PExoticsPlugin() {
 
 Bool_t PExoticsPlugin::ExecCommand(const char *command, Double_t) {
 
+    if (strcmp (command,"x17") == 0) {
+	//Experimental X17
+	if (makeStaticData()->AddParticle(117, "X17", 0.017) > 0) {
+	    makeStaticData()->AddAlias("X17","x17");
+	    makeStaticData()->SetParticleTotalWidth("X17", 6.582122e-25/4e-14);
+	    makeStaticData()->SetParticleParity("X17", 1);
+	    
+	    makeStaticData()->AddDecay("X17 --> e+ + e-",           "X17", "e+,e-",         1);
+	    makeStaticData()->AddDecay("eta --> pi+ + pi- + X17",   "eta", "pi+,pi-,X17",   0.001);
+	    
+	} else {
+	    Error("ExecCommand", "PIDs blocked, plugin disabled");
+	}
+	return kTRUE;
+    }
+    
     if (strcmp (command,"init") == 0) {
         if (!is_initialized) {
             is_initialized = 1;
@@ -62,7 +78,7 @@ Bool_t PExoticsPlugin::ExecCommand(const char *command, Double_t) {
 	    // handled later via Flatté parameterization to avoid static
 	    // phase-space threshold violations.
 	    // --------------------------------------------------------------------
-	    // BEGINN AI generated (Gemini)
+	    // BEGIN AI generated (Gemini)
 	    
 	    // PID 201: Neutral a0(980)
 	    if (makeStaticData()->AddParticle(201, "a0_980_0", 0.980) > 0) {
