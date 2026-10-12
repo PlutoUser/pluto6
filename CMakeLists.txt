@@ -136,6 +136,9 @@ endmacro()
 
 add_subdirectory(plugins)
 
+install(FILES ${CMAKE_BINARY_DIR}/Plugins.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PLUTO_SLOT})
+
 ROOT_GENERATE_DICTIONARY(G__Pluto MODULE Pluto ${PLUGIN_HEADERS_COLLECTION} ${HEADERS} Plugins.h LINKDEF PlutoLinkDef.h)
 
 #---Create a shared library with geneated dictionary
