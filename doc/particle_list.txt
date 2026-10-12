@@ -82,10 +82,11 @@ pid=79  name=Delta2050++
 pid=100 name=KStar0
 pid=101 name=KStar+
 pid=102 name=KStar-
+pid=103 name=anti_KStar0
 
 makeDistributionManager()->Exec("mesons:init");
-pid=103 name=f1                                              
-pid=104 name=eta1295    
+pid=104 name=f1
+pid=105 name=eta1295
 
 makeDistributionManager()->Exec("pdg:extend_resonances")
 pid=80  name=NF150
