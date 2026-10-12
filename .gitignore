@@ -48,6 +48,8 @@ CTestTestfile.cmake
 
 #Backup
 *~
+\#*
+.#*
 
 #Pluto
 builddir

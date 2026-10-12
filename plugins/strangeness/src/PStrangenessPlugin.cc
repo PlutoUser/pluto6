@@ -53,6 +53,7 @@ Bool_t PStrangenessPlugin::ExecCommand(const char *command, Double_t) {
             Double_t old = (*system_alloc_verbosity);
             (*system_alloc_verbosity) = 0;
 
+	    makeDistributionManager()->SetGroup("dalitz_zetenyi_wolf");
 
             if (makeStaticData()->AddParticle(70, "Sigma13850", 1.3837) > 0) {
                 makeStaticData()->AddAlias("Sigma13850", "Sigma(1385)0");

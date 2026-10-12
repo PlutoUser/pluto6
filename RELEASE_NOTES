@@ -1562,3 +1562,12 @@ dev
 
 390) added the K*(892) isospin-duplets (R. Lalik, JU Krakow)
 
+391) fixed bug in PHadronDecayM2 which lead to artificial spikes
+
+392) removed abolute pathes from the headers (S. Spies)
+
+393) added plugin for exotic hadrons
+
+394) added PHadronDecayM2Mesh for much faster generation
+     (used for the exotics plugin)
+     
