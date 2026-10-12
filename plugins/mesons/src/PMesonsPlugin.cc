@@ -40,7 +40,7 @@ Bool_t PMesonsPlugin::ExecCommand(const char *command, Double_t) {
             Double_t old = (*system_alloc_verbosity);
             (*system_alloc_verbosity) = 0;
 
-            if (makeStaticData()->AddParticle(103, "f1", 1.2819) > 0) {
+            if (makeStaticData()->AddParticle(104, "f1", 1.2819) > 0) {
                 makeStaticData()->AddAlias("f1", "f1(1285)");
                 makeStaticData()->SetParticleTotalWidth("f1", 0.0227);
                 makeStaticData()->SetParticleMeson("f1", 1);
@@ -56,7 +56,7 @@ Bool_t PMesonsPlugin::ExecCommand(const char *command, Double_t) {
                 Error("ExecCommand", "PIDs blocked, plugin disabled");
             }
 
-            if (makeStaticData()->AddParticle(104, "eta1295", 1.294) > 0) {
+            if (makeStaticData()->AddParticle(105, "eta1295", 1.294) > 0) {
                 makeStaticData()->AddAlias("eta1295", "eta(1295)");
                 makeStaticData()->SetParticleTotalWidth("eta1295", 0.055);
                 makeStaticData()->SetParticleMeson("eta1295", 1);
