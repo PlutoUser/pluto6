@@ -69,7 +69,7 @@ pid=67  name=J/Psi
 pid=68  name=Psi'
 pid=69  name=pn
 
-strangeness:
+strangeness (auto-enabled): 
 pid=70  name=Sigma13850
 pid=71  name=Sigma1385+
 pid=72  name=Sigma1385-
@@ -83,6 +83,10 @@ pid=100 name=KStar0
 pid=101 name=KStar+
 pid=102 name=KStar-
 
+makeDistributionManager()->Exec("mesons:init");
+pid=103 name=f1                                              
+pid=104 name=eta1295    
+
 makeDistributionManager()->Exec("pdg:extend_resonances")
 pid=80  name=NF150
 pid=81  name=NF15+
@@ -94,6 +98,15 @@ pid=86  name=DF35-
 pid=87  name=DF350
 pid=88  name=DF35+
 pid=89  name=DF35++
+
+makeDistributionManager()->Exec("exotics:init");
+pid=200 name=f0_980                                          
+pid=201 name=a0_980_0                                        
+pid=202 name=a0_980+                                         
+pid=203 name=a0_980-                                         
+pid=204 name=phi2170
+makeDistributionManager()->Exec("exotics:x17");
+pid=117 name=X17
 
 makeDistributionManager()->Exec("nucleus_fermi");
 pid=600    name=6He
@@ -117,3 +130,4 @@ pid=750    name=95Zr
 pid=751    name=96Zr
 pid=753    name=92Nb
 pid=754    name=93Nb
+
