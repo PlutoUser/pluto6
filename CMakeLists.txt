@@ -37,8 +37,8 @@ set(HEADERS PAdaptiveMesh.h PAdaptiveMeshN.h PAngularDistribution.h PAnyDistribu
     PDistributionManager.h PDistributionManagerUtil.h PDynamicData.h PEEDirectDecay.h PEmbeddedParticles.h PF1.h PF2.h
     PF3.h PFermiMomentumDD.h PFermiMomentum.h PFileInput.h PFileOutput.h PFilter.h PFireball.h PFixedDecay.h
     PFixedProduction.h PFormula.h PFunction.h PGenBod.h PHadronDecay.h PHadronDecayM1.h PHadronDecayM1N.h
-    PHadronDecayM2.h PHadronDecayM3.h PHadronModel.h PInclusiveModel.h PKinematics.h PMassSampling.h PMesh.h PParticle.h
-    PPiOmegaAngularDistribution.h PPlutoBulkDecay.h PProjector.h PPropagator.h PReaction.h PSaid.h
+    PHadronDecayM2.h PHadronDecayM2Mesh.h PHadronDecayM3.h PHadronModel.h PInclusiveModel.h PKinematics.h PMassSampling.h
+    PMesh.h PParticle.h PPiOmegaAngularDistribution.h PPlutoBulkDecay.h PProjector.h PPropagator.h PReaction.h PSaid.h
     PScatterDistribution.h PSimpleVMDFF.h PStaticData.h PStdData.h PStdModels.h PTCrossWeight.h PTGenPhaseSpace.h
     PThermal.h PUtils.h PValues.h PVertexFile.h
 )
