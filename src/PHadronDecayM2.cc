@@ -216,6 +216,11 @@ bool PHadronDecayM2::sampleM2(const double &ecm) {
     double f, y, m1, m2, mx[2] = {TMath::Min(m0[0],mh[0]),TMath::Min(m0[1],mh[1])};
     double maxW1, maxW2;
 
+    if (ecm < ml[0] + ml[1]) {
+	//unphysical event
+	return kFALSE;
+    }
+
     //for(int iter=0;iter<5;iter++) {   // find 2-dim maximum of Weight() function
     maxW1 = maxBWWeight(id1, ecm, ml[0], mh[0], mx[0], mx[1], didx1, id2, didx2);
     maxW2 = maxBWWeight(id2, ecm, ml[1], mh[1], mx[1], mx[0], didx2, id1, didx1);
@@ -229,6 +234,7 @@ bool PHadronDecayM2::sampleM2(const double &ecm) {
 
     f = scale*TMath::Max(maxW1,maxW2);
     if (f == 0.) {
+	Info("sampleM2", "Failed: f == 0 at ecm = %.6f (maxW1=%.6f, maxW2=%.6f)", ecm, maxW1, maxW2);
 	return kFALSE;
     }
 
@@ -239,19 +245,26 @@ bool PHadronDecayM2::sampleM2(const double &ecm) {
     do {                              // enter the rejection-method loop
 	m1 = ml[0] + PUtils::sampleFlat()*(mh[0]-ml[0]);
 	m2 = ml[1] + PUtils::sampleFlat()*(mh[1]-ml[1]);
+
 	y = BWWeight(id1, ecm, m1, m2, didx1, id2, didx2); // y(m1,m2) is the distribution function
+
+	if (f < y) {   // Error: the test function fails to bound the distribution fn;
+	    scale = scale*y/f + 0.1;
+	    //  printf("%s %f %i\n",Message[14],scale,counter);
+	}
+
 	counter++;
-    } while ((PUtils::sampleFlat()>y/f) && counter<10000);
 
-    if (f < y) {   // Error: the test function fails to bound the distribution fn;
-	scale = scale*y/f + 0.1;
-//  printf("%s %f %i\n",Message[14],scale,counter);
-	if (counter < 10000) goto repeat; // ...and try again
-    }
-    dynamic_mass1 = m1;
-    dynamic_mass2 = m2;
+	if (PUtils::sampleFlat() <= y/f) {
+	    dynamic_mass1 = m1;
+	    dynamic_mass2 = m2;
+	    return kTRUE;
+	}
 
-    return kTRUE;
+    } while (counter<10000);
+
+    Info("sampleM2", "Sampling failed after 10000 attempts at ecm=%.6f", ecm);
+    return kFALSE;
 }
 
 ClassImp(PHadronDecayM2)

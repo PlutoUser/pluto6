@@ -96,6 +96,7 @@
 #pragma link C++ class PHadronDecayM1;
 #pragma link C++ class PHadronDecayM1N;
 #pragma link C++ class PHadronDecayM2;
+#pragma link C++ class PHadronDecayM2Mesh;
 #pragma link C++ class PHadronDecayM3;
 #pragma link C++ class PInclusiveModel;
 #pragma link C++ class PEEDirectDecay;

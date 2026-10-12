@@ -29,10 +29,10 @@ PHadronDecay::PHadronDecay(const Char_t *id, const Char_t *de, Int_t key) :
     //Get particles
     Int_t tid[11];
     tid[0] = 10;
-    makeStaticData()->GetDecayModeByKey(key, tid); // retrieve current mode info
+    makeStaticData()->GetDecayModeByKey(primary_key, tid); // retrieve current mode info
 
     //Parent ALWAYS important (also for the inherited classes)
-    parent_id   = makeStaticData()->GetDecayParentByKey(key);
+    parent_id   = makeStaticData()->GetDecayParentByKey(primary_key);
     parent_g0   = makeStaticData()->GetParticleTotalWidth(parent_id);
     parent_mass = makeStaticData()->GetParticleMass(parent_id);
 
