@@ -30,23 +30,17 @@ SET(SOURCES src/PAdaptiveMesh.cc src/PAdaptiveMeshN.cc src/PAngularDistribution.
     src/PUtils.cc src/PValues.cc src/PVertexFile.cc
 )
 
-set(HEADERS include/PAdaptiveMesh.h include/PAdaptiveMeshN.h include/PAngularDistribution.h include/PAnyDistribution.h
-    include/PArray.h include/PBatch.h include/PBeamSmearing.h include/PBreitWigner.h include/PBulkInterface.h
-    include/PChannel.h include/PChannelModel.h include/PCommandList.h include/PComplexBreitWigner.h include/PCross.h
-    include/PDalitzDecay.h include/PDalitzDistribution.h include/PDataBase.h include/PData.h include/PDebugFileOutput.h
-    include/PDecayChannel.h include/PDecayManager.h include/PDefines.h include/PDeltaAngularDistribution.h
-    include/PDensityMatrix.h include/PDiLepton.h include/PDistributionCollection.h include/PDistribution.h
-    include/PDistributionManager.h include/PDistributionManagerUtil.h include/PDynamicData.h include/PEEDirectDecay.h
-    include/PEmbeddedParticles.h include/PF1.h include/PF2.h include/PF3.h include/PFermiMomentumDD.h
-    include/PFermiMomentum.h include/PFileInput.h include/PFileOutput.h include/PFilter.h include/PFireball.h
-    include/PFixedDecay.h include/PFixedProduction.h include/PFormula.h include/PFunction.h include/PGenBod.h
-    include/PHadronDecay.h include/PHadronDecayM1.h include/PHadronDecayM1N.h include/PHadronDecayM2.h
-    include/PHadronDecayM3.h include/PHadronModel.h include/PInclusiveModel.h include/PKinematics.h
-    include/PMassSampling.h include/PMesh.h include/PParticle.h include/PPiOmegaAngularDistribution.h
-    include/PPlutoBulkDecay.h include/PProjector.h include/PPropagator.h include/PReaction.h include/PSaid.h
-    include/PScatterDistribution.h include/PSimpleVMDFF.h include/PStaticData.h include/PStdData.h include/PStdModels.h
-    include/PTCrossWeight.h include/PTGenPhaseSpace.h include/PThermal.h include/PUtils.h include/PValues.h
-    include/PVertexFile.h
+set(HEADERS PAdaptiveMesh.h PAdaptiveMeshN.h PAngularDistribution.h PAnyDistribution.h PArray.h PBatch.h PBeamSmearing.h
+    PBreitWigner.h PBulkInterface.h PChannel.h PChannelModel.h PCommandList.h PComplexBreitWigner.h PCross.h
+    PDalitzDecay.h PDalitzDistribution.h PDataBase.h PData.h PDebugFileOutput.h PDecayChannel.h PDecayManager.h
+    PDefines.h PDeltaAngularDistribution.h PDensityMatrix.h PDiLepton.h PDistributionCollection.h PDistribution.h
+    PDistributionManager.h PDistributionManagerUtil.h PDynamicData.h PEEDirectDecay.h PEmbeddedParticles.h PF1.h PF2.h
+    PF3.h PFermiMomentumDD.h PFermiMomentum.h PFileInput.h PFileOutput.h PFilter.h PFireball.h PFixedDecay.h
+    PFixedProduction.h PFormula.h PFunction.h PGenBod.h PHadronDecay.h PHadronDecayM1.h PHadronDecayM1N.h
+    PHadronDecayM2.h PHadronDecayM3.h PHadronModel.h PInclusiveModel.h PKinematics.h PMassSampling.h PMesh.h PParticle.h
+    PPiOmegaAngularDistribution.h PPlutoBulkDecay.h PProjector.h PPropagator.h PReaction.h PSaid.h
+    PScatterDistribution.h PSimpleVMDFF.h PStaticData.h PStdData.h PStdModels.h PTCrossWeight.h PTGenPhaseSpace.h
+    PThermal.h PUtils.h PValues.h PVertexFile.h
 )
 
 # You need to tell CMake where to find the ROOT installation. This can be done in a number of ways:
@@ -109,17 +103,18 @@ macro(add_plugin plugin_target)
     endforeach()
 
     foreach(f ${PLUGIN_HEADERS})
-        list(APPEND PLUGIN_HEADERS_COLLECTION ${CMAKE_CURRENT_SOURCE_DIR}/${f})
-        file(APPEND ${CMAKE_BINARY_DIR}/Plugins.h "\#include \"${CMAKE_CURRENT_SOURCE_DIR}/${f}\"\n")
+        list(APPEND PLUGIN_HEADERS_COLLECTION ${f})
+        get_filename_component(f_name "${f}" NAME)
+        file(APPEND ${CMAKE_BINARY_DIR}/Plugins.h "\#include \"${f_name}\"\n")
     endforeach()
 
     install(DIRECTORY include/
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PLUTO_SLOT}/plugins
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PLUTO_SLOT}
     )
 
     target_include_directories(Pluto
         PUBLIC
-            $<INSTALL_INTERFACE:include/plugins>
+            $<INSTALL_INTERFACE:include>
         PRIVATE
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     )
@@ -140,6 +135,9 @@ macro(add_plugin plugin_target)
 endmacro()
 
 add_subdirectory(plugins)
+
+install(FILES ${CMAKE_BINARY_DIR}/Plugins.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PLUTO_SLOT})
 
 ROOT_GENERATE_DICTIONARY(G__Pluto MODULE Pluto ${PLUGIN_HEADERS_COLLECTION} ${HEADERS} Plugins.h LINKDEF PlutoLinkDef.h)
 
