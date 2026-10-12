@@ -19,10 +19,16 @@ ____________
 
 Out-of-source installation
 --------------------------
+Installation:
 export PLUTO_DIR=/path/to/pluto_installation
 mkdir builddir && cd builddir
 cmake .. -DCMAKE_INSTALL_PREFIX=$PLUTO_DIR
 make install
+
+Usage:
+export PLUTO_DIR=/path/to/pluto_installation
+export ROOT_INCLUDE_PATH=$PLUTO_DIR/include
+export LD_LIBRARY_PATH=$PLUTO_DIR/lib64:$LD_LIBRARY_PATH
 
 In-source installation
 ----------------------
