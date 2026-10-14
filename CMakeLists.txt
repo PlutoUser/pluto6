@@ -1,7 +1,7 @@
 # CMakeLists.txt for event package. It creates a library with dictionary and a main program
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 project(Pluto
-    VERSION 6.3.0
+    VERSION 6.3.1
     LANGUAGES CXX
 )
 
